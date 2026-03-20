@@ -7,8 +7,8 @@ Plataforma web de préstec i lloguer d'objectes entre veïns amb geolocalitzaci�
 | Capa                | Tecnologia                              |
 |---------------------|-----------------------------------------|
 | Frontend            | React + Vite + Tailwind CSS             |
-| Backend             | Laravel (PHP 8.3) + Sanctum             |
-| Base de dades       | PostgreSQL 16 + PostGIS                 |
+| Backend             | Laravel (PHP 8.4) + Sanctum             |
+| Base de dades       | PostgreSQL 15 + PostGIS 3.3             |
 | Client HTTP         | Axios                                   |
 | Mapes               | Leaflet                                 |
 | Imatges             | Cloudinary                              |
@@ -31,16 +31,17 @@ cd vecilend
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 
-# 3. Aixecar els contenidors
+# 3. Construir i aixecar els contenidors
+docker compose build
 docker compose up -d
 
-# 4. Instal·lar dependències i preparar el backend
-docker compose exec backend composer install
-docker compose exec backend php artisan key:generate
-docker compose exec backend php artisan migrate --seed
+# 4. Esperar que el backend estigui llest (~30s el primer cop)
+#    El backend instal·la dependències, genera APP_KEY i executa migracions automàticament.
+#    Pots veure el progrés amb:
+docker compose logs -f backend
 
-# 5. Instal·lar dependències del frontend
-docker compose exec frontend npm install
+# 5. Executar seeders (un sol cop, quan vegis "Server running on...")
+docker compose exec backend php artisan db:seed
 ```
 
 Un cop aixecat:
@@ -58,7 +59,7 @@ vecilend/
 ├── docker-compose.yml  # Orquestració de serveis
 ├── backend/            # Laravel API (amb Dockerfile)
 ├── frontend/           # React SPA - Vite + Tailwind (amb Dockerfile)
-├── db/                 # PostgreSQL + PostGIS (Dockerfile + init.sql)
+├── db/                 # PostgreSQL + PostGIS (Dockerfile)
 ├── docs/               # Documentació del projecte
 ├── .editorconfig       # Configuració d'editor compartida
 └── README.md
