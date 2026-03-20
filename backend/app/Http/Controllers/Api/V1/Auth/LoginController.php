@@ -3,52 +3,59 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    public function login(Request $request): JsonResponse
+    /**
+     * POST /api/v1/login
+     *
+     * Valida credencials i retorna un Bearer token.
+     */
+    public function login(LoginRequest $request): JsonResponse
     {
-        $request->validate([
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
-        if (! Auth::attempt($request->only('email', 'password'))) {
-            throw ValidationException::withMessages([
-                'email' => [__('Les credencials proporcionades no són correctes.')],
-            ]);
+        if (! Auth::attempt($request->validated())) {
+            return response()->json([
+                'message' => 'Credencials incorrectes.',
+            ], 401);
         }
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        if (! $user->actiu) {
-            Auth::logout();
-
-            throw ValidationException::withMessages([
-                'email' => [__('El teu compte ha estat desactivat.')],
-            ]);
-        }
-
-        $token = $user->createToken('auth')->plainTextToken;
+        // Genera un token amb nom descriptiu
+        // (Sanctum permet múltiples tokens per usuari — útil per multi-dispositiu)
+        $token = $user->createToken(
+            name: 'api-token',
+            // Si en el futur voleu abilities/permisos:
+            // abilities: ['objecte:crear', 'objecte:editar'],
+        )->plainTextToken;
 
         return response()->json([
-            'data' => new UserResource($user),
-            'token' => $token,
-        ]);
+            'message' => 'Login correcte.',
+            'data'    => [
+                'user'  => new UserResource($user),
+                'token' => $token,
+            ],
+        ], 200);
     }
 
+    /**
+     * POST /api/v1/logout
+     *
+     * Revoca el token actual (requereix auth:sanctum).
+     */
     public function logout(Request $request): JsonResponse
     {
-        // Elimina el token actual (el que s'ha usat per autenticar aquesta petició)
+        // Elimina NOMÉS el token usat en aquesta petició
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Sessió tancada correctament.',
-        ]);
+        ], 200);
     }
 }
