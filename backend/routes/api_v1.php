@@ -6,13 +6,17 @@ use App\Http\Resources\UserResource;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 
-Route::post('/register', [RegisterController::class, 'register']);
+// ── Rutes públiques (sense autenticació) ──────────────────
 
-Route::post('/login', [LoginController::class, 'login']);
+Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/login', [LoginController::class, 'login'])
+    ->middleware('throttle:login');
+
+// ── Rutes protegides (auth:sanctum) ───────────────────────
+
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
+    Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
-
     Route::post('/logout', [LoginController::class, 'logout']);
 });
