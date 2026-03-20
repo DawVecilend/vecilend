@@ -34,15 +34,15 @@ cp frontend/.env.example frontend/.env
 # 3. Construir i aixecar els contenidors
 docker compose build
 docker compose up -d
-
-# 4. Esperar que el backend estigui llest (~30s el primer cop)
-#    El backend instal·la dependències, genera APP_KEY i executa migracions automàticament.
-#    Pots veure el progrés amb:
-docker compose logs -f backend
-
-# 5. Executar seeders (un sol cop, quan vegis "Server running on...")
-docker compose exec backend php artisan db:seed
 ```
+
+El backend s'encarrega automàticament d'instal·lar dependències, generar l'APP_KEY, executar les migracions i poblar la base de dades amb les dades inicials (seeders). El primer arranc pot trigar ~30 segons. Es pot seguir el progrés amb:
+
+```bash
+docker compose logs -f backend
+```
+
+Quan aparegui `🚀 Arrancant servidor Laravel...`, tot està llest.
 
 Un cop aixecat:
 
@@ -52,12 +52,21 @@ Un cop aixecat:
 | Backend   | http://localhost:8000/api/v1 |
 | PostgreSQL| localhost:5432               |
 
+### Ús diari
+
+```bash
+docker compose up -d      # Arrencar
+docker compose down        # Aturar
+```
+
+No cal reconstruir (`build`) tret que canviï un Dockerfile o el `docker-compose.yml`.
+
 ## Estructura del Repositori
 
 ```
 vecilend/
 ├── docker-compose.yml  # Orquestració de serveis
-├── backend/            # Laravel API (amb Dockerfile)
+├── backend/            # Laravel API (amb Dockerfile + entrypoint.sh)
 ├── frontend/           # React SPA - Vite + Tailwind (amb Dockerfile)
 ├── db/                 # PostgreSQL + PostGIS (Dockerfile)
 ├── docs/               # Documentació del projecte
