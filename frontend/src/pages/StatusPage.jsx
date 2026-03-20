@@ -8,11 +8,8 @@ function StatusPage() {
   const checkConnection = async () => {
     setStatus('Conectando...')
     try {
-      // 1. Pedimos la cookie CSRF (obligatorio en Sanctum)
-      await api.get('/sanctum/csrf-cookie');
-      
-      // 2. Intentamos llamar a la API
-      const response = await api.get('/api/user');
+      // Comprovem la connexió amb l'API (Bearer token, sense CSRF cookie)
+      const response = await api.get('/api/v1/user');
       setBackendData(response.data);
       setStatus('✅ Conectado y Autenticado');
     } catch (error) {
