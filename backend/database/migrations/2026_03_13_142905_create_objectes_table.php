@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('titol', 200);
             $table->string('slug', 250);
             $table->text('descripcio');
-            $table->string('tipus', 20); // 'prestec' | 'lloguer' | 'ambdos'
+            $table->string('tipus', 20);
             $table->decimal('preu_diari', 8, 2)->nullable();
             $table->string('estat', 20)->default('disponible');
             $table->geography('ubicacio', subtype: 'point', srid: 4326);
