@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->unique(['usuari_1_id', 'usuari_2_id']);
         });
 
-        // CHECK constraint: usuari_1_id < usuari_2_id per evitar duplicats invertits
         DB::statement('ALTER TABLE converses ADD CONSTRAINT chk_conversa_ordre CHECK (usuari_1_id < usuari_2_id)');
     }
     
