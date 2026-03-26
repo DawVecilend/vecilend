@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import LogoDark from '/assets/logos/LogoDark.svg'
-import SearchBar from '../elementos/SearchBar'
-import PrimaryButton from '../elementos/PrimaryButton'
-import SecondaryButton from '../elementos/SecondaryButton'
+import SearchBar from '../../elementos/SearchBar'
+import PrimaryButton from '../../elementos/PrimaryButton'
+import SecondaryButton from '../../elementos/SecondaryButton'
 
 function HeaderDesktop() {
   return (

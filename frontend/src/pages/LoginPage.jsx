@@ -1,5 +1,5 @@
 import PrimaryButton from '../components/elementos/PrimaryButton'
-import HeaderDesktop from '../components/header/HeaderDesktop'
+import HeaderDesktop from '../components/layouts/header/HeaderDesktop'
 
 function LoginPage() {
   return (
