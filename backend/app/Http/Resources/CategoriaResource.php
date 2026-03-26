@@ -11,8 +11,18 @@ class CategoriaResource extends JsonResource {
             'id' => $this->id,
             'nom' => $this->nom,
             'icona' => $this->icona,
-            'descripcio'=> $this->descripcio,
-            'activa' => $this->activa
+            'descripcio' => $this->descripcio,
+            'activa' => $this->activa,
+            
+            'subcategories' => $this->whenLoaded('subcategories', fn () => $this->subcategories->map(
+                    fn ($sub) => [
+                        'id' => $sub->id,
+                        'nom' => $sub->nom,
+                    ]
+                )
+            ),
+            
+            'objectes_count' => $this->whenCounted('objectes'),
         ];
     }
 }
