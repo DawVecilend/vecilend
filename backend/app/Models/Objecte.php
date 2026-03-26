@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 
 class Objecte extends Model {
     use HasFactory;
-    
     protected $table = 'objectes';
     protected $casts = ['preu_diari' => 'decimal:2'];
     protected $fillable = [
@@ -54,9 +53,9 @@ class Objecte extends Model {
     public function subcategories(): BelongsToMany {
         return $this->belongsToMany(
             Subcategoria::class,
-            'objecte_subcategoria',
-            'objecte_id',
-            'subcategoria_id'
+                'objecte_subcategoria',
+                'objecte_id',
+                'subcategoria_id'
         );
     }
     
@@ -78,6 +77,7 @@ class Objecte extends Model {
             'id'
         );
     }
+    
 
     public function favoritsPer(): BelongsToMany {
         return $this->belongsToMany(
@@ -118,5 +118,9 @@ class Objecte extends Model {
         
         $point = DB::selectOne('SELECT ST_X(ubicacio::geometry) as lng, ST_Y(ubicacio::geometry) as lat FROM objectes WHERE id = ?', [$this->id]);
         return $point ? ['lat' => $point->lat, 'lng' => $point->lng] :null;
+    }
+
+    public static function setCoordenades(int $objecteId, float $lat, float $lng): void {
+        DB::statement('UPDATE objectes SET coordenades = ST_SetSRID(ST_MakePoint(?, ?), 4326) WHERE id = ?', [$lng, $lat, $objecteId]);
     }
 }

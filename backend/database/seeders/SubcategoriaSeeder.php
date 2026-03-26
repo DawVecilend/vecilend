@@ -10,34 +10,30 @@ class SubcategoriaSeeder extends Seeder {
     public function run(): void {
         $now = Carbon::now();
         $map = [
-            'Eines' => ['Eines elèctriques','Eines manuals','Pintura i decoració','Fontaneria','Fusteria'],
-            'Electrònica' => ['Ordinadors i tauletes','Perifèrics','Domòtica','Components'],
-            'Esports' => ['Esports aquàtics','Fitness','Esports de pilota','Esquí i neu','Ciclisme'],
-            'Llar i Jardí' => ['Electrodomèstics','Mobiliari','Eines de jardí','Neteja'],
-            'Vehicles i Mobilitat' => ['Bicicletes','Patinets elèctrics','Accessoris','Remolcs'],
-            'Fotografia i Vídeo' => ['Càmeres','Objectius','Il·luminació','Drons','Trípodes i estabilitzadors'],
-            'Música' => ['Corda','Vent','Percussió','Teclats i pianos','Equip de so'],
-            'Camping i Natura' => ['Tendes i refugis','Sacs de dormir','Cuina de camp','Orientació i GPS'],
-            'Jocs i Entreteniment' => ['Jocs de taula','Consoles','Realitat virtual','Jocs de festa'],
-            'Roba i Accessoris' => ['Disfresses','Vestits de cerimònia','Complements'],
-            'Bebès i Infants' => ['Cotxets','Cadires de cotxe','Joguines','Mobiliari infantil'],
-            'Altres' => []
+            'Viatges' => ['Maletes', 'Motxilles', 'Accessoris de viatge'],
+            'Construcció' => ['Maquinària', 'Seguretat', 'Material d\'obra'],
+            'Eines' => ['Manuals', 'Elèctriques', 'Mesura'],
+            'Jardineria' => ['Poda', 'Reg', 'Plantació'],
+            'Electrodomèstics' => ['Cuina', 'Neteja', 'Climatització'],
+            'Mobilitat' => ['Bicicletes', 'Patinets', 'Accessoris'],
+            'Fitness' => ['Peses', 'Cardio', 'Ioga'],
+            'Surf' => ['Taules', 'Neoprens', 'Accessoris'],
+            'Trones de nadó' => ['Trones', 'Cotxets', 'Seguretat infantil'],
+            'Jocs de taula' => ['Estratègia', 'Cooperatius', 'Familiars']
         ];
-
-        foreach ($map as $catNom => $subcats) {
-            $catId = DB::table('categories')->where('nom', $catNom)->value('id');
-            if (! $catId) {
+        
+        foreach ($map as $nomCategoria => $subcategories) {
+            $categoriaId = DB::table('categories')->where('nom', $nomCategoria)->value('id');
+            if (!$categoriaId) {
+                $this->command->warn(" Categoria '{$nomCategoria}' notrobada. Executa CategoriaSeeder primer.");
                 continue;
             }
-
-            foreach ($subcats as $subNom) {
-                DB::table('subcategories')->insert([
-                    'categoria_id' => $catId,
-                    'nom' => $subNom,
-                    'activa' => true,
-                    'created_at' => $now,
-                    'updated_at' => $now
-                ]);
+            
+            foreach ($subcategories as $nomSub) {
+                DB::table('subcategories')->updateOrInsert(
+                    ['categoria_id' => $categoriaId,'nom' => $nomSub],
+                    ['descripcio' => null,'activa' => true,'created_at' => $now,'updated_at' => $now]
+                );
             }
         }
     }
