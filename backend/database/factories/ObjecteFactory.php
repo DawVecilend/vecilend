@@ -6,35 +6,36 @@ use App\Models\Objecte;
 use App\Models\User;
 use App\Models\Categoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 
-class ObjecteFactory extends Factory {
+class ObjecteFactory extends Factory
+{
     protected $model = Objecte::class;
-    public function definition(): array {
+
+    public function definition(): array
+    {
+        $lat = fake()->latitude(41.30, 41.50);
+        $lng = fake()->longitude(1.95, 2.25);
+
         return [
-            'user_id' => User::factory(),
+            'user_id'      => User::factory(),
             'categoria_id' => Categoria::factory(),
-            'nom' => fake()->words(3, true),
-            'descripcio' => fake()->paragraph(),
-            'preu_per_dia' => fake()->randomFloat(2, 1, 100),
-            'imatge_url' => fake()->imageUrl(640, 480, 'objects'),
-            'estat' => fake()->randomElement(['disponible',
-            'no_disponible']),
+            'nom'          => fake()->words(3, true),
+            'descripcio'   => fake()->paragraph(),
+            'tipus'        => fake()->randomElement(['prestec', 'lloguer', 'ambdos']),
+            'preu_diari'   => fake()->randomFloat(2, 1, 100),
+            'estat'        => fake()->randomElement(['disponible', 'no_disponible']),
+            'ubicacio'     => DB::raw("ST_SetSRID(ST_MakePoint({$lng}, {$lat}), 4326)::geography"),
         ];
     }
 
-    public function configure(): static {
-        return $this->afterCreating(function (Objecte $objecte) {
-            $lat = fake()->latitude(41.30, 41.50);
-            $lng = fake()->longitude(1.95, 2.25);
-            Objecte::setCoordenades($objecte->id, $lat, $lng);
-        });
+    public function disponible(): static
+    {
+        return $this->state(fn() => ['estat' => 'disponible']);
     }
 
-    public function disponible(): static {
-        return $this->state(fn () => ['estat' => 'disponible']);
-    }
-    
-    public function noDisponible(): static {
-        return $this->state(fn () => ['estat' => 'no_disponible']);
+    public function noDisponible(): static
+    {
+        return $this->state(fn() => ['estat' => 'no_disponible']);
     }
 }

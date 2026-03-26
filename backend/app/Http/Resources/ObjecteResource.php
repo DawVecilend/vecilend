@@ -5,11 +5,13 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ObjecteResource extends JsonResource {
-    public function toArray(Request $request): array {
+class ObjecteResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
         return [
             'id' => $this->id,
-            'titol' => $this->titol,
+            'nom' => $this->nom,
             'slug' => $this->slug,
             'descripcio' => $this->descripcio,
             'tipus' => $this->tipus,
@@ -33,21 +35,21 @@ class ObjecteResource extends JsonResource {
                 ];
             }),
 
-            'subcategories' => $this->whenLoaded('subcategories',function () {
-                return $this->subcategories->map(fn ($sub) => [
+            'subcategories' => $this->whenLoaded('subcategories', function () {
+                return $this->subcategories->map(fn($sub) => [
                     'id' => $sub->id,
                     'nom' => $sub->nom
                 ]);
             }),
-            
+
             'imatges' => $this->whenLoaded('imatges', function () {
-                return $this->imatges->map(fn ($img) => [
+                return $this->imatges->map(fn($img) => [
                     'id' => $img->id,
                     'url' => $img->url_cloudinary,
                     'ordre' => $img->ordre,
                 ]);
             }),
-            
+
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String()
         ];
