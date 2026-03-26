@@ -12,62 +12,70 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class Objecte extends Model {
+class Objecte extends Model
+{
     use HasFactory;
     protected $table = 'objectes';
     protected $casts = ['preu_diari' => 'decimal:2'];
     protected $fillable = [
         'user_id',
         'categoria_id',
-        'titol',
+        'nom',
         'slug',
         'descripcio',
         'tipus',
         'preu_diari',
-        'estat', 
+        'estat',
         'ubicacio',
     ];
-    
-    protected static function booted(): void {
+
+    protected static function booted(): void
+    {
         static::creating(function (Objecte $objecte) {
             if (empty($objecte->slug)) {
-                $objecte->slug = Str::slug($objecte->titol);
+                $objecte->slug = Str::slug($objecte->nom);
             }
         });
-        
+
         static::updating(function (Objecte $objecte) {
-            if ($objecte->isDirty('titol')) {
-                $objecte->slug = Str::slug($objecte->titol);
+            if ($objecte->isDirty('nom')) {
+                $objecte->slug = Str::slug($objecte->nom);
             }
         });
     }
-    
-    public function user(): BelongsTo {
+
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function categoria(): BelongsTo {
+    public function categoria(): BelongsTo
+    {
         return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
-    public function subcategories(): BelongsToMany {
+    public function subcategories(): BelongsToMany
+    {
         return $this->belongsToMany(
             Subcategoria::class,
-                'objecte_subcategoria',
-                'objecte_id',
-                'subcategoria_id'
+            'objecte_subcategoria',
+            'objecte_id',
+            'subcategoria_id'
         );
     }
-    
-    public function imatges(): HasMany {
+
+    public function imatges(): HasMany
+    {
         return $this->hasMany(ImatgeObjecte::class, 'objecte_id')->orderBy('ordre');
     }
 
-    public function solicituds(): HasMany {
+    public function solicituds(): HasMany
+    {
         return $this->hasMany(Solicitud::class, 'objecte_id');
     }
 
-    public function transaccions(): HasManyThrough {
+    public function transaccions(): HasManyThrough
+    {
         return $this->hasManyThrough(
             Transaccio::class,
             Solicitud::class,
@@ -77,9 +85,10 @@ class Objecte extends Model {
             'id'
         );
     }
-    
 
-    public function favoritsPer(): BelongsToMany {
+
+    public function favoritsPer(): BelongsToMany
+    {
         return $this->belongsToMany(
             User::class,
             'favorits',
@@ -88,39 +97,41 @@ class Objecte extends Model {
         )->withPivot('created_at');
     }
 
-    public function scopeDisponible(Builder $query): Builder {
+    public function scopeDisponible(Builder $query): Builder
+    {
         return $query->where('estat', 'disponible');
     }
 
-    public function scopePerCategoria(Builder $query, int $categoriaId): Builder {
+    public function scopePerCategoria(Builder $query, int $categoriaId): Builder
+    {
         return $query->where('categoria_id', $categoriaId);
     }
 
-    public function scopeCerca(Builder $query, string $terme): Builder {
+    public function scopeCerca(Builder $query, string $terme): Builder
+    {
         $terme = '%' . $terme . '%';
         return $query->where(function (Builder $q) use ($terme) {
-            $q->where('titol', 'ILIKE', $terme)->orWhere('descripcio', 'ILIKE', $terme);
+            $q->where('nom', 'ILIKE', $terme)->orWhere('descripcio', 'ILIKE', $terme);
         });
     }
 
-    public function scopeAProximitat(Builder $query, float $lat, float $lng, int $metres = 5000): Builder {
+    public function scopeAProximitat(Builder $query, float $lat, float $lng, int $metres = 5000): Builder
+    {
         return $query->whereRaw('ST_DWithin(ubicacio, ST_SetSRID(ST_MakePoint(?, ?),4326)::geography, ?)', [$lng, $lat, $metres]);
     }
 
-    public static function setUbicacio(int $objecteId, float $lat, float $lng): void {
+    public static function setUbicacio(int $objecteId, float $lat, float $lng): void
+    {
         DB::statement('UPDATE objectes SET ubicacio = ST_SetSRID(ST_MakePoint(?,?), 4326)::geography WHERE id = ?', [$lng, $lat, $objecteId]);
     }
 
-    public function coordenades(): ?array {
+    public function coordenades(): ?array
+    {
         if (! $this->ubicacio) {
             return null;
         }
-        
-        $point = DB::selectOne('SELECT ST_X(ubicacio::geometry) as lng, ST_Y(ubicacio::geometry) as lat FROM objectes WHERE id = ?', [$this->id]);
-        return $point ? ['lat' => $point->lat, 'lng' => $point->lng] :null;
-    }
 
-    public static function setCoordenades(int $objecteId, float $lat, float $lng): void {
-        DB::statement('UPDATE objectes SET coordenades = ST_SetSRID(ST_MakePoint(?, ?), 4326) WHERE id = ?', [$lng, $lat, $objecteId]);
+        $point = DB::selectOne('SELECT ST_X(ubicacio::geometry) as lng, ST_Y(ubicacio::geometry) as lat FROM objectes WHERE id = ?', [$this->id]);
+        return $point ? ['lat' => $point->lat, 'lng' => $point->lng] : null;
     }
 }

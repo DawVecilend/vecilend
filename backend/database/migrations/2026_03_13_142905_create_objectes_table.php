@@ -5,12 +5,13 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
+    public function up(): void
+    {
         Schema::create('objectes', function (Blueprint $table) {
-            $table->id(); 
+            $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('categoria_id')->constrained('categories')->restrictOnDelete();
-            $table->string('titol', 200);
+            $table->string('nom', 200);
             $table->string('slug', 250);
             $table->text('descripcio');
             $table->string('tipus', 20);
@@ -23,8 +24,9 @@ return new class extends Migration {
             $table->index('estat');
         });
     }
-    
-    public function down(): void {
+
+    public function down(): void
+    {
         Schema::dropIfExists('objectes');
     }
 };
