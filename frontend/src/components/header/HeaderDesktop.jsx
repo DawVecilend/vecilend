@@ -6,7 +6,7 @@ import SecondaryButton from '../elementos/SecondaryButton'
 
 function HeaderDesktop() {
   return (
-    <header className="bg-[#071A16] h-[82px] flex items-center justify-between px-38">
+    <header className="bg-vecilend-dark-bg-secondary h-[82px] flex items-center justify-between px-38">
         <Link to="/" className="flex items-center">
           <img src={LogoDark} alt="Logo modo oscuro" className="h-[45px] w-[136px]"/>
         </Link>
