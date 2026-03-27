@@ -64,8 +64,7 @@ class Objecte extends Model
         );
     }
 
-    public function imatges(): HasMany
-    {
+    public function imatges(): HasMany {
         return $this->hasMany(ImatgeObjecte::class, 'objecte_id')->orderBy('ordre');
     }
 

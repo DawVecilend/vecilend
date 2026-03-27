@@ -5,10 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ObjecteResource extends JsonResource
-{
-    public function toArray(Request $request): array
-    {
+class ObjecteResource extends JsonResource {
+    public function toArray(Request $request): array {
         return [
             'id' => $this->id,
             'nom' => $this->nom,
@@ -45,7 +43,10 @@ class ObjecteResource extends JsonResource
             'imatges' => $this->whenLoaded('imatges', function () {
                 return $this->imatges->map(fn($img) => [
                     'id' => $img->id,
-                    'url' => $img->url_cloudinary,
+                    'original' => $img->url_cloudinary,
+                    'thumbnail' => $img->thumbnail_url,
+                    'medium' => $img->medium_url,
+                    'large' => $img->large_url,
                     'ordre' => $img->ordre,
                 ]);
             }),
