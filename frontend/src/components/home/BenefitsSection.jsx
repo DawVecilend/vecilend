@@ -4,13 +4,13 @@ function BenefitsSection() {
   const benefits = [
     {
       id: 1,
-      icon: '/assets/icons/euro-icon.svg',
+      icon: '/assets/icons/verified-icon.svg',
       title: 'Fiabilidad',
       text: 'Usuarios verificados'
     },
     {
       id: 2,
-      icon: '/assets/icons/euro-icon.svg',
+      icon: '/assets/icons/security-icon.svg',
       title: 'Seguridad',
       text: 'Todas las transacciones son seguras'
     },

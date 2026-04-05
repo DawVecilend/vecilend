@@ -1,6 +1,6 @@
 import ProductCard from '../elementos/ProductCard'
 
-function ProductsSection({ title, products }) {
+function ProductsSection({ title, products = [] }) {
   return (
     <section className="w-full py-8">
       <div className="mx-auto w-full">
@@ -19,6 +19,8 @@ function ProductsSection({ title, products }) {
               userAvatar={product.userAvatar}
               rating={product.rating}
               pricePerDay={product.pricePerDay}
+              status={product.status}
+              availableAt={product.availableAt}
             />
           ))}
         </div>
