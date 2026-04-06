@@ -11,14 +11,12 @@ use App\Http\Controllers\Api\V1\ObjecteController;
 
 // ── Rutes públiques (sense autenticació) ──────────────────
 
-// ── Rutes públiques (sense autenticació) ──────────────────
-
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])
     ->middleware('throttle:login');
 
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
-Route::post('/reset-password',  [PasswordResetController::class, 'resetPassword']);
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
 
 Route::get('/categories', [CategoriaController::class, 'index']);
 Route::get('/objects', [ObjecteController::class, 'index']);
@@ -27,11 +25,10 @@ Route::get('/objects/{id}', [ObjecteController::class, 'show'])
 
 // ── Rutes protegides (auth:sanctum) ───────────────────────
 
-// ── Rutes protegides (auth:sanctum) ───────────────────────
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
+
     Route::post('/logout', [LoginController::class, 'logout']);
 });

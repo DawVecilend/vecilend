@@ -27,28 +27,24 @@ class ObjecteController extends Controller
             'per_page' => 'nullable|integer|min:1|max:50',
             'lat'      => 'nullable|numeric|between:-90,90',
             'lng'      => 'nullable|numeric|between:-180,180',
-            'radius'   => 'nullable|integer|min:500|max:50000', // metres
+            'radius'   => 'nullable|integer|min:500|max:50000',
         ]);
 
         $query = Objecte::query()
-            // ── Només objectes disponibles ──
             ->disponible()
-            // ── Eager load relacions ──
             ->with(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges']);
 
-        // ── Filtre: cerca per text ──
         if ($request->filled('search')) {
             $query->cerca($request->input('search'));
         }
 
-        // ── Filtre: categoria ──
         if ($request->filled('category')) {
             $query->perCategoria((int) $request->input('category'));
         }
 
-        // ── Filtre: proximitat geoespacial ──
         if ($request->filled('lat') && $request->filled('lng')) {
-            $radius = (int) $request->input('radius', 5000); // per defecte 5 km
+            $radius = (int) $request->input('radius', 5000);
+
             $query->aProximitat(
                 (float) $request->input('lat'),
                 (float) $request->input('lng'),
@@ -56,7 +52,6 @@ class ObjecteController extends Controller
             );
         }
 
-        // ── Ordenació ──
         $sort = $request->input('sort', 'recent');
 
         switch ($sort) {
@@ -69,7 +64,6 @@ class ObjecteController extends Controller
                 break;
 
             case 'rating':
-                // TODO: implementar quan existeixin models Transaccio + Valoracio
                 $query->orderByDesc('created_at');
                 break;
 
@@ -79,7 +73,6 @@ class ObjecteController extends Controller
                 break;
         }
 
-        // ── Paginació ──
         $perPage = (int) $request->input('per_page', 20);
         $objectes = $query->paginate($perPage);
 
@@ -103,31 +96,18 @@ class ObjecteController extends Controller
             ])
             ->findOrFail($id);
 
-        // ── Valoració mitjana del propietari ──
         $objecte->user->valoracio_mitjana = $this->calcularValoracioPropietari($objecte->user_id);
 
-        // ── Estadístiques de valoració de l'objecte ──
         $stats = $this->obtenirEstadistiquesValoracio($id);
         $objecte->valoracio_mitjana = $stats->avg_rating;
         $objecte->total_valoracions = (int) $stats->count_ratings;
 
-        // ── Valoracions amb autor ──
         $objecte->valoracions_data = $this->obtenirValoracionsObjecte($id);
-
-        // ── Dates ocupades (transaccions actives) ──
         $objecte->dates_ocupades = $this->obtenirDatesOcupades($id);
 
         return new ObjecteDetailResource($objecte);
     }
 
-    // ──────────────────────────────────────
-    //  MÈTODES PRIVATS (detall)
-    // ──────────────────────────────────────
-
-    /**
-     * Calcula la valoració mitjana del propietari a través de
-     * totes les transaccions dels seus objectes.
-     */
     private function calcularValoracioPropietari(int $userId): ?float
     {
         $avg = DB::table('valoracions')
@@ -140,9 +120,6 @@ class ObjecteController extends Controller
         return $avg !== null ? round((float) $avg, 1) : null;
     }
 
-    /**
-     * Obté la mitjana i el total de valoracions d'un objecte.
-     */
     private function obtenirEstadistiquesValoracio(int $objecteId): object
     {
         $result = DB::table('valoracions')
@@ -158,10 +135,6 @@ class ObjecteController extends Controller
         ];
     }
 
-    /**
-     * Retorna les dates ocupades per un objecte (sol·licituds acceptades
-     * amb transaccions actives o en curs).
-     */
     private function obtenirDatesOcupades(int $objecteId): array
     {
         return DB::table('solicituds')
@@ -178,9 +151,6 @@ class ObjecteController extends Controller
             ->toArray();
     }
 
-    /**
-     * Obté les valoracions de l'objecte amb l'autor de cada una.
-     */
     private function obtenirValoracionsObjecte(int $objecteId): array
     {
         return DB::table('valoracions')
@@ -199,11 +169,11 @@ class ObjecteController extends Controller
             ->orderByDesc('valoracions.created_at')
             ->get()
             ->map(fn($row) => [
-                'id'        => $row->id,
-                'puntuacio' => $row->puntuacio,
-                'comentari' => $row->comentari,
+                'id'         => $row->id,
+                'puntuacio'  => $row->puntuacio,
+                'comentari'  => $row->comentari,
                 'created_at' => $row->created_at,
-                'autor'     => [
+                'autor'      => [
                     'id'  => $row->autor_id,
                     'nom' => $row->autor_nom,
                 ],
