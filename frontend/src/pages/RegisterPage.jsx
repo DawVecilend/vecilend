@@ -68,7 +68,7 @@ function RegisterPage() {
                             <input type="text" value={formData.telefon} onChange={(e) => setFormData({ ...formData, telefon: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Teléfono' required />
                         </div>
                         <div className='flex items-center'>
-                            <img className='relative h-[24px] left-8' src="/assets/icons/location-icon.svg" alt="Icono Direccion" />
+                            <img className='relative h-[24px] left-8' src="/assets/icons/location-icon-white.svg" alt="Icono Direccion" />
                             <input type="text" value={formData.direccio} onChange={(e) => setFormData({ ...formData, direccio: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Dirección' required />
                         </div>
                         <div className='flex items-center'>
