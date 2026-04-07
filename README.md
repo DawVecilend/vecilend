@@ -32,6 +32,8 @@ cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 
 # 3. Construir i aixecar els contenidors
+> [!NOTE]
+> También funciona para cargar todos los datos
 docker compose build
 docker compose up -d
 ```
