@@ -36,9 +36,6 @@ docker compose build
 docker compose up -d
 ```
 
-> [!NOTE]
-> También funciona para cargar todos los datos
-
 El backend s'encarrega automàticament d'instal·lar dependències, generar l'APP_KEY, executar les migracions i poblar la base de dades amb les dades inicials (seeders). El primer arranc pot trigar ~30 segons. Es pot seguir el progrés amb:
 
 ```bash
@@ -249,6 +246,20 @@ actualitzar dependències de composer
 
 ---
 
-## Llicència
+
+> [!NOTE]
+> Nota
+
+> [!TIP]
+> Consejo
+
+> [!IMPORTANT]
+> Importante
+
+> [!WARNING]
+> Alerta
+
+> [!CAUTION]
+> Cuidado
 
 Aquest projecte està sota la llicència [Creative Commons BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
