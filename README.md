@@ -253,13 +253,11 @@ actualitzar dependències de composer
 > [!TIP]
 > Consejo
 
-> [!IMPORTANT]
-> Importante
-
 > [!WARNING]
 > Alerta
 
 > [!CAUTION]
 > Cuidado
 
-Aquest projecte està sota la llicència [Creative Commons BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+> [!IMPORTANT]
+> Aquest projecte està sota la llicència [Creative Commons BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
