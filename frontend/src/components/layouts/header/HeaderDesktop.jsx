@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 import LogoDark from '/assets/logos/LogoDark.svg'
-import SearchBar from '../elementos/SearchBar'
-import PrimaryButton from '../elementos/PrimaryButton'
-import SecondaryButton from '../elementos/SecondaryButton'
+import SearchBar from '../../elementos/SearchBar'
+import PrimaryButton from '../../elementos/PrimaryButton'
+import SecondaryButton from '../../elementos/SecondaryButton'
 import { useContext } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
+import { AuthContext } from '../../../contexts/AuthContext'
 
 function HeaderDesktop() {
   const { user, logout } = useContext(AuthContext);

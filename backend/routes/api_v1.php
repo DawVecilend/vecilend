@@ -11,8 +11,6 @@ use App\Http\Controllers\Api\V1\ObjecteController;
 
 // ── Rutes públiques (sense autenticació) ──────────────────
 
-// ── Rutes públiques (sense autenticació) ──────────────────
-
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])
     ->middleware('throttle:login');
@@ -24,8 +22,6 @@ Route::get('/categories', [CategoriaController::class, 'index']);
 Route::get('/objects', [ObjecteController::class, 'index']);
 Route::get('/objects/{id}', [ObjecteController::class, 'show'])
     ->where('id', '[0-9]+');
-
-// ── Rutes protegides (auth:sanctum) ───────────────────────
 
 // ── Rutes protegides (auth:sanctum) ───────────────────────
 
