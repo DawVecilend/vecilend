@@ -32,11 +32,12 @@ cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 
 # 3. Construir i aixecar els contenidors
-> [!NOTE]
-> También funciona para cargar todos los datos
 docker compose build
 docker compose up -d
 ```
+
+> [!NOTE]
+> También funciona para cargar todos los datos
 
 El backend s'encarrega automàticament d'instal·lar dependències, generar l'APP_KEY, executar les migracions i poblar la base de dades amb les dades inicials (seeders). El primer arranc pot trigar ~30 segons. Es pot seguir el progrés amb:
 
