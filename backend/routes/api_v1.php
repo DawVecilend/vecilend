@@ -20,6 +20,8 @@ Route::post('/reset-password',  [PasswordResetController::class, 'resetPassword'
 
 Route::get('/categories', [CategoriaController::class, 'index']);
 Route::get('/objects', [ObjecteController::class, 'index']);
+Route::get('/objects/{id}', [ObjecteController::class, 'show'])
+    ->where('id', '[0-9]+');
 
 // ── Rutes protegides (auth:sanctum) ───────────────────────
 

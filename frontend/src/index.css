@@ -54,12 +54,12 @@
   font-family: "Inter", system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-}
+}l
 
 * {
   box-sizing: border-box;
 }
 
 body{
-  background-color: #0A0A0B;
+  background-color:  var(--color-vecilend-dark-bg);
 }
