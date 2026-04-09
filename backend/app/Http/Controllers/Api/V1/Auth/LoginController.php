@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Auth;
 use \App\Models\User;
 use Illuminate\Http\Request;
 
-class LoginController extends Controller {
-    public function login(LoginRequest $request): JsonResponse {
+class LoginController extends Controller
+{
+    public function login(LoginRequest $request): JsonResponse
+    {
         if (! Auth::attempt($request->validated())) {
             return response()->json([
                 'message' => 'Credencials incorrectes.',
@@ -31,7 +33,8 @@ class LoginController extends Controller {
         ], 200);
     }
 
-    public function logout(Request $request): JsonResponse {
+    public function logout(Request $request): JsonResponse
+    {
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([

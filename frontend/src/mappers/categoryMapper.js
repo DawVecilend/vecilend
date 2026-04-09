@@ -10,12 +10,12 @@ function createSlug(text) {
 }
 
 export function mapCategory(category) {
-  const name = category.name || category.nom || 'Categoría'
-
   return {
     id: category.id,
-    name,
-    slug: category.slug || createSlug(name),
+    name: category.nom,
+    slug: category.slug,
+    icon: category.icona,
+    description: category.descripcio,
   }
 }
 
