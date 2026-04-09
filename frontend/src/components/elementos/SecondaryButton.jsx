@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 
 function SecondaryButton({ url, text, onClick, width }) {
-  // Si té onClick (com el botó de logout), renderitzar un <button>
   if (onClick) {
     return (
       <button
@@ -13,8 +12,6 @@ function SecondaryButton({ url, text, onClick, width }) {
       </button>
     )
   }
-
-  // Si té url, renderitzar un Link
   return (
     <Link
       to={url}
@@ -25,3 +22,5 @@ function SecondaryButton({ url, text, onClick, width }) {
     </Link>
   )
 }
+
+export default SecondaryButton;

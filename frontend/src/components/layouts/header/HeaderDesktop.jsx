@@ -7,7 +7,8 @@ import { useContext } from 'react'
 import { AuthContext } from '../../../contexts/AuthContext'
 
 function HeaderDesktop() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, loading } = useContext(AuthContext);
+  if (loading) return null;
   return (
     <header className="bg-vecilend-dark-bg-secondary h-[82px] flex items-center justify-between px-38">
       <Link to="/" className="flex items-center">
@@ -17,8 +18,8 @@ function HeaderDesktop() {
       <div className='flex gap-4'>
         {user ? (
           <>
-            <span className="text-white">Hola, {user.name}</span>
-            <PrimaryButton onClick={logout} text="Cerrar sesión" />
+            <p className="text-white flex items-center">Hola, {user.nom}</p>
+            <Link to="" onClick={logout} className='bg-[#14B8A6] text-white h-[44px] px-4 flex items-center justify-center rounded-2xl'>Cerrar sesión</Link>
           </>
         ) : (
           <>

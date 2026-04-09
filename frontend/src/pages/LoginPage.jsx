@@ -18,13 +18,12 @@ function LoginPage() {
 
         try {
             const response = await api.post("/api/v1/login", formData);
-            if (response.data.token) {
-                localStorage.setItem("auth_token", response.data.token);
+            if (response.data.data.token) {
+                localStorage.setItem("auth_token", response.data.data.token);
             }
 
             alert("inicio de sesion correcto");
             window.location.href = "/";
-
         } catch (error) {
             console.error("Error backend:", error.response?.data);
             alert("❌ Error al iniciar sesión");
