@@ -5,7 +5,7 @@ import api from "../services/api";
 
 function LoginPage() {
     const [formData, setFormData] = useState({
-        email: "",
+        login: "",
         password: ""
     })
 
@@ -43,7 +43,7 @@ function LoginPage() {
                     <div className='flex flex-col w-[382px] gap-[10px]'>
                         <div className='flex items-center'>
                             <img className='relative h-[24px] left-8' src="/assets/icons/mail-icon.svg" alt="Icono email" />
-                            <input type="text" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Email' />
+                            <input type="text" value={formData.email} onChange={(e) => setFormData({ ...formData, login: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Email' />
                         </div>
                         <div className='flex items-center'>
                             <img className='relative h-[24px] left-8' src="/assets/icons/key-icon.svg" alt="Icono contraseña" />
