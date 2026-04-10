@@ -4,6 +4,7 @@ function CategoryPill({ name, slug }) {
   const navigate = useNavigate()
 
   function handleClick() {
+    if (!slug) return
     navigate(`/categorias/${slug}`)
   }
 

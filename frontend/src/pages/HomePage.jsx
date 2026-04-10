@@ -31,9 +31,8 @@ function HomePage() {
 
     async function loadCategories() {
       try {
-        const response = await getCategories()
-        const rawCategories = response.data || response || []
-        const mappedCategories = mapCategories(rawCategories)
+        const categoriesData = await getCategories()
+        const mappedCategories = mapCategories(categoriesData)
         setCategories(mappedCategories)
       } catch (error) {
         console.error('Error cargando categorías:', error)

@@ -8,20 +8,20 @@ function SearchBar() {
   const location = useLocation()
   const [searchParams] = useSearchParams()
 
+  const isResultsPage = location.pathname === '/results'
+
   useEffect(() => {
-    setQuery(searchParams.get('search') || '')
-  }, [searchParams])
+    if (isResultsPage) {
+      setQuery(searchParams.get('search') || '')
+    }
+  }, [isResultsPage, searchParams])
 
   const handleChange = (value) => {
     setQuery(value)
 
-    const trimmedValue = value.trim()
+    if (!isResultsPage) return
 
-    if (location.pathname !== '/results') {
-      if (!trimmedValue) return
-      navigate(`/results?search=${encodeURIComponent(trimmedValue)}`)
-      return
-    }
+    const trimmedValue = value.trim()
 
     if (!trimmedValue) {
       navigate('/results', { replace: true })

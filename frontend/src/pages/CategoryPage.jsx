@@ -7,6 +7,8 @@ import BtnBack from '../components/elementos/BtnBack'
 import BtnOrder from '../components/elementos/BtnOrder'
 import { getCategories } from '../services/categories'
 import { getObjects } from '../services/objects'
+import { mapCategories } from '../mappers/categoryMapper'
+
 
 function CategoryPage() {
   const { slug } = useParams()
@@ -20,9 +22,9 @@ function CategoryPage() {
   useEffect(() => {
     async function loadCategories() {
       try {
-        const response = await getCategories()
-        const rawCategories = response.data || response || []
-        setCategories(Array.isArray(rawCategories) ? rawCategories : [])
+        const categoriesData = await getCategories()
+        const mappedCategories = mapCategories(categoriesData)
+        setCategories(mappedCategories)
       } catch (error) {
         console.error('Error cargando categorías:', error)
         setCategories([])
@@ -48,14 +50,20 @@ function CategoryPage() {
   }, [])
 
   const currentCategory = useMemo(() => {
-    return categories.find((category) => category.slug === slug) || null
+    const routeSlug = slug
+
+    return (
+      categories.find(
+        (category) => category.slug === routeSlug
+      ) || null
+    )
   }, [categories, slug])
 
   const filteredProducts = useMemo(() => {
     if (!currentCategory) return []
 
     return products.filter(
-      (product) => product.categoria?.id === currentCategory.id
+      (product) => Number(product.categoria?.id) === Number(currentCategory.id)
     )
   }, [products, currentCategory])
 
@@ -108,11 +116,11 @@ function CategoryPage() {
                 No existe ninguna categoría con el slug “{slug}”.
               </p>
             </section>
-          ) : (
+          ) : hasProducts ? (
             <>
               <section className="mb-8 mt-6">
                 <h1 className="font-heading text-h1-mobile font-bold text-vecilend-dark-text">
-                  {currentCategory.nom}
+                  {currentCategory.name}
                 </h1>
 
                 <p className="mt-2 font-body text-body-base text-vecilend-dark-text-secondary">
@@ -120,22 +128,32 @@ function CategoryPage() {
                 </p>
               </section>
 
-              {hasProducts ? (
-                <ProductsSection
-                  title={`Productos de ${currentCategory.nom}`}
-                  products={orderedProducts}
-                />
-              ) : (
-                <section className="rounded-[20px] border border-vecilend-dark-border bg-vecilend-dark-card p-10 text-center">
-                  <h2 className="font-heading text-h3-desktop text-vecilend-dark-text">
-                    No hay productos en esta categoría
-                  </h2>
+              <ProductsSection
+                title={`Productos de ${currentCategory.name}`}
+                products={orderedProducts}
+              />
+            </>
+          ) : (
+            <>
+              <section className="mb-8 mt-6">
+                <h1 className="font-heading text-h1-mobile font-bold text-vecilend-dark-text">
+                  {currentCategory.name}
+                </h1>
 
-                  <p className="mt-3 font-body text-body text-vecilend-dark-text-secondary">
-                    Todavía no hay productos publicados en “{currentCategory.nom}”.
-                  </p>
-                </section>
-              )}
+                <p className="mt-2 font-body text-body-base text-vecilend-dark-text-secondary">
+                  Se han encontrado 0 productos en esta categoría.
+                </p>
+              </section>
+
+              <section className="rounded-[20px] border border-vecilend-dark-border bg-vecilend-dark-card p-10 text-center">
+                <h2 className="font-heading text-h3-desktop text-vecilend-dark-text">
+                  No hay productos en esta categoría
+                </h2>
+
+                <p className="mt-3 font-body text-body text-vecilend-dark-text-secondary">
+                  Todavía no hay productos publicados en “{currentCategory.name}”.
+                </p>
+              </section>
             </>
           )}
         </div>
