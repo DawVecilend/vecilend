@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserResource;
+use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\Api\V1\ObjecteController;
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])
     ->middleware('throttle:login');
-
+Route::get('/profile/{username}', [UserController::class, 'getByUsername']);
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password',  [PasswordResetController::class, 'resetPassword']);
 
