@@ -14,7 +14,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'    => ['required', 'string', 'email'],
+            'login'    => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -22,8 +22,7 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required'    => "El camp email és obligatori.",
-            'email.email'       => "El format de l'email no és vàlid.",
+            'login.required'    => "El camp login és obligatori.",
             'password.required' => 'El camp contrasenya és obligatori.',
         ];
     }

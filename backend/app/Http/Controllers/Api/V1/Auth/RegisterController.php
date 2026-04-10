@@ -13,10 +13,11 @@ class RegisterController extends Controller {
     public function register(RegisterRequest $request): JsonResponse {
         $validated = $request->validated();
         $user = User::create([
+            'username' => $validated['username'],
             'nom' => $validated['nom'],
             'cognoms' => $validated['cognoms'],
             'email' => $validated['email'],
-            'password' => $validated['password'], // el cast 'hashed' del modelo se encarga
+            'password' => $validated['password'],
             'telefon' => $validated['telefon'] ?? null,
             'direccio' => $validated['direccio'] ?? null,
             'avatar_url' => $validated['avatar_url'] ?? null,

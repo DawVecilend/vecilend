@@ -10,6 +10,7 @@ class UserSeeder extends Seeder {
     public function run(): void {
         $now = Carbon::now();
         DB::table('users')->insert([
+            'username' => 'admin',
             'nom' => 'Admin',
             'cognoms' => 'Vecilend',
             'email' => 'admin@vecilend.com',
@@ -25,14 +26,15 @@ class UserSeeder extends Seeder {
         ]);
 
         $usuaris = [
-            ['nom' => 'Maria','cognoms' => 'Garcia López','email' => 'maria@example.com','lng' => 2.0950, 'lat' => 41.3850,'radi' => 5],
-            ['nom' => 'Pere','cognoms' => 'Martínez Soler','email' => 'pere@example.com','lng' => 2.0780, 'lat' => 41.3790,'radi' => 3],
-            ['nom' => 'Laura','cognoms' => 'Fernández Roca','email' => 'laura@example.com','lng' => 2.1000, 'lat' => 41.3900,'radi' => 8],
-            ['nom' => 'Joan','cognoms' => 'Puig Vidal','email' => 'joan@example.com','lng' => 2.0830, 'lat' => 41.3770,'radi' => 5],
+            ['username' => 'maria','nom' => 'Maria','cognoms' => 'Garcia López','email' => 'maria@example.com','lng' => 2.0950, 'lat' => 41.3850,'radi' => 5],
+            ['username' => 'pere','nom' => 'Pere','cognoms' => 'Martínez Soler','email' => 'pere@example.com','lng' => 2.0780, 'lat' => 41.3790,'radi' => 3],
+            ['username' => 'laura','nom' => 'Laura','cognoms' => 'Fernández Roca','email' => 'laura@example.com','lng' => 2.1000, 'lat' => 41.3900,'radi' => 8],
+            ['username' => 'joan','nom' => 'Joan','cognoms' => 'Puig Vidal','email' => 'joan@example.com','lng' => 2.0830, 'lat' => 41.3770,'radi' => 5],
         ];
 
         foreach ($usuaris as $u) {
             DB::table('users')->insert([
+                'username' => $u['username'],
                 'nom' => $u['nom'],
                 'cognoms' => $u['cognoms'],
                 'email' => $u['email'],

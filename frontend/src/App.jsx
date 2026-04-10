@@ -4,6 +4,7 @@ import StatusPage from './pages/StatusPage'
 import LoginPage from './pages/LoginPage'
 import CategoryPage from './pages/CategoryPage'
 import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage'
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
+          <Route path="/profile/:username" element={<ProfilePage />} />
         </Routes>
       </AuthProvider>
     </>
