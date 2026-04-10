@@ -1,32 +1,33 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import HeaderDesktop from '../components/layouts/header/HeaderDesktop'
 import { useState } from "react"
-import api from "../services/api";
+import { useAuth } from '../contexts/AuthContext'
 
 function LoginPage() {
+    const { login } = useAuth()
+    const navigate = useNavigate()
+
     const [formData, setFormData] = useState({
         login: "",
         password: ""
     })
+    const [error, setError] = useState(null)
+    const [submitting, setSubmitting] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
-        const submitData = {
-            ...formData
-        }
+        setError(null)
+        setSubmitting(true)
 
         try {
-            const response = await api.post("/api/v1/login", formData);
-            if (response.data.data.token) {
-                localStorage.setItem("auth_token", response.data.data.token);
-            }
-
-            alert("inicio de sesion correcto");
-            window.location.href = "/";
-        } catch (error) {
-            console.error("Error backend:", error.response?.data);
-            alert("❌ Error al iniciar sesión");
+            await login(formData)
+            navigate('/')
+        } catch (err) {
+            if (err.response?.status === 401) setError('Credencials incorrectes.')
+            else if (err.response?.status === 422) setError(Object.values(err.response.data.errors).flat()[0])
+            else setError('Error de connexió.')
+        } finally {
+            setSubmitting(false)
         }
     }
 
@@ -43,7 +44,7 @@ function LoginPage() {
                     <div className='flex flex-col w-[382px] gap-[10px]'>
                         <div className='flex items-center'>
                             <img className='relative h-[24px] left-8' src="/assets/icons/mail-icon.svg" alt="Icono email" />
-                            <input type="text" value={formData.email} onChange={(e) => setFormData({ ...formData, login: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Email' />
+                            <input type="text" value={formData.login} onChange={(e) => setFormData({ ...formData, login: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Email' />
                         </div>
                         <div className='flex items-center'>
                             <img className='relative h-[24px] left-8' src="/assets/icons/key-icon.svg" alt="Icono contraseña" />
