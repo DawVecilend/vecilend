@@ -1,8 +1,30 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { getProfile } from '../services/profile'
+import api from '../services/api'
 import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
 import FooterDesktop from '../components/layouts/footer/FooterDesktop';
 
 function ProfilePage() {
+  const [profile, setProfile] = useState([])
+  const { username } = useParams()
+
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const response = await getProfile(username)
+        console.log('Perfil cargado:', response.data)
+        setProfile(response.data)
+      } catch (error) {
+        console.error('Error cargando perfil:', error)
+        setProfile(null)
+      }
+    }
+
+    loadProfile()
+  }, [username])
+
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
       <HeaderDesktop />
@@ -15,48 +37,48 @@ function ProfilePage() {
           <div className="relative flex flex-col md:flex-row gap-8 items-start md:items-center">
             <div className="relative group">
               <img 
-                alt="Marcus Thompson"
+                alt="Foto de perfil"
                 className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500" 
-                data-alt="high-end editorial portrait of Marcus Thompson" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuALtst_DDopk9qy32cu1f416S_jKl7EXgKR58J91Bcm6pIqDhKlqngYs1qXrOUHBSN6aNvfDhzBDqM0jRJ8fQ6P3Q5-M8ekmE3yP6LUnqLZPbhL9hKGwKYH94N8p8JYTmTB6OlQ8NnYY_PNMiWcdZ_DFmCAw7cXxFa6fpECNjZrMwK88DI4805b29ye2eZkMKDaaM9wCaGMRwni88fBLDXav6sP1BizGybRSAze0fp7Ft2ltjBG4gIlODchwQiAjKnEqTgKRA4h4fT1"
+                data-alt="User Profile" 
+                src={profile?.avatar}
               />
               <div className="absolute -bottom-3 -right-3 bg-[#f38764] text-[#6c2106] px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 border border-white">
                 <span className="material-symbols-outlined icon-filled text-sm">verified</span>
-                Verified Pro
+                Verificado
               </div>
             </div>
             <div className="flex-1 space-y-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight">Marcus Thompson</h1>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight">{profile?.nom} {profile?.cognoms}</h1>
                 <p className="flex items-center gap-1 text-[#bbcac6] font-medium mt-1">
                   <span className="material-symbols-outlined !text-lg">location_on</span>
-                  Brooklyn, NY
+                  {profile?.direccio || 'Ubicación no disponible'}
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
                 <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
                   <span className="text-[#4fdbc8] font-bold text-xl">350+</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">Rentals</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">Alquileres</span>
                 </div>
                 <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
                   <span className="text-[#4fdbc8] font-bold text-xl">100%</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">Response</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">Respuesta</span>
                 </div>
                 <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
                   <div className="flex items-center gap-1">
                     <span className="text-[#4fdbc8] font-bold text-xl">4.9</span>
                     <span className="material-symbols-outlined icon-filled text-orange-500 text-sm">star</span>
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">Rating</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">Puntuación</span>
                 </div>
               </div>
               <div className="flex gap-4 pt-2">
                 <button className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2">
                   <span className="material-symbols-outlined !text-xl">mail</span>
-                  Message Marcus
+                  Contacta a {profile?.nom}
                 </button>
                 <button className="bg-[#21514a] text-[#92c2b8] px-8 py-4 rounded-full font-bold hover:bg-[#bbece2] transition-colors active:scale-95">
-                  Follow
+                  Seguir
                 </button>
               </div>
             </div>
@@ -65,10 +87,9 @@ function ProfilePage() {
 
         <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
           <div className="md:col-span-8 bg-[#090f0e] p-8 rounded-lg space-y-6">
-            <h2 className="text-2xl font-bold text-[#4fdbc8]">About Marcus</h2>
+            <h2 className="text-2xl font-bold text-[#4fdbc8]">Acerca de {profile?.nom}</h2>
             <div className="space-y-4 text-[#bbcac6] leading-relaxed">
-              <p>I'm a professional cinematographer with 12 years of experience in the industry, focusing on narrative features and high-end commercials. I believe that gear is only as good as the care it receives, which is why I personally inspect and clean every piece of equipment after each rental.</p>
-              <p>My goal is to support the local filmmaker community by providing access to production-ready gear at fair prices. All my kits come in rugged travel cases and include the necessary cables and accessories for immediate field use.</p>
+              <p>{profile?.descripcio || 'Descripción no disponible'}</p>
             </div>
             <div className="flex flex-wrap gap-3 pt-4">
               <span className="bg-[#252b2a] px-4 py-2 rounded-full text-sm font-semibold">Cinematography</span>

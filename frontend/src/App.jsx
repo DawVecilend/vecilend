@@ -17,7 +17,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:username" element={<ProfilePage />} />
         </Routes>
       </AuthProvider>
     </>
