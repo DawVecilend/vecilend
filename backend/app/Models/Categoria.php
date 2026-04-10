@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Categoria extends Model {
+class Categoria extends Model
+{
     use HasFactory;
+
     protected $table = 'categories';
+
     protected $fillable = [
         'nom',
+        'slug',
         'icona',
         'descripcio',
         'activa',
@@ -20,16 +24,19 @@ class Categoria extends Model {
     protected $casts = [
         'activa' => 'boolean',
     ];
-    
-    public function objectes(): HasMany {
+
+    public function objectes(): HasMany
+    {
         return $this->hasMany(Objecte::class, 'categoria_id');
     }
-    
-    public function subcategories(): HasMany {
+
+    public function subcategories(): HasMany
+    {
         return $this->hasMany(Subcategoria::class, 'categoria_id');
     }
-    
-    public function scopeActives(Builder $query): Builder {
+
+    public function scopeActives(Builder $query): Builder
+    {
         return $query->where('activa', true);
     }
 }
