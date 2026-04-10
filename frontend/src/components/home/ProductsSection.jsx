@@ -10,18 +10,7 @@ function ProductsSection({ title, products = [] }) {
 
         <div className="flex flex-wrap justify-center gap-4">
           {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              image={product.image}
-              category={product.category}
-              title={product.title}
-              userName={product.userName}
-              userAvatar={product.userAvatar}
-              rating={product.rating}
-              pricePerDay={product.pricePerDay}
-              status={product.status}
-              availableAt={product.availableAt}
-            />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>

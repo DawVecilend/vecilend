@@ -8,7 +8,6 @@ import TopUsersSection from '../components/home/TopUsersSection'
 import BenefitsSection from '../components/home/BenefitsSection'
 import { getObjects } from '../services/objects'
 import { getCategories } from '../services/categories'
-import { mapObjectsToProducts } from '../mappers/objectMapper'
 import { mapCategories } from '../mappers/categoryMapper'
 
 function HomePage() {
@@ -20,10 +19,8 @@ function HomePage() {
   useEffect(() => {
     async function loadObjects() {
       try {
-        const response = await getObjects()
-        const rawObjects = response.data || response || []
-        const mappedProducts = mapObjectsToProducts(rawObjects)
-        setProducts(mappedProducts)
+        const objects = await getObjects()
+        setProducts(Array.isArray(objects) ? objects : [])
       } catch (error) {
         console.error('Error cargando objetos:', error)
         setProducts([])
@@ -50,8 +47,11 @@ function HomePage() {
     loadCategories()
   }, [])
 
-  const topProducts = products.slice(0, 5)
-  const recentProducts = products.slice(0, 5)
+  const recentProducts = [...products]
+    .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+    .slice(0, 5)
+
+  const topProducts = recentProducts
 
   return (
     <>
@@ -59,7 +59,9 @@ function HomePage() {
       <HeroSection />
 
       {loadingCategories ? (
-        <p className="py-6 text-center text-vecilend-dark-text">Cargando categorías...</p>
+        <p className="py-6 text-center text-vecilend-dark-text">
+          Cargando categorías...
+        </p>
       ) : (
         <CategoriesSection categories={categories} />
       )}

@@ -1,67 +1,53 @@
-function getAvailabilityLabel(status, availableAt = null) {
-  const now = new Date()
+function normalizeStatus(status) {
+  const s = String(status || '').toLowerCase()
 
-  if (status === 'available') {
-    return 'Disponible'
+  if (s === 'reservado' || s === 'reservat' || s === 'reserved') {
+    return 'reserved'
   }
 
-  if (status === 'reserved') {
+  if (s === 'alquilado' || s === 'llogat' || s === 'rented') {
+    return 'rented'
+  }
+
+  return 'available'
+}
+
+function getAvailabilityLabel(status) {
+  const normalizedStatus = normalizeStatus(status)
+
+  if (normalizedStatus === 'reserved') {
     return 'Reservado'
   }
 
-  if (status === 'rented') {
-    if (!availableAt) {
-      return 'Alquilado'
-    }
-
-    const endDate = new Date(availableAt)
-    const diffMs = endDate - now
-
-    if (Number.isNaN(endDate.getTime()) || diffMs <= 0) {
-      return 'Disponible'
-    }
-
-    const diffHours = Math.ceil(diffMs / (1000 * 60 * 60))
-    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
-
-    if (diffHours < 24) {
-      return `Disponible en ${diffHours} h`
-    }
-
-    if (diffDays === 1) {
-      return 'Disponible mañana'
-    }
-
-    return `Disponible en ${diffDays} días`
+  if (normalizedStatus === 'rented') {
+    return 'Alquilado'
   }
 
   return 'Disponible'
 }
 
 function getAvailabilityClass(status) {
-  if (status === 'reserved') {
+  const normalizedStatus = normalizeStatus(status)
+
+  if (normalizedStatus === 'reserved') {
     return 'text-yellow-400'
   }
 
   return 'text-vecilend-dark-text-secondary'
 }
 
-function ProductCard({
-  image,
-  category,
-  title,
-  userName,
-  userAvatar,
-  rating,
-  pricePerDay,
-  status = 'available',
-  availableAt = null,
-}) {
-  const availabilityLabel = getAvailabilityLabel(status, availableAt)
-  const availabilityClass = getAvailabilityClass(status)
+function ProductCard({ product }) {
+  const image = product.imatge_principal || '/assets/product1-image.jpg'
+  const category = product.categoria?.nom || 'Sin categoría'
+  const title = product.nom || 'Producto'
+  const userName = product.user?.nom || 'Usuario'
+  const userAvatar = product.user?.avatar_url || '/assets/avatar-omar.jpg'
+  const pricePerDay = product.preu_diari || 0
+  const availabilityLabel = getAvailabilityLabel(product.estat)
+  const availabilityClass = getAvailabilityClass(product.estat)
 
   return (
-    <article className="w-[255px] overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card">
+    <article className="flex h-full w-[255px] flex-col overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card">
       <div className="relative">
         <img src={image} alt={title} className="h-[194px] w-full object-cover" />
 
@@ -78,8 +64,8 @@ function ProductCard({
         </span>
       </div>
 
-      <div className="p-4">
-        <h3 className="mb-3 font-heading text-h3-desktop leading-h3 font-semibold text-vecilend-dark-text">
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="mb-3 min-h-[56px] overflow-hidden font-heading text-h3-desktop leading-h3 font-semibold text-vecilend-dark-text [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
           {title}
         </h3>
 
@@ -96,23 +82,18 @@ function ProductCard({
 
         <div className="mb-3 h-px w-full bg-vecilend-dark-border"></div>
 
-        <div className="mb-2 flex items-center gap-2">
-          <span className="text-vecilend-dark-primary">★★★★☆</span>
-          <span className="font-body text-label leading-label text-vecilend-dark-text-secondary">
-            {rating}
-          </span>
-        </div>
+        <div className="mt-auto">
+          <p className="mb-2 font-body text-body-base leading-body text-vecilend-dark-text">
+            <span className="font-semibold">{pricePerDay}€</span> / día
+          </p>
 
-        <p className="mb-2 font-body text-body-base leading-body text-vecilend-dark-text">
-          <span className="font-semibold">{pricePerDay}€</span> / día
-        </p>
+          <div className="mb-3 h-px w-full bg-vecilend-dark-border"></div>
 
-        <div className="mb-3 h-px w-full bg-vecilend-dark-border"></div>
-
-        <div>
-          <span className={`font-body text-label leading-label ${availabilityClass}`}>
-            {availabilityLabel}
-          </span>
+          <div>
+            <span className={`font-body text-label leading-label ${availabilityClass}`}>
+              {availabilityLabel}
+            </span>
+          </div>
         </div>
       </div>
     </article>

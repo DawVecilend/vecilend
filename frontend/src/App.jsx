@@ -4,6 +4,7 @@ import StatusPage from './pages/StatusPage'
 import LoginPage from './pages/LoginPage'
 import CategoryPage from './pages/CategoryPage'
 import ObjectsPage from './pages/ObjectsPage'
+import ResultsPage from './pages/ResultsPage'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/status" element={<StatusPage />} />
         <Route path="/objects" element={<ObjectsPage />} />
         <Route path="/categorias/:slug" element={<CategoryPage />} />
+        <Route path="/results" element={<ResultsPage />} />
       </Routes>
     </>
   )
