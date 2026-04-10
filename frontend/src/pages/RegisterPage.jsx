@@ -6,6 +6,7 @@ import api from "../services/api";
 
 function RegisterPage() {
     const [formData, setFormData] = useState({
+        username: "",
         nom: "",
         cognoms: "",
         email: "",
@@ -45,12 +46,16 @@ function RegisterPage() {
             <HeaderDesktop />
             <form onSubmit={handleSubmit} className="relative h-full bg-[url('/assets/fondo-login-register.jpg')] flex flex-col items-center bg-cover bg-center">
                 <div className="absolute inset-0 bg-black/90"></div>
-                <div className="relative flex flex-col items-center pt-20 gap-6 w-full px-38 pb-36">
+                <div className="relative flex flex-col items-center pt-6 gap-6 w-full px-38 pb-36">
                     <div className='flex'>
                         <Link to="/register" className='bg-vecilend-dark-primary h-full px-8 py-4 rounded-l-2xl'>Crear cuenta</Link >
                         <Link to="/login" className='bg-vecilend-dark-neutral text-white h-full px-8 py-4 rounded-r-2xl'>Iniciar sessión</Link >
                     </div>
                     <div className='flex flex-col w-[382px] gap-[10px]'>
+                        <div className='flex items-center'>
+                            <img className='relative h-[24px] left-8' src="/assets/icons/person-icon.svg" alt="Icono Persona" />
+                            <input type="text" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Nombre de usuario' required />
+                        </div>
                         <div className='flex items-center'>
                             <img className='relative h-[24px] left-8' src="/assets/icons/person-icon.svg" alt="Icono Persona" />
                             <input type="text" value={formData.nom} onChange={(e) => setFormData({ ...formData, nom: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Nombre' required />

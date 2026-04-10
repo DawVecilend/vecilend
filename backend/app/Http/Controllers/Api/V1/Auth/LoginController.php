@@ -14,14 +14,19 @@ class LoginController extends Controller
 {
     public function login(LoginRequest $request): JsonResponse
     {
-        if (! Auth::attempt($request->validated())) {
+        $login = $request->input('login');
+        $password = $request->input('password');
+
+        $authenticated = Auth::attempt(['email' => $login, 'password' => $password]) ||
+                     Auth::attempt(['username' => $login, 'password' => $password]);
+
+        if (!$authenticated) {
             return response()->json([
                 'message' => 'Credencials incorrectes.',
             ], 401);
         }
 
         $user = Auth::user();
-
         $token = $user->createToken(name: 'api-token')->plainTextToken;
 
         return response()->json([

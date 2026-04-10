@@ -19,6 +19,12 @@ function HeaderDesktop() {
         {user ? (
           <>
             <p className="text-white flex items-center">Hola, {user.nom}</p>
+            <Link 
+              to="/profile" 
+              className="text-white flex items-center hover:text-[#14B8A6] transition-colors cursor-pointer font-medium"
+            >
+              Ver perfil
+            </Link>
             <Link to="" onClick={logout} className='bg-[#14B8A6] text-white h-[44px] px-4 flex items-center justify-center rounded-2xl'>Cerrar sesión</Link>
           </>
         ) : (

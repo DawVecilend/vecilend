@@ -11,6 +11,7 @@ class UserFactory extends Factory {
     protected static ?string $password = null;
     public function definition(): array {
         return [
+            'username' => fake()->unique()->userName(),
             'nom' => fake()->firstName(),
             'cognoms' => fake()->lastName() . ' ' . fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
