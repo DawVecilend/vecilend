@@ -1,45 +1,35 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import HeaderDesktop from '../components/layouts/header/HeaderDesktop'
 import { useState } from "react"
-import api from "../services/api";
-
+import { useAuth } from '../contexts/AuthContext'
 
 function RegisterPage() {
+    const { register } = useAuth()
+    const navigate = useNavigate()
+
     const [formData, setFormData] = useState({
-        username: "",
-        nom: "",
-        cognoms: "",
-        email: "",
-        telefon: "",
-        direccio: "",
-        password: "",
-        password_confirmation: "",
-        accepta_termes: false,
-        avatar_url: "",
-        radi_proximitat: 10,
-        ubicacio: {
-            lat: 0,
-            lng: 0
-        }
-    });
+        username: "", nom: "", cognoms: "", email: "", telefon: "", direccio: "",
+        password: "", password_confirmation: "", accepta_termes: false,
+        avatar_url: "", radi_proximitat: 10, ubicacio: { lat: 0, lng: 0 },
+    })
+    const [error, setError] = useState(null)
+    const [submitting, setSubmitting] = useState(false)
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
+        setError(null)
+        setSubmitting(true)
 
         try {
-            const response = await api.post("/api/v1/register", formData);
-            if (response.data.token) {
-                localStorage.setItem("auth_token", response.data.token);
-            }
-
-            alert("Usuario creado correctamente");
-            window.location.href = "/login";
-
-        } catch (error) {
-            console.error("Error backend:", error.response?.data || error.message);
-            alert("❌ Error al crear usuario");
+            await register(formData)
+            navigate('/')
+        } catch (err) {
+            if (err.response?.status === 422) setError(Object.values(err.response.data.errors).flat()[0])
+            else setError("Error al crear l'usuari.")
+        } finally {
+            setSubmitting(false)
         }
-    };
+    }
 
     return (
         <>
@@ -87,7 +77,7 @@ function RegisterPage() {
                     </div>
                     <div className='flex items-center flex-col w-full gap-6'>
                         <div className='flex gap-2'>
-                            <input type="checkbox" onChange={(e) => setFormData({ ...formData, accepta_termes: e.target.value })} id="accept" className='scale-125 accent-vecilend-dark-primary cursor-pointer transition' required />
+                            <input type="checkbox" onChange={(e) => setFormData({ ...formData, accepta_termes: e.target.checked })} id="accept" className='scale-125 accent-vecilend-dark-primary cursor-pointer transition' required />
                             <label htmlFor="accept" className='text-white'>Acepto los Términos y la <span className='text-vecilend-dark-primary'>Política de privacidad</span></label>
                         </div>
                         <button className='bg-vecilend-dark-primary text-white h-[44px] px-4 flex items-center justify-center rounded-2xl w-[298px] cursor-pointer' type="submit">Registrarse</button>

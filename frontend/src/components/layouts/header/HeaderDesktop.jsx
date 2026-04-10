@@ -25,7 +25,8 @@ function HeaderDesktop() {
             >
               Ver perfil
             </Link>
-            <Link to="" onClick={logout} className='bg-[#14B8A6] text-white h-[44px] px-4 flex items-center justify-center rounded-2xl'>Cerrar sesión</Link>
+            <button onClick={logout} className='bg-[#14B8A6] text-white h-[44px] px-4 flex items-center justify-center 
+            rounded-2xl cursor-pointer'>Cerrar sesión</button>
           </>
         ) : (
           <>
