@@ -13,8 +13,8 @@ use App\Http\Controllers\Api\V1\ObjecteController;
 // ── Rutes públiques (sense autenticació) ──────────────────
 
 Route::post('/register', [RegisterController::class, 'register']);
-Route::post('/login', [LoginController::class, 'login'])
-    ->middleware('throttle:login');
+Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
+Route::post('/check-user', [RegisterController::class, 'checkUser']);
 Route::get('/profile/{username}', [UserController::class, 'getByUsername']);
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password',  [PasswordResetController::class, 'resetPassword']);

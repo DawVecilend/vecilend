@@ -3,7 +3,7 @@ import LogoDark from '/assets/logos/LogoDark.svg'
 
 function FooterDesktop() {
   return (
-    <footer className="mt-[68px] flex h-[226px] items-center justify-center bg-vecilend-dark-bg-secondary">
+    <footer className="flex h-[226px] items-center justify-center bg-vecilend-dark-bg-secondary">
       <div className="mx-auto flex items-start justify-around gap-75">
         <div className="flex min-w-[180px] flex-col">
           <h3 className="mb-4 font-heading text-h3-desktop font-semibold text-white">

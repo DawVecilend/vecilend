@@ -27,7 +27,7 @@ function HeaderDesktop() {
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/objects" className={getNavClass('/objects')}>
-              Browse
+              Objects
             </Link>
             <Link to="/how-it-works" className={getNavClass('/how-it-works')}>
               How it Works
@@ -66,7 +66,7 @@ function HeaderDesktop() {
 
               {/* Nombre con enlace al perfil */}
               <Link 
-                to="/profile" 
+                to={`/profile/${user.username}`} 
                 className="hidden md:block text-[#aebdb9] hover:text-[#4fdbc8] font-bold text-sm px-4 py-2.5 transition-colors"
               >
                 Hola, {user.nom}

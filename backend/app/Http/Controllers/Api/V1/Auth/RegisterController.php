@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\RegisterRequest;
+use App\Http\Requests\Api\V1\Auth\CheckUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -43,5 +44,15 @@ class RegisterController extends Controller {
             'data' => new UserResource($user),
             'token' => $token,
         ], 201);
+    }
+
+    public function checkUser(CheckUserRequest $request): JsonResponse {
+        $emailExists = User::where('email', $request->email)->exists();
+        $userExists = User::where('username', $request->username)->exists();
+
+        return response()->json([
+            'emailExists' => $emailExists,
+            'userExists' => $userExists,
+        ]);
     }
 }
