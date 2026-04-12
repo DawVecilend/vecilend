@@ -470,7 +470,7 @@ function RegisterPage() {
                 </div>
               </div>
               
-              <div className="p-6 bg-[#161d1b] rounded-xl border border-[#3c4947]/20 flex-col items-center text-center w-full flex-1 flex justify-center">
+              <div className="p-6 bg-[#161d1b] rounded-xl border border-[#3c4947]/20 flex flex-col items-center text-center w-full">
                 <div className="w-10 h-10 rounded-lg bg-[#f38764]/20 flex items-center justify-center text-[#ffb59e] mb-4">
                   <span className="material-symbols-outlined">visibility_off</span>
                 </div>
