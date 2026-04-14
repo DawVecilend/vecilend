@@ -6,6 +6,7 @@ import Footer from '../components/layouts/footer/FooterDesktop'
 import BtnOrder from '../components/elementos/BtnOrder'
 import BtnBack from '../components/elementos/BtnBack'
 import { getObjects } from '../services/objects'
+import { mapObjectsToProducts } from '../mappers/objectMapper'
 
 function normalizeText(text) {
   return String(text || '')
@@ -49,8 +50,9 @@ function ResultsPage() {
     async function loadObjects() {
       try {
         setLoadingProducts(true)
-        const objects = await getObjects()
-        setAllProducts(Array.isArray(objects) ? objects : [])
+        const response = await getObjects()
+        const rawObjects = response.data || response || []
+        setAllProducts(Array.isArray(rawObjects) ? rawObjects : [])
       } catch (error) {
         console.error('Error cargando resultados:', error)
         setAllProducts([])
@@ -66,25 +68,39 @@ function ResultsPage() {
     return allProducts.filter((object) => matchesSearch(object, searchText))
   }, [allProducts, searchText])
 
-  const orderedProducts = [...filteredProducts].sort((a, b) => {
+  const orderedRawProducts = useMemo(() => {
+    const sorted = [...filteredProducts]
+
     if (orderBy === 'recent') {
-      return new Date(b.created_at || 0) - new Date(a.created_at || 0)
+      return sorted.sort(
+        (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
+      )
     }
 
     if (orderBy === 'oldest') {
-      return new Date(a.created_at || 0) - new Date(b.created_at || 0)
+      return sorted.sort(
+        (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
+      )
     }
 
     if (orderBy === 'price_asc') {
-      return Number(a.preu_diari || 0) - Number(b.preu_diari || 0)
+      return sorted.sort(
+        (a, b) => Number(a.preu_diari || 0) - Number(b.preu_diari || 0)
+      )
     }
 
     if (orderBy === 'price_desc') {
-      return Number(b.preu_diari || 0) - Number(a.preu_diari || 0)
+      return sorted.sort(
+        (a, b) => Number(b.preu_diari || 0) - Number(a.preu_diari || 0)
+      )
     }
 
-    return 0
-  })
+    return sorted
+  }, [filteredProducts, orderBy])
+
+  const orderedProducts = useMemo(() => {
+    return mapObjectsToProducts(orderedRawProducts)
+  }, [orderedRawProducts])
 
   const hasResults = orderedProducts.length > 0
 

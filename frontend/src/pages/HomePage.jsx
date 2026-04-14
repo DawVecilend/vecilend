@@ -8,6 +8,7 @@ import TopUsersSection from '../components/home/TopUsersSection'
 import BenefitsSection from '../components/home/BenefitsSection'
 import { getObjects } from '../services/objects'
 import { getCategories } from '../services/categories'
+import { mapObjectsToProducts } from '../mappers/objectMapper'
 import { mapCategories } from '../mappers/categoryMapper'
 
 function HomePage() {
@@ -19,8 +20,10 @@ function HomePage() {
   useEffect(() => {
     async function loadObjects() {
       try {
-        const objects = await getObjects()
-        setProducts(Array.isArray(objects) ? objects : [])
+        const response = await getObjects()
+        const rawObjects = response.data || response || []
+        const mappedProducts = mapObjectsToProducts(rawObjects)
+        setProducts(mappedProducts)
       } catch (error) {
         console.error('Error cargando objetos:', error)
         setProducts([])
@@ -31,8 +34,9 @@ function HomePage() {
 
     async function loadCategories() {
       try {
-        const categoriesData = await getCategories()
-        const mappedCategories = mapCategories(categoriesData)
+        const response = await getCategories()
+        const rawCategories = response.data || response || []
+        const mappedCategories = mapCategories(rawCategories)
         setCategories(mappedCategories)
       } catch (error) {
         console.error('Error cargando categorías:', error)

@@ -1,15 +1,26 @@
-export function normalizeStatus(status) {
+function normalizeStatus(status) {
   const s = String(status || '').toLowerCase()
-
-  if (s === 'reservado' || s === 'reservat' || s === 'reserved') return 'reserved'
-  if (s === 'alquilado' || s === 'llogat' || s === 'rented') return 'rented'
+  if (['reserved', 'reservado', 'reservat'].includes(s)) return 'reserved'
+  if (['rented', 'alquilado', 'llogat'].includes(s)) return 'rented'
   return 'available'
 }
 
-export function getStatusLabel(status) {
-  const normalized = normalizeStatus(status)
+export function mapObjectToProduct(object) {
+  return {
+    id: object.id,
+    image: object.imatge_principal || '/assets/product1-image.jpg',
+    category: object.categoria?.nom || 'Sense categoria',
+    title: object.nom || 'Objecte',
+    userName: object.user?.nom || 'Usuari',
+    userAvatar: object.user?.avatar_url || '/assets/avatar-omar.jpg',
+    rating: 0,
+    pricePerDay: object.preu_diari || 0,
+    status: normalizeStatus(object.estat),
+    availableAt: null,
+  }
+}
 
-  if (normalized === 'reserved') return 'Reservado'
-  if (normalized === 'rented') return 'Alquilado'
-  return 'Disponible'
+export function mapObjectsToProducts(objects) {
+  if (!Array.isArray(objects)) return []
+  return objects.map(mapObjectToProduct)
 }

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import searchicon from '/assets/icons/search-icon.svg'
 
 function SearchBar() {
   const [query, setQuery] = useState('')
@@ -47,22 +46,25 @@ function SearchBar() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex">
-      <img src={searchicon} alt="Icono de buscar" className="relative left-8" />
+    <form
+      onSubmit={handleSubmit}
+      className="hidden lg:flex items-center rounded-full bg-[#1d2422] px-4 py-2 transition-all focus-within:bg-[#333b39] focus-within:ring-2 focus-within:ring-[#4fdbc8]/40"
+    >
+      <span className="material-symbols-outlined text-[#8b9390]">search</span>
 
       <input
-        className="h-[45px] w-[433px] rounded-l-[15px] border-none bg-[#14B8A6] px-10 text-black placeholder-black focus:outline-none"
+        className="w-48 bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-[#e1e3e0] placeholder:text-[#8b9390] px-3"
         type="text"
-        placeholder="Busca lo que quieres alquilar"
+        placeholder="Search for items..."
         value={query}
         onChange={(e) => handleChange(e.target.value)}
       />
 
       <button
         type="submit"
-        className="h-[45px] w-[82px] cursor-pointer rounded-r-[15px] bg-[#0F766E] text-white"
+        className="rounded-full bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] px-4 py-2 text-sm font-bold text-[#003730] transition-transform active:scale-95"
       >
-        Buscar
+        Search
       </button>
     </form>
   )

@@ -1,11 +1,10 @@
 export function mapCategory(category) {
   return {
     id: category.id,
-    name: category.nom || category.name || 'Categoría',
-    slug: category.slug ?? null,
-    icon: category.icona || category.icon || null,
-    description: category.descripcio || category.description || '',
-    active: category.activa ?? category.active ?? true,
+    name: category.nom,
+    slug: category.slug,
+    icon: category.icona,
+    description: category.descripcio,
   }
 }
 

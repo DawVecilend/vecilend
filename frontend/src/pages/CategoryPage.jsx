@@ -8,7 +8,7 @@ import BtnOrder from '../components/elementos/BtnOrder'
 import { getCategories } from '../services/categories'
 import { getObjects } from '../services/objects'
 import { mapCategories } from '../mappers/categoryMapper'
-
+import { mapObjectsToProducts } from '../mappers/objectMapper'
 
 function CategoryPage() {
   const { slug } = useParams()
@@ -22,8 +22,9 @@ function CategoryPage() {
   useEffect(() => {
     async function loadCategories() {
       try {
-        const categoriesData = await getCategories()
-        const mappedCategories = mapCategories(categoriesData)
+        const response = await getCategories()
+        const rawCategories = response.data || response || []
+        const mappedCategories = mapCategories(rawCategories)
         setCategories(mappedCategories)
       } catch (error) {
         console.error('Error cargando categorías:', error)
@@ -35,8 +36,9 @@ function CategoryPage() {
 
     async function loadObjects() {
       try {
-        const objects = await getObjects()
-        setProducts(Array.isArray(objects) ? objects : [])
+        const response = await getObjects()
+        const rawObjects = response.data || response || []
+        setProducts(Array.isArray(rawObjects) ? rawObjects : [])
       } catch (error) {
         console.error('Error cargando objetos:', error)
         setProducts([])
@@ -50,42 +52,50 @@ function CategoryPage() {
   }, [])
 
   const currentCategory = useMemo(() => {
-    const routeSlug = slug
-
-    return (
-      categories.find(
-        (category) => category.slug === routeSlug
-      ) || null
-    )
+    return categories.find((category) => category.slug === slug) || null
   }, [categories, slug])
 
   const filteredProducts = useMemo(() => {
     if (!currentCategory) return []
 
     return products.filter(
-      (product) => Number(product.categoria?.id) === Number(currentCategory.id)
+      (product) => Number(product?.categoria?.id) === Number(currentCategory.id)
     )
   }, [products, currentCategory])
 
-  const orderedProducts = [...filteredProducts].sort((a, b) => {
+  const orderedRawProducts = useMemo(() => {
+    const sorted = [...filteredProducts]
+
     if (orderBy === 'recent') {
-      return new Date(b.created_at || 0) - new Date(a.created_at || 0)
+      return sorted.sort(
+        (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
+      )
     }
 
     if (orderBy === 'oldest') {
-      return new Date(a.created_at || 0) - new Date(b.created_at || 0)
+      return sorted.sort(
+        (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
+      )
     }
 
     if (orderBy === 'price_asc') {
-      return Number(a.preu_diari || 0) - Number(b.preu_diari || 0)
+      return sorted.sort(
+        (a, b) => Number(a.preu_diari || 0) - Number(b.preu_diari || 0)
+      )
     }
 
     if (orderBy === 'price_desc') {
-      return Number(b.preu_diari || 0) - Number(a.preu_diari || 0)
+      return sorted.sort(
+        (a, b) => Number(b.preu_diari || 0) - Number(a.preu_diari || 0)
+      )
     }
 
-    return 0
-  })
+    return sorted
+  }, [filteredProducts, orderBy])
+
+  const orderedProducts = useMemo(() => {
+    return mapObjectsToProducts(orderedRawProducts)
+  }, [orderedRawProducts])
 
   const isLoading = loadingCategories || loadingProducts
   const hasCategory = Boolean(currentCategory)
