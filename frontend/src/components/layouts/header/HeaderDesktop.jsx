@@ -25,24 +25,30 @@ function HeaderDesktop() {
     };
   }, []);
 
-  if (loading) return null;
+function HeaderDesktop() {
+  const auth = useContext(AuthContext)
+  const location = useLocation()
 
-  // Función que decide qué clases ponerle al enlace según la ruta actual
+  if (!auth) return null
+
+  const { user, logout, loading } = auth
+
+  if (loading) return null
+
   const getNavClass = (path) => {
     return location.pathname === path
-      ? "text-[#4fdbc8] border-b-2 border-[#4fdbc8] font-bold pb-1 text-sm tracking-tight"
-      : "text-[#aebdb9] font-medium hover:text-[#4fdbc8] transition-colors text-sm tracking-tight";
-  };
+      ? 'text-[#4fdbc8] border-b-2 border-[#4fdbc8] font-bold pb-1 text-sm tracking-tight'
+      : 'text-[#aebdb9] font-medium hover:text-[#4fdbc8] transition-colors text-sm tracking-tight'
+  }
 
   return (
     <header className="fixed top-0 w-full z-50 bg-[#0f1715]/70 backdrop-blur-[20px] border-b border-[#333b39]">
       <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-
-        {/* Lado Izquierdo: Logo y Enlaces */}
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center">
             <img src={LogoDark} alt="Logo modo oscuro" className="h-[45px] w-[136px]" />
           </Link>
+
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/objects" className={getNavClass('/objects')}>
               Buscar
@@ -56,11 +62,9 @@ function HeaderDesktop() {
           </nav>
         </div>
 
-        {/* Lado Derecho: Buscador, Iconos y Autenticación */}
         <div className="flex items-center gap-4">
           <SearchBar />
 
-          {/* Lógica condicional de Usuario */}
           {user ? (
             <>
               <div onClick={() => setOpen(!open)} className='cursor-pointer'>
@@ -69,6 +73,13 @@ function HeaderDesktop() {
                 ) : (
                   <img src="/assets/icons/empty-user-icon.svg" alt="" className="h-[48px]" />
                 )}
+              <div className="flex items-center gap-2">
+                <button className="p-2 hover:bg-[#333b39] rounded-full transition-all duration-300 scale-95 active:scale-90 text-[#aebdb9]">
+                  <span className="material-symbols-outlined">chat_bubble</span>
+                </button>
+                <button className="p-2 hover:bg-[#333b39] rounded-full transition-all duration-300 scale-95 active:scale-90 text-[#aebdb9]">
+                  <span className="material-symbols-outlined">notifications</span>
+                </button>
               </div>
               <div ref={menuRef} className="relative">
                 {open && (

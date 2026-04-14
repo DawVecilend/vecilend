@@ -1,14 +1,51 @@
 import React, { useState } from 'react';
 import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
 import FooterDesktop from '../components/layouts/footer/FooterDesktop';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 function RegisterPage() {
+  const { register } = useAuth();
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState({
+    username: '',
+    nom: '',
+    cognoms: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    accepta_termes: false,
+    telefon: '',
+    direccio: '',
+    avatar_url: '',
+    radi_proximitat: 10,
+    ubicacio: { lat: 0, lng: 0 },
+  });
 
   const handleContinue = (e) => {
     e.preventDefault();
     setStep(2);
+  };
+
+  const handleRegister = async () => {
+    setError(null);
+    setSubmitting(true);
+    try {
+      await register(formData);
+      navigate('/');
+    } catch (err) {
+      if (err.response?.status === 422) {
+        setError(Object.values(err.response.data.errors).flat()[0]);
+      } else {
+        setError("Error al crear l'usuari.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

@@ -50,8 +50,11 @@ function HomePage() {
     loadCategories()
   }, [])
 
-  const topProducts = products.slice(0, 5)
-  const recentProducts = products.slice(0, 5)
+  const recentProducts = [...products]
+    .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+    .slice(0, 5)
+
+  const topProducts = recentProducts
 
   return (
     <>
@@ -59,7 +62,9 @@ function HomePage() {
       <HeroSection />
 
       {loadingCategories ? (
-        <p className="py-6 text-center text-vecilend-dark-text">Cargando categorías...</p>
+        <p className="py-6 text-center text-vecilend-dark-text">
+          Cargando categorías...
+        </p>
       ) : (
         <CategoriesSection categories={categories} />
       )}
