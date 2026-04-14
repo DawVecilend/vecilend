@@ -1,17 +1,12 @@
-import searchicon from '/assets/icons/search-icon.svg'
-
 function SearchBar() {
   return (
-    <div className="flex">
-      <img src={searchicon} alt="Icono de buscar" className='relative left-8' />
+    <div className="hidden lg:flex items-center bg-[#1d2422] rounded-full px-4 py-2 focus-within:bg-[#333b39] focus-within:ring-2 focus-within:ring-[#4fdbc8]/40 transition-all">
+      <span className="material-symbols-outlined text-[#8b9390]">search</span>
       <input
-        className="w-[433px] h-[45px] bg-[#14B8A6] rounded-l-2xl border-none px-10 text-black placeholder-black focus:outline-none"
+        className="bg-transparent border-none outline-none focus:ring-0 text-sm w-48 font-medium placeholder:text-[#8b9390] text-[#e1e3e0]"
+        placeholder="Buscar Objetos..."
         type="text"
-        placeholder="Busca lo que quieres alquilar"
       />
-      <button className="w-[82px] h-[45px] bg-[#0F766E] rounded-r-2xl text-white cursor-pointer">
-        Buscar
-      </button>
     </div>
   )
 }

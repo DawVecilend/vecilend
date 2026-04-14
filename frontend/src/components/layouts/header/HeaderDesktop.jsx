@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import LogoDark from '/assets/logos/LogoDark.svg'
 import { AuthContext } from '../../../contexts/AuthContext'
 import { useContext, useState, useRef, useEffect } from 'react'
+import SearchBar from '../../elementos/SearchBar'
 
 function HeaderDesktop() {
   const { user, logout, loading } = useContext(AuthContext);
@@ -44,29 +45,20 @@ function HeaderDesktop() {
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/objects" className={getNavClass('/objects')}>
-              Browse
+              Buscar
             </Link>
             <Link to="/how-it-works" className={getNavClass('/how-it-works')}>
-              How it Works
+              Como funciona
             </Link>
             <Link to="/about" className={getNavClass('/about')}>
-              About
+              Sobre Nosotros
             </Link>
           </nav>
         </div>
 
         {/* Lado Derecho: Buscador, Iconos y Autenticación */}
         <div className="flex items-center gap-4">
-
-          {/* Barra de Búsqueda */}
-          <div className="hidden lg:flex items-center bg-[#1d2422] rounded-full px-4 py-2 focus-within:bg-[#333b39] focus-within:ring-2 focus-within:ring-[#4fdbc8]/40 transition-all">
-            <span className="material-symbols-outlined text-[#8b9390]">search</span>
-            <input
-              className="bg-transparent border-none outline-none focus:ring-0 text-sm w-48 font-medium placeholder:text-[#8b9390] text-[#e1e3e0]"
-              placeholder="Search for items..."
-              type="text"
-            />
-          </div>
+          <SearchBar />
 
           {/* Lógica condicional de Usuario */}
           {user ? (
