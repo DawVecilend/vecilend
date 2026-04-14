@@ -20,8 +20,7 @@ function HomePage() {
   useEffect(() => {
     async function loadObjects() {
       try {
-        const response = await getObjects()
-        const rawObjects = response.data || response || []
+        const rawObjects = await getObjects()
         const mappedProducts = mapObjectsToProducts(rawObjects)
         setProducts(mappedProducts)
       } catch (error) {
@@ -34,8 +33,7 @@ function HomePage() {
 
     async function loadCategories() {
       try {
-        const response = await getCategories()
-        const rawCategories = response.data || response || []
+        const rawCategories = await getCategories()
         const mappedCategories = mapCategories(rawCategories)
         setCategories(mappedCategories)
       } catch (error) {

@@ -40,7 +40,7 @@ function ProfilePage() {
                 alt="Foto de perfil"
                 className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500" 
                 data-alt="User Profile" 
-                src={profile?.avatar}
+                src={profile?.avatar_url || '/assets/avatar-default.jpg'}
               />
               <div className="absolute -bottom-3 -right-3 bg-[#f38764] text-[#6c2106] px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 border border-white">
                 <span className="material-symbols-outlined icon-filled text-sm">verified</span>

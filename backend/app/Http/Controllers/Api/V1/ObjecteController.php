@@ -22,7 +22,7 @@ class ObjecteController extends Controller
         $request->validate([
             'search'   => 'nullable|string|max:100',
             'category' => 'nullable|integer|exists:categories,id',
-            'sort'     => 'nullable|string|in:recent,price_asc,price_desc,rating',
+            'sort'     => 'nullable|string|in:recent,oldest,price_asc,price_desc,rating',
             'page'     => 'nullable|integer|min:1',
             'per_page' => 'nullable|integer|min:1|max:50',
             'lat'      => 'nullable|numeric|between:-90,90',
@@ -31,6 +31,7 @@ class ObjecteController extends Controller
         ]);
 
         $query = Objecte::query()
+            ->ambCoordenades()
             ->disponible()
             ->with(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges']);
 
@@ -61,6 +62,10 @@ class ObjecteController extends Controller
 
             case 'price_desc':
                 $query->orderBy('preu_diari', 'desc');
+                break;
+
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
                 break;
 
             case 'rating':

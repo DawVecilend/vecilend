@@ -17,9 +17,9 @@ class ObjecteResource extends JsonResource
             'tipus' => $this->tipus,
             'preu_diari' => $this->preu_diari ? (float) $this->preu_diari : null,
             'estat' => $this->estat,
-            'ubicacio' => $this->whenNotNull(
-                $this->ubicacio ? $this->coordenades() : null
-            ),
+            'ubicacio' => ($this->lat !== null && $this->lng !== null)
+                ? ['lat' => (float) $this->lat, 'lng' => (float) $this->lng]
+                : ($this->ubicacio ? $this->coordenades() : null),
 
             'imatge_principal' => $this->whenLoaded('imatges', function () {
                 $primera = $this->imatges->first();
