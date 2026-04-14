@@ -7,6 +7,7 @@ import ObjectsPage from './pages/ObjectsPage'
 import ResultsPage from './pages/ResultsPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
+import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
 
 function App() {
@@ -20,7 +21,11 @@ function App() {
         <Route path="/objects" element={<ObjectsPage />} />
         <Route path="/categorias/:slug" element={<CategoryPage />} />
         <Route path="/results" element={<ResultsPage />} />
-        <Route path="/profile/:username" element={<ProfilePage />} />
+        <Route path="/profile/:username" element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        } />
       </Routes>
     </AuthProvider>
   )

@@ -134,4 +134,9 @@ class Objecte extends Model
         $point = DB::selectOne('SELECT ST_X(ubicacio::geometry) as lng, ST_Y(ubicacio::geometry) as lat FROM objectes WHERE id = ?', [$this->id]);
         return $point ? ['lat' => $point->lat, 'lng' => $point->lng] : null;
     }
+
+    public function scopeAmbCoordenades(Builder $query): Builder
+    {
+        return $query->selectRaw('*, ST_Y(ubicacio::geometry) as lat, ST_X(ubicacio::geometry) as lng');
+    }
 }

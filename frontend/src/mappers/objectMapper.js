@@ -17,6 +17,8 @@ export function mapObjectToProduct(object) {
     pricePerDay: object.preu_diari || 0,
     status: normalizeStatus(object.estat),
     availableAt: null,
+    created_at: object.created_at || null,
+    preu_diari: object.preu_diari || 0,
   }
 }
 
