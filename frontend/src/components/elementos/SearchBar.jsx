@@ -55,7 +55,7 @@ function SearchBar() {
       <input
         className="w-48 bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-[#e1e3e0] placeholder:text-[#8b9390] px-3"
         type="text"
-        placeholder="Search for items..."
+        placeholder="Buscar Objeto..."
         value={query}
         onChange={(e) => handleChange(e.target.value)}
       />
