@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import LogoDark from '/assets/logos/LogoDark.svg'
-import { useContext } from 'react'
+import { useContext, useState, useRef, useEffect } from 'react'
 import { AuthContext } from '../../../contexts/AuthContext'
 import SearchBar from '../../elementos/SearchBar'
 

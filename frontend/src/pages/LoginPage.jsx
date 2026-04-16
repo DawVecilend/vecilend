@@ -63,7 +63,6 @@ function LoginPage() {
                     </div>
                 </div>
             </form>
-            <FooterDesktop />
         </>
     )
 }

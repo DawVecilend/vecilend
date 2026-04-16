@@ -48,7 +48,6 @@ function RegisterPage() {
 
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen flex flex-col dark">
-      <HeaderDesktop />
 
       {step === 1 ? (
         // ==========================================
