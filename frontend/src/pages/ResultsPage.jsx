@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import ProductsSection from '../components/home/ProductsSection'
-import Header from '../components/layouts/header/HeaderDesktop'
-import Footer from '../components/layouts/footer/FooterDesktop'
 import BtnOrder from '../components/elementos/BtnOrder'
 import BtnBack from '../components/elementos/BtnBack'
 import { getObjects } from '../services/objects'
@@ -106,8 +104,6 @@ function ResultsPage() {
 
   return (
     <>
-      <Header />
-
       <section className="mx-auto w-full max-w-[1380px] px-10 pt-6">
         <div className="flex items-center justify-between gap-4">
           <BtnBack />
@@ -145,8 +141,6 @@ function ResultsPage() {
           </div>
         </section>
       )}
-
-      <Footer />
     </>
   )
 }

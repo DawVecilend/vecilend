@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom'
-import HeaderDesktop from '../components/layouts/header/HeaderDesktop'
 import { useState } from "react"
 import { useAuth } from '../contexts/AuthContext'
 
@@ -33,7 +32,6 @@ function LoginPage() {
 
     return (
         <>
-            <HeaderDesktop />
             <form onSubmit={handleSubmit} className="relative h-full bg-[url('/assets/fondo-login-register.jpg')] flex flex-col items-center bg-cover bg-center">
                 <div className="absolute inset-0 bg-black/90"></div>
                 <div className="relative flex flex-col items-center pt-20 gap-6 w-full px-38 pb-36">

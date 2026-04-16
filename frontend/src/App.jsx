@@ -8,20 +8,35 @@ import ResultsPage from './pages/ResultsPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
 import { AuthProvider } from './contexts/AuthContext'
+import HeaderDesktop from './components/layouts/header/HeaderDesktop'
+import HeaderMobile from './components/layouts/header/HeaderMobile'
+import Footer from './components/layouts/footer/Footer'
 
 function App() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/status" element={<StatusPage />} />
-        <Route path="/objects" element={<ObjectsPage />} />
-        <Route path="/categorias/:slug" element={<CategoryPage />} />
-        <Route path="/results" element={<ResultsPage />} />
-        <Route path="/profile/:username" element={<ProfilePage />} />
-      </Routes>
+      <div className="hidden md:block">
+        <HeaderDesktop />
+      </div>
+
+      <div className="md:hidden">
+        <HeaderMobile />
+      </div>
+
+      <main className="pt-[80px] pb-[110px] md:pb-0">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/status" element={<StatusPage />} />
+          <Route path="/objects" element={<ObjectsPage />} />
+          <Route path="/categorias/:slug" element={<CategoryPage />} />
+          <Route path="/results" element={<ResultsPage />} />
+          <Route path="/profile/:username" element={<ProfilePage />} />
+        </Routes>
+      </main>
+
+      <Footer />
     </AuthProvider>
   )
 }
