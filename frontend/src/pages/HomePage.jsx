@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import HeroSection from '../components/home/HeroSection'
 import CategoriesSection from '../components/home/categories/CategoriesSection'
 import ProductsSection from '../components/home/ProductsSection'
-import Header from '../components/layouts/header/HeaderDesktop'
-import Footer from '../components/layouts/footer/FooterDesktop'
 import TopUsersSection from '../components/home/TopUsersSection'
 import BenefitsSection from '../components/home/BenefitsSection'
 import { getObjects } from '../services/objects'
@@ -56,7 +54,6 @@ function HomePage() {
 
   return (
     <>
-      <Header />
       <HeroSection />
 
       {loadingCategories ? (
@@ -80,7 +77,6 @@ function HomePage() {
 
       <TopUsersSection />
       <BenefitsSection />
-      <Footer />
     </>
   )
 }

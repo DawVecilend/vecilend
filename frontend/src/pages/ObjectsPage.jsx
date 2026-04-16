@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 import ProductsSection from '../components/home/ProductsSection'
-import Header from '../components/layouts/header/HeaderDesktop'
-import Footer from '../components/layouts/footer/FooterDesktop'
 import { getObjects } from '../services/objects'
 import BtnOrder from '../components/elementos/BtnOrder'
 import BtnBack from '../components/elementos/BtnBack'
@@ -32,7 +30,6 @@ function ObjectsPage() {
 
   return (
     <>
-      <Header />
       <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
         <BtnBack />
         <BtnOrder value={orderBy} onChange={setOrderBy} />
@@ -44,7 +41,6 @@ function ObjectsPage() {
       ) : (
         <ProductsSection title="Todos los Productos" products={products} />
       )}
-      <Footer />
     </>
   )
 }

@@ -14,7 +14,7 @@ function BtnBack() {
 
   return (
     <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 cursor-pointer">
-      <img src="/assets/icons/arrow-back-icon-white.svg" alt="Icono volver" />
+      <img src="/assets/icons/arrow-back-white-icon.svg" alt="Icono volver" />
       <span className="text-label text-vecilend-dark-text">Volver</span>
     </button>
   )

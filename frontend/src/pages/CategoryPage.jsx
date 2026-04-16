@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import HeaderDesktop from '../components/layouts/header/HeaderDesktop'
-import FooterDesktop from '../components/layouts/footer/FooterDesktop'
 import ProductsSection from '../components/home/ProductsSection'
 import BtnBack from '../components/elementos/BtnBack'
 import BtnOrder from '../components/elementos/BtnOrder'
@@ -63,8 +61,6 @@ function CategoryPage() {
 
   return (
     <>
-      <HeaderDesktop />
-
       <main className="min-h-screen bg-vecilend-dark-bg px-6 py-10 text-vecilend-dark-text">
         <div className="mx-auto max-w-[1380px]">
           <div className="flex items-center justify-between gap-4">
@@ -122,8 +118,6 @@ function CategoryPage() {
           )}
         </div>
       </main>
-
-      <FooterDesktop />
     </>
   )
 }

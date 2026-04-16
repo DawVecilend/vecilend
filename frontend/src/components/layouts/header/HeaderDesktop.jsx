@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import LogoDark from '/assets/logos/LogoDark.svg'
+import { useContext } from 'react'
 import { AuthContext } from '../../../contexts/AuthContext'
-import { useContext, useState, useRef, useEffect } from 'react'
 import SearchBar from '../../elementos/SearchBar'
 
 function HeaderDesktop() {
@@ -47,13 +47,13 @@ function HeaderDesktop() {
 
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/objects" className={getNavClass('/objects')}>
-              Buscar
+              Browse
             </Link>
             <Link to="/how-it-works" className={getNavClass('/how-it-works')}>
-              Como funciona
+              How it Works
             </Link>
             <Link to="/about" className={getNavClass('/about')}>
-              Sobre Nosotros
+              About
             </Link>
           </nav>
         </div>
@@ -126,7 +126,6 @@ function HeaderDesktop() {
             </>
           ) : (
             <>
-              {/* Botones si NO hay sesión iniciada */}
               <Link
                 to="/login"
                 className="hidden md:block text-[#aebdb9] hover:text-[#4fdbc8] font-bold text-sm px-4 py-2.5 transition-colors"

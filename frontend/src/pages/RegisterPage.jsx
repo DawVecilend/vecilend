@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
-import FooterDesktop from '../components/layouts/footer/FooterDesktop';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -56,7 +54,7 @@ function RegisterPage() {
         // ==========================================
         // PASO 1: FORMULARIO DE REGISTRO
         // ==========================================
-        <main className="flex-grow pt-24 pb-12 flex flex-col md:flex-row">
+        <main className="flex-grow pt-20 pb-12 flex flex-col md:flex-row">
           <section className="hidden md:flex md:w-1/2 relative bg-[#090f0e] items-center justify-center p-12 overflow-hidden">
             <div className="absolute inset-0 z-0">
               <img 
@@ -183,7 +181,7 @@ function RegisterPage() {
         // ==========================================
         // PASO 2: VERIFICACIÓN DE CORREO (OTP)
         // ==========================================
-        <main className="flex-grow flex flex-col items-center justify-center px-4 pt-24 pb-12">
+        <main className="flex-grow flex flex-col items-center justify-center px-4 pt-20 pb-12">
           <div className="w-full max-w-md">
             <div className="mb-12">
               <div className="flex justify-between mb-3 px-1">
@@ -254,8 +252,6 @@ function RegisterPage() {
           </div>
         </main>
       )}
-
-      <FooterDesktop />
     </div>
   );
 }
