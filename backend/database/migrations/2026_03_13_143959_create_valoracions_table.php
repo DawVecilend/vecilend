@@ -10,10 +10,10 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('transaccio_id')->constrained('transaccions')->cascadeOnDelete();
             $table->foreignId('autor_id')->constrained('users')->cascadeOnDelete();
-            $table->unsignedTinyInteger('puntuacio'); // 1-5
+            $table->unsignedTinyInteger('puntuacio');
             $table->text('comentari')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->unique(['transaccio_id', 'autor_id']); // max 1 valoració per participant
+            $table->unique(['transaccio_id', 'autor_id']);
             $table->index('transaccio_id');
         });
     }

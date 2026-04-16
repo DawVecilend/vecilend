@@ -4,32 +4,41 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class CategoriaSeeder extends Seeder {
-    public function run(): void {
+class CategoriaSeeder extends Seeder
+{
+    public function run(): void
+    {
         $now = Carbon::now();
+
         $categories = [
-            ['nom' => 'Eines', 'icona' => 'wrench', 'descripcio' => 'Eines manuals i elèctriques per a bricolatge i reparacions'],
-            ['nom' => 'Electrònica', 'icona' => 'cpu', 'descripcio' => 'Dispositius electrònics, gadgets i accessoris'],
-            ['nom' => 'Esports', 'icona' => 'dumbbell', 'descripcio' => 'Material esportiu i equipament per a activitats físiques'],
-            ['nom' => 'Llar i Jardí', 'icona' => 'home', 'descripcio' => 'Mobiliari, decoració, electrodomèstics i eines de jardí'],
-            ['nom' => 'Vehicles i Mobilitat', 'icona' => 'bike', 'descripcio' => 'Bicicletes, patinets, remolcs i accessoris de mobilitat'],
-            ['nom' => 'Fotografia i Vídeo', 'icona' => 'camera', 'descripcio' => 'Càmeres, objectius, trípodes i equipament audiovisual'],
-            ['nom' => 'Música', 'icona' => 'music', 'descripcio' => 'Instruments musicals i equipament de so'],
-            ['nom' => 'Camping i Natura', 'icona' => 'tent', 'descripcio' => 'Tendes, sacs de dormir, motxilles i material de muntanya'],
-            ['nom' => 'Jocs i Entreteniment','icona' => 'gamepad', 'descripcio' => 'Jocs de taula, consoles, jocs de festa i entreteniment'],
-            ['nom' => 'Roba i Accessoris', 'icona' => 'shirt', 'descripcio' => 'Roba de disfressa, vestits de cerimònia i accessoris especials'],
-            ['nom' => 'Bebès i Infants', 'icona' => 'baby', 'descripcio' => 'Cotxets, cadires, joguines i material infantil'],
-            ['nom' => 'Altres', 'icona' => 'package', 'descripcio' => 'Objectes que no encaixen en cap altra categoria']
+            ['nom' => 'Viatges', 'slug' => 'viatges', 'icona' => 'plane', 'descripcio' => 'Maletes, adaptadors, accessoris de viatge i equipament per a desplaçaments'],
+            ['nom' => 'Construcció', 'slug' => 'construccio', 'icona' => 'hard-hat', 'descripcio' => 'Eines de construcció, maquinària lleugera i material d\'obra'],
+            ['nom' => 'Eines', 'slug' => 'eines', 'icona' => 'wrench', 'descripcio' => 'Eines manuals i elèctriques per a bricolatge i reparacions'],
+            ['nom' => 'Jardineria', 'slug' => 'jardineria', 'icona' => 'flower', 'descripcio' => 'Eines de jardí, maquinària de poda i accessoris per a l\'exterior'],
+            ['nom' => 'Electrodomèstics', 'slug' => 'electrodomestics', 'icona' => 'zap', 'descripcio' => 'Electrodomèstics petits i grans per a la llar'],
+            ['nom' => 'Mobilitat', 'slug' => 'mobilitat', 'icona' => 'bike', 'descripcio' => 'Bicicletes, patinets, remolcs i accessoris de mobilitat'],
+            ['nom' => 'Fitness', 'slug' => 'fitness', 'icona' => 'dumbbell', 'descripcio' => 'Material esportiu, peses, màquines d\'exercici i accessoris'],
+            ['nom' => 'Surf', 'slug' => 'surf', 'icona' => 'waves', 'descripcio' => 'Taules de surf, neoprens, quilles i accessoris aquàtics'],
+            ['nom' => 'Trones de nadó', 'slug' => 'trones-de-nado', 'icona' => 'baby', 'descripcio' => 'Trones, cotxets, cadires de passeig i material infantil'],
+            ['nom' => 'Jocs de taula', 'slug' => 'jocs-de-taula',  'icona' => 'gamepad', 'descripcio' => 'Jocs de taula, jocs de cartes, puzles i entreteniment'],
         ];
 
         foreach ($categories as $cat) {
-            DB::table('categories')->insert(array_merge($cat, [
-                'activa' => true,
-                'created_at' => $now,
-                'updated_at' => $now
-            ]));
+            DB::table('categories')->updateOrInsert(
+                [
+                    'nom' => $cat['nom'],
+                    'slug' => $cat['slug'],
+                ],
+                array_merge($cat, [
+                    'slug' => Str::slug($cat['nom']),
+                    'activa' => true,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ])
+            );
         }
     }
 }

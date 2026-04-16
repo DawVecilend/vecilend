@@ -7,7 +7,7 @@ return new class extends Migration {
         Schema::create('notificacions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('tipus', 50); // 'solicitud_rebuda', 'nou_missatge', etc.
+            $table->string('tipus', 50);
             $table->string('titol', 200);
             $table->text('missatge');
             $table->string('entitat_referenciada', 50)->nullable();
