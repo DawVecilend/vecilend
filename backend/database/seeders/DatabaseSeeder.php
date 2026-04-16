@@ -9,7 +9,6 @@ class DatabaseSeeder extends Seeder {
             CategoriaSeeder::class,
             SubcategoriaSeeder::class,
             UserSeeder::class,
-            ObjecteSeeder::class
         ]);
     }
 }

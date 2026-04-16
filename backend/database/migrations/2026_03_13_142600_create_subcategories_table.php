@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->text('descripcio')->nullable();
             $table->boolean('activa')->default(true);
             $table->timestamps();
-            $table->unique(['categoria_id', 'nom']);
+            $table->unique(['categoria_id', 'nom']); // nom únic dins de cada categoria
             $table->index('categoria_id');
         });
     }
