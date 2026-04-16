@@ -22,9 +22,9 @@ function LoginPage() {
             await login(formData)
             navigate('/')
         } catch (err) {
-            if (err.response?.status === 401) setError('Credencials incorrectes.')
+            if (err.response?.status === 401) setError('Credenciales incorrectas')
             else if (err.response?.status === 422) setError(Object.values(err.response.data.errors).flat()[0])
-            else setError('Error de connexió.')
+            else setError('Error de conexión')
         } finally {
             setSubmitting(false)
         }
@@ -51,7 +51,8 @@ function LoginPage() {
                     </div>
                     <div className='flex items-center flex-col w-full gap-6'>
                         <Link to="#" className='text-[#4B5563]'>¿Olvidaste tu contraseña?</Link>
-                        <button className='bg-[#14B8A6] text-white h-[44px] px-4 flex items-center justify-center rounded-2xl w-[298px] cursor-pointer' type="submit">Entrar</button>
+                        {error && (<p className="text-red-400 text-sm bg-red-400/10 px-4 py-2 rounded-lg w-[298px] text-center">{error}</p>)}
+                        <button className='bg-[#14B8A6] text-white h-[44px] px-4 flex items-center justify-center rounded-2xl w-[298px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed' type="submit" disabled={submitting}>{submitting ? 'Entrando...' : 'Entrar'}</button>
                     </div>
                     <div className='flex items-center'>
                         <p className='text-[#4B5563] text-center'>Al continuar aceptas nuestros Términos y  la Política de privacidad.</p>
@@ -62,6 +63,7 @@ function LoginPage() {
                     </div>
                 </div>
             </form>
+            <FooterDesktop />
         </>
     )
 }

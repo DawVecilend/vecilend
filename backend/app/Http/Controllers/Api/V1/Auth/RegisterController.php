@@ -9,8 +9,10 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
-class RegisterController extends Controller {
-    public function register(RegisterRequest $request): JsonResponse {
+class RegisterController extends Controller
+{
+    public function register(RegisterRequest $request): JsonResponse
+    {
         $validated = $request->validated();
         $user = User::create([
             'username' => $validated['username'],
@@ -34,14 +36,17 @@ class RegisterController extends Controller {
                 ?), 4326) WHERE id = ?',
                 [$lng, $lat, $user->id]
             );
-        
+
             $user->refresh();
         }
-        
+
         $token = $user->createToken('auth')->plainTextToken;
         return response()->json([
-            'data' => new UserResource($user),
-            'token' => $token,
+            'message' => 'Registre completat correctament.',
+            'data' => [
+                'user'  => new UserResource($user),
+                'token' => $token,
+            ],
         ], 201);
     }
 }

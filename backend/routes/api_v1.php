@@ -32,4 +32,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::post('/logout', [LoginController::class, 'logout']);
+
+    Route::post('/objects', [ObjecteController::class, 'store']);
 });

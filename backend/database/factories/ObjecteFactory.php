@@ -26,6 +26,8 @@ class ObjecteFactory extends Factory
             'preu_diari'   => fake()->randomFloat(2, 1, 100),
             'estat'        => fake()->randomElement(['disponible', 'no_disponible']),
             'ubicacio'     => DB::raw("ST_SetSRID(ST_MakePoint({$lng}, {$lat}), 4326)::geography"),
+            'created_at'   => fake()->dateTimeBetween('-90 days', 'now'),
+            'updated_at'   => fn(array $attrs) => fake()->dateTimeBetween($attrs['created_at'], 'now'),
         ];
     }
 

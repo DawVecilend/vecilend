@@ -17,87 +17,47 @@ function CategoryPage() {
   const [loadingProducts, setLoadingProducts] = useState(true)
   const [orderBy, setOrderBy] = useState('recent')
 
-  useEffect(() => {
-    async function loadCategories() {
-      try {
-        const response = await getCategories()
-        const rawCategories = response.data || response || []
-        const mappedCategories = mapCategories(rawCategories)
-        setCategories(mappedCategories)
-      } catch (error) {
-        console.error('Error cargando categorías:', error)
-        setCategories([])
-      } finally {
-        setLoadingCategories(false)
-      }
-    }
-
-    async function loadObjects() {
-      try {
-        const response = await getObjects()
-        const rawObjects = response.data || response || []
-        setProducts(Array.isArray(rawObjects) ? rawObjects : [])
-      } catch (error) {
-        console.error('Error cargando objetos:', error)
-        setProducts([])
-      } finally {
-        setLoadingProducts(false)
-      }
-    }
-
-    loadCategories()
-    loadObjects()
-  }, [])
-
+  // Trobar la categoria actual un cop carregades les categories
   const currentCategory = useMemo(() => {
     return categories.find((category) => category.slug === slug) || null
   }, [categories, slug])
 
-  const filteredProducts = useMemo(() => {
-    if (!currentCategory) return []
+  useEffect(() => {
+    async function loadData() {
+      try {
+        // 1. Cargar categorías
+        const rawCats = await getCategories()
+        const mappedCats = mapCategories(rawCats)
+        setCategories(mappedCats)
 
-    return products.filter(
-      (product) => Number(product?.categoria?.id) === Number(currentCategory.id)
-    )
-  }, [products, currentCategory])
+        // 2. Encontrar la categoría actual por slug
+        const current = mappedCats.find((c) => c.slug === slug)
+        if (!current) {
+          setLoadingCategories(false)
+          setLoadingProducts(false)
+          return
+        }
 
-  const orderedRawProducts = useMemo(() => {
-    const sorted = [...filteredProducts]
-
-    if (orderBy === 'recent') {
-      return sorted.sort(
-        (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
-      )
+        // 3. Cargar objetos filtrados y ordenados por el backend
+        const rawObjects = await getObjects({
+          category: current.id,
+          sort: orderBy,
+        })
+        setProducts(mapObjectsToProducts(rawObjects))
+      } catch (error) {
+        console.error('Error cargando datos:', error)
+      } finally {
+        setLoadingCategories(false)
+        setLoadingProducts(false)
+      }
     }
 
-    if (orderBy === 'oldest') {
-      return sorted.sort(
-        (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
-      )
-    }
-
-    if (orderBy === 'price_asc') {
-      return sorted.sort(
-        (a, b) => Number(a.preu_diari || 0) - Number(b.preu_diari || 0)
-      )
-    }
-
-    if (orderBy === 'price_desc') {
-      return sorted.sort(
-        (a, b) => Number(b.preu_diari || 0) - Number(a.preu_diari || 0)
-      )
-    }
-
-    return sorted
-  }, [filteredProducts, orderBy])
-
-  const orderedProducts = useMemo(() => {
-    return mapObjectsToProducts(orderedRawProducts)
-  }, [orderedRawProducts])
+    loadData()
+  }, [slug, orderBy])
 
   const isLoading = loadingCategories || loadingProducts
   const hasCategory = Boolean(currentCategory)
-  const hasProducts = orderedProducts.length > 0
+  const hasProducts = products.length > 0
 
   return (
     <>
@@ -117,9 +77,8 @@ function CategoryPage() {
               <h1 className="font-heading text-h2-desktop font-bold text-vecilend-dark-text">
                 Categoría no encontrada
               </h1>
-
               <p className="mt-3 font-body text-body text-vecilend-dark-text-secondary">
-                No existe ninguna categoría con el slug “{slug}”.
+                No existe ninguna categoría con el slug "{slug}".
               </p>
             </section>
           ) : hasProducts ? (
@@ -128,15 +87,13 @@ function CategoryPage() {
                 <h1 className="font-heading text-h1-mobile font-bold text-vecilend-dark-text">
                   {currentCategory.name}
                 </h1>
-
                 <p className="mt-2 font-body text-body-base text-vecilend-dark-text-secondary">
-                  Se han encontrado {orderedProducts.length} productos en esta categoría.
+                  Se han encontrado {products.length} productos en esta categoría.
                 </p>
               </section>
-
               <ProductsSection
                 title={`Productos de ${currentCategory.name}`}
-                products={orderedProducts}
+                products={products}
               />
             </>
           ) : (
@@ -145,19 +102,16 @@ function CategoryPage() {
                 <h1 className="font-heading text-h1-mobile font-bold text-vecilend-dark-text">
                   {currentCategory.name}
                 </h1>
-
                 <p className="mt-2 font-body text-body-base text-vecilend-dark-text-secondary">
                   Se han encontrado 0 productos en esta categoría.
                 </p>
               </section>
-
               <section className="rounded-[20px] border border-vecilend-dark-border bg-vecilend-dark-card p-10 text-center">
                 <h2 className="font-heading text-h3-desktop text-vecilend-dark-text">
                   No hay productos en esta categoría
                 </h2>
-
                 <p className="mt-3 font-body text-body text-vecilend-dark-text-secondary">
-                  Todavía no hay productos publicados en “{currentCategory.name}”.
+                  Todavía no hay productos publicados en "{currentCategory.name}".
                 </p>
               </section>
             </>

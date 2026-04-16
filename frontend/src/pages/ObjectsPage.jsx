@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ProductsSection from '../components/home/ProductsSection'
 import { getObjects } from '../services/objects'
 import BtnOrder from '../components/elementos/BtnOrder'
@@ -12,9 +12,9 @@ function ObjectsPage() {
 
   useEffect(() => {
     async function loadObjects() {
+      setLoadingProducts(true)
       try {
-        const response = await getObjects()
-        const rawObjects = response.data || response || []
+        const rawObjects = await getObjects({ sort: orderBy })
         const mappedProducts = mapObjectsToProducts(rawObjects)
         setProducts(mappedProducts)
       } catch (error) {
@@ -26,43 +26,7 @@ function ObjectsPage() {
     }
 
     loadObjects()
-  }, [])
-
-  const orderedProducts = useMemo(() => {
-    const sorted = [...products]
-
-    if (orderBy === 'recent') {
-      return sorted.sort(
-        (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
-      )
-    }
-
-    if (orderBy === 'oldest') {
-      return sorted.sort(
-        (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
-      )
-    }
-
-    if (orderBy === 'price_asc') {
-      return sorted.sort(
-        (a, b) => Number(a.pricePerDay || 0) - Number(b.pricePerDay || 0)
-      )
-    }
-
-    if (orderBy === 'price_desc') {
-      return sorted.sort(
-        (a, b) => Number(b.pricePerDay || 0) - Number(a.pricePerDay || 0)
-      )
-    }
-
-    if (orderBy === 'rating') {
-      return sorted.sort(
-        (a, b) => Number(b.rating || 0) - Number(a.rating || 0)
-      )
-    }
-
-    return sorted
-  }, [products, orderBy])
+  }, [orderBy])
 
   return (
     <>
@@ -70,13 +34,12 @@ function ObjectsPage() {
         <BtnBack />
         <BtnOrder value={orderBy} onChange={setOrderBy} />
       </div>
-
       {loadingProducts ? (
         <p className="py-10 text-center text-vecilend-dark-text">
           Cargando productos...
         </p>
       ) : (
-        <ProductsSection title="Todos los Productos" products={orderedProducts} />
+        <ProductsSection title="Todos los Productos" products={products} />
       )}
     </>
   )
