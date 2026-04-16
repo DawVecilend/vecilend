@@ -9,7 +9,7 @@ return new class extends Migration {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->string('tipus', 20);
+            $table->string('tipus', 20); // 'admin' | 'usuari' | 'sistema'
             $table->string('accio', 100);
             $table->jsonb('detall')->nullable();
             $table->string('entitat_afectada', 50)->nullable();

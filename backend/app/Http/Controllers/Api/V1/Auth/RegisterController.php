@@ -9,17 +9,14 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
-class RegisterController extends Controller
-{
-    public function register(RegisterRequest $request): JsonResponse
-    {
+class RegisterController extends Controller {
+    public function register(RegisterRequest $request): JsonResponse {
         $validated = $request->validated();
         $user = User::create([
-            'username' => $validated['username'],
             'nom' => $validated['nom'],
             'cognoms' => $validated['cognoms'],
             'email' => $validated['email'],
-            'password' => $validated['password'],
+            'password' => $validated['password'], // el cast 'hashed' del modelo se encarga
             'telefon' => $validated['telefon'] ?? null,
             'direccio' => $validated['direccio'] ?? null,
             'avatar_url' => $validated['avatar_url'] ?? null,
@@ -36,17 +33,14 @@ class RegisterController extends Controller
                 ?), 4326) WHERE id = ?',
                 [$lng, $lat, $user->id]
             );
-
+        
             $user->refresh();
         }
-
+        
         $token = $user->createToken('auth')->plainTextToken;
         return response()->json([
-            'message' => 'Registre completat correctament.',
-            'data' => [
-                'user'  => new UserResource($user),
-                'token' => $token,
-            ],
+            'data' => new UserResource($user),
+            'token' => $token,
         ], 201);
     }
 }
