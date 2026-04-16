@@ -3,7 +3,7 @@ import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import api from '../services/api';
-import municipalitiesData from '../data/rows.json';
+import municipalitiesData from '../data/municipios.json';
 
 function RegisterPage() {
   const { register } = useContext(AuthContext);
@@ -22,16 +22,15 @@ function RegisterPage() {
     direccio: "",
     password: "",
     password_confirmation: "",
+    biography: "",
+    avatar: null,
     accepta_termes: true,
-    avatar_url: "",
     radi_proximitat: 10,
     ubicacio: {
         lat: 0,
         lng: 0
     }
   });
-
-  const [bio, setBio] = useState('');
   
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -42,6 +41,13 @@ function RegisterPage() {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, avatar: file }));
+    }
   };
 
   const normalizeString = (str) => {
@@ -122,51 +128,51 @@ function RegisterPage() {
     setStep(3);
   };
 
-  const handleFinalSubmit = async (e) => {
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    setError('');
-
-    if (formData.password !== formData.password_confirmation) {
-      setError('Las contraseñas no coinciden.');
-      return;
-    }
-
-    if (!formData.direccio.trim()) {
-      setError('Por favor, selecciona una población de la lista.');
-      return;
-    }
-
-    const isValidMunicipality = municipalitiesData.data.some(
-      row => row[9] === formData.direccio
-    );
-
-    if (!isValidMunicipality) {
-      setError('Por favor, selecciona una población válida de la lista desplegable.');
-      return;
-    }
-
+    setError(null);
     setIsLoading(true);
-    
+
     try {
-      const response = await register(formData);
-      
-      if (response?.token) {
-        localStorage.setItem("auth_token", response.token);
+      const data = new FormData();
+      data.append('username', formData.username);
+      data.append('nom', formData.nom);
+      data.append('cognoms', formData.cognoms);
+      data.append('email', formData.email);
+      data.append('password', formData.password);
+      data.append('password_confirmation', formData.password_confirmation);
+      data.append('accepta_termes', formData.accepta_termes ? '1' : '0');
+
+      if (formData.telefon) data.append('telefon', formData.telefon);
+      if (formData.direccio) data.append('direccio', formData.direccio);
+
+      if (formData.avatar) {
+        data.append('avatar', formData.avatar);
       }
 
-      alert("Usuario creado correctamente");
+      if (formData.ubicacio?.lat && formData.ubicacio?.lng) {
+        data.append('ubicacio[lat]', formData.ubicacio.lat);
+        data.append('ubicacio[lng]', formData.ubicacio.lng);
+      }
+
+      console.log("Datos enviados al backend:");
+      for (let pair of data.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+
+      await register(data);
       navigate('/login');
     } catch (err) {
-      console.error("Error backend:", err.response?.data || err.message);
-      if (err.response?.status === 422) {
-        setError(Object.values(err.response.data.errors).flat()[0]);
+      if(err.response.status === 422) {
+        setError(err.response?.data?.message || 'Error al registrar. Inténtalo de nuevo.');
       } else {
-        setError("Error al crear usuario");
+        setError('Error al registrar. Inténtalo de nuevo.');
       }
     } finally {
       setIsLoading(false);
-    }
-  };
+    };
+  }
 
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen md:h-screen md:overflow-hidden flex flex-col dark">
@@ -346,7 +352,7 @@ function RegisterPage() {
                   <p className="text-[#859490]">Tell us a bit more about yourself to finalize your professional profile.</p>
                 </div>
 
-                <form className="space-y-3 lg:space-y-4 flex flex-col flex-1" onSubmit={handleFinalSubmit}>
+                <form className="space-y-3 lg:space-y-4 flex flex-col flex-1" onSubmit={handleRegister}>
                   {error && (
                     <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-2 rounded-lg text-sm font-medium text-center">
                       {error}
@@ -432,19 +438,31 @@ function RegisterPage() {
                         <label className="block text-sm font-medium text-[#bbcac6] ml-1">Profile Picture (Optional)</label>
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-full bg-[#2f3634] border border-[#3c4947] flex items-center justify-center overflow-hidden">
-                            <span className="material-symbols-outlined text-[#859490]">account_circle</span>
+                            {formData.avatar ? (
+                              <img src={URL.createObjectURL(formData.avatar)} alt="Avatar Preview" className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="material-symbols-outlined text-[#859490]">account_circle</span>
+                            )}
                           </div>
-                          <button className="px-4 py-1.5 text-sm font-medium border border-[#859490] rounded-lg text-[#dde4e1] hover:bg-[#2f3634] transition-colors flex items-center gap-2" type="button">
+                          <label className="cursor-pointer px-4 py-1.5 text-sm font-medium border border-[#859490] rounded-lg text-[#dde4e1] hover:bg-[#2f3634] transition-colors flex items-center gap-2">
                             <span className="material-symbols-outlined text-sm">upload</span> Choose File
-                          </button>
+                            <input 
+                              type="file"
+                              className="hidden"
+                              accept="image/jpeg,image/png,image/webp"
+                              onChange={handleFileChange}
+                            />
+                          </label>
                         </div>
                       </div>
                     </div>
+
+
                   </div>
 
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-[#bbcac6] ml-1">Professional Bio</label>
-                    <textarea name="bio" value={bio} onChange={(e) => setBio(e.target.value)} className="w-full bg-[#2f3634] border-none rounded-lg px-4 py-2 lg:py-2.5 focus:ring-2 focus:ring-[#4fdbc8] text-[#dde4e1] placeholder:text-[#859490]/50 outline-none transition-all resize-none" placeholder="Briefly describe your experience and expertise..." rows="2"></textarea>
+                    <textarea name="biography" value={formData.biography} onChange={handleChange} className="w-full bg-[#2f3634] border-none rounded-lg px-4 py-2 lg:py-2.5 focus:ring-2 focus:ring-[#4fdbc8] text-[#dde4e1] placeholder:text-[#859490]/50 outline-none transition-all resize-none" placeholder="Briefly describe your experience and expertise..." rows="2"></textarea>
                   </div>
 
                   <div className="mt-auto pt-2 flex flex-col sm:flex-row gap-3">
