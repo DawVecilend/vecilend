@@ -20,6 +20,10 @@ class UserFactory extends Factory
             'cognoms' => fake()->lastName() . ' ' . fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make('User1234!'),
+            'biography' => fake()->paragraph(),
+            'telefon' => fake()->phoneNumber(),
+            'direccio' => fake()->city(),
+            'ubicacio' => null,
             'avatar_url' => null,
             'google_id' => null,
             'ubicacio' => DB::raw(sprintf(

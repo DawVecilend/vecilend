@@ -7,7 +7,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ── Recuperar sessió: si hi ha token, obtenir l'usuari ──
+  // ── Get current user ──
   const getUser = useCallback(async () => {
     try {
       const res = await api.get('/me');
@@ -32,10 +32,11 @@ export function AuthProvider({ children }) {
   const login = async (credentials) => {
     const res = await api.post('/login', credentials);
 
-    // Backend retorna: { message, data: { user: {...}, token: "..." } }
     const { user: userData, token } = res.data.data;
+
     localStorage.setItem('auth_token', token);
     setUser(userData);
+
     return userData;
   };
 
@@ -44,30 +45,41 @@ export function AuthProvider({ children }) {
     const res = await api.post('/register', data);
 
     const { user: userData, token } = res.data.data;
+
     localStorage.setItem('auth_token', token);
     setUser(userData);
+
     return userData;
   };
 
   // ── Logout ──
   const logout = async () => {
     try {
-      await api.post('/logout');    // Invalida el token a la BD
-    } catch {
-      // Si el token ja estava expirat, no passa res
-    }
+      await api.post('/logout');
+    } catch {}
+
     localStorage.removeItem('auth_token');
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, getUser, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        register,
+        logout,
+        getUser,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
-// Hook personalitzat per no haver de fer useContext(AuthContext) a cada component
+// Hook helper
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth ha de ser usat dins un AuthProvider');
