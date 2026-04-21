@@ -12,6 +12,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import HeaderDesktop from './components/layouts/header/HeaderDesktop'
 import HeaderMobile from './components/layouts/header/HeaderMobile'
 import Footer from './components/layouts/footer/Footer'
+import FloatingAddObjectButton from './components/elementos/FloatingAddObjectButton'
 
 function App() {
   return (
@@ -33,14 +34,18 @@ function App() {
           <Route path="/objects" element={<ObjectsPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
-          <Route path="/profile/:username" element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          } />
+          <Route
+            path="/profile/:username"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
-      
+
+      <FloatingAddObjectButton />
       <Footer />
     </AuthProvider>
   )
