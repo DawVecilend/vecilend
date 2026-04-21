@@ -13,7 +13,9 @@ return new class extends Migration {
             $table->string('cognoms', 150);
             $table->string('email', 255)->unique();
             $table->string('password', 255)->nullable();
+            $table->text('biography')->nullable();
             $table->string('avatar_url', 500)->nullable();
+            $table->string('avatar_public_id', 255)->nullable()->after('avatar_url');
             $table->string('google_id', 100)->unique()->nullable();
             $table->geography('ubicacio', subtype: 'point', srid: 4326)->nullable();
             $table->integer('radi_proximitat')->default(5);
