@@ -11,8 +11,10 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
-class RegisterController extends Controller {
-    public function register(RegisterRequest $request, CloudinaryService $cloudinary): JsonResponse {
+class RegisterController extends Controller
+{
+    public function register(RegisterRequest $request, CloudinaryService $cloudinary): JsonResponse
+    {
         $validated = $request->validated();
         $avatarUrl = null;
         $avatarPublicId = null;
@@ -58,15 +60,19 @@ class RegisterController extends Controller {
 
             $user->refresh();
         }
-        
+
         $token = $user->createToken('auth')->plainTextToken;
         return response()->json([
-            'data' => new UserResource($user),
-            'token' => $token,
+            'message' => 'Registre completat correctament.',
+            'data' => [
+                'user'  => new UserResource($user),
+                'token' => $token,
+            ],
         ], 201);
     }
 
-    public function checkUser(CheckUserRequest $request): JsonResponse {
+    public function checkUser(CheckUserRequest $request): JsonResponse
+    {
         $emailExists = User::where('email', $request->email)->exists();
         $userExists = User::where('username', $request->username)->exists();
 

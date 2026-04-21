@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import HeroSection from '../components/home/HeroSection'
 import CategoriesSection from '../components/home/categories/CategoriesSection'
 import ProductsSection from '../components/home/ProductsSection'
-import Header from '../components/layouts/header/HeaderDesktop'
-import Footer from '../components/layouts/footer/FooterDesktop'
 import TopUsersSection from '../components/home/TopUsersSection'
 import BenefitsSection from '../components/home/BenefitsSection'
 import { getObjects } from '../services/objects'
@@ -20,8 +18,7 @@ function HomePage() {
   useEffect(() => {
     async function loadObjects() {
       try {
-        const response = await getObjects()
-        const rawObjects = response.data || response || []
+        const rawObjects = await getObjects()
         const mappedProducts = mapObjectsToProducts(rawObjects)
         setProducts(mappedProducts)
       } catch (error) {
@@ -34,8 +31,7 @@ function HomePage() {
 
     async function loadCategories() {
       try {
-        const response = await getCategories()
-        const rawCategories = response.data || response || []
+        const rawCategories = await getCategories()
         const mappedCategories = mapCategories(rawCategories)
         setCategories(mappedCategories)
       } catch (error) {
@@ -50,16 +46,20 @@ function HomePage() {
     loadCategories()
   }, [])
 
-  const topProducts = products.slice(0, 5)
-  const recentProducts = products.slice(0, 5)
+  const recentProducts = [...products]
+    .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+    .slice(0, 5)
+
+  const topProducts = recentProducts
 
   return (
     <>
-      <Header />
       <HeroSection />
 
       {loadingCategories ? (
-        <p className="py-6 text-center text-vecilend-dark-text">Cargando categorías...</p>
+        <p className="py-6 text-center text-vecilend-dark-text">
+          Cargando categorías...
+        </p>
       ) : (
         <CategoriesSection categories={categories} />
       )}
@@ -77,7 +77,6 @@ function HomePage() {
 
       <TopUsersSection />
       <BenefitsSection />
-      <Footer />
     </>
   )
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class CategoriaSeeder extends Seeder
@@ -11,6 +12,7 @@ class CategoriaSeeder extends Seeder
     public function run(): void
     {
         $now = Carbon::now();
+
         $categories = [
             ['nom' => 'Viatges', 'slug' => 'viatges', 'icona' => 'plane', 'descripcio' => 'Maletes, adaptadors, accessoris de viatge i equipament per a desplaçaments'],
             ['nom' => 'Construcció', 'slug' => 'construccio', 'icona' => 'hard-hat', 'descripcio' => 'Eines de construcció, maquinària lleugera i material d\'obra'],
@@ -31,9 +33,10 @@ class CategoriaSeeder extends Seeder
                     'slug' => $cat['slug'],
                 ],
                 array_merge($cat, [
+                    'slug' => Str::slug($cat['nom']),
                     'activa' => true,
                     'created_at' => $now,
-                    'updated_at' => $now
+                    'updated_at' => $now,
                 ])
             );
         }

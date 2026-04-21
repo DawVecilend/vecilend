@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -6,8 +7,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
-class UserSeeder extends Seeder {
-    public function run(): void {
+class UserSeeder extends Seeder
+{
+    public function run(): void
+    {
         $now = Carbon::now();
         DB::table('users')->insert([
             'username' => 'admin',
@@ -29,10 +32,10 @@ class UserSeeder extends Seeder {
         ]);
 
         $usuaris = [
-            ['username' => 'maria','nom' => 'Maria','cognoms' => 'Garcia López','email' => 'maria@example.com','lng' => 2.0950, 'lat' => 41.3850,'radi' => 5,'biography' => 'Usuaria de prova.', 'telefon' => '666666667', 'direccio' => 'Barcelona'],
-            ['username' => 'pere','nom' => 'Pere','cognoms' => 'Martínez Soler','email' => 'pere@example.com','lng' => 2.0780, 'lat' => 41.3790,'radi' => 3,'biography' => 'Usuari de prova.', 'telefon' => '666666668', 'direccio' => 'Gava'],
-            ['username' => 'laura','nom' => 'Laura','cognoms' => 'Fernández Roca','email' => 'laura@example.com','lng' => 2.1000, 'lat' => 41.3900,'radi' => 8,'biography' => 'Usuaria de prova.', 'telefon' => '666666669', 'direccio' => 'Viladecans'],
-            ['username' => 'joan','nom' => 'Joan','cognoms' => 'Puig Vidal','email' => 'joan@example.com','lng' => 2.0830, 'lat' => 41.3770,'radi' => 5,'biography' => 'Usuari de prova.', 'telefon' => '666666670', 'direccio' => 'Castelldefels'],
+            ['username' => 'maria', 'nom' => 'Maria', 'cognoms' => 'Garcia López', 'email' => 'maria@example.com', 'lng' => 2.0950, 'lat' => 41.3850, 'radi' => 5, 'biography' => 'Usuaria de prova.', 'telefon' => '666666667', 'direccio' => 'Barcelona'],
+            ['username' => 'pere', 'nom' => 'Pere', 'cognoms' => 'Martínez Soler', 'email' => 'pere@example.com', 'lng' => 2.0780, 'lat' => 41.3790, 'radi' => 3, 'biography' => 'Usuari de prova.', 'telefon' => '666666668', 'direccio' => 'Gava'],
+            ['username' => 'laura', 'nom' => 'Laura', 'cognoms' => 'Fernández Roca', 'email' => 'laura@example.com', 'lng' => 2.1000, 'lat' => 41.3900, 'radi' => 8, 'biography' => 'Usuaria de prova.', 'telefon' => '666666669', 'direccio' => 'Viladecans'],
+            ['username' => 'joan', 'nom' => 'Joan', 'cognoms' => 'Puig Vidal', 'email' => 'joan@example.com', 'lng' => 2.0830, 'lat' => 41.3770, 'radi' => 5, 'biography' => 'Usuari de prova.', 'telefon' => '666666670', 'direccio' => 'Castelldefels'],
         ];
 
         foreach ($usuaris as $u) {

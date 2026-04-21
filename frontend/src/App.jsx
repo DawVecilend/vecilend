@@ -3,27 +3,50 @@ import HomePage from './pages/HomePage'
 import StatusPage from './pages/StatusPage'
 import LoginPage from './pages/LoginPage'
 import CategoryPage from './pages/CategoryPage'
-import RegisterPage from './pages/RegisterPage';
+import ObjectsPage from './pages/ObjectsPage'
+import ResultsPage from './pages/ResultsPage'
+import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
-import { AuthProvider } from './contexts/AuthContext';
 import EditProfilePage from './pages/EditProfilePage'
+import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from './contexts/AuthContext'
+import HeaderDesktop from './components/layouts/header/HeaderDesktop'
+import HeaderMobile from './components/layouts/header/HeaderMobile'
+import Footer from './components/layouts/footer/Footer'
 
 function App() {
   return (
-    <>
-      <AuthProvider>
+    <AuthProvider>
+      <div className="hidden md:block">
+        <HeaderDesktop />
+      </div>
+
+      <div className="md:hidden">
+        <HeaderMobile />
+      </div>
+
+      <main className="pt-[80px] pb-[110px] md:pb-0">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/status" element={<StatusPage />} />
+          <Route path="/objects" element={<ObjectsPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
-          <Route path="/profile/:username" element={<ProfilePage />} />
-          <Route path="/settings/profile/edit" element={<EditProfilePage />} />
-        </Routes>
-      </AuthProvider>
-    </>
+          <Route path="/results" element={<ResultsPage />} />
 
+          <Route path="/profile/:username" element={<ProfilePage />} />
+
+          <Route path="/settings/profile/edit" element={
+            <ProtectedRoute>
+              <EditProfilePage />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </main>
+      
+      <Footer />
+    </AuthProvider>
   )
 }
 

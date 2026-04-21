@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { getProfile } from '../services/profile'
 import api from '../services/api'
 import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
-import FooterDesktop from '../components/layouts/footer/FooterDesktop';
+import FooterDesktop from '../components/layouts/footer/Footer';
 
 function ProfilePage() {
   const [profile, setProfile] = useState([])

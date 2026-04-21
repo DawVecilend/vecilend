@@ -1,20 +1,24 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const token = localStorage.getItem('auth_token');
-        if (token) {
-            getUser();
-        } else {
-            setLoading(false);
-        }
-    }, []);
+  // ── Recuperar sessió: si hi ha token, obtenir l'usuari ──
+  const getUser = useCallback(async () => {
+    try {
+      const res = await api.get('/me');
+      setUser(res.data.data);
+    } catch {
+      setUser(null);
+      localStorage.removeItem('auth_token');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
     const login = async (credentials) => {
         const res = await api.post('/api/v1/login', credentials);
@@ -32,33 +36,44 @@ export const AuthProvider = ({ children }) => {
         return user;
     };
 
-    const logout = async () => {
-        try {
-            const resp = await api.post('/api/v1/logout');
-            if (resp.status == 200) {
-                localStorage.removeItem('auth_token');
-            }
-            setUser(null);
-        } catch (error) {
-            console.error('Error al hacer logout:', error);
-        }
-    };
+    // Backend retorna: { message, data: { user: {...}, token: "..." } }
+    const { user: userData, token } = res.data.data;
+    localStorage.setItem('auth_token', token);
+    setUser(userData);
+    return userData;
+  };
 
-    const getUser = async () => {
-        try {
-            const res = await api.get('/api/v1/me');
-            setUser(res.data.data);
-        } catch (error) {
-            console.error(error);
-            logout();
-        } finally {
-            setLoading(false);
-        }
-    };
+  // ── Register ──
+  const register = async (data) => {
+    const res = await api.post('/register', data);
 
-    return (
-        <AuthContext.Provider value={{ user, login, register, logout, getUser, loading }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+    const { user: userData, token } = res.data.data;
+    localStorage.setItem('auth_token', token);
+    setUser(userData);
+    return userData;
+  };
+
+  // ── Logout ──
+  const logout = async () => {
+    try {
+      await api.post('/logout');    // Invalida el token a la BD
+    } catch {
+      // Si el token ja estava expirat, no passa res
+    }
+    localStorage.removeItem('auth_token');
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, loading, login, register, logout, getUser, isAuthenticated: !!user }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+// Hook personalitzat per no haver de fer useContext(AuthContext) a cada component
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth ha de ser usat dins un AuthProvider');
+  return ctx;
+}

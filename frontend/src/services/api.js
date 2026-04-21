@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+  baseURL: (import.meta.env.VITE_API_URL || 'http://localhost:8000') + '/api/v1',
   withCredentials: false,
   headers: {
     'Accept': 'application/json',
@@ -21,6 +21,9 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('auth_token');
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

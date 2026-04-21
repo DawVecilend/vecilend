@@ -9,7 +9,7 @@ function StatusPage() {
     setStatus('Conectando...')
     try {
       // Comprovem la connexió amb l'API (Bearer token, sense CSRF cookie)
-      const response = await api.get('/api/v1/me');
+      const response = await api.get('/me');
       setBackendData(response.data.data);
       setStatus('✅ Conectado y Autenticado');
     } catch (error) {

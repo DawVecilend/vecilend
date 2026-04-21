@@ -17,7 +17,7 @@ Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:l
 Route::post('/check-user', [RegisterController::class, 'checkUser']);
 Route::get('/profile/{username}', [UserController::class, 'getByUsername']);
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
-Route::post('/reset-password',  [PasswordResetController::class, 'resetPassword']);
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
 
 Route::get('/categories', [CategoriaController::class, 'index']);
 Route::get('/objects', [ObjecteController::class, 'index']);
@@ -30,5 +30,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
+
     Route::post('/logout', [LoginController::class, 'logout']);
+
+    Route::post('/objects', [ObjecteController::class, 'store']);
+    Route::put('/objects/{id}', [ObjecteController::class, 'update'])
+        ->where('id', '[0-9]+');
+    Route::delete('/objects/{id}', [ObjecteController::class, 'destroy'])
+        ->where('id', '[0-9]+');
 });
