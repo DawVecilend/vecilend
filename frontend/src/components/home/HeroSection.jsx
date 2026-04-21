@@ -2,7 +2,7 @@ import PrimaryButton from '../elementos/PrimaryButton'
 
 function HeroSection() {
   return (
-    <section className="w-full">
+    <section className="w-full mt-[2rem]">
       <div className="relative mx-auto flex min-h-[420px] w-full items-center justify-center overflow-hidden rounded-[6px] border border-white/5">
         <img src="/assets/fondo-hero-section.jpg" alt="Personas intercambiando un objeto en la calle" className="absolute inset-0 h-full w-full object-cover"/>
 

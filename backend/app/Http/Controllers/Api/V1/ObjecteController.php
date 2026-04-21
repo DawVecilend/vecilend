@@ -8,6 +8,11 @@ use App\Http\Resources\ObjecteDetailResource;
 use App\Models\Objecte;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Api\V1\StoreObjecteRequest;
+use App\Models\ImatgeObjecte;
+use App\Services\CloudinaryService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Api\V1\UpdateObjecteRequest;
 
 class ObjecteController extends Controller
 {
@@ -17,12 +22,17 @@ class ObjecteController extends Controller
      * Endpoint públic — llistat d'objectes disponibles amb filtres, cerca,
      * ordenació i paginació.
      */
+
+    public function __construct(
+        private readonly CloudinaryService $cloudinary,
+    ) {}
+
     public function index(Request $request)
     {
         $request->validate([
             'search'   => 'nullable|string|max:100',
             'category' => 'nullable|integer|exists:categories,id',
-            'sort'     => 'nullable|string|in:recent,price_asc,price_desc,rating',
+            'sort'     => 'nullable|string|in:recent,oldest,price_asc,price_desc,rating',
             'page'     => 'nullable|integer|min:1',
             'per_page' => 'nullable|integer|min:1|max:50',
             'lat'      => 'nullable|numeric|between:-90,90',
@@ -31,6 +41,7 @@ class ObjecteController extends Controller
         ]);
 
         $query = Objecte::query()
+            ->ambCoordenades()
             ->disponible()
             ->with(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges']);
 
@@ -61,6 +72,10 @@ class ObjecteController extends Controller
 
             case 'price_desc':
                 $query->orderBy('preu_diari', 'desc');
+                break;
+
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
                 break;
 
             case 'rating':
@@ -179,5 +194,226 @@ class ObjecteController extends Controller
                 ],
             ])
             ->toArray();
+    }
+
+    /**
+     * POST /api/v1/objects
+     *
+     * Crea un nou objecte amb imatges pujades a Cloudinary.
+     * Requereix autenticació (auth:sanctum).
+     */
+    public function store(StoreObjecteRequest $request)
+    {
+        $validated = $request->validated();
+        $user = $request->user();
+
+        // ── 1. Crear l'objecte (sense ubicació encara) ──
+        $objecte = Objecte::create([
+            'user_id'      => $user->id,
+            'categoria_id' => $validated['categoria_id'],
+            'nom'          => $validated['nom'],
+            'descripcio'   => $validated['descripcio'],
+            'tipus'        => $validated['tipus'],
+            'preu_diari'   => $validated['preu_diari'] ?? null,
+            'estat'        => 'disponible',
+            // ubicacio es posa via SQL raw per PostGIS
+            'ubicacio'     => DB::raw(sprintf(
+                "ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography",
+                $validated['lng'],
+                $validated['lat']
+            )),
+        ]);
+
+        // ── 2. Pujar imatges a Cloudinary i guardar-les ──
+        $imatgesData = [];
+
+        foreach ($request->file('imatges') as $index => $fitxer) {
+            try {
+                $result = $this->cloudinary->upload($fitxer, 'vecilend/objectes');
+
+                $imatgesData[] = [
+                    'objecte_id'           => $objecte->id,
+                    'url_cloudinary'       => $result['url'],
+                    'public_id_cloudinary' => $result['public_id'],
+                    'ordre'                => $index,
+                ];
+            } catch (\Throwable $e) {
+                // Si falla una pujada, eliminem l'objecte i les imatges ja pujades
+                $this->rollbackImatges($imatgesData);
+                $objecte->delete();
+
+                Log::error('Cloudinary upload error', [
+                    'objecte_nom' => $validated['nom'],
+                    'index'       => $index,
+                    'error'       => $e->getMessage(),
+                ]);
+
+                return response()->json([
+                    'message' => 'Error en pujar les imatges. Torna-ho a provar.',
+                ], 500);
+            }
+        }
+
+        // Inserir totes les imatges d'un cop
+        ImatgeObjecte::insert($imatgesData);
+
+        // ── 3. Associar subcategories (si n'hi ha) ──
+        if (!empty($validated['subcategories'])) {
+            $objecte->subcategories()->attach($validated['subcategories']);
+        }
+
+        // ── 4. Recarregar amb relacions i retornar ──
+        $objecte->load(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges', 'subcategories:id,nom']);
+
+        return (new ObjecteResource($objecte))
+            ->response()
+            ->setStatusCode(201);
+    }
+
+    /**
+     * Si falla la pujada a Cloudinary a meitat, eliminar les imatges
+     * que s'hagin pujat correctament abans de l'error.
+     */
+    private function rollbackImatges(array $imatgesData): void
+    {
+        foreach ($imatgesData as $img) {
+            try {
+                $this->cloudinary->delete($img['public_id_cloudinary']);
+            } catch (\Throwable $e) {
+                Log::warning('Cloudinary rollback failed', [
+                    'public_id' => $img['public_id_cloudinary'],
+                    'error'     => $e->getMessage(),
+                ]);
+            }
+        }
+    }
+
+    /**
+     * PUT /api/v1/objects/{id}
+     *
+     * Actualitza un objecte existent. Només el propietari.
+     * Suporta multipart/form-data per noves imatges.
+     */
+    public function update(UpdateObjecteRequest $request, int $id)
+    {
+        $objecte = Objecte::findOrFail($id);
+
+        // Autorització via Policy
+        $this->authorize('update', $objecte);
+
+        $validated = $request->validated();
+
+        // ── 1. Actualitzar camps bàsics ──
+        $campsActualitzables = ['nom', 'descripcio', 'categoria_id', 'tipus', 'preu_diari', 'estat'];
+
+        $dades = collect($validated)->only($campsActualitzables)->toArray();
+
+        if (!empty($dades)) {
+            $objecte->update($dades);
+        }
+
+        // ── 2. Actualitzar ubicació (si s'envia) ──
+        if (isset($validated['lat']) && isset($validated['lng'])) {
+            Objecte::setUbicacio($objecte->id, $validated['lat'], $validated['lng']);
+        }
+
+        // ── 3. Eliminar imatges marcades ──
+        if (!empty($validated['imatges_eliminar'])) {
+            $imatgesAEliminar = ImatgeObjecte::where('objecte_id', $objecte->id)
+                ->whereIn('id', $validated['imatges_eliminar'])
+                ->get();
+
+            foreach ($imatgesAEliminar as $img) {
+                try {
+                    $this->cloudinary->delete($img->public_id_cloudinary);
+                } catch (\Throwable $e) {
+                    Log::warning('Cloudinary delete error (update)', [
+                        'public_id' => $img->public_id_cloudinary,
+                        'error'     => $e->getMessage(),
+                    ]);
+                }
+                $img->delete();
+            }
+        }
+
+        // ── 4. Pujar noves imatges ──
+        if ($request->hasFile('imatges_noves')) {
+            // Determinar l'ordre actual més alt
+            $ordreMax = $objecte->imatges()->max('ordre') ?? -1;
+
+            foreach ($request->file('imatges_noves') as $fitxer) {
+                try {
+                    $result = $this->cloudinary->upload($fitxer, 'vecilend/objectes');
+
+                    ImatgeObjecte::create([
+                        'objecte_id'           => $objecte->id,
+                        'url_cloudinary'       => $result['url'],
+                        'public_id_cloudinary' => $result['public_id'],
+                        'ordre'                => ++$ordreMax,
+                    ]);
+                } catch (\Throwable $e) {
+                    Log::error('Cloudinary upload error (update)', [
+                        'objecte_id' => $objecte->id,
+                        'error'      => $e->getMessage(),
+                    ]);
+                    // Continuem amb les altres imatges — no fem rollback total
+                }
+            }
+        }
+
+        // ── 5. Actualitzar subcategories (si s'envien) ──
+        if (array_key_exists('subcategories', $validated)) {
+            // sync() reemplaça les subcategories existents
+            $objecte->subcategories()->sync($validated['subcategories'] ?? []);
+        }
+
+        // ── 6. Verificar que queda almenys 1 imatge ──
+        $objecte->refresh();
+        if ($objecte->imatges()->count() === 0) {
+            return response()->json([
+                'message' => 'L\'objecte ha de tenir almenys una imatge.',
+            ], 422);
+        }
+
+        // ── 7. Recarregar i retornar ──
+        $objecte->load(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges', 'subcategories:id,nom']);
+
+        return new ObjecteResource($objecte);
+    }
+
+    /**
+     * DELETE /api/v1/objects/{id}
+     *
+     * Elimina un objecte i totes les seves imatges de Cloudinary.
+     * Només el propietari.
+     */
+    public function destroy(int $id)
+    {
+        $objecte = Objecte::findOrFail($id);
+
+        // Autorització via Policy
+        $this->authorize('delete', $objecte);
+
+        // ── 1. Eliminar imatges de Cloudinary ──
+        $imatges = $objecte->imatges;
+
+        foreach ($imatges as $img) {
+            try {
+                $this->cloudinary->delete($img->public_id_cloudinary);
+            } catch (\Throwable $e) {
+                Log::warning('Cloudinary delete error (destroy)', [
+                    'public_id' => $img->public_id_cloudinary,
+                    'error'     => $e->getMessage(),
+                ]);
+                // Continuem — no volem que una imatge bloquegi l'eliminació
+            }
+        }
+
+        // ── 2. Eliminar l'objecte (cascade elimina imatges de la BD) ──
+        $objecte->delete();
+
+        return response()->json([
+            'message' => 'Objecte eliminat correctament.',
+        ], 200);
     }
 }

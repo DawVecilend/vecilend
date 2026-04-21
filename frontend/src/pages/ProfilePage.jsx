@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getProfile } from '../services/profile'
 import api from '../services/api'
-import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
-import FooterDesktop from '../components/layouts/footer/FooterDesktop';
 
 function ProfilePage() {
   const [profile, setProfile] = useState([])
@@ -27,8 +25,6 @@ function ProfilePage() {
 
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
-      <HeaderDesktop />
-
       <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
         <section className="relative bg-[#161d1b] rounded-xl p-8 md:p-12 overflow-hidden">
           <div className="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
@@ -38,9 +34,9 @@ function ProfilePage() {
             <div className="relative group">
               <img
                 alt="Foto de perfil"
-                className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500"
-                data-alt="User Profile"
-                src={profile?.avatar}
+                className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500" 
+                data-alt="User Profile" 
+                src={profile?.avatar_url || '/assets/avatar-default.jpg'}
               />
               <div className="absolute -bottom-3 -right-3 bg-[#f38764] text-[#6c2106] px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 border border-white">
                 <span className="material-symbols-outlined icon-filled text-sm">verified</span>
@@ -258,8 +254,6 @@ function ProfilePage() {
           </div>
         </section>
       </main>
-
-      <FooterDesktop />
     </div>
   );
 }
