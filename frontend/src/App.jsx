@@ -7,6 +7,7 @@ import ObjectsPage from './pages/ObjectsPage'
 import ResultsPage from './pages/ResultsPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
+import CreateObjectPage from './pages/CreateObjectPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
 import HeaderDesktop from './components/layouts/header/HeaderDesktop'
@@ -34,11 +35,21 @@ function App() {
           <Route path="/objects" element={<ObjectsPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
+
           <Route
             path="/profile/:username"
             element={
               <ProtectedRoute>
                 <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/objects/create"
+            element={
+              <ProtectedRoute>
+                <CreateObjectPage />
               </ProtectedRoute>
             }
           />
