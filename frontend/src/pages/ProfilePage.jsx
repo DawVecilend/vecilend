@@ -36,10 +36,10 @@ function ProfilePage() {
           </div>
           <div className="relative flex flex-col md:flex-row gap-8 items-start md:items-center">
             <div className="relative group">
-              <img 
+              <img
                 alt="Foto de perfil"
-                className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500" 
-                data-alt="User Profile" 
+                className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500"
+                data-alt="User Profile"
                 src={profile?.avatar}
               />
               <div className="absolute -bottom-3 -right-3 bg-[#f38764] text-[#6c2106] px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 border border-white">
@@ -136,9 +136,9 @@ function ProfilePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="group bg-[#090f0e] rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
               <div className="relative h-64 overflow-hidden">
-                <img 
-                  alt="Sony A7 IV" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                <img
+                  alt="Sony A7 IV"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCVZKePoBsHIMyfa2kUKTDD0ZqZS5nRXTvkEdrfH_QZXgIkIRusDKwwfPKXBN0xtApGy4efudWoQXV3OvufyCVksmLdqdjz5BOIov0LmMLPLBlbEdeNCwJyhK1x8h6wliY5zHfiZvOXSS5LTxjPNlLI7aR07B3pi5DMvJSqm0zTPL8IxFovJ2z3KAsqB3eIQUX03dSgvUqwax1kolHF9f9P0sD9hO946e7nVUkR8Y2DgZwHBcD-1uoVHnsOb1khAmF7G69foNPLyIv"
                 />
                 <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-[#4fdbc8] flex items-center gap-1">
@@ -164,9 +164,9 @@ function ProfilePage() {
 
             <div className="group bg-[#090f0e] rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
               <div className="relative h-64 overflow-hidden">
-                <img 
-                  alt="DJI Mavic 3 Pro" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                <img
+                  alt="DJI Mavic 3 Pro"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOaN20-_BcbW-bZYIHJADUt3RrR2HTmVWFJ0fReOH_KLFPNMqMBu0xn_R7BXuUWXWjob5QsJQ6cLbRfC4MRdgyIFgjYk6qFkbbMohJtT_Y2OCCzoSGdy0dcyIDB1CHvHOmjcNehnAWSJxZwYqGgHS-p5trI-fOMIGIdAflIVdZPdosb3hYdNhFdA1nFDd4g8mTDxMd4CyEsrJAqA3zCJv2LRrOoumzrg446B8iNHj_UDZVyHKqvASzTWi72vL2P6DmcA_pivh1cQhH"
                 />
               </div>
@@ -188,9 +188,9 @@ function ProfilePage() {
 
             <div className="group bg-[#090f0e] rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
               <div className="relative h-64 overflow-hidden">
-                <img 
-                  alt="Aputure 600d Pro" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                <img
+                  alt="Aputure 600d Pro"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxjeCKNL2rJfYg_IUfEOCc_wQlzTwKqvbAiGSfUZxn9-HzIP8bex0ZtoGbTnoL5pzdVVuJkwK7juJ6MlyOWg7d9oG2hXlV-USDehpJsp__vJP5O2j0QIlIp6V3ec59DVwjQXyZB37d5zSis4gT4DGm13UTSfI_VY0ddl6R8H3i5IKHsx0aeb1wvz0iuHjlwBZQ5IHwKNKIcw64PDaRON8A9zb7GEHhOtJQ1HW5RZf8ftnvb9WoT0iyZJSOAaLxDK3kxyPI_i_A_m1e"
                 />
               </div>
@@ -217,9 +217,9 @@ function ProfilePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-[#161d1b] p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
               <div className="flex items-center gap-4">
-                <img 
-                  alt="User Profile" 
-                  className="w-12 h-12 rounded-full" 
+                <img
+                  alt="User Profile"
+                  className="w-12 h-12 rounded-full"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeEqSaikQJZ9NyhaeByH7mNkoQaDgO_9cyQiWUksGlDctNMV0--xgG-UcMBJDNVrQmfNQYR3YO8eTQDfBln6kVPTsnElbQkorJAiH6_aAihwvGCnhudhzqU6XC1THU08yyo9voih6Vizg0zdjS42_N9T-hMApuFRwzd_v_4wTRAmo-cKdTegtEhxYr9AdRK7l0qvDKlqFSuw_Ym7T3HaELXNjQNll5t_Uev_uYODmlCmfFw1eq3L5WB1iJCkjwFk8xRLvx8EVSiEdS"
                 />
                 <div>
@@ -237,9 +237,9 @@ function ProfilePage() {
             </div>
             <div className="bg-[#161d1b] p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
               <div className="flex items-center gap-4">
-                <img 
-                  alt="User Profile" 
-                  className="w-12 h-12 rounded-full" 
+                <img
+                  alt="User Profile"
+                  className="w-12 h-12 rounded-full"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT73IMdFWPKHxMqksyR2MCl4XQcJ1X0CXN0AuGLaIsDsCXq-tuIibwjcU_1BmOGXse2LDOy66gcF2Hl92iZrf6wYHmnHIx-BVGUr6m7V3PIBsg5lD8qAdIuj14q2O8CgvgX85B6RYhiiQxfR249Gns_KiJi3cxwndjmI2YJ9FGoKj1xa0KSyRWgI4ZXYkPhhOeDYzLw_ktDwt04Bz3YMM-pT2XXwLfnEob_kDTsLlJeuH_J8Otfey4nZ6XiKlu-7IXA9y3wuikqzQZ"
                 />
                 <div>

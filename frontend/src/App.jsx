@@ -8,6 +8,7 @@ import ResultsPage from './pages/ResultsPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
 import { AuthProvider } from './contexts/AuthContext'
+import ObjectPage from './pages/ObjectPage'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/categorias/:slug" element={<CategoryPage />} />
         <Route path="/results" element={<ResultsPage />} />
         <Route path="/profile/:username" element={<ProfilePage />} />
+        <Route path="/object/:id" element={<ObjectPage />} />
       </Routes>
     </AuthProvider>
   )
