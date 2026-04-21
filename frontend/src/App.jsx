@@ -34,10 +34,9 @@ function App() {
           <Route path="/objects" element={<ObjectsPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
-
           <Route path="/profile/:username" element={<ProfilePage />} />
 
-          <Route path="/settings/profile/edit" element={
+          <Route path="/settings/profile/:username/editing" element={
             <ProtectedRoute>
               <EditProfilePage />
             </ProtectedRoute>
