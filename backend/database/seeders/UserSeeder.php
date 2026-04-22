@@ -21,8 +21,7 @@ class UserSeeder extends Seeder
             'biography' => 'Administrador del sistema.',
             'telefon' => '666666666',
             'direccio' => 'Murcia',
-            'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint(2.0872,
-            41.3831), 4326)"), // Esplugues aprox.
+            'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint(2.0872, 41.3831), 4326)::geography"), // Esplugues aprox.
             'radi_proximitat' => 10,
             'rol' => 'admin',
             'actiu' => true,
@@ -48,7 +47,7 @@ class UserSeeder extends Seeder
                 'biography' => $u['biography'],
                 'telefon' => $u['telefon'],
                 'direccio' => $u['direccio'],
-                'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint({$u['lng']}, {$u['lat']}), 4326)"),
+                'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint({$u['lng']}, {$u['lat']}), 4326)::geography"),
                 'radi_proximitat' => $u['radi'],
                 'rol' => 'usuari',
                 'actiu' => true,

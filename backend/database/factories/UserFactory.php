@@ -23,7 +23,6 @@ class UserFactory extends Factory
             'biography' => fake()->paragraph(),
             'telefon' => fake()->phoneNumber(),
             'direccio' => fake()->city(),
-            'ubicacio' => null,
             'avatar_url' => null,
             'google_id' => null,
             'ubicacio' => DB::raw(sprintf(
