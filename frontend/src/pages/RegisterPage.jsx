@@ -432,6 +432,7 @@ function RegisterPage() {
               </div>
             </div>
 
+            {/* CONTENEDORES DE LA DERECHA: ORIGINALES E INTACTOS */}
             <div className="w-full md:w-1/3 flex flex-col gap-6 lg:gap-8 justify-center h-full">
               <div className="p-6 bg-[#161d1b] rounded-xl border border-[#3c4947]/20 flex flex-col items-center text-center w-full">
                 <div className="w-10 h-10 rounded-lg bg-[#14b8a6]/20 flex items-center justify-center text-[#4fdbc8] mb-4">
