@@ -28,16 +28,15 @@ class CategoriaSeeder extends Seeder
 
         foreach ($categories as $cat) {
             DB::table('categories')->updateOrInsert(
+                ['nom' => $cat['nom']],  // clau només amb nom
                 [
-                    'nom' => $cat['nom'],
-                    'slug' => $cat['slug'],
-                ],
-                array_merge($cat, [
-                    'slug' => Str::slug($cat['nom']),
-                    'activa' => true,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ])
+                    'slug'        => Str::slug($cat['nom']),
+                    'icona'       => $cat['icona'],
+                    'descripcio'  => $cat['descripcio'],
+                    'activa'      => true,
+                    'created_at'  => $now,
+                    'updated_at'  => $now,
+                ]
             );
         }
     }

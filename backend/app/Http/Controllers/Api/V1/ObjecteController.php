@@ -79,7 +79,16 @@ class ObjecteController extends Controller
                 break;
 
             case 'rating':
-                $query->orderByDesc('created_at');
+                $avgRatingSub = DB::table('valoracions')
+                    ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
+                    ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
+                    ->select('solicituds.objecte_id', DB::raw('AVG(valoracions.puntuacio) as avg_rating'))
+                    ->groupBy('solicituds.objecte_id');
+
+                $query
+                    ->leftJoinSub($avgRatingSub, 'ratings', 'ratings.objecte_id', '=', 'objectes.id')
+                    ->orderByRaw('ratings.avg_rating DESC NULLS LAST')
+                    ->orderByDesc('objectes.created_at');
                 break;
 
             case 'recent':
@@ -264,10 +273,10 @@ class ObjecteController extends Controller
 
         // ── 4. Recarregar amb relacions i retornar ──
         $objecte->load(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges', 'subcategories:id,nom']);
+        $objecte->lat = $validated['lat'];
+        $objecte->lng = $validated['lng'];
 
-        return (new ObjecteResource($objecte))
-            ->response()
-            ->setStatusCode(201);
+        return (new ObjecteResource($objecte))->response()->setStatusCode(201);
     }
 
     /**
@@ -377,6 +386,14 @@ class ObjecteController extends Controller
 
         // ── 7. Recarregar i retornar ──
         $objecte->load(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges', 'subcategories:id,nom']);
+        if (isset($validated['lat']) && isset($validated['lng'])) {
+            $objecte->lat = $validated['lat'];
+            $objecte->lng = $validated['lng'];
+        } else {
+            // Recarregar amb scope per obtenir lat/lng existents
+            $objecte = Objecte::ambCoordenades()->findOrFail($objecte->id)
+                ->load(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges', 'subcategories:id,nom']);
+        }
 
         return new ObjecteResource($objecte);
     }

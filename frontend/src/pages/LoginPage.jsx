@@ -42,7 +42,7 @@ function LoginPage() {
                     <div className='flex flex-col w-[382px] gap-[10px]'>
                         <div className='flex items-center'>
                             <img className='relative h-[24px] left-8' src="/assets/icons/mail-icon.svg" alt="Icono email" />
-                            <input type="text" value={formData.login} onChange={(e) => setFormData({ ...formData, login: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Email' />
+                            <input type="text" value={formData.login} onChange={(e) => setFormData({ ...formData, login: e.target.value })} className='bg-[#4B5563]/40 text-[#D9D9D9] w-full px-10 h-[45px] focus:outline-none rounded-xl' placeholder='Email o nom d&apos;usuari' />
                         </div>
                         <div className='flex items-center'>
                             <img className='relative h-[24px] left-8' src="/assets/icons/key-icon.svg" alt="Icono contraseña" />

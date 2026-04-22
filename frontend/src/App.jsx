@@ -8,8 +8,10 @@ import ResultsPage from './pages/ResultsPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
 import CreateObjectPage from './pages/CreateObjectPage'
+import EditProfilePage from './pages/EditProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
+import ObjectPage from './pages/ObjectPage'
 import HeaderDesktop from './components/layouts/header/HeaderDesktop'
 import HeaderMobile from './components/layouts/header/HeaderMobile'
 import Footer from './components/layouts/footer/Footer'
@@ -32,7 +34,10 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/status" element={<StatusPage />} />
+          
           <Route path="/objects" element={<ObjectsPage />} />
+          <Route path="/object/:id" element={<ObjectPage />} />
+
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
 
@@ -53,6 +58,12 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/profile/:username" element={<ProfilePage />} />
+          <Route path="/settings/profile/:username/editing" element={
+            <ProtectedRoute>
+              <EditProfilePage />
+            </ProtectedRoute>
+          } />
         </Routes>
       </main>
 
