@@ -144,6 +144,7 @@ function RegisterPage() {
       data.append('password_confirmation', formData.password_confirmation);
       data.append('accepta_termes', formData.accepta_termes ? '1' : '0');
 
+      if (formData.biography) data.append('biography', formData.biography);
       if (formData.telefon) data.append('telefon', formData.telefon);
       if (formData.direccio) data.append('direccio', formData.direccio);
 
@@ -157,7 +158,7 @@ function RegisterPage() {
       }
 
       await register(data);
-      navigate('/login');
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrar. Inténtalo de nuevo.');
     } finally {
