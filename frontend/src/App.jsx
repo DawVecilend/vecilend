@@ -7,6 +7,7 @@ import ObjectsPage from './pages/ObjectsPage'
 import ResultsPage from './pages/ResultsPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
+import CreateObjectPage from './pages/CreateObjectPage'
 import EditProfilePage from './pages/EditProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
@@ -35,14 +36,28 @@ function App() {
           <Route path="/status" element={<StatusPage />} />
           
           <Route path="/objects" element={<ObjectsPage />} />
-          <Route path="/object/:id" element={<ObjectPage />} />  {/* ← AFEGIR */}
-          {/* <Route path="/objects/create" element={
-            <ProtectedRoute><CreateObjectPage /></ProtectedRoute>
-          } /> */}  {/* ← AFEGIR QUAN ES CREÏ LA PÀGINA */}
+          <Route path="/object/:id" element={<ObjectPage />} />
 
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
 
+          <Route
+            path="/profile/:username"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/objects/create"
+            element={
+              <ProtectedRoute>
+                <CreateObjectPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/settings/profile/:username/editing" element={
             <ProtectedRoute>
