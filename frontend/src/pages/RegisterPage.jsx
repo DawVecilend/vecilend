@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import api from '../services/api';
@@ -168,8 +167,6 @@ function RegisterPage() {
 
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased md:h-[calc(100vh-80px)] md:overflow-hidden flex flex-col dark">
-      <HeaderDesktop />
-
       {step === 1 && (
         <main className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
           <section className="hidden md:flex md:w-1/2 relative bg-[#090f0e] items-center justify-center h-full overflow-hidden">
