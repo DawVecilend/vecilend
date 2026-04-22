@@ -67,7 +67,7 @@ function CreateObjectPage() {
                   className="inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-[#14B8A6] px-6 py-3 font-body text-[15px] font-medium text-white transition-all hover:bg-[#0F766E]"
                 >
                   <img
-                    src="/assets/icons/camera-icon.svg"
+                    src="/assets/icons/add-photo-icon.svg"
                     alt=""
                     className="h-5 w-5"
                   />
@@ -102,7 +102,7 @@ function CreateObjectPage() {
 
                 <div className="flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4">
                   <img
-                    src="/assets/icons/box-icon.svg"
+                    src="/assets/icons/label-icon.svg"
                     alt=""
                     className="h-5 w-5 opacity-60"
                   />
