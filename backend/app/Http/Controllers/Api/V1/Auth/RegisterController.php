@@ -15,12 +15,49 @@ use Illuminate\Support\Facades\Log;
 class RegisterController extends Controller
 {
     public function register(RegisterRequest $request, CloudinaryService $cloudinary): JsonResponse
-{
-    $validated = $request->validated();
+    {
+        $validated = $request->validated();
+        $avatarUrl = null;
+        $avatarPublicId = null;
 
-    // ── 1. Pujar avatar (fora de la transacció, abans) ──
-    $avatarUrl = null;
-    $avatarPublicId = null;
+        if ($request->hasFile('avatar')) {
+            try {
+                $result = $cloudinary->upload(
+                    $request->file('avatar'),
+                    'vecilend/avatars'
+                );
+                $avatarUrl      = $result['url'];
+                $avatarPublicId = $result['public_id'];
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+        }
+
+        $user = User::create([
+            'username' => $validated['username'],
+            'nom' => $validated['nom'],
+            'cognoms' => $validated['cognoms'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+            'biography' => $validated['biography'] ?? null,
+            'telefon' => $validated['telefon'] ?? null,
+            'direccio' => $validated['direccio'] ?? null,
+            'avatar_url' => $avatarUrl,
+            'avatar_public_id' => $avatarPublicId,
+            'radi_proximitat' => $validated['radi_proximitat'] ?? 5,
+            'rol' => 'usuari',
+            'actiu' => true,
+        ]);
+
+        if (isset($validated['ubicacio'])) {
+            $lat = $validated['ubicacio']['lat'];
+            $lng = $validated['ubicacio']['lng'];
+            DB::statement(
+                'UPDATE users SET ubicacio = ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography WHERE id = ?',
+                [$lng, $lat, $user->id]
+            );
 
     if ($request->hasFile('avatar')) {
         try {
@@ -89,6 +126,17 @@ class RegisterController extends Controller
         ],
     ], 201);
 }
+
+    public function checkUser(CheckUserRequest $request): JsonResponse
+    {
+        $emailExists = User::where('email', $request->email)->exists();
+        $userExists = User::where('username', $request->username)->exists();
+
+        return response()->json([
+            'emailExists' => $emailExists,
+            'userExists' => $userExists,
+        ]);
+    }
 
     public function checkUser(CheckUserRequest $request): JsonResponse
     {

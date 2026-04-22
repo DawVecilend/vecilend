@@ -10,9 +10,11 @@ import ProfilePage from './pages/ProfilePage'
 import EditProfilePage from './pages/EditProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
+import ObjectPage from './pages/ObjectPage'
 import HeaderDesktop from './components/layouts/header/HeaderDesktop'
 import HeaderMobile from './components/layouts/header/HeaderMobile'
 import Footer from './components/layouts/footer/Footer'
+import FloatingAddObjectButton from './components/elementos/FloatingAddObjectButton'
 
 function App() {
   return (
@@ -49,7 +51,8 @@ function App() {
           } />
         </Routes>
       </main>
-      
+
+      <FloatingAddObjectButton />
       <Footer />
     </AuthProvider>
   )
