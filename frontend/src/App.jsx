@@ -35,7 +35,7 @@ function App() {
           <Route path="/status" element={<StatusPage />} />
           
           <Route path="/objects" element={<ObjectsPage />} />
-          <Route path="/objects/:id" element={<ObjectPage />} />  {/* ← AFEGIR */}
+          <Route path="/object/:id" element={<ObjectPage />} />  {/* ← AFEGIR */}
           {/* <Route path="/objects/create" element={
             <ProtectedRoute><CreateObjectPage /></ProtectedRoute>
           } /> */}  {/* ← AFEGIR QUAN ES CREÏ LA PÀGINA */}

@@ -30,7 +30,6 @@ function ObjectPage() {
 
     return (
         <>
-            <Header />
             <div className='pt-24 flex justify-center gap-8'>
                 <div className='flex flex-col w-full max-w-[700px]'>
                     <div className='flex flex-col'>
@@ -75,7 +74,6 @@ function ObjectPage() {
                     <p className='text-vecilend-dark-text text-text-h3-desktop'>{product.nom}</p>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }
