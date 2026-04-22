@@ -16,7 +16,7 @@ class UserResource extends JsonResource {
             'telefon' => $this->telefon,
             'direccio' => $this->direccio,
             'avatar_url' => $this->avatar_url,
-            'ubicacio' => $this->whenNotNull($this->ubicacio ? $this->coordenades() : null),
+            'ubicacio' => $this->ubicacio ? $this->coordenades() : null,
             'radi_proximitat' => $this->radi_proximitat,
             'rol' => $this->rol,
             'actiu' => $this->actiu,

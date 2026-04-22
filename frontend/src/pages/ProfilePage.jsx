@@ -1,29 +1,31 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getProfile } from '../services/profile'
-import api from '../services/api'
+import { useState, useEffect, useContext } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { getProfile } from '../services/profile';
+import { AuthContext } from '../contexts/AuthContext';
 import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
 import FooterDesktop from '../components/layouts/footer/Footer';
 
 function ProfilePage() {
-  const [profile, setProfile] = useState([])
-  const { username } = useParams()
+  const [profile, setProfile] = useState(null);
+  const { username } = useParams();
+  const { user: currentUser } = useContext(AuthContext);
+
+  const isOwnProfile = currentUser && currentUser.username === username;
 
   useEffect(() => {
     async function loadProfile() {
       try {
-        const response = await getProfile(username)
-        console.log('Perfil cargado:', response.data)
-        setProfile(response.data)
+        const response = await getProfile(username);
+        setProfile(response);
       } catch (error) {
-        console.error('Error cargando perfil:', error)
-        setProfile(null)
+        console.error('Error cargando perfil:', error);
+        setProfile(null);
       }
     }
 
-    loadProfile()
-  }, [username])
+    loadProfile();
+  }, [username]);
 
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
@@ -39,8 +41,7 @@ function ProfilePage() {
               <img
                 alt="Foto de perfil"
                 className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500" 
-                data-alt="User Profile" 
-                src={profile?.avatar_url || '/assets/avatar-omar.jpg'}
+                src={profile?.avatar_url || '/assets/icons/empty-user-icon.svg'}
               />
               <div className="absolute -bottom-3 -right-3 bg-[#f38764] text-[#6c2106] px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 border border-white">
                 <span className="material-symbols-outlined icon-filled text-sm">verified</span>
@@ -73,13 +74,25 @@ function ProfilePage() {
                 </div>
               </div>
               <div className="flex gap-4 pt-2">
-                <button className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2">
-                  <span className="material-symbols-outlined !text-xl">mail</span>
-                  Contacta a {profile?.nom}
-                </button>
-                <button className="bg-[#21514a] text-[#92c2b8] px-8 py-4 rounded-full font-bold hover:bg-[#bbece2] transition-colors active:scale-95">
-                  Seguir
-                </button>
+                {isOwnProfile ? (
+                  <Link 
+                    to={`/settings/profile/${username}/editing`}
+                    className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2"
+                  >
+                    <span className="material-symbols-outlined !text-xl">edit</span>
+                    Editar Perfil
+                  </Link>
+                ) : (
+                  <>
+                    <button className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2">
+                      <span className="material-symbols-outlined !text-xl">mail</span>
+                      Contacta a {profile?.nom}
+                    </button>
+                    <button className="bg-[#21514a] text-[#92c2b8] px-8 py-4 rounded-full font-bold hover:bg-[#bbece2] transition-colors active:scale-95">
+                      Seguir
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -89,7 +102,7 @@ function ProfilePage() {
           <div className="md:col-span-8 bg-[#090f0e] p-8 rounded-lg space-y-6">
             <h2 className="text-2xl font-bold text-[#4fdbc8]">Acerca de {profile?.nom}</h2>
             <div className="space-y-4 text-[#bbcac6] leading-relaxed">
-              <p>{profile?.descripcio || 'Descripción no disponible'}</p>
+              <p>{profile?.biography || 'Descripción no disponible'}</p>
             </div>
             <div className="flex flex-wrap gap-3 pt-4">
               <span className="bg-[#252b2a] px-4 py-2 rounded-full text-sm font-semibold">Cinematography</span>
@@ -161,7 +174,6 @@ function ProfilePage() {
                 </div>
               </div>
             </div>
-
             <div className="group bg-[#090f0e] rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
               <div className="relative h-64 overflow-hidden">
                 <img
@@ -185,7 +197,6 @@ function ProfilePage() {
                 </div>
               </div>
             </div>
-
             <div className="group bg-[#090f0e] rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
               <div className="relative h-64 overflow-hidden">
                 <img

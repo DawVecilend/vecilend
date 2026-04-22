@@ -33,13 +33,18 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/status" element={<StatusPage />} />
+          
           <Route path="/objects" element={<ObjectsPage />} />
+          <Route path="/objects/:id" element={<ObjectPage />} />  {/* ← AFEGIR */}
+          {/* <Route path="/objects/create" element={
+            <ProtectedRoute><CreateObjectPage /></ProtectedRoute>
+          } /> */}  {/* ← AFEGIR QUAN ES CREÏ LA PÀGINA */}
+
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
 
           <Route path="/profile/:username" element={<ProfilePage />} />
-
-          <Route path="/settings/profile/edit" element={
+          <Route path="/settings/profile/:username/editing" element={
             <ProtectedRoute>
               <EditProfilePage />
             </ProtectedRoute>

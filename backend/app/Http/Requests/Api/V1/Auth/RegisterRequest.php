@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -54,12 +55,14 @@ class RegisterRequest extends FormRequest {
     }
 
     private function getMunicipios(): array {
-        $path = database_path('data/municipios.json');
-        if (!file_exists($path)) {
-            return [];
-        }
-        
-        $json = json_decode(file_get_contents($path), true);
-        return array_column($json['data'] ?? [], 9);
+        return Cache::rememberForever('municipios_list', function () {
+            $path = database_path('data/municipios.json');
+            if (!file_exists($path)) {
+                return [];
+            }
+
+            $json = json_decode(file_get_contents($path), true);
+            return array_column($json['data'] ?? [], 9);
+        });
     }
 }
