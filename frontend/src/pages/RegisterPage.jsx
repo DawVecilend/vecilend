@@ -98,7 +98,7 @@ function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const response = await api.post("/api/v1/check-user", {
+      const response = await api.post("/check-user", {
         username: formData.username,
         email: formData.email
       });
@@ -179,7 +179,7 @@ function RegisterPage() {
       <HeaderDesktop />
 
       {step === 1 && (
-        <main className="flex-grow pt-20 flex flex-col md:flex-row md:h-full">
+        <main className="flex-grow flex flex-col md:flex-row md:h-full">
           <section className="hidden md:flex md:w-1/2 relative bg-[#090f0e] items-center justify-center min-h-[calc(100vh-80px)] md:min-h-0 overflow-hidden">
             <div className="absolute inset-0 z-0">
               <img alt="Professional Gear" className="w-full h-full object-cover opacity-40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQW8YXGcPQGsj1Q0KeE6EM5PNeIb_2pLMJDvddODr88dUMeNgFpr5Qs5dEO2AB3ny82vvXhxKR1aN2E7BqjU2sV5FtcQZ-345ynN76RDdZv2smlnejUHG2dyJnTy2VyYGx6-IWF-CKxfbXp8pzNllfgIcWjEMqPvNwxWyDXubGsjAiiVqX-uFuvxCluOPaesKLrAtqv5nHmjRfKM-WAQLXtTiquVhbmhJZ62YM7sq7EbMBlR3I8WQF1s_63H87bU9H2tZ7BGot5ARl" />
@@ -210,7 +210,7 @@ function RegisterPage() {
             </div>
           </section>
 
-          <section className="flex-1 flex flex-col justify-center px-6 py-6 md:px-24 bg-[#0e1513]">
+          <section className="flex-1 flex flex-col justify-center md:px-24 bg-[#0e1513]">
             <div className="max-w-md mx-auto w-full">
               <div className="mb-6">
                 <div className="flex justify-between items-center mb-4">

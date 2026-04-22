@@ -58,84 +58,74 @@ class RegisterController extends Controller
                 'UPDATE users SET ubicacio = ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography WHERE id = ?',
                 [$lng, $lat, $user->id]
             );
-
-    if ($request->hasFile('avatar')) {
-        try {
-            $result = $cloudinary->upload($request->file('avatar'), 'vecilend/avatars');
-            $avatarUrl      = $result['url'];
-            $avatarPublicId = $result['public_id'];
-        } catch (\Throwable $e) {
-            return response()->json(['message' => 'Error pujant l&apos;avatar.'], 500);
         }
-    }
 
-    // ── 2. Transacció: crear usuari + ubicació PostGIS ──
-    try {
-        $user = DB::transaction(function () use ($validated, $avatarUrl, $avatarPublicId) {
-            $user = User::create([
-                'username'         => $validated['username'],
-                'nom'              => $validated['nom'],
-                'cognoms'          => $validated['cognoms'],
-                'email'            => $validated['email'],
-                'password'         => $validated['password'],
-                'biography'        => $validated['biography'] ?? null,
-                'telefon'          => $validated['telefon'] ?? null,
-                'direccio'         => $validated['direccio'] ?? null,
-                'avatar_url'       => $avatarUrl,
-                'avatar_public_id' => $avatarPublicId,
-                'radi_proximitat'  => $validated['radi_proximitat'] ?? 5,
-                'rol'              => 'usuari',
-                'actiu'            => true,
-            ]);
-
-            if (isset($validated['ubicacio'])) {
-                $lat = $validated['ubicacio']['lat'];
-                $lng = $validated['ubicacio']['lng'];
-                DB::statement(
-                    'UPDATE users SET ubicacio = ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography WHERE id = ?',
-                    [$lng, $lat, $user->id]
-                );
-                $user->refresh();
-            }
-
-            return $user;
-        });
-    } catch (\Throwable $e) {
-        // Rollback de Cloudinary si la BD ha fallat
-        if ($avatarPublicId) {
+        if ($request->hasFile('avatar')) {
             try {
-                $cloudinary->delete($avatarPublicId);
-            } catch (\Throwable $cloudErr) {
-                Log::warning('Cloudinary rollback failed on register', [
-                    'public_id' => $avatarPublicId,
-                    'error'     => $cloudErr->getMessage(),
-                ]);
+                $result = $cloudinary->upload($request->file('avatar'), 'vecilend/avatars');
+                $avatarUrl      = $result['url'];
+                $avatarPublicId = $result['public_id'];
+            } catch (\Throwable $e) {
+                return response()->json(['message' => 'Error pujant l&apos;avatar.'], 500);
             }
         }
-        return response()->json(['message' => 'Error en el registre.'], 500);
-    }
 
-    // ── 3. Token i resposta ──
-    $token = $user->createToken('auth')->plainTextToken;
+        // ── 2. Transacció: crear usuari + ubicació PostGIS ──
+        try {
+            $user = DB::transaction(function () use ($validated, $avatarUrl, $avatarPublicId) {
+                $user = User::create([
+                    'username'         => $validated['username'],
+                    'nom'              => $validated['nom'],
+                    'cognoms'          => $validated['cognoms'],
+                    'email'            => $validated['email'],
+                    'password'         => $validated['password'],
+                    'biography'        => $validated['biography'] ?? null,
+                    'telefon'          => $validated['telefon'] ?? null,
+                    'direccio'         => $validated['direccio'] ?? null,
+                    'avatar_url'       => $avatarUrl,
+                    'avatar_public_id' => $avatarPublicId,
+                    'radi_proximitat'  => $validated['radi_proximitat'] ?? 5,
+                    'rol'              => 'usuari',
+                    'actiu'            => true,
+                ]);
 
-    return response()->json([
-        'message' => 'Registre completat correctament.',
-        'data'    => [
-            'user'  => new UserResource($user),
-            'token' => $token,
-        ],
-    ], 201);
-}
+                if (isset($validated['ubicacio'])) {
+                    $lat = $validated['ubicacio']['lat'];
+                    $lng = $validated['ubicacio']['lng'];
+                    DB::statement(
+                        'UPDATE users SET ubicacio = ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography WHERE id = ?',
+                        [$lng, $lat, $user->id]
+                    );
+                    $user->refresh();
+                }
 
-    public function checkUser(CheckUserRequest $request): JsonResponse
-    {
-        $emailExists = User::where('email', $request->email)->exists();
-        $userExists = User::where('username', $request->username)->exists();
+                return $user;
+            });
+        } catch (\Throwable $e) {
+            // Rollback de Cloudinary si la BD ha fallat
+            if ($avatarPublicId) {
+                try {
+                    $cloudinary->delete($avatarPublicId);
+                } catch (\Throwable $cloudErr) {
+                    Log::warning('Cloudinary rollback failed on register', [
+                        'public_id' => $avatarPublicId,
+                        'error'     => $cloudErr->getMessage(),
+                    ]);
+                }
+            }
+            return response()->json(['message' => 'Error en el registre.'], 500);
+        }
+
+        // ── 3. Token i resposta ──
+        $token = $user->createToken('auth')->plainTextToken;
 
         return response()->json([
-            'emailExists' => $emailExists,
-            'userExists' => $userExists,
-        ]);
+            'message' => 'Registre completat correctament.',
+            'data'    => [
+                'user'  => new UserResource($user),
+                'token' => $token,
+            ],
+        ], 201);
     }
 
     public function checkUser(CheckUserRequest $request): JsonResponse
