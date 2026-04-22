@@ -22,46 +22,6 @@ class RegisterController extends Controller
 
         if ($request->hasFile('avatar')) {
             try {
-                $result = $cloudinary->upload(
-                    $request->file('avatar'),
-                    'vecilend/avatars'
-                );
-                $avatarUrl      = $result['url'];
-                $avatarPublicId = $result['public_id'];
-            } catch (\Throwable $e) {
-                return response()->json([
-                    'message' => $e->getMessage(),
-                ], 500);
-            }
-        }
-
-        $user = User::create([
-            'username' => $validated['username'],
-            'nom' => $validated['nom'],
-            'cognoms' => $validated['cognoms'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-            'biography' => $validated['biography'] ?? null,
-            'telefon' => $validated['telefon'] ?? null,
-            'direccio' => $validated['direccio'] ?? null,
-            'avatar_url' => $avatarUrl,
-            'avatar_public_id' => $avatarPublicId,
-            'radi_proximitat' => $validated['radi_proximitat'] ?? 5,
-            'rol' => 'usuari',
-            'actiu' => true,
-        ]);
-
-        if (isset($validated['ubicacio'])) {
-            $lat = $validated['ubicacio']['lat'];
-            $lng = $validated['ubicacio']['lng'];
-            DB::statement(
-                'UPDATE users SET ubicacio = ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography WHERE id = ?',
-                [$lng, $lat, $user->id]
-            );
-        }
-
-        if ($request->hasFile('avatar')) {
-            try {
                 $result = $cloudinary->upload($request->file('avatar'), 'vecilend/avatars');
                 $avatarUrl      = $result['url'];
                 $avatarPublicId = $result['public_id'];
@@ -70,7 +30,6 @@ class RegisterController extends Controller
             }
         }
 
-        // ── 2. Transacció: crear usuari + ubicació PostGIS ──
         try {
             $user = DB::transaction(function () use ($validated, $avatarUrl, $avatarPublicId) {
                 $user = User::create([
@@ -102,7 +61,6 @@ class RegisterController extends Controller
                 return $user;
             });
         } catch (\Throwable $e) {
-            // Rollback de Cloudinary si la BD ha fallat
             if ($avatarPublicId) {
                 try {
                     $cloudinary->delete($avatarPublicId);
