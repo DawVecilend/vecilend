@@ -1,5 +1,5 @@
 import React from 'react'
-import { Rating } from "@mui/material";
+import { Rating } from '@mui/material'
 
 function UserCard({ user }) {
     const valoracion = user.valoracio_mitjana ?? 3.5

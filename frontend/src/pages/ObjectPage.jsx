@@ -1,7 +1,5 @@
-import Header from '../components/layouts/header/HeaderDesktop'
-import Footer from '../components/layouts/footer/FooterDesktop'
 import { useEffect, useState } from 'react'
-import { getProduct } from '../services/object'
+import { getProduct } from '../services/objects'
 import { useParams } from 'react-router-dom'
 import BtnBack from '../components/elementos/BtnBack'
 import UserCard from '../components/elementos/UserCard'
