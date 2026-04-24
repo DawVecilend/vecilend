@@ -3,7 +3,7 @@ import LogoDark from '/assets/logos/LogoDark.svg'
 
 function Footer() {
   return (
-    <footer className="mp-[68px] bg-vecilend-dark-bg-secondary px-6 py-10 md:h-[226px] md:px-10 md:py-0">
+    <footer className="bg-vecilend-dark-bg-secondary px-6 py-10 md:h-[226px] md:px-10 md:py-0">
       <div className="mx-auto flex max-w-[1380px] flex-col md:h-full md:flex-row md:items-center md:justify-around md:gap-20 xl:gap-75">
 
         <div className="order-1 flex flex-col">
