@@ -84,7 +84,7 @@ function SecuritySettingsPage() {
                             <span className="material-symbols-outlined">security</span>
                             <span>Seguridad</span>
                         </Link>
-                        <Link to={`/settings/profile/${user?.username}/privacy`} className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
+                        <Link to={`/settings/profile/${user?.username}/notifications`} className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
                             <span className="material-symbols-outlined">privacy</span>
                             <span>Privacidad</span>
                         </Link>
