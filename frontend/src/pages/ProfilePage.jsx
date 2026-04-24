@@ -3,8 +3,6 @@ import { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProfile } from '../services/profile';
 import { AuthContext } from '../contexts/AuthContext';
-import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
-import FooterDesktop from '../components/layouts/footer/Footer';
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -29,8 +27,6 @@ function ProfilePage() {
 
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
-      <HeaderDesktop />
-
       <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
         <section className="relative bg-[#161d1b] rounded-xl p-8 md:p-12 overflow-hidden">
           <div className="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
@@ -269,8 +265,6 @@ function ProfilePage() {
           </div>
         </section>
       </main>
-
-      <FooterDesktop />
     </div>
   );
 }

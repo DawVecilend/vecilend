@@ -16,6 +16,7 @@ import HeaderDesktop from './components/layouts/header/HeaderDesktop'
 import HeaderMobile from './components/layouts/header/HeaderMobile'
 import Footer from './components/layouts/footer/Footer'
 import FloatingAddObjectButton from './components/elementos/FloatingAddObjectButton'
+import SettingsPage from './pages/SettingsPage'
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
         <HeaderMobile />
       </div>
 
-      <main className="pt-[80px] pb-[110px] md:pb-0">
+      <main className="md:pt-[80px]">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -59,6 +60,11 @@ function App() {
             }
           />
           <Route path="/profile/:username" element={<ProfilePage />} />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          } />
           <Route path="/settings/profile/:username/editing" element={
             <ProtectedRoute>
               <EditProfilePage />

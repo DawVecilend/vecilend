@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useAuth } from '../contexts/AuthContext';
-import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
 
 function LoginPage() {
     const { login } = useAuth();
@@ -33,8 +32,6 @@ function LoginPage() {
 
     return (
         <div className="bg-[#0e1513] text-[#dde4e1] antialiased md:h-[calc(100vh-80px)] md:overflow-hidden flex flex-col dark">
-            <HeaderDesktop />
-
             <main className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
                 <section className="hidden md:flex md:w-1/2 relative bg-[#090f0e] items-center justify-center h-full overflow-hidden">
                     <div className="absolute inset-0 z-0">
