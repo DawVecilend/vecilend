@@ -8,6 +8,7 @@ use App\Http\Requests\Api\V1\UpdateProfileRequest;
 use App\Http\Requests\Api\V1\UpdatePasswordRequest;
 use App\Models\User;
 use App\Services\CloudinaryService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -53,17 +54,16 @@ class UserController extends Controller {
         return new UserResource($user);
     }
 
-    public function updatePassword(UpdatePasswordRequest $request, $username) {
-        $user = User::where('username', $username)->firstOrFail();
-
-        if ($request->user()->id !== $user->id) {
-            return response()->json(['message' => 'Acció no autoritzada.'], 403);
-        }
+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse {
+        $user = $request->user();
 
         $user->update([
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->validated('password')),
         ]);
 
-        return response()->json(['message' => 'Contrasenya actualitzada correctament.']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Contraseña actualizada correctamente.'
+        ], 200);
     }
 }

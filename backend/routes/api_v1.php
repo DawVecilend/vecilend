@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
+use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
 
@@ -24,7 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
-    
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);
     Route::post('/logout', [LoginController::class, 'logout']);

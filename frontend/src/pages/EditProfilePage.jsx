@@ -8,7 +8,7 @@ import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
 function EditProfilePage() {
   const { username } = useParams();
   const navigate = useNavigate();
-  const { user: currentUser, getUser } = useContext(AuthContext);
+  const { user, currentUser, getUser } = useContext(AuthContext);
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState(null);
@@ -160,25 +160,21 @@ function EditProfilePage() {
               <p className="text-[#859490] text-xs">Gestiona tu cuenta</p>
           </div>
           <nav className="space-y-1">
-              <Link to="/settings" className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
+              <Link to={`/settings/profile/${user?.username}`} className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
                   <span className="material-symbols-outlined">home</span>
                   <span>Página principal</span>
               </Link>
-              <Link className="flex items-center gap-3 px-3 py-3 bg-[#4fdbc8]/10 text-[#4fdbc8] font-semibold border-r-4 border-[#4fdbc8] transition-all duration-150">
+              <Link to={`/settings/profile/${user?.username}/editing`} className="flex items-center gap-3 px-3 py-3 bg-[#4fdbc8]/10 text-[#4fdbc8] font-semibold border-r-4 border-[#4fdbc8] transition-all duration-150">
                   <span className="material-symbols-outlined">person</span>
-                  <span>Profile</span>
+                  <span>Perfil</span>
               </Link>
-              <Link to="#" className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
+              <Link to={`/settings/profile/${user?.username}/security`} className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
                   <span className="material-symbols-outlined">security</span>
-                  <span>Security</span>
+                  <span>Seguridad</span>
               </Link>
-              <Link to="#" className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
-                  <span className="material-symbols-outlined">notifications</span>
-                  <span>Notifications</span>
-              </Link>
-              <Link to="#" className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
-                  <span className="material-symbols-outlined">payments</span>
-                  <span>Payments</span>
+              <Link to={`/settings/profile/${user?.username}/privacy`} className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
+                  <span className="material-symbols-outlined">privacy</span>
+                  <span>Privacidad</span>
               </Link>
           </nav>
         </aside>
