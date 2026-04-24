@@ -9,3 +9,13 @@ export async function getProduct(id) {
   const response = await api.get(`/objects/${id}`)
   return response.data
 }
+
+export async function createObject(payload) {
+  const response = await api.post('/objects', payload, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+
+  return response.data
+}
