@@ -17,6 +17,7 @@ import HeaderMobile from './components/layouts/header/HeaderMobile'
 import Footer from './components/layouts/footer/Footer'
 import FloatingAddObjectButton from './components/elementos/FloatingAddObjectButton'
 import SettingsPage from './pages/SettingsPage'
+import SecuritySettingsPage from './pages/SecuritySettingsPage'
 
 function App() {
   return (
@@ -31,45 +32,25 @@ function App() {
 
       <main className="md:pt-[80px]">
         <Routes>
+          {/* Rutas Públicas */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/status" element={<StatusPage />} />
-          
           <Route path="/objects" element={<ObjectsPage />} />
           <Route path="/object/:id" element={<ObjectPage />} />
-
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
 
-          <Route
-            path="/profile/:username"
-            element={
-              <ProtectedRoute>
-                <ProfilePage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/objects/create"
-            element={
-              <ProtectedRoute>
-                <CreateObjectPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/profile/:username" element={<ProfilePage />} />
-          <Route path="/settings" element={
-            <ProtectedRoute>
-              <SettingsPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/settings/profile/:username/editing" element={
-            <ProtectedRoute>
-              <EditProfilePage />
-            </ProtectedRoute>
-          } />
+          {/* Rutas Protegidas */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/objects/create" element={<CreateObjectPage />}/>
+            <Route path="/profile/:username" element={<ProfilePage />}/>
+            <Route path="/settings/profile/:username" element={<SettingsPage/>} />
+            <Route path="/settings/profile/:username/editing" element={<EditProfilePage />} />
+            <Route path="/settings/profile/:username/security" element={<SecuritySettingsPage/>} />
+            <Route path="/settings/profile/:username/privacy" element={<SettingsPage/>} />
+          </Route>
         </Routes>
       </main>
 

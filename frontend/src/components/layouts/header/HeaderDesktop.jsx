@@ -119,7 +119,7 @@ function HeaderDesktop() {
                           </Link>
                         ) : (
                           <Link
-                            to={'/profile/' + user.username}
+                            to={`/profile/${user?.username}`}
                             className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
                           >
                             <p className="py-2 text-base text-white">
@@ -130,7 +130,7 @@ function HeaderDesktop() {
                         )}
 
                         <Link
-                          to="/settings"
+                          to={`/settings/profile/${user?.username}`}
                           className="flex gap-2 px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
                         >
                           Ajustes

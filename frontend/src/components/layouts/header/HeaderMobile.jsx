@@ -7,7 +7,7 @@ function HeaderMobile() {
 
   if (!auth) return null
 
-  const { loading } = auth
+  const { user, loading } = auth
 
   if (loading) return null
 
@@ -42,7 +42,7 @@ function HeaderMobile() {
           </div>
         </Link>
 
-        <Link to="/profile" className="flex flex-col items-center justify-center text-white">
+        <Link to={`/profile/${user?.username}`} className="flex flex-col items-center justify-center text-white">
           <div className="flex flex-col items-center justify-center">
             <img src="/assets/icons/person-white-icon.svg" alt="Mi perfil" className="h-[22px] w-[22px] object-contain" />
             <span className="mt-1 text-center font-body text-caption leading-caption text-white">Mi perfil</span>
