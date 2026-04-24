@@ -41,11 +41,11 @@ function App() {
           <Route path="/object/:id" element={<ObjectPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
+          <Route path="/profile/:username" element={<ProfilePage />}/>
 
           {/* Rutas Protegidas */}
           <Route element={<ProtectedRoute />}>
             <Route path="/objects/create" element={<CreateObjectPage />}/>
-            <Route path="/profile/:username" element={<ProfilePage />}/>
             <Route path="/settings/profile/:username" element={<SettingsPage/>} />
             <Route path="/settings/profile/:username/editing" element={<EditProfilePage />} />
             <Route path="/settings/profile/:username/security" element={<SecuritySettingsPage/>} />
