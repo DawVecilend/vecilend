@@ -27,7 +27,7 @@ function SettingsPage() {
                   <span className="material-symbols-outlined">security</span>
                   <span>Seguridad</span>
               </Link>
-              <Link to={`/settings/profile/${user?.username}/privacy`} className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
+              <Link to={`/settings/profile/${user?.username}/notifications`} className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150">
                   <span className="material-symbols-outlined">privacy</span>
                   <span>Privacidad</span>
               </Link>
@@ -78,18 +78,18 @@ function SettingsPage() {
                 </div>
               </Link>
               
-              <Link to={`/settings/profile/${user?.username}/privacy`} className="bg-[#2f3634]/40 backdrop-blur-md border border-[#859490]/10 group p-8 rounded-xl flex flex-col justify-between hover:border-[#4fdbc8]/40 transition-all duration-300 cursor-pointer active:scale-[0.98] md:col-span-2 lg:col-span-1">
+              <Link to={`/settings/profile/${user?.username}/notifications`} className="bg-[#2f3634]/40 backdrop-blur-md border border-[#859490]/10 group p-8 rounded-xl flex flex-col justify-between hover:border-[#4fdbc8]/40 transition-all duration-300 cursor-pointer active:scale-[0.98] md:col-span-2 lg:col-span-1">
                 <div>
                   <div className="w-14 h-14 bg-[#21514a]/30 text-[#a0d0c6] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>privacy_tip</span>
+                    <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>notifications</span>
                   </div>
-                  <h3 className="text-xl font-bold text-[#dde4e1] mb-3">Datos y privacidad</h3>
+                  <h3 className="text-xl font-bold text-[#dde4e1] mb-3">Notificaciones y permisos</h3>
                   <p className="text-[#bbcac6] text-sm leading-relaxed mb-6">
-                    Controla el uso que hacemos de tu información, gestiona tus preferencias de notificaciones y configura tus parámetros de privacidad.
+                    Administra tus alertas, notificaciones push y permisos de dispositivo como cámara o ubicación para mejorar tu experiencia.
                   </p>
                 </div>
                 <div className="flex items-center text-[#4fdbc8] font-semibold text-sm group-hover:gap-2 transition-all">
-                  <span>Gestionar privacidad</span>
+                  <span>Gestionar notificaciones</span>
                   <span className="material-symbols-outlined text-sm ml-1">arrow_forward</span>
                 </div>
               </Link>
