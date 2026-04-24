@@ -11,7 +11,10 @@ function SecuritySettingsPage() {
         password: '',
         password_confirmation: ''
     });
-    const [status, setStatus] = useState({ type: '', message: '' });
+    
+    // Cambiamos la forma de guardar los mensajes
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handlePasswordChange = (e) => {
@@ -23,25 +26,25 @@ function SecuritySettingsPage() {
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        setStatus({ type: '', message: '' });
+        setSuccessMessage('');
+        setErrorMessage('');
 
         if (!passwords.current_password || !passwords.password || !passwords.password_confirmation) {
-            setStatus({ type: 'error', message: 'Por favor, rellena todos los campos.' });
+            setErrorMessage('Por favor, rellena todos los campos.');
             return;
         }
 
         if (passwords.password !== passwords.password_confirmation) {
-            setStatus({ type: 'error', message: 'Las contraseñas nuevas no coinciden.' });
+            setErrorMessage('Las contraseñas nuevas no coinciden.');
             return;
         }
 
         setIsLoading(true);
 
         try {
-            // AQUÍ ESTÁ LA CORRECCIÓN: Le pasamos el username y los datos
             const response = await updatePassword(user?.username, passwords);
             
-            setStatus({ type: 'success', message: response.message || 'Contraseña actualizada correctamente.' });
+            setSuccessMessage(response.message || 'Contraseña actualizada correctamente.');
             setPasswords({
                 current_password: '',
                 password: '',
@@ -50,9 +53,9 @@ function SecuritySettingsPage() {
         } catch (error) {
             if (error.response?.status === 422) {
                 const firstError = Object.values(error.response.data.errors).flat()[0];
-                setStatus({ type: 'error', message: firstError });
+                setErrorMessage(firstError);
             } else {
-                setStatus({ type: 'error', message: 'Error al conectar con el servidor.' });
+                setErrorMessage('Error al conectar con el servidor.');
             }
         } finally {
             setIsLoading(false);
@@ -102,9 +105,17 @@ function SecuritySettingsPage() {
                                 <h2 className="text-xl font-bold">Cambiar Contraseña</h2>
                             </div>
 
-                            {status.message && (
-                                <div className={`mb-6 px-4 py-3 rounded-lg text-sm font-bold border ${status.type === 'error' ? 'bg-[#93000a]/10 border-[#ffb4ab]/20 text-[#ffb4ab]' : 'bg-[#14b8a6]/10 border-[#4fdbc8]/20 text-[#4fdbc8]'}`}>
-                                    {status.message}
+                            {/* Nuevos mensajes de éxito y error integrados */}
+                            {successMessage && (
+                                <div className="mb-6 bg-[#4fdbc8]/10 border border-[#4fdbc8]/50 text-[#4fdbc8] px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
+                                    <span className="material-symbols-outlined text-base">check_circle</span>
+                                    <p className="font-semibold text-xs tracking-wide uppercase">{successMessage}</p>
+                                </div>
+                            )}
+                            {errorMessage && (
+                                <div className="mb-6 bg-[#ef4444]/10 border border-[#ef4444]/50 text-[#ef4444] px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
+                                    <span className="material-symbols-outlined text-base">error</span>
+                                    <p className="font-semibold text-xs tracking-wide uppercase">{errorMessage}</p>
                                 </div>
                             )}
 
