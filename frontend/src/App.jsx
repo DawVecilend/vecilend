@@ -50,6 +50,7 @@ function App() {
             <Route path="/settings/profile/:username/editing" element={<EditProfilePage />} />
             <Route path="/settings/profile/:username/security" element={<SecuritySettingsPage/>} />
             <Route path="/settings/profile/:username/privacy" element={<SettingsPage/>} />
+            <Route path="/settings/profile/:username/notifications" element={<SettingsPage/>} />
           </Route>
         </Routes>
       </main>
