@@ -38,7 +38,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/objects" element={<ObjectsPage />} />
-          <Route path="/object/:id" element={<ObjectPage />} />
+          <Route path="/objects/:id" element={<ObjectPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
           <Route path="/profile/:username" element={<ProfilePage />}/>
@@ -49,7 +49,7 @@ function App() {
             <Route path="/settings/profile/:username" element={<SettingsPage/>} />
             <Route path="/settings/profile/:username/editing" element={<EditProfilePage />} />
             <Route path="/settings/profile/:username/security" element={<SecuritySettingsPage/>} />
-            <Route path="/settings/profile/:username/notifications" element={<SettingsPage/>} />
+            <Route path="/settings/profile/:username/privacy" element={<SettingsPage/>} />
           </Route>
         </Routes>
       </main>

@@ -5,7 +5,7 @@ import BtnBack from '../components/elementos/BtnBack'
 import UserCard from '../components/elementos/UserCard'
 
 function ObjectPage() {
-    const [product, setProduct] = useState([])
+    const [product, setProduct] = useState(null)
     const { id } = useParams()
     const images = [
         "/assets/product1-image.jpg",
@@ -16,9 +16,9 @@ function ObjectPage() {
     useEffect(() => {
         async function loadProduct() {
             try {
-                const response = await getProduct(id)
-                console.log('Producto Cargando:', response.data)
-                setProduct(response.data)
+                const data = await getProduct(id)
+                console.log('Producto cargado:', data)
+                setProduct(data)
             } catch (error) {
                 console.error('Error cargando producto:', error)
                 setProduct(null)
@@ -27,6 +27,9 @@ function ObjectPage() {
         loadProduct()
     }, [id])
 
+    if (!product) {
+        return <p className="pt-24 text-center text-vecilend-dark-text">Cargando...</p>
+    }
 
     return (
         <>
