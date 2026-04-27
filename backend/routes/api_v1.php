@@ -19,6 +19,7 @@ Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
 Route::get('/categories', [CategoriaController::class, 'index']);
 Route::get('/objects', [ObjecteController::class, 'index']);
+Route::get('/objects/nearby', [ObjecteController::class, 'nearby']);
 Route::get('/objects/{id}', [ObjecteController::class, 'show'])->where('id', '[0-9]+');
 
 Route::middleware('auth:sanctum')->group(function () {
