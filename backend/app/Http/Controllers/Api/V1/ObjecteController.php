@@ -13,6 +13,7 @@ use App\Models\ImatgeObjecte;
 use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Api\V1\UpdateObjecteRequest;
+use App\Models\User;
 
 class ObjecteController extends Controller
 {
@@ -240,6 +241,31 @@ class ObjecteController extends Controller
                 ],
             ])
             ->toArray();
+    }
+
+    /**
+     * GET /api/v1/profile/{username}/objects
+     *
+     * Obtiene todos los objetos de un usuario específico.
+     */
+    public function getUserObjects(string $username)
+    {
+        $user = User::where('username', $username)->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Usuari no trobat.'
+            ], 404);
+        }
+
+        $objectes = Objecte::query()
+            ->ambCoordenades()
+            ->with(['categoria:id,nom,icona', 'imatges'])
+            ->where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        return ObjecteResource::collection($objectes);
     }
 
     /**
