@@ -15,6 +15,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
 Route::post('/check-user', [RegisterController::class, 'checkUser']);
 Route::get('/profile/{username}', [UserController::class, 'getByUsername']);
+Route::get('/profile/{username}/objects', [ObjecteController::class, 'getUserObjects']);
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
 Route::get('/categories', [CategoriaController::class, 'index']);
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
+
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);
     Route::post('/logout', [LoginController::class, 'logout']);
