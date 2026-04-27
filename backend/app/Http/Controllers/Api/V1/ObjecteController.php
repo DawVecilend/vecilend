@@ -133,6 +133,43 @@ class ObjecteController extends Controller
         return new ObjecteDetailResource($objecte);
     }
 
+    /**
+     * GET /api/v1/objects/nearby?lat=&lng=&radius=[&category=&per_page=]
+     *
+     * Endpoint públic - retorna els objectes disponibles dins d'un radi
+     * (metres) d'una ubicació, ordenats per distància ascendent.
+     *
+     */
+    public function nearby(Request $request)
+    {
+        $validated = $request->validate([
+            'lat'      => ['required', 'numeric', 'between:-90,90'],
+            'lng'      => ['required', 'numeric', 'between:-180,180'],
+            'radius'   => ['nullable', 'integer', 'min:100', 'max:50000'],
+            'category' => ['nullable', 'integer', 'exists:categories,id'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
+        ]);
+
+        $lat    = (float) $validated['lat'];
+        $lng    = (float) $validated['lng'];
+        $radius = (int)  ($validated['radius']  ?? 5000);
+
+        $query = Objecte::query()
+            ->disponible()
+            ->with(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges'])
+            ->aProximitat($lat, $lng, $radius)
+            ->ordreProximitat();
+
+        if (!empty($validated['category'])) {
+            $query->perCategoria((int) $validated['category']);
+        }
+
+        $perPage  = (int) ($validated['per_page'] ?? 20);
+        $objectes = $query->paginate($perPage)->withQueryString();
+
+        return ObjecteResource::collection($objectes);
+    }
+
     private function calcularValoracioPropietari(int $userId): ?float
     {
         $avg = DB::table('valoracions')

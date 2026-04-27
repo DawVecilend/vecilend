@@ -21,6 +21,10 @@ class ObjecteResource extends JsonResource
                 ? ['lat' => (float) $this->lat, 'lng' => (float) $this->lng]
                 : ($this->ubicacio ? $this->coordenades() : null),
 
+            'distancia_metres' => isset($this->distancia_metres)
+                ? (int) round((float) $this->distancia_metres)
+                : null,
+
             'imatge_principal' => $this->whenLoaded('imatges', function () {
                 $primera = $this->imatges->first();
                 return $primera?->url_cloudinary;
