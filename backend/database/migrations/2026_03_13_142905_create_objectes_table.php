@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('categoria_id')->constrained('categories')->restrictOnDelete();
+            $table->foreignId('subcategoria_id')->constrained('subcategories')->restrictOnDelete();
             $table->string('nom', 200);
             $table->string('slug', 250);
             $table->text('descripcio');
@@ -21,6 +22,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->spatialIndex('ubicacio');
             $table->index('categoria_id');
+            $table->index('subcategoria_id');
             $table->index('estat');
         });
     }
