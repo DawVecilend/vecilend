@@ -11,12 +11,22 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 
 class RegisterController extends Controller
 {
     public function register(RegisterRequest $request, CloudinaryService $cloudinary): JsonResponse
     {
         $validated = $request->validated();
+        // Bloquejar el registre si l'email no s'ha verificat amb el codi previ
+        if (! EmailVerificationController::isEmailVerified($validated['email'])) {
+            return response()->json([
+                'message' => 'Tienes que verificar tu email con el código antes de completar el registro.',
+                'errors'  => [
+                    'email' => ["El email no está verificado. Solicita un código nuevo desde el paso 2."],
+                ],
+            ], 422);
+        }
         $avatarUrl = null;
         $avatarPublicId = null;
 
@@ -46,6 +56,7 @@ class RegisterController extends Controller
                     'radi_proximitat'  => $validated['radi_proximitat'] ?? 5,
                     'rol'              => 'usuari',
                     'actiu'            => true,
+                    'email_verified_at' => now(),
                 ]);
 
                 if (isset($validated['ubicacio'])) {
@@ -73,6 +84,8 @@ class RegisterController extends Controller
             }
             return response()->json(['message' => 'Error en el registre.'], 500);
         }
+
+        EmailVerificationController::clearVerifiedFlag($validated['email']);
 
         // ── 3. Token i resposta ──
         $token = $user->createToken('auth')->plainTextToken;
