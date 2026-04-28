@@ -23,6 +23,7 @@ class CategoriaResource extends JsonResource
                 $this->subcategories->map(fn($sub) => [
                     'id'  => $sub->id,
                     'nom' => $sub->nom,
+                    'slug' => $sub->slug,
                 ])
             ),
 

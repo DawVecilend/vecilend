@@ -47,7 +47,7 @@ class ObjecteController extends Controller
             ->with([
                 'user:id,nom,avatar_url',
                 'categoria:id,nom,icona',
-                'subcategoria:id,nom',
+                'subcategoria:id,nom,slug',
                 'imatges',
             ]);
 
@@ -125,7 +125,7 @@ class ObjecteController extends Controller
             ->with([
                 'user:id,nom,cognoms,avatar_url,created_at',
                 'categoria:id,nom,icona',
-                'subcategoria:id,nom',
+                'subcategoria:id,nom,slug',
                 'imatges',
             ])
             ->findOrFail($id);
@@ -168,7 +168,7 @@ class ObjecteController extends Controller
             ->with([
                 'user:id,nom,avatar_url',
                 'categoria:id,nom,icona',
-                'subcategoria:id,nom',
+                'subcategoria:id,nom,slug',
                 'imatges',
             ])
             ->aProximitat($lat, $lng, $radius)
@@ -311,7 +311,7 @@ class ObjecteController extends Controller
             ->ambCoordenades()
             ->with([
                 'categoria:id,nom,icona',
-                'subcategoria:id,nom',
+                'subcategoria:id,nom,slug',
                 'imatges',
             ])
             ->where('user_id', $user->id)
