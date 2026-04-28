@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Subcategoria extends Model {
+class Subcategoria extends Model
+{
     use HasFactory;
     protected $table = 'subcategories';
     protected $fillable = [
@@ -21,16 +22,13 @@ class Subcategoria extends Model {
         'activa' => 'boolean',
     ];
 
-    public function categoria(): BelongsTo {
+    public function categoria(): BelongsTo
+    {
         return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
-    public function objectes(): BelongsToMany {
-        return $this->belongsToMany(
-            Objecte::class,
-            'objecte_subcategoria',
-            'subcategoria_id',
-            'objecte_id'
-        );
+    public function objectes(): HasMany
+    {
+        return $this->hasMany(Objecte::class, 'subcategoria_id');
     }
 }

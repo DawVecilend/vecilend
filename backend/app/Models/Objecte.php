@@ -20,6 +20,7 @@ class Objecte extends Model
     protected $fillable = [
         'user_id',
         'categoria_id',
+        'subcategoria_id',
         'nom',
         'slug',
         'descripcio',
@@ -54,14 +55,9 @@ class Objecte extends Model
         return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
-    public function subcategories(): BelongsToMany
+    public function subcategoria(): BelongsTo
     {
-        return $this->belongsToMany(
-            Subcategoria::class,
-            'objecte_subcategoria',
-            'objecte_id',
-            'subcategoria_id'
-        );
+        return $this->belongsTo(Subcategoria::class, 'subcategoria_id');
     }
 
     public function imatges(): HasMany
@@ -85,7 +81,6 @@ class Objecte extends Model
             'id'
         );
     }
-
 
     public function favoritsPer(): BelongsToMany
     {
@@ -137,10 +132,6 @@ class Objecte extends Model
             );
     }
 
-    /**
-     * Ordena per distància ascendent (el més proper primer).
-     * Ha de fer-se servir després d'aProximitat() per tenir la columna calculada.
-     */
     public function scopeOrdreProximitat(Builder $query): Builder
     {
         return $query->orderBy('distancia_metres', 'asc');

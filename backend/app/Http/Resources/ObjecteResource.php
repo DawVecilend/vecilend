@@ -39,11 +39,11 @@ class ObjecteResource extends JsonResource
                 ];
             }),
 
-            'subcategories' => $this->whenLoaded('subcategories', function () {
-                return $this->subcategories->map(fn($sub) => [
-                    'id' => $sub->id,
-                    'nom' => $sub->nom
-                ]);
+            'subcategoria' => $this->whenLoaded('subcategoria', function () {
+                return $this->subcategoria ? [
+                    'id'  => $this->subcategoria->id,
+                    'nom' => $this->subcategoria->nom,
+                ] : null;
             }),
 
             'imatges' => $this->whenLoaded('imatges', function () {
