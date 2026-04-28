@@ -1,54 +1,71 @@
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 function SearchBar() {
-  const [query, setQuery] = useState('')
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [searchParams] = useSearchParams()
+  const [query, setQuery] = useState("");
+  const [active, setActive] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const wrapperRef = useRef(null);
 
-  const isResultsPage = location.pathname === '/results'
+  const isResultsPage = location.pathname === "/results";
 
+  // Sincronitzar amb la URL quan estem a /results
   useEffect(() => {
     if (isResultsPage) {
-      setQuery(searchParams.get('search') || '')
+      setQuery(searchParams.get("search") || "");
     }
-  }, [isResultsPage, searchParams])
+  }, [isResultsPage, searchParams]);
+
+  // Sortir de mode "actiu" en clicar fora del component
+  useEffect(() => {
+    const handler = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setActive(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const handleChange = (value) => {
-    setQuery(value)
+    setQuery(value);
 
-    if (!isResultsPage) return
+    if (!isResultsPage) return;
 
-    const trimmedValue = value.trim()
+    const trimmedValue = value.trim();
 
+    // Si està buit, treiem el param però seguim a /results sense buscar
     if (!trimmedValue) {
-      navigate('/results', { replace: true })
-      return
+      navigate("/results", { replace: true });
+      return;
     }
 
     navigate(`/results?search=${encodeURIComponent(trimmedValue)}`, {
       replace: true,
-    })
-  }
+    });
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const trimmedQuery = query.trim()
+    const trimmedQuery = query.trim();
 
+    // No fer res si està buit
     if (!trimmedQuery) {
-      navigate('/objects')
-      return
+      return;
     }
 
-    navigate(`/results?search=${encodeURIComponent(trimmedQuery)}`)
-  }
+    navigate(`/results?search=${encodeURIComponent(trimmedQuery)}`);
+  };
 
   return (
     <form
+      ref={wrapperRef}
       onSubmit={handleSubmit}
-      className="hidden lg:flex items-center rounded-full bg-[#1d2422] px-4 py-2 transition-all focus-within:bg-[#333b39] focus-within:ring-2 focus-within:ring-[#4fdbc8]/40"
+      onFocus={() => setActive(true)}
+      className={`hidden lg:flex items-center rounded-full bg-[#1d2422] px-4 py-2 transition-all ${active ? "ring-2 ring-[#4fdbc8]/40 bg-[#333b39]" : ""}`}
     >
       <span className="material-symbols-outlined text-[#8b9390]">search</span>
 
@@ -58,16 +75,17 @@ function SearchBar() {
         placeholder="Buscar Objeto..."
         value={query}
         onChange={(e) => handleChange(e.target.value)}
+        onFocus={() => setActive(true)}
       />
 
       <button
         type="submit"
         className="rounded-full bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] px-4 py-2 text-sm font-bold text-[#003730] transition-transform active:scale-95"
       >
-        Buscar
+        Search
       </button>
     </form>
-  )
+  );
 }
 
-export default SearchBar
+export default SearchBar;

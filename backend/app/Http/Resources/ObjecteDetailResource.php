@@ -22,12 +22,13 @@ class ObjecteDetailResource extends JsonResource
             'ubicacio'      => $this->coordenades(),
 
             // ── Propietari ──
-            'propietari'    => $this->whenLoaded('user', fn() => [
+            'propietari' => $this->whenLoaded('user', fn() => [
                 'id'                => $this->user->id,
                 'nom'               => $this->user->nom,
                 'cognoms'           => $this->user->cognoms,
                 'avatar_url'        => $this->user->avatar_url,
                 'valoracio_mitjana' => $this->user->valoracio_mitjana ?? null,
+                'valoracio_total'   => $this->user->valoracio_total ?? 0,
                 'created_at'        => $this->user->created_at?->toIso8601String(),
             ]),
 

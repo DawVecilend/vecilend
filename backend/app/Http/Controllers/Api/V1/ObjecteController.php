@@ -130,8 +130,12 @@ class ObjecteController extends Controller
             ])
             ->findOrFail($id);
 
-        $objecte->user->valoracio_mitjana = $this->calcularValoracioPropietari($objecte->user_id);
+        // Valoracions del propietari (mitjana + total)
+        $statsPropietari = $this->calcularValoracioPropietari($objecte->user_id);
+        $objecte->user->valoracio_mitjana = $statsPropietari['avg'];
+        $objecte->user->valoracio_total   = $statsPropietari['total'];
 
+        // Valoracions de l'objecte (mitjana + total)
         $stats = $this->obtenirEstadistiquesValoracio($id);
         $objecte->valoracio_mitjana = $stats->avg_rating;
         $objecte->total_valoracions = (int) $stats->count_ratings;
@@ -210,16 +214,20 @@ class ObjecteController extends Controller
         return 5000;
     }
 
-    private function calcularValoracioPropietari(int $userId): ?float
+    private function calcularValoracioPropietari(int $userId): array
     {
-        $avg = DB::table('valoracions')
+        $stats = DB::table('valoracions')
             ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
             ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
             ->join('objectes', 'objectes.id', '=', 'solicituds.objecte_id')
             ->where('objectes.user_id', $userId)
-            ->avg('valoracions.puntuacio');
+            ->selectRaw('AVG(valoracions.puntuacio) as avg_rating, COUNT(*) as total')
+            ->first();
 
-        return $avg !== null ? round((float) $avg, 1) : null;
+        return [
+            'avg'   => $stats->avg_rating !== null ? round((float) $stats->avg_rating, 1) : null,
+            'total' => (int) ($stats->total ?? 0),
+        ];
     }
 
     /**
