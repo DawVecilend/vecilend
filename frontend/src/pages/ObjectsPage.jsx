@@ -3,7 +3,6 @@ import ProductsSection from '../components/home/ProductsSection'
 import { getObjects } from '../services/objects'
 import BtnOrder from '../components/elementos/BtnOrder'
 import BtnBack from '../components/elementos/BtnBack'
-import { mapObjectsToProducts } from '../mappers/objectMapper'
 
 function ObjectsPage() {
   const [products, setProducts] = useState([])
@@ -15,8 +14,7 @@ function ObjectsPage() {
       setLoadingProducts(true)
       try {
         const rawObjects = await getObjects({ sort: orderBy })
-        const mappedProducts = mapObjectsToProducts(rawObjects)
-        setProducts(mappedProducts)
+        setProducts(rawObjects)
       } catch (error) {
         console.error('Error cargando objetos:', error)
         setProducts([])

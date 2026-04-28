@@ -48,7 +48,7 @@ function getAvailabilityClass(status) {
 }
 
 
-function ProductCard({
+function ProfileProductCard({
   id,
   image,
   category,
@@ -79,16 +79,6 @@ function ProductCard({
             </div>
         </div>
         <div className="p-6 flex flex-col flex-1">
-              <div className="flex justify-between items-start mb-2">
-                <Link to={"/profile/" + userName} className="relative px-4 -mt-5 mb-4">
-                  <img  
-                      alt={userName}
-                      src={userAvatar}
-                      className="w-8 h-8 rounded-full object-cover absolute top-4 left-4 border-2 border-[#0e1513]/60"
-                  />
-                  <p className="text-[#bbcac6] text-sm mb-4">{userName}</p>
-                </Link>
-            </div>
             <div className="flex justify-between items-start mb-2">
                 <h3 className="text-lg font-bold text-[#dde4e1] group-hover:text-[#4fdbc8] transition-colors line-clamp-2">{title}</h3>
                 <div className="flex items-center text-[#f38764] text-sm font-bold">
@@ -111,4 +101,4 @@ function ProductCard({
 
 
 
-export default ProductCard
+export default ProfileProductCard

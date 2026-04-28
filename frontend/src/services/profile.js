@@ -23,6 +23,17 @@ export const updateProfile = async (username, data) => {
   return response.data.data;
 };
 
+export const getUserObjects = async (username) => {
+  const response = await api.get(`/profile/${username}/objects`);
+  return response.data.data;
+}
+
+export const deleteProfile = async (username) => {
+  const response = await api.delete(`/profile/${username}`);
+  return response.data;
+};
+
+
 export const updatePassword = async (username, passwordData) => {
   const response = await api.put(`/profile/${username}/password`, passwordData);
   return response.data;

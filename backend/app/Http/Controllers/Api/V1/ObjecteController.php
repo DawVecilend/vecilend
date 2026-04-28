@@ -28,8 +28,7 @@ class ObjecteController extends Controller
         private readonly CloudinaryService $cloudinary,
     ) {}
 
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $request->validate([
             'search'   => 'nullable|string|max:100',
             'category' => 'nullable|integer|exists:categories,id',
@@ -211,8 +210,7 @@ class ObjecteController extends Controller
      *
      * Obtiene todos los objetos de un usuario específico.
      */
-    public function getUserObjects(string $username)
-    {
+    public function getUserObjects(string $username) {
         $user = User::where('username', $username)->first();
 
         if (!$user) {
@@ -223,7 +221,7 @@ class ObjecteController extends Controller
 
         $objectes = Objecte::query()
             ->ambCoordenades()
-            ->with(['categoria:id,nom,icona', 'imatges'])
+            ->with(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges'])
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->get();

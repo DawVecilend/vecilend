@@ -4,7 +4,6 @@ import ProductsSection from '../components/home/ProductsSection'
 import BtnOrder from '../components/elementos/BtnOrder'
 import BtnBack from '../components/elementos/BtnBack'
 import { getObjects } from '../services/objects'
-import { mapObjectsToProducts } from '../mappers/objectMapper'
 
 function ResultsPage() {
   const [products, setProducts] = useState([])
@@ -22,7 +21,7 @@ function ResultsPage() {
           search: searchText,
           sort: orderBy,
         })
-        setProducts(mapObjectsToProducts(rawObjects))
+        setProducts(rawObjects)
       } catch (error) {
         console.error('Error cargando resultados:', error)
         setProducts([])
