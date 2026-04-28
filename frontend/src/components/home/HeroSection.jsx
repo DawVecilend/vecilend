@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 function HeroSection() {
   return (
@@ -13,11 +13,16 @@ function HeroSection() {
           </span>
 
           <h1 className="max-w-[680px] font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-vecilend-dark-text md:text-[64px]">
-            Alquila lo que necesitas, <span className="italic text-vecilend-dark-primary">cerca de ti.</span>
+            Alquila lo que necesitas,{" "}
+            <span className="italic text-vecilend-dark-primary">
+              cerca de ti.
+            </span>
           </h1>
 
           <p className="mt-6 max-w-[600px] font-body text-body-base leading-body text-vecilend-dark-text-secondary md:text-[18px]">
-            Encuentra herramientas, tecnología, material deportivo y objetos del día a día compartidos por vecinos de tu zona. Ahorra dinero, evita compras innecesarias y aprovecha lo que ya existe a tu alrededor.
+            Encuentra herramientas, tecnología, material deportivo y objetos del
+            día a día compartidos por vecinos de tu zona. Ahorra dinero, evita
+            compras innecesarias y aprovecha lo que ya existe a tu alrededor.
           </p>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -29,7 +34,7 @@ function HeroSection() {
             </Link>
 
             <Link
-              to="/upload-product"
+              to="/objects/create"
               className="inline-flex items-center justify-center rounded-[16px] border border-vecilend-dark-border bg-white/5 px-8 py-4 font-body text-body-base font-bold text-vecilend-dark-text transition-all hover:border-vecilend-dark-primary hover:bg-vecilend-dark-primary/10 active:scale-95"
             >
               Subir producto
@@ -81,7 +86,7 @@ function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default HeroSection
+export default HeroSection;

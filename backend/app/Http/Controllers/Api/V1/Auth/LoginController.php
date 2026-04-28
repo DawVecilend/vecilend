@@ -17,17 +17,30 @@ class LoginController extends Controller
         $login = $request->input('login');
         $password = $request->input('password');
 
-        $authenticated = Auth::attempt(['email' => $login, 'password' => $password]) ||
-                     Auth::attempt(['username' => $login, 'password' => $password]);
+        $authenticated = Auth::attempt(['email' => $login, 'password' => $password, 'actiu' => true]) ||
+            Auth::attempt(['username' => $login, 'password' => $password, 'actiu' => true]);
 
         if (!$authenticated) {
+            // Comprovar si existeix però està inactiu
+            $userExists = User::where('email', $login)
+                ->orWhere('username', $login)
+                ->where('actiu', false)
+                ->exists();
+
+            if ($userExists) {
+                return response()->json([
+                    'message' => 'Tu cuenta está desactivada. Contacta con soporte técnico.',
+                ], 403);
+            }
+
             return response()->json([
-                'message' => 'Credencials incorrectes.',
+                'message' => 'Credenciales incorrectas.',
             ], 401);
         }
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
-        $token = $user->createToken(name: 'api-token')->plainTextToken;
+        $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login correcte.',
