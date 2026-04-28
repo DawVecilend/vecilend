@@ -55,7 +55,7 @@ class ObjecteController extends Controller
         }
 
         if ($request->filled('lat') && $request->filled('lng')) {
-            $radius = (int) $request->input('radius', 5000);
+            $radius = $this->resolveNearbyRadius($request, $request->all());
 
             $query->aProximitat(
                 (float) $request->input('lat'),
@@ -134,6 +134,28 @@ class ObjecteController extends Controller
     }
 
     /**
+     * Resol el radi de cerca (en metres) per al nearby.
+     *
+     * Ordre de prioritat:
+     *   1. Paràmetre radius enviat pel client (en metres).
+     *   2. radi_proximitat del User autenticat (en km --> metres).
+     *   3. Default públic: 5000 m.
+     */
+    private function resolveNearbyRadius(Request $request, array $validated): int
+    {
+        if (isset($validated['radius'])) {
+            return (int) $validated['radius'];
+        }
+
+        $user = $request->user();
+        if ($user && $user->radi_proximitat) {
+            return ((int) $user->radi_proximitat) * 1000;
+        }
+
+        return 5000;
+    }
+
+    /**
      * GET /api/v1/objects/nearby?lat=&lng=&radius=[&category=&per_page=]
      *
      * Endpoint públic - retorna els objectes disponibles dins d'un radi
@@ -152,7 +174,7 @@ class ObjecteController extends Controller
 
         $lat    = (float) $validated['lat'];
         $lng    = (float) $validated['lng'];
-        $radius = (int)  ($validated['radius']  ?? 5000);
+        $radius = $this->resolveNearbyRadius($request, $validated);
 
         $query = Objecte::query()
             ->disponible()
