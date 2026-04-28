@@ -6,24 +6,28 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
-class UpdateProfileRequest extends FormRequest {
-    public function authorize(): bool {
+class UpdateProfileRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
         return true;
     }
 
-    public function rules(): array {
+    public function rules(): array
+    {
         return [
             'nom'             => ['required', 'string', 'max:100'],
             'cognoms'         => ['required', 'string', 'max:150'],
             'telefon'         => ['nullable', 'string', 'max:20'],
             'direccio'        => ['nullable', 'string', 'max:500', Rule::in($this->getMunicipios())],
             'biography'       => ['nullable', 'string', 'max:1000'],
-            'radi_proximitat' => ['nullable', 'integer', 'between:1,100'],
+            'radi_proximitat' => ['nullable', 'integer', 'between:1,50'],
             'avatar'          => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
         ];
     }
 
-    public function messages(): array {
+    public function messages(): array
+    {
         return [
             'direccio.in'  => 'El municipi seleccionat no és vàlid.',
             'avatar.image' => 'L\'avatar ha de ser una imatge.',
@@ -32,7 +36,8 @@ class UpdateProfileRequest extends FormRequest {
         ];
     }
 
-    private function getMunicipios(): array {
+    private function getMunicipios(): array
+    {
         return Cache::rememberForever('municipios_list', function () {
             $path = database_path('data/municipios.json');
             if (!file_exists($path)) {
