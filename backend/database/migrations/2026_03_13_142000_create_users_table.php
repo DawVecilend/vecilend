@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
+    public function up(): void
+    {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('username', 100)->unique();
@@ -15,7 +16,7 @@ return new class extends Migration {
             $table->string('password', 255)->nullable();
             $table->text('biography')->nullable();
             $table->string('avatar_url', 500)->nullable();
-            $table->string('avatar_public_id', 255)->nullable()->after('avatar_url');
+            $table->string('avatar_public_id', 255)->nullable();
             $table->string('google_id', 100)->unique()->nullable();
             $table->geography('ubicacio', subtype: 'point', srid: 4326)->nullable();
             $table->integer('radi_proximitat')->default(5);
@@ -43,7 +44,8 @@ return new class extends Migration {
         });
     }
 
-    public function down(): void {
+    public function down(): void
+    {
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');

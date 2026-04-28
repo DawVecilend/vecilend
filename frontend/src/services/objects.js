@@ -7,7 +7,7 @@ export async function getObjects(params = {}) {
 
 export async function getProduct(id) {
   const response = await api.get(`/objects/${id}`)
-  return response.data
+  return response.data.data
 }
 
 export async function getNearbyObjects({ lat, lng, radius = 5000 } = {}) {

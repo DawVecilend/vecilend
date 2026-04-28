@@ -19,10 +19,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response?.status === 401) {
+      const wasAuthed = !!localStorage.getItem('auth_token');
       localStorage.removeItem('auth_token');
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
+
+      if (wasAuthed) {
+        window.dispatchEvent(new CustomEvent('auth:unauthorized'));
       }
     }
     return Promise.reject(error);

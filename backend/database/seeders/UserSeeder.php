@@ -20,8 +20,8 @@ class UserSeeder extends Seeder
             'password' => Hash::make('Admin1234!'),
             'biography' => 'Administrador del sistema.',
             'telefon' => '666666666',
-            'direccio' => 'Murcia',
-            'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint(2.0872, 41.3831), 4326)::geography"), // Esplugues aprox.
+            'direccio' => 'Esplugues de Llobregat',
+            'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint(2.0872, 41.3831), 4326)::geography"),
             'radi_proximitat' => 10,
             'rol' => 'admin',
             'actiu' => true,
