@@ -47,7 +47,6 @@ function getAvailabilityClass(status) {
   return 'text-vecilend-dark-text-secondary'
 }
 
-
 function ProductCard({
   id,
   image,
@@ -62,6 +61,7 @@ function ProductCard({
 }) {
   const availabilityLabel = getAvailabilityLabel(status)
   const availabilityClass = getAvailabilityClass(status)
+
   return (
     <Link to={"/objects/" + id} className="w-63.75">
       <div className="group bg-[#161d1b] rounded-2xl overflow-hidden border border-transparent hover:border-[#4fdbc8]/30 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(79,219,200,0.15)] flex flex-col">

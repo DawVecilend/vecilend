@@ -17,33 +17,39 @@ use App\Models\User;
 
 class ObjecteController extends Controller
 {
+    public function __construct(
+        private readonly CloudinaryService $cloudinary,
+    ) {}
+
     /**
      * GET /api/v1/objects?search=&category=&sort=&page=&per_page=&lat=&lng=&radius=
      *
      * Endpoint públic — llistat d'objectes disponibles amb filtres, cerca,
      * ordenació i paginació.
      */
-
-    public function __construct(
-        private readonly CloudinaryService $cloudinary,
-    ) {}
-
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $request->validate([
-            'search'   => 'nullable|string|max:100',
-            'category' => 'nullable|integer|exists:categories,id',
-            'sort'     => 'nullable|string|in:recent,oldest,price_asc,price_desc,rating',
-            'page'     => 'nullable|integer|min:1',
-            'per_page' => 'nullable|integer|min:1|max:50',
-            'lat'      => 'nullable|numeric|between:-90,90',
-            'lng'      => 'nullable|numeric|between:-180,180',
-            'radius'   => 'nullable|integer|min:500|max:50000',
+            'search'      => 'nullable|string|max:100',
+            'category'    => 'nullable|integer|exists:categories,id',
+            'subcategory' => 'nullable|integer|exists:subcategories,id',
+            'sort'        => 'nullable|string|in:recent,oldest,price_asc,price_desc,rating',
+            'page'        => 'nullable|integer|min:1',
+            'per_page'    => 'nullable|integer|min:1|max:50',
+            'lat'         => 'nullable|numeric|between:-90,90',
+            'lng'         => 'nullable|numeric|between:-180,180',
+            'radius'      => 'nullable|integer|min:500|max:50000',
         ]);
 
         $query = Objecte::query()
             ->ambCoordenades()
             ->disponible()
-            ->with(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges']);
+            ->with([
+                'user:id,nom,avatar_url',
+                'categoria:id,nom,icona',
+                'subcategoria:id,nom,slug',
+                'imatges',
+            ]);
 
         if ($request->filled('search')) {
             $query->cerca($request->input('search'));
@@ -53,8 +59,12 @@ class ObjecteController extends Controller
             $query->perCategoria((int) $request->input('category'));
         }
 
+        if ($request->filled('subcategory')) {
+            $query->where('subcategoria_id', (int) $request->input('subcategory'));
+        }
+
         if ($request->filled('lat') && $request->filled('lng')) {
-            $radius = (int) $request->input('radius', 5000);
+            $radius = $this->resolveNearbyRadius($request, $request->all());
 
             $query->aProximitat(
                 (float) $request->input('lat'),
@@ -107,7 +117,7 @@ class ObjecteController extends Controller
      * GET /api/v1/objects/{id}
      *
      * Retorna el detall complet d'un objecte: propietari, categoria,
-     * subcategories, imatges, valoracions i dates ocupades.
+     * subcategoria, imatges, valoracions i dates ocupades.
      */
     public function show(int $id)
     {
@@ -115,7 +125,7 @@ class ObjecteController extends Controller
             ->with([
                 'user:id,nom,cognoms,avatar_url,created_at',
                 'categoria:id,nom,icona',
-                'subcategories:id,nom',
+                'subcategoria:id,nom,slug',
                 'imatges',
             ])
             ->findOrFail($id);
@@ -127,35 +137,40 @@ class ObjecteController extends Controller
         $objecte->total_valoracions = (int) $stats->count_ratings;
 
         $objecte->valoracions_data = $this->obtenirValoracionsObjecte($id);
-        $objecte->dates_ocupades = $this->obtenirDatesOcupades($id);
+        $objecte->dates_ocupades   = $this->obtenirDatesOcupades($id);
 
         return new ObjecteDetailResource($objecte);
     }
 
     /**
-     * GET /api/v1/objects/nearby?lat=&lng=&radius=[&category=&per_page=]
+     * GET /api/v1/objects/nearby?lat=&lng=&radius=[&category=&subcategory=&per_page=]
      *
-     * Endpoint públic - retorna els objectes disponibles dins d'un radi
+     * Endpoint públic — retorna els objectes disponibles dins d'un radi
      * (metres) d'una ubicació, ordenats per distància ascendent.
-     *
      */
     public function nearby(Request $request)
     {
         $validated = $request->validate([
-            'lat'      => ['required', 'numeric', 'between:-90,90'],
-            'lng'      => ['required', 'numeric', 'between:-180,180'],
-            'radius'   => ['nullable', 'integer', 'min:100', 'max:50000'],
-            'category' => ['nullable', 'integer', 'exists:categories,id'],
-            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
+            'lat'         => ['required', 'numeric', 'between:-90,90'],
+            'lng'         => ['required', 'numeric', 'between:-180,180'],
+            'radius'      => ['nullable', 'integer', 'min:100', 'max:50000'],
+            'category'    => ['nullable', 'integer', 'exists:categories,id'],
+            'subcategory' => ['nullable', 'integer', 'exists:subcategories,id'],
+            'per_page'    => ['nullable', 'integer', 'min:1', 'max:50'],
         ]);
 
         $lat    = (float) $validated['lat'];
         $lng    = (float) $validated['lng'];
-        $radius = (int)  ($validated['radius']  ?? 5000);
+        $radius = $this->resolveNearbyRadius($request, $validated);
 
         $query = Objecte::query()
             ->disponible()
-            ->with(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges'])
+            ->with([
+                'user:id,nom,avatar_url',
+                'categoria:id,nom,icona',
+                'subcategoria:id,nom,slug',
+                'imatges',
+            ])
             ->aProximitat($lat, $lng, $radius)
             ->ordreProximitat();
 
@@ -163,10 +178,36 @@ class ObjecteController extends Controller
             $query->perCategoria((int) $validated['category']);
         }
 
+        if (!empty($validated['subcategory'])) {
+            $query->where('subcategoria_id', (int) $validated['subcategory']);
+        }
+
         $perPage  = (int) ($validated['per_page'] ?? 20);
         $objectes = $query->paginate($perPage)->withQueryString();
 
         return ObjecteResource::collection($objectes);
+    }
+
+    /**
+     * Resol el radi de cerca (en metres) per al nearby.
+     *
+     * Ordre de prioritat:
+     *   1. Paràmetre radius enviat pel client (en metres).
+     *   2. radi_proximitat del User autenticat (en km --> metres).
+     *   3. Default públic: 5000 m.
+     */
+    private function resolveNearbyRadius(Request $request, array $validated): int
+    {
+        if (isset($validated['radius'])) {
+            return (int) $validated['radius'];
+        }
+
+        $user = $request->user();
+        if ($user && $user->radi_proximitat) {
+            return ((int) $user->radi_proximitat) * 1000;
+        }
+
+        return 5000;
     }
 
     private function calcularValoracioPropietari(int $userId): ?float
@@ -181,6 +222,9 @@ class ObjecteController extends Controller
         return $avg !== null ? round((float) $avg, 1) : null;
     }
 
+    /**
+     * Estadístiques de valoracions d'un objecte concret.
+     */
     private function obtenirEstadistiquesValoracio(int $objecteId): object
     {
         $result = DB::table('valoracions')
@@ -196,6 +240,9 @@ class ObjecteController extends Controller
         ];
     }
 
+    /**
+     * Dates ocupades per transaccions actives d'un objecte.
+     */
     private function obtenirDatesOcupades(int $objecteId): array
     {
         return DB::table('solicituds')
@@ -212,6 +259,9 @@ class ObjecteController extends Controller
             ->toArray();
     }
 
+    /**
+     * Llista de valoracions individuals d'un objecte amb autor.
+     */
     private function obtenirValoracionsObjecte(int $objecteId): array
     {
         return DB::table('valoracions')
@@ -245,20 +295,26 @@ class ObjecteController extends Controller
     /**
      * GET /api/v1/profile/{username}/objects
      *
-     * Obtiene todos los objetos de un usuario específico.
+     * Obté tots els objectes d'un usuari específic.
      */
-    public function getUserObjects(string $username) {
+    public function getUserObjects(string $username)
+    {
         $user = User::where('username', $username)->first();
 
         if (!$user) {
             return response()->json([
-                'message' => 'Usuari no trobat.'
+                'message' => 'Usuari no trobat.',
             ], 404);
         }
 
         $objectes = Objecte::query()
             ->ambCoordenades()
-            ->with(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges'])
+            ->with([
+                'user:id,nom,avatar_url',
+                'categoria:id,nom,icona',
+                'subcategoria:id,nom,slug',
+                'imatges',
+            ])
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->get();
@@ -279,15 +335,16 @@ class ObjecteController extends Controller
 
         // ── 1. Crear l'objecte (sense ubicació encara) ──
         $objecte = Objecte::create([
-            'user_id'      => $user->id,
-            'categoria_id' => $validated['categoria_id'],
-            'nom'          => $validated['nom'],
-            'descripcio'   => $validated['descripcio'],
-            'tipus'        => $validated['tipus'],
-            'preu_diari'   => $validated['preu_diari'] ?? null,
-            'estat'        => 'disponible',
+            'user_id'         => $user->id,
+            'categoria_id'    => $validated['categoria_id'],
+            'subcategoria_id' => $validated['subcategoria_id'],
+            'nom'             => $validated['nom'],
+            'descripcio'      => $validated['descripcio'],
+            'tipus'           => $validated['tipus'],
+            'preu_diari'      => $validated['preu_diari'] ?? null,
+            'estat'           => 'disponible',
             // ubicacio es posa via SQL raw per PostGIS
-            'ubicacio'     => DB::raw(sprintf(
+            'ubicacio'        => DB::raw(sprintf(
                 "ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography",
                 $validated['lng'],
                 $validated['lat']
@@ -327,13 +384,13 @@ class ObjecteController extends Controller
         // Inserir totes les imatges d'un cop
         ImatgeObjecte::insert($imatgesData);
 
-        // ── 3. Associar subcategories (si n'hi ha) ──
-        if (!empty($validated['subcategories'])) {
-            $objecte->subcategories()->attach($validated['subcategories']);
-        }
-
-        // ── 4. Recarregar amb relacions i retornar ──
-        $objecte->load(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges', 'subcategories:id,nom']);
+        // ── 3. Recarregar amb relacions i retornar ──
+        $objecte->load([
+            'user:id,nom,avatar_url',
+            'categoria:id,nom,icona',
+            'subcategoria:id,nom',
+            'imatges',
+        ]);
         $objecte->lat = $validated['lat'];
         $objecte->lng = $validated['lng'];
 
@@ -374,7 +431,15 @@ class ObjecteController extends Controller
         $validated = $request->validated();
 
         // ── 1. Actualitzar camps bàsics ──
-        $campsActualitzables = ['nom', 'descripcio', 'categoria_id', 'tipus', 'preu_diari', 'estat'];
+        $campsActualitzables = [
+            'nom',
+            'descripcio',
+            'categoria_id',
+            'subcategoria_id',
+            'tipus',
+            'preu_diari',
+            'estat',
+        ];
 
         $dades = collect($validated)->only($campsActualitzables)->toArray();
 
@@ -431,13 +496,7 @@ class ObjecteController extends Controller
             }
         }
 
-        // ── 5. Actualitzar subcategories (si s'envien) ──
-        if (array_key_exists('subcategories', $validated)) {
-            // sync() reemplaça les subcategories existents
-            $objecte->subcategories()->sync($validated['subcategories'] ?? []);
-        }
-
-        // ── 6. Verificar que queda almenys 1 imatge ──
+        // ── 5. Verificar que queda almenys 1 imatge ──
         $objecte->refresh();
         if ($objecte->imatges()->count() === 0) {
             return response()->json([
@@ -445,15 +504,26 @@ class ObjecteController extends Controller
             ], 422);
         }
 
-        // ── 7. Recarregar i retornar ──
-        $objecte->load(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges', 'subcategories:id,nom']);
+        // ── 6. Recarregar i retornar ──
         if (isset($validated['lat']) && isset($validated['lng'])) {
+            $objecte->load([
+                'user:id,nom,avatar_url',
+                'categoria:id,nom,icona',
+                'subcategoria:id,nom',
+                'imatges',
+            ]);
             $objecte->lat = $validated['lat'];
             $objecte->lng = $validated['lng'];
         } else {
             // Recarregar amb scope per obtenir lat/lng existents
-            $objecte = Objecte::ambCoordenades()->findOrFail($objecte->id)
-                ->load(['user:id,nom,avatar_url', 'categoria:id,nom,icona', 'imatges', 'subcategories:id,nom']);
+            $objecte = Objecte::ambCoordenades()
+                ->findOrFail($objecte->id)
+                ->load([
+                    'user:id,nom,avatar_url',
+                    'categoria:id,nom,icona',
+                    'subcategoria:id,nom',
+                    'imatges',
+                ]);
         }
 
         return new ObjecteResource($objecte);

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Objecte;
 use App\Models\User;
 use App\Models\Categoria;
+use App\Models\Subcategoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
@@ -17,9 +18,15 @@ class ObjecteFactory extends Factory
         $lat = fake()->latitude(41.30, 41.50);
         $lng = fake()->longitude(1.95, 2.25);
 
+        $categoria = Categoria::has('subcategories')->inRandomOrder()->first()
+            ?? Categoria::factory()->create();
+        $subcategoria = $categoria->subcategories()->inRandomOrder()->first()
+            ?? Subcategoria::factory()->create(['categoria_id' => $categoria->id]);
+
         return [
             'user_id'      => User::factory(),
-            'categoria_id' => Categoria::factory(),
+            'categoria_id'    => $categoria->id,
+            'subcategoria_id' => $subcategoria->id,
             'nom'          => fake()->words(3, true),
             'descripcio'   => fake()->paragraph(),
             'tipus'        => fake()->randomElement(['prestec', 'lloguer', 'ambdos']),

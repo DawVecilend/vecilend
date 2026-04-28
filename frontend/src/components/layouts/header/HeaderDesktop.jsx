@@ -48,13 +48,13 @@ function HeaderDesktop() {
 
           <nav className="hidden items-center gap-6 md:flex">
             <Link to="/objects" className={getNavClass('/objects')}>
-              Browse
+              Productos
             </Link>
             <Link to="/how-it-works" className={getNavClass('/how-it-works')}>
-              How it Works
+              ¿Cómo funciona?
             </Link>
             <Link to="/about" className={getNavClass('/about')}>
-              About
+              Sobre Nosotros
             </Link>
           </nav>
         </div>
@@ -154,14 +154,14 @@ function HeaderDesktop() {
                 to="/login"
                 className="hidden px-4 py-2.5 text-sm font-bold text-[#aebdb9] transition-colors hover:text-[#4fdbc8] md:block"
               >
-                Log In
+                Iniciar Sesión
               </Link>
 
               <Link
                 to="/register"
                 className="hidden rounded-full bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] px-6 py-2.5 text-sm font-bold text-[#003730] shadow-lg shadow-[#4fdbc8]/20 transition-transform active:scale-95 md:block"
               >
-                Sign Up
+                Registrarse
               </Link>
             </>
           )}

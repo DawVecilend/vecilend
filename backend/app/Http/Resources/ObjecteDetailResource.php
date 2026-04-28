@@ -38,15 +38,12 @@ class ObjecteDetailResource extends JsonResource
                 'icona' => $this->categoria->icona,
             ]),
 
-            // ── Subcategories ──
-            'subcategories' => $this->whenLoaded(
-                'subcategories',
-                fn() =>
-                $this->subcategories->map(fn($sub) => [
-                    'id'  => $sub->id,
-                    'nom' => $sub->nom,
-                ])
-            ),
+            // ── Subcategoria ──
+            'subcategoria' => $this->whenLoaded('subcategoria', fn() => $this->subcategoria ? [
+                'id'  => $this->subcategoria->id,
+                'nom' => $this->subcategoria->nom,
+                'slug' => $this->subcategoria->slug,
+            ] : null),
 
             // ── Imatges ──
             'imatges'       => $this->whenLoaded(

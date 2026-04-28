@@ -10,10 +10,13 @@ use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
+use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
 Route::post('/check-user', [RegisterController::class, 'checkUser']);
+Route::post('/email/send-code',   [EmailVerificationController::class, 'sendCode']);
+Route::post('/email/verify-code', [EmailVerificationController::class, 'verifyCode']);
 Route::get('/profile/{username}', [UserController::class, 'getByUsername']);
 Route::get('/profile/{username}/objects', [ObjecteController::class, 'getUserObjects']);
 Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
@@ -27,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
-
+    Route::put('/user/proximity-radius', [UserController::class, 'updateProximityRadius']);
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);
     Route::post('/logout', [LoginController::class, 'logout']);
