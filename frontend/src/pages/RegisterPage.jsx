@@ -45,6 +45,7 @@ function RegisterPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -53,6 +54,7 @@ function RegisterPage() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       setFormData((prev) => ({ ...prev, avatar: file }));
     }
@@ -67,10 +69,12 @@ function RegisterPage() {
 
   const handleDireccioChange = (e) => {
     const value = e.target.value;
+
     setFormData((prev) => ({ ...prev, direccio: value }));
 
     if (value.length >= 2) {
       const searchNormalized = normalizeString(value);
+
       const filtered = municipalitiesData.data
         .map((row) => row[9])
         .filter((name) => normalizeString(name).includes(searchNormalized))
@@ -119,12 +123,12 @@ function RegisterPage() {
       } else if (response.data.emailExists) {
         setError("Este email ya está registrado en el sistema.");
       } else {
-        // Enviar código de verificación
         try {
           await api.post("/email/send-code", {
             email: formData.email,
             nom: formData.username,
           });
+
           setResendCooldown(60);
           setStep(2);
         } catch (err) {
@@ -136,6 +140,7 @@ function RegisterPage() {
       }
     } catch (error) {
       console.error("Error backend:", error.response?.data);
+
       if (error.response?.data?.message) {
         setError(error.response.data.message);
       } else {
@@ -151,17 +156,20 @@ function RegisterPage() {
     setError("");
 
     const code = otpDigits.join("");
+
     if (code.length !== 6) {
       setError("Introduce los 6 dígitos del código.");
       return;
     }
 
     setIsLoading(true);
+
     try {
       await api.post("/email/verify-code", {
         email: formData.email,
         code,
       });
+
       setStep(3);
     } catch (err) {
       setError(err.response?.data?.message || "Código incorrecto o caducado.");
@@ -172,12 +180,15 @@ function RegisterPage() {
 
   const handleResendCode = async () => {
     if (resendCooldown > 0) return;
+
     setError("");
+
     try {
       await api.post("/email/send-code", {
         email: formData.email,
         nom: formData.username,
       });
+
       setResendCooldown(60);
       setOtpDigits(["", "", "", "", "", ""]);
     } catch (err) {
@@ -189,11 +200,13 @@ function RegisterPage() {
 
   const handleOtpChange = (idx, value) => {
     const v = value.replace(/\D/g, "").slice(-1);
+
     setOtpDigits((prev) => {
       const next = [...prev];
       next[idx] = v;
       return next;
     });
+
     if (v && idx < 5) {
       const nextInput = document.getElementById(`otp-${idx + 1}`);
       nextInput?.focus();
@@ -214,6 +227,7 @@ function RegisterPage() {
 
     try {
       const data = new FormData();
+
       data.append("username", formData.username);
       data.append("nom", formData.nom);
       data.append("cognoms", formData.cognoms);
@@ -239,8 +253,7 @@ function RegisterPage() {
       navigate("/");
     } catch (err) {
       setError(
-        err.response?.data?.message ||
-          "Error al registrar. Inténtalo de nuevo.",
+        err.response?.data?.message || "Error al registrar. Inténtalo de nuevo.",
       );
     } finally {
       setIsLoading(false);
@@ -254,12 +267,14 @@ function RegisterPage() {
           <section className="hidden md:flex md:w-1/2 relative bg-[#090f0e] items-center justify-center h-full overflow-hidden">
             <div className="absolute inset-0 z-0">
               <img
-                alt="Professional Gear"
+                alt="Producto compartido entre vecinos"
                 className="w-full h-full object-cover opacity-40"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQW8YXGcPQGsj1Q0KeE6EM5PNeIb_2pLMJDvddODr88dUMeNgFpr5Qs5dEO2AB3ny82vvXhxKR1aN2E7BqjU2sV5FtcQZ-345ynN76RDdZv2smlnejUHG2dyJnTy2VyYGx6-IWF-CKxfbXp8pzNllfgIcWjEMqPvNwxWyDXubGsjAiiVqX-uFuvxCluOPaesKLrAtqv5nHmjRfKM-WAQLXtTiquVhbmhJZ62YM7sq7EbMBlR3I8WQF1s_63H87bU9H2tZ7BGot5ARl"
               />
+
               <div className="absolute inset-0 bg-linear-to-tr from-[#0e1513] via-transparent to-transparent"></div>
             </div>
+
             <div className="relative z-10 max-w-lg px-8">
               <div className="bg-[#1a211f]/60 backdrop-blur-xl border border-[#3c4947] p-8 rounded-xl shadow-2xl">
                 <div className="flex gap-1 mb-4 text-[#4fdbc8]">
@@ -272,22 +287,28 @@ function RegisterPage() {
                     </span>
                   ))}
                 </div>
+
                 <p className="text-xl font-medium leading-relaxed italic text-[#dde4e1] mb-6">
-                  "The quality of the equipment and the seamless professional
-                  workflow completely transformed how we handle our high-stakes
-                  productions."
+                  “Vecilend me ha ayudado a encontrar justo lo que necesitaba
+                  sin tener que comprarlo. Es fácil de usar, cercano y da mucha
+                  confianza saber que los productos están compartidos por
+                  vecinos de mi zona.”
                 </p>
+
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#4fdbc8]">
                     <img
-                      alt="User Avatar"
+                      alt="Avatar de usuario"
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3lCex78R9gss1rSRXiBMONf6Kpo-aObjVvhOsdxYfDEV5VkAjs6H5udYWFVTbBQLLe-5OX-1Nfr__L2EXX8_85qkavwodEygWuVjZ6R_S-ujoopRTJ6XdUyiVw_F4VHAySzA5WVdjgh6exDBGT_RwCUnYkkCZZYY6CTNyMrYDouOrmBTLw1SX27Er49FLqX-_HboWJrblOlE2XV8QqCIM-hFlX3WtzUVzAQ7DIjz6roiYJcCohYGKap5Asn5a0VIiVco4tNU-khmT"
                     />
                   </div>
+
                   <div>
-                    <p className="font-bold text-[#dde4e1]">Alex Chen</p>
+                    <p className="font-bold text-[#dde4e1]">
+                      Laura Martínez
+                    </p>
                     <p className="text-sm text-[#859490]">
-                      Creative Director, Lumina Studios
+                      Vecina de Barcelona
                     </p>
                   </div>
                 </div>
@@ -301,8 +322,9 @@ function RegisterPage() {
                 <h1 className="text-4xl font-extrabold text-[#dde4e1] tracking-tight mb-2">
                   Crear cuenta
                 </h1>
+
                 <p className="text-[#859490] text-lg">
-                  Únete a la comunidad de profesionales de élite hoy.
+                  Únete a Vecilend y empieza a compartir con vecinos de tu zona.
                 </p>
               </div>
 
@@ -326,21 +348,26 @@ function RegisterPage() {
                       fill="#EA4335"
                     ></path>
                   </svg>
+
                   <span>Continuar con Google</span>
                 </button>
+
                 <button className="w-full flex items-center justify-center gap-3 bg-[#1a211f] hover:bg-[#252b2a] border border-[#3c4947] py-3 rounded-lg font-medium transition-all active:scale-[0.98]">
                   <svg className="w-5 h-5 fill-[#dde4e1]" viewBox="0 0 24 24">
                     <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2.002-.156-3.725 1.09-4.51 1.09zM15.53 4.854c.87-1.05 1.454-2.506 1.293-3.96-1.247.052-2.76.831-3.656 1.883-.792.935-1.48 2.442-1.293 3.869 1.39.104 2.786-.74 3.656-1.792z"></path>
                   </svg>
+
                   <span>Continuar con Apple</span>
                 </button>
               </div>
 
               <div className="relative flex items-center justify-center mb-8">
                 <div className="flex-grow border-t border-[#3c4947]"></div>
+
                 <span className="mx-4 text-xs font-bold text-[#859490] uppercase tracking-widest">
                   O usar cuenta
                 </span>
+
                 <div className="flex-grow border-t border-[#3c4947]"></div>
               </div>
 
@@ -349,6 +376,7 @@ function RegisterPage() {
                   <label className="block text-sm font-semibold text-[#bbcac6]">
                     Usuario
                   </label>
+
                   <input
                     name="username"
                     value={formData.username}
@@ -359,10 +387,12 @@ function RegisterPage() {
                     required
                   />
                 </div>
+
                 <div className="space-y-1.5">
                   <label className="block text-sm font-semibold text-[#bbcac6]">
                     Email
                   </label>
+
                   <input
                     name="email"
                     value={formData.email}
@@ -385,7 +415,10 @@ function RegisterPage() {
                   type="submit"
                   disabled={isLoading}
                 >
-                  <span>{isLoading ? "Comprobando datos..." : "Continue"}</span>
+                  <span>
+                    {isLoading ? "Comprobando datos..." : "Continuar"}
+                  </span>
+
                   {!isLoading && (
                     <span className="material-symbols-outlined text-xl">
                       arrow_forward
@@ -396,7 +429,7 @@ function RegisterPage() {
 
               <div className="mt-8 text-center">
                 <p className="text-[#859490] text-sm">
-                  ¿Tienes cuenta?{" "}
+                  ¿Ya tienes cuenta?{" "}
                   <Link
                     to="/login"
                     className="text-[#4fdbc8] font-bold hover:underline"
@@ -410,19 +443,20 @@ function RegisterPage() {
         </main>
       )}
 
-      {/* Steps 2 and 3 remain exactly as defined in previous messages */}
       {step === 2 && (
         <main className="flex-grow flex flex-col items-center justify-center px-4 h-full">
           <div className="w-full max-w-md -mt-12 md:-mt-8">
             <div className="mb-10 md:mb-6">
               <div className="flex justify-between mb-3 px-1">
                 <span className="text-xs font-bold tracking-widest text-[#4fdbc8] uppercase">
-                  Step 2 of 3
+                  Paso 2 de 3
                 </span>
+
                 <span className="text-xs font-medium text-[#859490]">
-                  Email Verification
+                  Verificación de email
                 </span>
               </div>
+
               <div className="flex h-1.5 w-full bg-[#1a211f] rounded-full overflow-hidden">
                 <div className="h-full w-1/3 bg-[#4fdbc8]/30"></div>
                 <div className="h-full w-1/3 bg-[#4fdbc8]"></div>
@@ -438,7 +472,8 @@ function RegisterPage() {
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_back
                 </span>
-                <span>Back</span>
+
+                <span>Volver</span>
               </button>
 
               <div className="flex flex-col items-center mb-6 mt-2">
@@ -447,24 +482,28 @@ function RegisterPage() {
                     mail
                   </span>
                 </div>
+
                 <h1 className="text-2xl font-bold text-[#dde4e1] mb-2 text-center">
-                  Check your inbox!
+                  Revisa tu correo
                 </h1>
+
                 <p className="text-[#bbcac6] text-center text-sm leading-relaxed">
-                  We've sent a verification link to{" "}
+                  Hemos enviado un código de verificación a{" "}
                   <span className="font-bold text-[#4fdbc8]">
                     {formData.email}
                   </span>
-                  . Click the link in the message to confirm your account.
+                  . Introduce el código para confirmar tu cuenta.
                 </p>
               </div>
 
               <div className="space-y-6">
                 <div className="relative py-2 flex items-center">
                   <div className="flex-grow border-t border-[#3c4947]"></div>
+
                   <span className="flex-shrink mx-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#859490]">
-                    OR ENTER CODE
+                    Introduce el código
                   </span>
+
                   <div className="flex-grow border-t border-[#3c4947]"></div>
                 </div>
 
@@ -491,7 +530,7 @@ function RegisterPage() {
                     disabled={isLoading}
                     className={`w-full bg-[#4fdbc8] text-[#003731] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-[#4fdbc8]/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#14b8a6]"}`}
                   >
-                    {isLoading ? "Verificando..." : "Verify Code"}
+                    {isLoading ? "Verificando..." : "Verificar código"}
                   </button>
 
                   {error && (
@@ -534,14 +573,16 @@ function RegisterPage() {
                 <div className="mb-4 mt-2">
                   <div className="flex items-center justify-between mb-1">
                     <h1 className="text-2xl font-bold text-[#dde4e1]">
-                      Final Personal Details
+                      Últimos datos personales
                     </h1>
+
                     <span className="text-sm text-[#4fdbc8] font-semibold px-3 py-1 bg-[#14b8a6]/20 rounded-full border border-[#4fdbc8]/20">
-                      Step 3 of 3
+                      Paso 3 de 3
                     </span>
                   </div>
+
                   <p className="text-[#859490] text-sm">
-                    Tell us a bit more about yourself to finalize your profile.
+                    Cuéntanos un poco más sobre ti para completar tu perfil.
                   </p>
                 </div>
 
@@ -559,19 +600,21 @@ function RegisterPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3">
                       <div className="space-y-1">
                         <label className="block text-xs font-medium text-[#bbcac6] ml-1">
-                          First Name (Nom) *
+                          Nombre *
                         </label>
+
                         <div className="relative group">
                           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
                             person
                           </span>
+
                           <input
                             name="nom"
                             value={formData.nom}
                             onChange={handleChange}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-[#dde4e1] placeholder:text-[#859490]/50 outline-none transition-all text-sm"
-                            placeholder="John"
+                            placeholder="Iván"
                             type="text"
                           />
                         </div>
@@ -579,19 +622,21 @@ function RegisterPage() {
 
                       <div className="space-y-1">
                         <label className="block text-xs font-medium text-[#bbcac6] ml-1">
-                          Last Name (Cognoms) *
+                          Apellidos *
                         </label>
+
                         <div className="relative group">
                           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
                             badge
                           </span>
+
                           <input
                             name="cognoms"
                             value={formData.cognoms}
                             onChange={handleChange}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-[#dde4e1] placeholder:text-[#859490]/50 outline-none transition-all text-sm"
-                            placeholder="Doe"
+                            placeholder="Carrasco"
                             type="text"
                           />
                         </div>
@@ -599,12 +644,14 @@ function RegisterPage() {
 
                       <div className="space-y-1">
                         <label className="block text-xs font-medium text-[#bbcac6] ml-1">
-                          Password *
+                          Contraseña *
                         </label>
+
                         <div className="relative group">
                           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
                             lock
                           </span>
+
                           <input
                             name="password"
                             value={formData.password}
@@ -619,12 +666,14 @@ function RegisterPage() {
 
                       <div className="space-y-1">
                         <label className="block text-xs font-medium text-[#bbcac6] ml-1">
-                          Confirm Password *
+                          Confirmar contraseña *
                         </label>
+
                         <div className="relative group">
                           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
                             lock_reset
                           </span>
+
                           <input
                             name="password_confirmation"
                             value={formData.password_confirmation}
@@ -639,12 +688,14 @@ function RegisterPage() {
 
                       <div className="space-y-1 relative">
                         <label className="block text-xs font-medium text-[#bbcac6] ml-1">
-                          City/State (Población)
+                          Población *
                         </label>
+
                         <div className="relative group">
                           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
                             location_on
                           </span>
+
                           <input
                             name="direccio"
                             value={formData.direccio}
@@ -662,6 +713,7 @@ function RegisterPage() {
                             autoComplete="off"
                             required
                           />
+
                           {showSuggestions && suggestions.length > 0 && (
                             <ul className="absolute z-50 w-full mt-1 bg-[#1a211f] border border-[#3c4947] rounded-lg shadow-2xl max-h-32 overflow-y-auto custom-scrollbar">
                               {suggestions.map((suggestion, index) => (
@@ -682,12 +734,14 @@ function RegisterPage() {
 
                       <div className="space-y-1">
                         <label className="block text-xs font-medium text-[#bbcac6] ml-1">
-                          Phone Number
+                          Teléfono
                         </label>
+
                         <div className="relative group">
                           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
                             call
                           </span>
+
                           <input
                             name="telefon"
                             value={formData.telefon}
@@ -702,14 +756,15 @@ function RegisterPage() {
                       <div className="md:col-span-2 flex items-end">
                         <div className="flex-grow space-y-1">
                           <label className="block text-xs font-medium text-[#bbcac6] ml-1">
-                            Profile Picture (Optional)
+                            Foto de perfil opcional
                           </label>
+
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-full bg-[#2f3634] border border-[#3c4947] flex items-center justify-center overflow-hidden">
                               {formData.avatar ? (
                                 <img
                                   src={URL.createObjectURL(formData.avatar)}
-                                  alt="Avatar Preview"
+                                  alt="Vista previa del avatar"
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
@@ -718,11 +773,12 @@ function RegisterPage() {
                                 </span>
                               )}
                             </div>
+
                             <label className="cursor-pointer px-4 py-1.5 text-sm font-medium border border-[#859490] rounded-lg text-[#dde4e1] hover:bg-[#2f3634] transition-colors flex items-center gap-2">
                               <span className="material-symbols-outlined text-sm">
                                 upload
-                              </span>{" "}
-                              Choose File
+                              </span>
+                              Elegir archivo
                               <input
                                 type="file"
                                 className="hidden"
@@ -737,14 +793,15 @@ function RegisterPage() {
 
                     <div className="space-y-1">
                       <label className="block text-xs font-medium text-[#bbcac6] ml-1">
-                        Professional Bio
+                        Biografía
                       </label>
+
                       <textarea
                         name="biography"
                         value={formData.biography}
                         onChange={handleChange}
                         className="w-full bg-[#2f3634] border-none rounded-lg px-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-[#dde4e1] placeholder:text-[#859490]/50 outline-none transition-all resize-none text-sm"
-                        placeholder="Describe your experience..."
+                        placeholder="Cuéntanos algo sobre ti, qué sueles compartir o qué tipo de objetos te interesan..."
                         rows="2"
                       ></textarea>
                     </div>
@@ -756,21 +813,21 @@ function RegisterPage() {
                       className="flex-1 px-6 py-3 rounded-xl border border-[#3c4947] text-[#dde4e1] font-semibold hover:bg-[#2f3634] transition-all active:scale-[0.98] text-sm"
                       type="button"
                     >
-                      Back
+                      Volver
                     </button>
+
                     <button
                       disabled={isLoading}
                       className={`flex-1 px-6 py-3 rounded-xl bg-[#4fdbc8] text-[#003731] font-bold shadow-lg shadow-[#4fdbc8]/20 transition-all text-sm ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110 active:scale-[0.98]"}`}
                       type="submit"
                     >
-                      Complete Registration
+                      {isLoading ? "Creando cuenta..." : "Completar registro"}
                     </button>
                   </div>
                 </form>
               </div>
             </div>
 
-            {/* CONTENEDORES DE LA DERECHA: ORIGINALES E INTACTOS */}
             <div className="w-full md:w-1/3 flex flex-col gap-6 lg:gap-8 justify-center h-full">
               <div className="p-6 bg-[#161d1b] rounded-xl border border-[#3c4947]/20 flex flex-col items-center text-center w-full">
                 <div className="w-10 h-10 rounded-lg bg-[#14b8a6]/20 flex items-center justify-center text-[#4fdbc8] mb-4">
@@ -778,13 +835,15 @@ function RegisterPage() {
                     verified_user
                   </span>
                 </div>
+
                 <div>
                   <h3 className="font-semibold text-[#dde4e1] mb-2">
-                    Secure Storage
+                    Datos seguros
                   </h3>
+
                   <p className="text-xs lg:text-sm text-[#859490]">
-                    Your personal data is encrypted and stored according to
-                    strict security protocols.
+                    Tus datos personales se protegen para que puedas usar
+                    Vecilend con confianza.
                   </p>
                 </div>
               </div>
@@ -795,13 +854,15 @@ function RegisterPage() {
                     visibility_off
                   </span>
                 </div>
+
                 <div>
                   <h3 className="font-semibold text-[#dde4e1] mb-2">
-                    Privacy Control
+                    Control de privacidad
                   </h3>
+
                   <p className="text-xs lg:text-sm text-[#859490]">
-                    Control what information is visible to other members in your
-                    settings later.
+                    Más adelante podrás controlar qué información quieres mostrar
+                    al resto de usuarios.
                   </p>
                 </div>
               </div>
@@ -810,13 +871,15 @@ function RegisterPage() {
                 <div className="w-10 h-10 rounded-lg bg-[#b9e9e0]/20 flex items-center justify-center text-[#a0d0c6] mb-4">
                   <span className="material-symbols-outlined">speed</span>
                 </div>
+
                 <div>
                   <h3 className="font-semibold text-[#dde4e1] mb-2">
-                    Quick Setup
+                    Configuración rápida
                   </h3>
+
                   <p className="text-xs lg:text-sm text-[#859490]">
-                    Almost there! After this step, your account will be live and
-                    ready for use.
+                    Ya casi está. Después de este paso, tu cuenta estará lista
+                    para empezar a usar Vecilend.
                   </p>
                 </div>
               </div>
