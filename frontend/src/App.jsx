@@ -39,7 +39,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/objects" element={<ObjectsPage />} />
-          <Route path="/object/:id" element={<ObjectPage />} />
+          <Route path="/objects/:id" element={<ObjectPage />} />
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
           <Route path="/profile/:username" element={<ProfilePage />}/>

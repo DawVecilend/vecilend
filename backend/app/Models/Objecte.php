@@ -115,9 +115,35 @@ class Objecte extends Model
         });
     }
 
-    public function scopeAProximitat(Builder $query, float $lat, float $lng, int $metres = 5000): Builder
+    /**
+     * Filtra objectes a dins d'un radi (metres) d'un punt lat/lng
+     * i afegeix la columna 'distancia_metres' al SELECT.
+     *
+     * Important: ST_MakePoint pren els paràmetres en ordre (LONGITUD, LATITUD).
+     */
+    public function scopeAProximitat(
+        Builder $query,
+        float $lat,
+        float $lng,
+        int $metres = 5000
+    ): Builder {
+        $punt = 'ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography';
+
+        return $query
+            ->whereRaw("ST_DWithin(ubicacio, {$punt}, ?)", [$lng, $lat, $metres])
+            ->selectRaw(
+                "objectes.*, ST_Distance(ubicacio, {$punt}) AS distancia_metres",
+                [$lng, $lat]
+            );
+    }
+
+    /**
+     * Ordena per distància ascendent (el més proper primer).
+     * Ha de fer-se servir després d'aProximitat() per tenir la columna calculada.
+     */
+    public function scopeOrdreProximitat(Builder $query): Builder
     {
-        return $query->whereRaw('ST_DWithin(ubicacio, ST_SetSRID(ST_MakePoint(?, ?),4326)::geography, ?)', [$lng, $lat, $metres]);
+        return $query->orderBy('distancia_metres', 'asc');
     }
 
     public static function setUbicacio(int $objecteId, float $lat, float $lng): void
