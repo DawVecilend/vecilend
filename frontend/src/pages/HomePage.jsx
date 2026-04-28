@@ -6,7 +6,6 @@ import TopUsersSection from '../components/home/TopUsersSection'
 import BenefitsSection from '../components/home/BenefitsSection'
 import { getObjects } from '../services/objects'
 import { getCategories } from '../services/categories'
-import { mapObjectsToProducts } from '../mappers/objectMapper'
 import { mapCategories } from '../mappers/categoryMapper'
 
 function HomePage() {
@@ -19,8 +18,7 @@ function HomePage() {
     async function loadObjects() {
       try {
         const rawObjects = await getObjects()
-        const mappedProducts = mapObjectsToProducts(rawObjects)
-        setProducts(mappedProducts)
+        setProducts(rawObjects)
       } catch (error) {
         console.error('Error cargando objetos:', error)
         setProducts([])

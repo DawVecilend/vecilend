@@ -18,6 +18,7 @@ import Footer from './components/layouts/footer/Footer'
 import FloatingAddObjectButton from './components/elementos/FloatingAddObjectButton'
 import SettingsPage from './pages/SettingsPage'
 import SecuritySettingsPage from './pages/SecuritySettingsPage'
+import UserObjectsPage from './pages/UserObjectsPage'
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="/categorias/:slug" element={<CategoryPage />} />
           <Route path="/results" element={<ResultsPage />} />
           <Route path="/profile/:username" element={<ProfilePage />}/>
+          <Route path="/profile/:username/objects" element={<UserObjectsPage />}/>
 
           {/* Rutas Protegidas */}
           <Route element={<ProtectedRoute />}>

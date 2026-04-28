@@ -310,6 +310,7 @@ class ObjecteController extends Controller
         $objectes = Objecte::query()
             ->ambCoordenades()
             ->with([
+                'user:id,nom,avatar_url',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',

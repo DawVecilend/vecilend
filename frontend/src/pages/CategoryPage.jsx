@@ -6,7 +6,6 @@ import BtnOrder from '../components/elementos/BtnOrder'
 import { getCategories } from '../services/categories'
 import { getObjects } from '../services/objects'
 import { mapCategories } from '../mappers/categoryMapper'
-import { mapObjectsToProducts } from '../mappers/objectMapper'
 
 function CategoryPage() {
   const { slug } = useParams()
@@ -43,7 +42,7 @@ function CategoryPage() {
           category: current.id,
           sort: orderBy,
         })
-        setProducts(mapObjectsToProducts(rawObjects))
+        setProducts(rawObjects)
       } catch (error) {
         console.error('Error cargando datos:', error)
       } finally {

@@ -138,9 +138,9 @@ function ProfilePage() {
               <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">Currently Listing</h2>
               <p className="text-[#bbcac6] mt-1">14 professional film kits available now</p>
             </div>
-            <button className="text-[#4fdbc8] font-bold text-sm flex items-center gap-1 hover:underline">
+            <Link to={`/profile/${profile?.username}/objects`} className="text-[#4fdbc8] font-bold text-sm flex items-center gap-1 hover:underline">
               View All Gear <span className="material-symbols-outlined !text-sm">arrow_forward</span>
-            </button>
+            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="group bg-[#090f0e] rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
