@@ -5,20 +5,24 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
+    public function up(): void
+    {
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('categoria_id')->constrained('categories')->cascadeOnDelete();
             $table->string('nom', 100);
+            $table->string('slug', 120);
             $table->text('descripcio')->nullable();
             $table->boolean('activa')->default(true);
             $table->timestamps();
             $table->unique(['categoria_id', 'nom']);
+            $table->unique(['categoria_id', 'slug']);
             $table->index('categoria_id');
         });
     }
 
-    public function down(): void {
+    public function down(): void
+    {
         Schema::dropIfExists('subcategories');
     }
 };

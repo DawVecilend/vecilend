@@ -43,6 +43,7 @@ class ObjecteResource extends JsonResource
                 return $this->subcategoria ? [
                     'id'  => $this->subcategoria->id,
                     'nom' => $this->subcategoria->nom,
+                    'slug' => $this->subcategoria->slug,
                 ] : null;
             }),
 

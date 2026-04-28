@@ -42,6 +42,7 @@ class ObjecteDetailResource extends JsonResource
             'subcategoria' => $this->whenLoaded('subcategoria', fn() => $this->subcategoria ? [
                 'id'  => $this->subcategoria->id,
                 'nom' => $this->subcategoria->nom,
+                'slug' => $this->subcategoria->slug,
             ] : null),
 
             // ── Imatges ──

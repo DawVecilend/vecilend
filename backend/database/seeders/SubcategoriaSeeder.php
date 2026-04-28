@@ -4,10 +4,13 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class SubcategoriaSeeder extends Seeder {
-    public function run(): void {
+class SubcategoriaSeeder extends Seeder
+{
+    public function run(): void
+    {
         $now = Carbon::now();
         $map = [
             'Viatges' => ['Maletes', 'Motxilles', 'Accessoris de viatge'],
@@ -19,20 +22,26 @@ class SubcategoriaSeeder extends Seeder {
             'Fitness' => ['Peses', 'Cardio', 'Ioga'],
             'Surf' => ['Taules', 'Neoprens', 'Accessoris'],
             'Trones de nadó' => ['Trones', 'Cotxets', 'Seguretat infantil'],
-            'Jocs de taula' => ['Estratègia', 'Cooperatius', 'Familiars']
+            'Jocs de taula' => ['Estratègia', 'Cooperatius', 'Familiars'],
         ];
-        
+
         foreach ($map as $nomCategoria => $subcategories) {
             $categoriaId = DB::table('categories')->where('nom', $nomCategoria)->value('id');
             if (!$categoriaId) {
-                $this->command->warn(" Categoria '{$nomCategoria}' notrobada. Executa CategoriaSeeder primer.");
+                $this->command->warn(" Categoria '{$nomCategoria}' no trobada. Executa CategoriaSeeder primer.");
                 continue;
             }
-            
+
             foreach ($subcategories as $nomSub) {
                 DB::table('subcategories')->updateOrInsert(
-                    ['categoria_id' => $categoriaId,'nom' => $nomSub],
-                    ['descripcio' => null,'activa' => true,'created_at' => $now,'updated_at' => $now]
+                    ['categoria_id' => $categoriaId, 'nom' => $nomSub],
+                    [
+                        'slug'       => Str::slug($nomSub),
+                        'descripcio' => null,
+                        'activa'     => true,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]
                 );
             }
         }
