@@ -64,7 +64,7 @@ function SearchBar() {
         type="submit"
         className="rounded-full bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] px-4 py-2 text-sm font-bold text-[#003730] transition-transform active:scale-95"
       >
-        Search
+        Buscar
       </button>
     </form>
   )

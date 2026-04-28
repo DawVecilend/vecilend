@@ -48,7 +48,6 @@ function getAvailabilityClass(status) {
   return 'text-vecilend-dark-text-secondary'
 }
 
-
 function ProductCard({
   id,
   image,
@@ -63,10 +62,18 @@ function ProductCard({
 }) {
   const availabilityLabel = getAvailabilityLabel(status, availableAt)
   const availabilityClass = getAvailabilityClass(status)
+
   return (
-    <Link to={"/object/" + id} className="w-[255px] overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card">
+    <Link
+      to={"/object/" + id}
+      className="flex h-full w-[255px] flex-col overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card"
+    >
       <div className="relative">
-        <img src={image} alt={title} className="h-[194px] w-full object-cover" />
+        <img
+          src={image}
+          alt={title}
+          className="h-[194px] w-full object-cover"
+        />
 
         <button className="absolute top-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-vecilend-dark-primary-hover">
           <img
@@ -81,8 +88,8 @@ function ProductCard({
         </span>
       </div>
 
-      <div className="p-4">
-        <h3 className="mb-3 font-heading text-h3-desktop leading-h3 font-semibold text-vecilend-dark-text">
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="mb-3 line-clamp-2 min-h-[58px] font-heading text-h3-desktop leading-h3 font-semibold text-vecilend-dark-text">
           {title}
         </h3>
 
@@ -92,6 +99,7 @@ function ProductCard({
             alt={userName}
             className="h-[28px] w-[28px] rounded-full object-cover"
           />
+
           <span className="font-body text-label leading-label text-vecilend-dark-text">
             {userName}
           </span>
@@ -101,6 +109,7 @@ function ProductCard({
 
         <div className="mb-2 flex items-center gap-2">
           <span className="text-vecilend-dark-primary">★★★★☆</span>
+
           <span className="font-body text-label leading-label text-vecilend-dark-text-secondary">
             {rating}
           </span>
@@ -112,7 +121,7 @@ function ProductCard({
 
         <div className="mb-3 h-px w-full bg-vecilend-dark-border"></div>
 
-        <div>
+        <div className="mt-auto">
           <span className={`font-body text-label leading-label ${availabilityClass}`}>
             {availabilityLabel}
           </span>
