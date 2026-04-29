@@ -39,4 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/objects/{id}', [ObjecteController::class, 'update'])->where('id', '[0-9]+');
     Route::delete('/objects/{id}', [ObjecteController::class, 'destroy'])->where('id', '[0-9]+');
     Route::post('/transactions', [TransactionController::class, 'store']);
+    Route::put('/transactions/{id}/accept', [TransactionController::class, 'accept'])
+        ->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/reject', [TransactionController::class, 'reject'])
+        ->where('id', '[0-9]+');
 });
