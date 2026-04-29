@@ -17,7 +17,6 @@ class TransactionResource extends JsonResource
         // disparar query lazy.
         $transaccio = $this->relationLoaded('transaccio') ? $this->transaccio : null;
 
-        $estatApi    = $this->calcularEstatAPI($transaccio);
         $diesPrestec = $this->data_inici->diffInDays($this->data_fi) + 1;
         $preuTotal   = $this->calcularPreuTotal($diesPrestec);
 
@@ -32,7 +31,7 @@ class TransactionResource extends JsonResource
             'dies'            => $diesPrestec,
 
             'tipus'           => $this->tipus,
-            'estat'           => $estatApi,
+            'estat'           => $this->estat,
 
             'missatge'        => $this->missatge,
             'preu_total'      => $preuTotal,
@@ -76,45 +75,6 @@ class TransactionResource extends JsonResource
             'created_at'      => $this->created_at?->toIso8601String(),
             'updated_at'      => $this->updated_at?->toIso8601String(),
         ];
-    }
-
-    /**
-     * Mapping de l'estat intern (Solicitud + Transaccio) als 5 estats
-     * que exposa l'API.
-     */
-    private function calcularEstatAPI(?\App\Models\Transaccio $transaccio): string
-    {
-        // Casos terminals (prioritzats)
-        if ($this->estat === 'rebutjat') {
-            return 'rebutjat';
-        }
-
-        if ($this->estat === 'finalitzat' || $transaccio?->estat === 'finalitzat') {
-            return 'finalitzat';
-        }
-
-        if ($this->estat === 'pendent') {
-            return 'pendent';
-        }
-
-        // estat = 'acceptat' --> distingim entre 'acceptat' (futur) i 'actiu' (en curs)
-        if ($this->estat === 'acceptat') {
-            $avui = Carbon::today();
-
-            if ($avui->lt($this->data_inici)) {
-                return 'acceptat';
-            }
-
-            if ($avui->between($this->data_inici, $this->data_fi)) {
-                return 'actiu';
-            }
-
-            // Hauria d'estar finalitzat però l'usuari no ho ha registrat encara.
-            // Mantenim 'actiu' fins que algú executi /return.
-            return 'actiu';
-        }
-
-        return $this->estat;
     }
 
     /**

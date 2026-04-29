@@ -43,4 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
         ->where('id', '[0-9]+');
     Route::put('/transactions/{id}/reject', [TransactionController::class, 'reject'])
         ->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/return', [TransactionController::class, 'returnObject'])
+        ->where('id', '[0-9]+');
 });
