@@ -29,7 +29,7 @@ function HomePage() {
 
     async function loadCategories() {
       try {
-        const rawCategories = await getCategories()
+        const rawCategories = await getCategories(6)
         const mappedCategories = mapCategories(rawCategories)
         setCategories(mappedCategories)
       } catch (error) {
