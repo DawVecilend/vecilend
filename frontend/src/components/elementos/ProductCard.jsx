@@ -64,7 +64,7 @@ function ProductCard({
   const availabilityLabel = getAvailabilityLabel(status, availableAt)
   const availabilityClass = getAvailabilityClass(status)
   return (
-    <Link to={"/object/" + id} className="w-[255px] overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card">
+    <Link to={"/objects/" + id} className="w-[255px] overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card">
       <div className="relative">
         <img src={image} alt={title} className="h-[194px] w-full object-cover" />
 
