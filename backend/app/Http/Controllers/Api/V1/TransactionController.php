@@ -181,4 +181,60 @@ class TransactionController extends Controller
             'data'    => new TransactionResource($solicitud),
         ], 200);
     }
+
+    /**
+     * PUT /api/v1/transactions/{id}/return
+     *
+     * El propietari registra que ha rebut l'objecte de tornada.
+     *   - Transaccio.estat: en_curs --> finalitzat
+     *   - Transaccio.data_fi_real = ara
+     *   - Solicitud.estat: acceptat --> finalitzat
+     *   - Objecte.estat: no_disponible --> disponible
+     *
+     */
+    public function returnObject(int $id): JsonResponse
+    {
+        $solicitud = Solicitud::with(['objecte.user', 'solicitant', 'transaccio'])
+            ->findOrFail($id);
+
+        $this->authorize('returnObject', $solicitud);
+
+        // Ha d'estar acceptada amb una transacció en curs
+        if ($solicitud->estat !== 'acceptat') {
+            return response()->json([
+                'message' => 'Esta transacción no está en curso.',
+                'errors'  => ['estat' => ["L'estat actual és '{$solicitud->estat}'."]],
+            ], 422);
+        }
+
+        $transaccio = $solicitud->transaccio;
+
+        if (!$transaccio || $transaccio->estat !== 'en_curs') {
+            return response()->json([
+                'message' => 'No hay transacción activa para esta solicitud.',
+                'errors'  => ['transaccio' => ['No s\'ha trobat la transacció associada o no està en curs.']],
+            ], 422);
+        }
+
+        DB::transaction(function () use ($solicitud, $transaccio) {
+            // 1. Tancar la transacció
+            $transaccio->update([
+                'data_fi_real' => now(),
+                'estat'        => 'finalitzat',
+            ]);
+
+            // 2. Marcar la sol·licitud com finalitzada (per facilitar queries)
+            $solicitud->update(['estat' => 'finalitzat']);
+
+            // 3. Tornar a marcar l'objecte com disponible
+            $solicitud->objecte()->update(['estat' => 'disponible']);
+        });
+
+        $solicitud->refresh()->load(['objecte.user', 'solicitant', 'transaccio']);
+
+        return response()->json([
+            'message' => 'Devolución registrada correctamente.',
+            'data'    => new TransactionResource($solicitud),
+        ], 200);
+    }
 }
