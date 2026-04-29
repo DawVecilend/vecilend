@@ -13,7 +13,7 @@ function HeroSection() {
           </span>
 
           <h1 className="max-w-[680px] font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-vecilend-dark-text md:text-[64px]">
-            Alquila lo que necesitas,{" "}
+            Alquila lo que necesitas, <br />
             <span className="italic text-vecilend-dark-primary">
               cerca de ti.
             </span>
