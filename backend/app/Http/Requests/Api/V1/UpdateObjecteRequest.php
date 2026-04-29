@@ -43,7 +43,7 @@ class UpdateObjecteRequest extends FormRequest
                     }
                 },
             ],
-            'tipus'         => ['sometimes', 'string', 'in:prestec,lloguer,ambdos'],
+            'tipus'         => ['sometimes', 'string', 'in:prestec,lloguer'],
             'preu_diari'    => ['nullable', 'numeric', 'min:0', 'max:99999.99'],
             'estat'         => ['sometimes', 'string', 'in:disponible,no_disponible'],
             'lat'           => ['sometimes', 'numeric', 'between:-90,90'],
@@ -66,7 +66,7 @@ class UpdateObjecteRequest extends FormRequest
             'descripcio.min'            => 'La descripció ha de tenir almenys 10 caràcters.',
             'categoria_id.exists'       => 'La categoria seleccionada no existeix.',
             'subcategoria_id.exists'    => 'La subcategoria seleccionada no existeix.',
-            'tipus.in'                  => 'El tipus ha de ser: prestec, lloguer o ambdos.',
+            'tipus.in'                  => 'El tipus ha de ser: prestec o lloguer.',
             'estat.in'                  => 'L\'estat ha de ser: disponible o no_disponible.',
             'imatges_noves.*.image'     => 'Cada fitxer ha de ser una imatge.',
             'imatges_noves.*.mimes'     => 'Formats acceptats: JPEG, PNG, WebP.',

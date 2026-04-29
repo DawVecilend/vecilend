@@ -29,7 +29,7 @@ class ObjecteFactory extends Factory
             'subcategoria_id' => $subcategoria->id,
             'nom'          => fake()->words(3, true),
             'descripcio'   => fake()->paragraph(),
-            'tipus'        => fake()->randomElement(['prestec', 'lloguer', 'ambdos']),
+            'tipus'        => fake()->randomElement(['prestec', 'lloguer']),
             'preu_diari'   => fake()->randomFloat(2, 1, 100),
             'estat'        => fake()->randomElement(['disponible', 'no_disponible']),
             'ubicacio'     => DB::raw("ST_SetSRID(ST_MakePoint({$lng}, {$lat}), 4326)::geography"),
