@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
+use App\Http\Controllers\Api\V1\TransactionController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
@@ -37,4 +38,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/objects', [ObjecteController::class, 'store']);
     Route::put('/objects/{id}', [ObjecteController::class, 'update'])->where('id', '[0-9]+');
     Route::delete('/objects/{id}', [ObjecteController::class, 'destroy'])->where('id', '[0-9]+');
+    Route::post('/transactions', [TransactionController::class, 'store']);
 });

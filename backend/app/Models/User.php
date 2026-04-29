@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -64,5 +65,28 @@ class User extends Authenticatable
         );
 
         return $point ? ['lat' => $point->lat, 'lng' => $point->lng] : null;
+    }
+
+    /**
+     * Sol·licituds que aquest usuari ha fet (com a sol·licitant).
+     */
+    public function solicituds(): HasMany
+    {
+        return $this->hasMany(Solicitud::class, 'solicitant_id');
+    }
+
+    /**
+     * Sol·licituds rebudes per aquest usuari (com a propietari dels seus objectes).
+     */
+    public function solicitudsRebudes(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Solicitud::class,
+            Objecte::class,
+            'user_id',     // FK a objectes (propietari)
+            'objecte_id',  // FK a solicituds
+            'id',          // PK a users
+            'id'           // PK a objectes
+        );
     }
 }
