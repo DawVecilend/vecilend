@@ -54,12 +54,8 @@ function SearchBar() {
     let n = 0;
     if (initialFilters.lat) n++;
     if (initialFilters.data_inici) n++;
-    if (
-      initialFilters.min_price ||
-      initialFilters.max_price ||
-      initialFilters.min_user_rating
-    )
-      n++;
+    if (initialFilters.min_price || initialFilters.max_price) n++;
+    if (initialFilters.min_user_rating) n++;
     return n;
   }, [initialFilters]);
 
