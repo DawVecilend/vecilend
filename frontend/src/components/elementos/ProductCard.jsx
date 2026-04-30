@@ -1,10 +1,23 @@
+// frontend/src/components/elementos/ProductCard.jsx
 import { Link } from "react-router-dom";
 
 function getAvailabilityLabel(status) {
   if (status === "disponible") return "Disponible";
   if (status === "no_disponible") return "No disponible";
-  if (status === "reserved") return "Reservado";
   return "Disponible";
+}
+
+function getAvailabilityClasses(status) {
+  if (status === "no_disponible") {
+    return {
+      container: "bg-[#0e1513]/60 text-[#ef4444]",
+      dot: "bg-[#ef4444]",
+    };
+  }
+  return {
+    container: "bg-[#0e1513]/60 text-[#4fdbc8]",
+    dot: "bg-[#4fdbc8]",
+  };
 }
 
 function ProductCard({
@@ -21,6 +34,7 @@ function ProductCard({
   searchParamsString = "",
 }) {
   const availabilityLabel = getAvailabilityLabel(status);
+  const availabilityClasses = getAvailabilityClasses(status);
 
   // Conserva els filtres de cerca al navegar al detall
   const detailLink = searchParamsString
@@ -29,7 +43,7 @@ function ProductCard({
 
   return (
     <Link to={detailLink} className="w-63.75">
-      <div className="group bg-[#161d1b] rounded-2xl overflow-hidden border border-transparent hover:border-[#4fdbc8]/30 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(79,219,200,0.15)] flex flex-col h-full ">
+      <div className="group bg-[#161d1b] rounded-2xl overflow-hidden border border-transparent hover:border-[#4fdbc8]/30 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(79,219,200,0.15)] flex flex-col">
         <div className="relative aspect-4/3 overflow-hidden">
           <img
             alt={title}
@@ -43,14 +57,20 @@ function ProductCard({
           >
             <span className="material-symbols-outlined">favorite</span>
           </button>
-          <div className="absolute bottom-4 left-4 bg-[#0e1513]/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-[#4fdbc8] flex items-center">
-            <span className="w-2 h-2 rounded-full bg-[#4fdbc8] mr-2"></span>
+          <div
+            className={`absolute bottom-4 left-4 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold flex items-center ${availabilityClasses.container}`}
+          >
+            <span
+              className={`w-2 h-2 rounded-full mr-2 ${availabilityClasses.dot}`}
+            ></span>
             {availabilityLabel}
           </div>
         </div>
-        <div className="p-4 flex flex-col flex-1">
+
+        <div className="p-6 flex flex-col flex-1">
+          {/* Mini-card del propietari */}
           <div
-            className="relative px-4 -mt-5 mb-4 inline-flex items-center gap-2 cursor-pointer"
+            className="relative -mt-10 mb-4 inline-flex items-center gap-2 cursor-pointer self-start"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -64,8 +84,9 @@ function ProductCard({
             />
             <p className="text-[#bbcac6] text-sm">{userName}</p>
           </div>
+
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-lg font-bold text-[#dde4e1] group-hover:text-[#4fdbc8] transition-colors line-clamp-2 h-14 ">
+            <h3 className="text-lg font-bold text-[#dde4e1] group-hover:text-[#4fdbc8] transition-colors line-clamp-2">
               {title}
             </h3>
             <div className="flex items-center text-[#f38764] text-sm font-bold">
@@ -78,20 +99,22 @@ function ProductCard({
               {rating}
             </div>
           </div>
+
           <p className="text-[#bbcac6] text-sm mb-4 line-clamp-2">
             {description}
           </p>
-          <div className="mt-auto flex items-center justify-between gap-2 pt-4 border-t border-[#3c4947]">
+
+          <div className="mt-auto flex items-center justify-between pt-4 border-t border-[#3c4947]">
             <div>
               {priceDay > 0 ? (
                 <>
-                  <span className="text-lg font-black text-[#dde4e1]">
+                  <span className="text-xl font-black text-[#dde4e1]">
                     {priceDay}€
                   </span>
                   <span className="text-[#bbcac6] text-sm"> / día</span>
                 </>
               ) : (
-                <span className="text-lg font-black text-[#dde4e1]">
+                <span className="text-xl font-black text-[#dde4e1]">
                   Gratuito
                 </span>
               )}

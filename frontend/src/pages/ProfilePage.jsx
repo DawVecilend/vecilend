@@ -15,7 +15,6 @@ function ProfilePage() {
 
   useEffect(() => {
     async function loadProfile() {
-      setLoading(true);
       try {
         const { user, latest_objects } = await getProfile(username);
         setProfile(user);
@@ -24,8 +23,6 @@ function ProfilePage() {
         console.error("Error cargando perfil:", error);
         setProfile(null);
         setLatestObjects([]);
-      } finally {
-        setLoading(false);
       }
     }
     loadProfile();
@@ -219,7 +216,7 @@ function ProfilePage() {
               )}
             </div>
           ) : (
-            <ProductsSection title="" products={latestObjects} />
+            <ProductsSection title="" products={latestObjects} profile={true} />
           )}
         </section>
 
