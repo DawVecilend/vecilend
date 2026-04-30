@@ -100,11 +100,11 @@ class ObjecteController extends Controller
 
         switch ($sort) {
             case 'price_asc':
-                $query->orderBy('preu_diari', 'asc');
+                $query->orderByRaw('preu_diari ASC NULLS FIRST');
                 break;
 
             case 'price_desc':
-                $query->orderBy('preu_diari', 'desc');
+                $query->orderByRaw('preu_diari DESC NULLS LAST');
                 break;
 
             case 'oldest':
