@@ -147,7 +147,6 @@ function DateRangeCalendar({
         <DateCalendar
           value={rangeStart}
           onChange={handleDateClick}
-          minDate={dayjs()}
           slots={{ day: CustomDay }}
           slotProps={{
             day: { datesOcupades, rangeStart, rangeEnd },
@@ -165,6 +164,9 @@ function DateRangeCalendar({
               fontFamily: "Inter",
             },
             "& .MuiPickersDay-root": { color: "#F2F4F8" },
+            "& .MuiPickersDay-root.Mui-disabled": {
+              color: "#4B5563 !important",
+            },
           }}
         />
 
