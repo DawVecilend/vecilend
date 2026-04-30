@@ -4,7 +4,7 @@ export const getProfile = async (username) => {
   const response = await api.get(`/profile/${username}`);
   return {
     user:           response.data.data,
-    latest_objects: response.data.latest_objects?.data || [],
+    latest_objects: response.data.latest_objects || [],
   };
 };
 

@@ -7,6 +7,7 @@ use App\Http\Resources\ObjecteResource;
 use App\Http\Resources\ObjecteDetailResource;
 use App\Models\Objecte;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Api\V1\StoreObjecteRequest;
 use App\Models\ImatgeObjecte;
@@ -367,7 +368,7 @@ class ObjecteController extends Controller
      *
      * Obté tots els objectes d'un usuari específic.
      */
-    public function getUserObjects(string $username)
+    public function getUserObjects(Request $request, string $username)
     {
         $user = User::where('username', $username)->first();
 
@@ -377,19 +378,49 @@ class ObjecteController extends Controller
             ], 404);
         }
 
-        $objectes = Objecte::query()
+        $authUser = Auth::guard('sanctum')->user() ?? $request->user();
+        $isOwn = $authUser && $authUser->is($user);
+
+        $query = Objecte::query()
             ->ambCoordenades()
+            ->where('user_id', $user->id)
             ->with([
-                'user:id,nom,avatar_url',
+                'user:id,nom,username,avatar_url',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',
-            ])
-            ->where('user_id', $user->id)
-            ->orderByDesc('created_at')
-            ->get();
+            ]);
+
+        if (! $isOwn) {
+            $query->disponible();
+        }
+
+        $objectes = $query->orderByDesc('created_at')->get();
 
         return ObjecteResource::collection($objectes);
+
+        // //Antiguo
+        // $user = User::where('username', $username)->first();
+
+        // if (!$user) {
+        //     return response()->json([
+        //         'message' => 'Usuari no trobat.',
+        //     ], 404);
+        // }
+
+        // $objectes = Objecte::query()
+        //     ->ambCoordenades()
+        //     ->with([
+        //         'user:id,nom,avatar_url',
+        //         'categoria:id,nom,icona',
+        //         'subcategoria:id,nom,slug',
+        //         'imatges',
+        //     ])
+        //     ->where('user_id', $user->id)
+        //     ->orderByDesc('created_at')
+        //     ->get();
+
+        // return ObjecteResource::collection($objectes);
     }
 
     /**
