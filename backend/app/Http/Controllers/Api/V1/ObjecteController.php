@@ -30,15 +30,20 @@ class ObjecteController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'search'      => 'nullable|string|max:100',
-            'category'    => 'nullable|integer|exists:categories,id',
-            'subcategory' => 'nullable|integer|exists:subcategories,id',
-            'sort'        => 'nullable|string|in:recent,oldest,price_asc,price_desc,rating',
-            'page'        => 'nullable|integer|min:1',
-            'per_page'    => 'nullable|integer|min:1|max:50',
-            'lat'         => 'nullable|numeric|between:-90,90',
-            'lng'         => 'nullable|numeric|between:-180,180',
-            'radius'      => 'nullable|integer|min:500|max:50000',
+            'search'           => 'nullable|string|max:100',
+            'category'         => 'nullable|integer|exists:categories,id',
+            'subcategory'      => 'nullable|integer|exists:subcategories,id',
+            'sort'             => 'nullable|string|in:recent,oldest,price_asc,price_desc,rating',
+            'page'             => 'nullable|integer|min:1',
+            'per_page'         => 'nullable|integer|min:1|max:50',
+            'lat'              => 'nullable|numeric|between:-90,90',
+            'lng'              => 'nullable|numeric|between:-180,180',
+            'radius'           => 'nullable|integer|min:500|max:50000',
+            'data_inici'       => 'nullable|date',
+            'data_fi'          => 'nullable|date|after_or_equal:data_inici',
+            'min_price'        => 'nullable|numeric|min:0',
+            'max_price'        => 'nullable|numeric|min:0|gte:min_price',
+            'min_user_rating'  => 'nullable|numeric|min:0|max:5',
         ]);
 
         $query = Objecte::query()
@@ -71,6 +76,24 @@ class ObjecteController extends Controller
                 (float) $request->input('lng'),
                 $radius
             );
+        }
+
+        if ($request->filled('data_inici') && $request->filled('data_fi')) {
+            $query->disponiblePerDates(
+                $request->input('data_inici'),
+                $request->input('data_fi')
+            );
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('preu_diari', '>=', (float) $request->input('min_price'));
+        }
+        if ($request->filled('max_price')) {
+            $query->where('preu_diari', '<=', (float) $request->input('max_price'));
+        }
+
+        if ($request->filled('min_user_rating')) {
+            $query->ambValoracioPropietariMinima((float) $request->input('min_user_rating'));
         }
 
         $sort = $request->input('sort', 'recent');
@@ -155,12 +178,17 @@ class ObjecteController extends Controller
     public function nearby(Request $request)
     {
         $validated = $request->validate([
-            'lat'         => ['required', 'numeric', 'between:-90,90'],
-            'lng'         => ['required', 'numeric', 'between:-180,180'],
-            'radius'      => ['nullable', 'integer', 'min:100', 'max:50000'],
-            'category'    => ['nullable', 'integer', 'exists:categories,id'],
-            'subcategory' => ['nullable', 'integer', 'exists:subcategories,id'],
-            'per_page'    => ['nullable', 'integer', 'min:1', 'max:50'],
+            'lat'              => ['required', 'numeric', 'between:-90,90'],
+            'lng'              => ['required', 'numeric', 'between:-180,180'],
+            'radius'           => ['nullable', 'integer', 'min:100', 'max:50000'],
+            'category'         => ['nullable', 'integer', 'exists:categories,id'],
+            'subcategory'      => ['nullable', 'integer', 'exists:subcategories,id'],
+            'per_page'         => ['nullable', 'integer', 'min:1', 'max:50'],
+            'data_inici'       => ['nullable', 'date'],
+            'data_fi'          => ['nullable', 'date', 'after_or_equal:data_inici'],
+            'min_price'        => ['nullable', 'numeric', 'min:0'],
+            'max_price'        => ['nullable', 'numeric', 'min:0', 'gte:min_price'],
+            'min_user_rating'  => ['nullable', 'numeric', 'min:0', 'max:5'],
         ]);
 
         $lat    = (float) $validated['lat'];
@@ -184,6 +212,21 @@ class ObjecteController extends Controller
 
         if (!empty($validated['subcategory'])) {
             $query->where('subcategoria_id', (int) $validated['subcategory']);
+        }
+
+        if (!empty($validated['data_inici']) && !empty($validated['data_fi'])) {
+            $query->disponiblePerDates($validated['data_inici'], $validated['data_fi']);
+        }
+
+        if (isset($validated['min_price'])) {
+            $query->where('preu_diari', '>=', (float) $validated['min_price']);
+        }
+        if (isset($validated['max_price'])) {
+            $query->where('preu_diari', '<=', (float) $validated['max_price']);
+        }
+
+        if (isset($validated['min_user_rating'])) {
+            $query->ambValoracioPropietariMinima((float) $validated['min_user_rating']);
         }
 
         $perPage  = (int) ($validated['per_page'] ?? 20);

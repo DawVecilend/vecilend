@@ -23,18 +23,22 @@ class ObjecteFactory extends Factory
         $subcategoria = $categoria->subcategories()->inRandomOrder()->first()
             ?? Subcategoria::factory()->create(['categoria_id' => $categoria->id]);
 
+        $tipus = fake()->randomElement(['prestec', 'lloguer']);
+
         return [
-            'user_id'      => User::factory(),
+            'user_id'         => User::factory(),
             'categoria_id'    => $categoria->id,
             'subcategoria_id' => $subcategoria->id,
-            'nom'          => fake()->words(3, true),
-            'descripcio'   => fake()->paragraph(),
-            'tipus'        => fake()->randomElement(['prestec', 'lloguer']),
-            'preu_diari'   => fake()->randomFloat(2, 1, 100),
-            'estat'        => fake()->randomElement(['disponible', 'no_disponible']),
-            'ubicacio'     => DB::raw("ST_SetSRID(ST_MakePoint({$lng}, {$lat}), 4326)::geography"),
-            'created_at'   => fake()->dateTimeBetween('-90 days', 'now'),
-            'updated_at'   => fn(array $attrs) => fake()->dateTimeBetween($attrs['created_at'], 'now'),
+            'nom'             => fake()->words(3, true),
+            'descripcio'      => fake()->paragraph(),
+            'tipus'           => $tipus,
+            'preu_diari'      => $tipus === 'lloguer'
+                ? fake()->randomFloat(2, 1, 100)
+                : null,
+            'estat'           => fake()->randomElement(['disponible', 'no_disponible']),
+            'ubicacio'        => DB::raw("ST_SetSRID(ST_MakePoint({$lng}, {$lat}), 4326)::geography"),
+            'created_at'      => fake()->dateTimeBetween('-90 days', 'now'),
+            'updated_at'      => fn(array $attrs) => fake()->dateTimeBetween($attrs['created_at'], 'now'),
         ];
     }
 

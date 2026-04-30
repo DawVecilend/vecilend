@@ -156,4 +156,42 @@ class Objecte extends Model
     {
         return $query->selectRaw('*, ST_Y(ubicacio::geometry) as lat, ST_X(ubicacio::geometry) as lng');
     }
+
+    /**
+     * Filtra objectes que no tenen cap sol·licitud "acceptat" amb dates que
+     * solapin amb [dataInici, dataFi].
+     *
+     * Solapament: a1 <= b2 && a2 >= b1.
+     */
+    public function scopeDisponiblePerDates(
+        Builder $query,
+        string $dataInici,
+        string $dataFi
+    ): Builder {
+        return $query->whereDoesntHave('solicituds', function (Builder $q) use ($dataInici, $dataFi) {
+            $q->where('estat', 'acceptat')
+                ->where('data_inici', '<=', $dataFi)
+                ->where('data_fi', '>=', $dataInici);
+        });
+    }
+
+    /**
+     * Filtra objectes el propietari dels quals té una valoració mitjana
+     * >= $minRating. Objectes sense valoracions queden exclosos (no es pot
+     * verificar el rating mínim).
+     */
+    public function scopeAmbValoracioPropietariMinima(
+        Builder $query,
+        float $minRating
+    ): Builder {
+        return $query->whereIn('user_id', function ($sub) use ($minRating) {
+            $sub->select('objectes.user_id')
+                ->from('objectes')
+                ->join('solicituds', 'solicituds.objecte_id', '=', 'objectes.id')
+                ->join('transaccions', 'transaccions.solicitud_id', '=', 'solicituds.id')
+                ->join('valoracions', 'valoracions.transaccio_id', '=', 'transaccions.id')
+                ->groupBy('objectes.user_id')
+                ->havingRaw('AVG(valoracions.puntuacio) >= ?', [$minRating]);
+        });
+    }
 }

@@ -36,27 +36,30 @@ function Footer() {
 
           <div className="flex flex-wrap gap-x-6 gap-y-2 md:flex-col md:gap-x-0 md:gap-y-0">
             <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
+              href="https://www.instagram.com/vecilend.official"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
             >
               Instagram
             </a>
 
             <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
+              href="https://www.x.com/vecilend"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary"
             >
-              Facebook
+              X
             </a>
 
             <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary"
+              href="https://www.tiktok.com/@vecilend"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
             >
-              Twitter
+              TikTok
             </a>
           </div>
         </div>

@@ -36,7 +36,7 @@ docker compose build
 docker compose up -d
 ```
 
-El backend s'encarrega automàticament d'instal·lar dependències, generar l'APP_KEY, executar les migracions i poblar la base de dades amb les dades inicials (seeders). El primer arranc pot trigar ~30 segons. Es pot seguir el progrés amb:
+El backend s'encarrega automàticament d'instal·lar dependències, generar l'APP_KEY, executar les migracions i poblar la base de dades amb les dades inicials (seeders). El primer arranc pot trigar uns minuts. Es pot seguir el progrés amb:
 
 ```bash
 docker compose logs -f backend
