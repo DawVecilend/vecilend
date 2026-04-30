@@ -24,7 +24,10 @@ class UserController extends Controller
 
     public function getByUsername($username)
     {
-        $user = User::where('username', $username)->first();
+        $user = User::with(['objectes' => function ($query) {
+            $query->orderByDesc('created_at')->limit(3);
+        }])->where('username', $username)->first();
+
         if (!$user) {
             return response()->json([
                 'message' => 'Usuari no trobat.',

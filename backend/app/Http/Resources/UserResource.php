@@ -3,6 +3,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\ObjecteResource;
 
 class UserResource extends JsonResource {
     public function toArray(Request $request): array {
@@ -22,6 +23,7 @@ class UserResource extends JsonResource {
             'actiu' => $this->actiu,
             'email_verified_at' => $this->email_verified_at?->toISOString(),
             'created_at' => $this->created_at?->toISOString(),
+            'first_objects' => ObjecteResource::collection($this->whenLoaded('objectes')),
         ];
     }
 }

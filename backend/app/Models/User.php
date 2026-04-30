@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Objecte;
 
 class User extends Authenticatable
 {
@@ -102,5 +103,13 @@ class User extends Authenticatable
             'id',          // PK a users
             'id'           // PK a objectes
         );
+    }
+
+    /**
+     * Objectes publicats per aquest usuari.
+     */
+    public function objectes(): HasMany
+    {
+        return $this->hasMany(Objecte::class, 'user_id');
     }
 }
