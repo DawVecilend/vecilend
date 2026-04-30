@@ -22,20 +22,22 @@ class UserController extends Controller
         $this->cloudinaryService = $cloudinaryService;
     }
 
-    public function getByUsername(Request $request, $username) {
+    public function getByUsername(Request $request, $username)
+    {
         $user = User::where('username', $username)->first();
-
         if (!$user) {
             return response()->json([
                 'message' => 'Usuari no trobat.',
             ], 404);
         }
 
-        // Carreguem els últims 5 objectes amb relacions necessàries per al ProductCard
-        $latestObjects = \App\Models\Objecte::query()
+        $authUser = $request->user();
+        $isOwn = $authUser && $authUser->id === $user->id;
+
+        // Query base dels objectes del usuari
+        $latestObjectsQuery = \App\Models\Objecte::query()
             ->ambCoordenades()
             ->where('user_id', $user->id)
-            ->disponible()
             ->with([
                 'user:id,nom,username,avatar_url',
                 'categoria:id,nom,icona',
@@ -43,12 +45,16 @@ class UserController extends Controller
                 'imatges',
             ])
             ->orderByDesc('created_at')
-            ->limit(5)
-            ->get();
+            ->limit(5);
 
-        $authUser = $request->user();
-        $isOwn = $authUser && $authUser->id === $user->id;
+        // Si NO és el propietari, només retorna disponibles
+        if (!$isOwn) {
+            $latestObjectsQuery->where('estat', 'disponible');
+        }
 
+        $latestObjects = $latestObjectsQuery->get();
+
+        // Triem el resource segons si és el propietari
         $resourceClass = $isOwn
             ? UserResource::class
             : \App\Http\Resources\PublicUserResource::class;
