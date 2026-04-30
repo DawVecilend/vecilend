@@ -2,7 +2,10 @@ import api from "./api";
 
 export const getProfile = async (username) => {
   const response = await api.get(`/profile/${username}`);
-  return response.data.data;
+  return {
+    user:           response.data.data,
+    latest_objects: response.data.latest_objects?.data || [],
+  };
 };
 
 export const updateProfile = async (username, data) => {
