@@ -104,12 +104,4 @@ class User extends Authenticatable
             'id'           // PK a objectes
         );
     }
-
-    /**
-     * Objectes publicats per aquest usuari.
-     */
-    public function objectes(): HasMany
-    {
-        return $this->hasMany(Objecte::class, 'user_id');
-    }
 }

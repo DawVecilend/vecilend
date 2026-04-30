@@ -22,11 +22,8 @@ class UserController extends Controller
         $this->cloudinaryService = $cloudinaryService;
     }
 
-    public function getByUsername(Request $request, $username)
-    {
-        $user = User::with(['objectes' => function ($query) {
-            $query->orderByDesc('created_at')->limit(3);
-        }])->where('username', $username)->first();
+    public function getByUsername(Request $request, $username) {
+        $user = User::where('username', $username)->first();
 
         if (!$user) {
             return response()->json([
