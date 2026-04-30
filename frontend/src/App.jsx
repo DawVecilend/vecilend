@@ -19,6 +19,8 @@ import SettingsPage from "./pages/SettingsPage";
 import SecuritySettingsPage from "./pages/SecuritySettingsPage";
 import UserObjectsPage from "./pages/UserObjectsPage";
 import ScrollToTop from "./components/ScrollToTop";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
             path="/profile/:username/objects"
             element={<UserObjectsPage />}
           />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
           {/* Rutas Protegidas */}
           <Route element={<ProtectedRoute />}>
