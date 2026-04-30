@@ -83,10 +83,18 @@ function ProductCard({
           </p>
           <div className="mt-auto flex items-center justify-between pt-4 border-t border-[#3c4947]">
             <div>
-              <span className="text-xl font-black text-[#dde4e1]">
-                {priceDay}€
-              </span>
-              <span className="text-[#bbcac6] text-sm"> / día</span>
+              {priceDay > 0 ? (
+                <>
+                  <span className="text-xl font-black text-[#dde4e1]">
+                    {priceDay}€
+                  </span>
+                  <span className="text-[#bbcac6] text-sm"> / día</span>
+                </>
+              ) : (
+                <span className="text-xl font-black text-[#dde4e1]">
+                  Gratuito
+                </span>
+              )}
             </div>
             <span className="bg-[#14b8a6] text-[#00423b] px-5 py-2.5 rounded-xl font-bold text-sm">
               Ver detalle
