@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
   // ── Get current user ──
   const getUser = useCallback(async () => {
     try {
-      const res = await api.get("/me");
+      const res = await api.get("/me", { skipAuthRedirect: true });
       setUser(res.data.data);
     } catch {
       setUser(null);

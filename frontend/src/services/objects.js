@@ -2,7 +2,7 @@ import api from './api'
 
 export async function getObjects(params = {}) {
   const response = await api.get('/objects', { params })
-  // Retornem { data, meta } perquè ResultsPage pugui paginar.
+  // Retornem { data, meta } perquè ObjectsPage pugui paginar.
   // Per compatibilitat: si el caller només vol l'array, fa response.data.
   return {
     data: response.data.data,

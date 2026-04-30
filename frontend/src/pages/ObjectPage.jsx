@@ -12,6 +12,7 @@ import BtnBack from "../components/elementos/BtnBack";
 import UserCard from "../components/elementos/UserCard";
 import DateRangeCalendar from "../components/calendar/DateRangeCalendar";
 import ObjectMiniMap from "../components/map/ObjectMiniMap";
+import { cldTransform } from "../utils/cloudinary";
 
 function ObjectPage() {
   const { id } = useParams();
@@ -154,7 +155,10 @@ function ObjectPage() {
         <div className="flex flex-col gap-6">
           <div>
             <img
-              src={mainImage || "/assets/product1-image.jpg"}
+              src={
+                cldTransform(mainImage, "detail") ||
+                "/assets/product1-image.jpg"
+              }
               alt={product.nom}
               className="w-full h-[280px] md:h-[428px] object-cover rounded-2xl"
             />
@@ -163,7 +167,7 @@ function ObjectPage() {
                 {images.map((img, idx) => (
                   <img
                     key={idx}
-                    src={img}
+                    src={cldTransform(img, "thumb")}
                     alt={`thumb-${idx}`}
                     onClick={() => setMainImage(img)}
                     className={`w-[60px] h-[60px] cursor-pointer rounded-lg object-cover ${

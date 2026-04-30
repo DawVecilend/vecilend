@@ -11,12 +11,12 @@ import PriceFilter from "../../filters/PriceFilter";
 
 function ChangePriceModal({ open, onClose, initial, onApply }) {
   const isMobile = useMediaQuery("(max-width:768px)");
-  const [value, setValue] = useState({ minPrice: 1, maxPrice: 100 });
+  const [value, setValue] = useState({ minPrice: 0, maxPrice: 100 });
 
   useEffect(() => {
     if (!open) return;
     setValue({
-      minPrice: initial?.min_price ? Number(initial.min_price) : 1,
+      minPrice: initial?.min_price ? Number(initial.min_price) : 0,
       maxPrice: initial?.max_price ? Number(initial.max_price) : 100,
     });
   }, [open, initial]);
@@ -73,7 +73,7 @@ function ChangePriceModal({ open, onClose, initial, onApply }) {
           type="button"
           onClick={() => {
             onApply({
-              min_price: value.minPrice > 1 ? String(value.minPrice) : null,
+              min_price: value.minPrice > 0 ? String(value.minPrice) : null,
               max_price: value.maxPrice < 100 ? String(value.maxPrice) : null,
             });
             onClose();
