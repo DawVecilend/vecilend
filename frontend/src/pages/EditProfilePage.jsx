@@ -35,15 +35,15 @@ function EditProfilePage() {
     async function loadProfile() {
       setIsLoading(true);
       try {
-        const data = await getProfile(username);
-        setProfile(data);
+        const { user } = await getProfile(username);
+        setProfile(user);
         setFormData({
-          nom: data.nom || "",
-          cognoms: data.cognoms || "",
-          telefon: data.telefon || "",
-          direccio: data.direccio || "",
-          biography: data.biography || data.descripcio || "",
-          radi_proximitat: data.radi_proximitat || 10,
+          nom: user.nom || "",
+          cognoms: user.cognoms || "",
+          telefon: user.telefon || "",
+          direccio: user.direccio || "",
+          biography: user.biography || user.descripcio || "",
+          radi_proximitat: user.radi_proximitat || 10,
           avatar: null,
         });
       } catch (error) {

@@ -30,7 +30,7 @@ class ObjecteResource extends JsonResource
                 return $primera?->url_cloudinary;
             }),
 
-            'user' => new UserResource($this->whenLoaded('user')),
+            'user' => new \App\Http\Resources\PublicUserResource($this->whenLoaded('user')),
             'categoria' => $this->whenLoaded('categoria', function () {
                 return [
                     'id' => $this->categoria->id,
