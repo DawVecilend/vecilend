@@ -17,8 +17,8 @@ class LoginController extends Controller
         $login = $request->input('login');
         $password = $request->input('password');
 
-        $authenticated = Auth::attempt(['email' => $login, 'password' => $password, 'actiu' => true]) ||
-            Auth::attempt(['username' => $login, 'password' => $password, 'actiu' => true]);
+        $authenticated = Auth::guard('web')->attempt(['email' => $login, 'password' => $password, 'actiu' => true]) ||
+            Auth::guard('web')->attempt(['username' => $login, 'password' => $password, 'actiu' => true]);
 
         if (!$authenticated) {
             // Comprovar si existeix però està inactiu
@@ -39,7 +39,7 @@ class LoginController extends Controller
         }
 
         /** @var \App\Models\User $user */
-        $user = Auth::user();
+        $user = Auth::guard('web')->user();
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
