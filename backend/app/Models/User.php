@@ -68,6 +68,20 @@ class User extends Authenticatable
     }
 
     /**
+     * Sobreescrivim la notificació de reset perquè utilitzi el nostre
+     * PasswordResetMail amb la plantilla blade personalitzada.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $resetUrl = config('app.frontend_url')
+            . '/reset-password?token=' . $token
+            . '&email=' . urlencode($this->email);
+
+        \Illuminate\Support\Facades\Mail::to($this->email)
+            ->send(new \App\Mail\PasswordResetMail($resetUrl, $this->nom));
+    }
+
+    /**
      * Sol·licituds que aquest usuari ha fet (com a sol·licitant).
      */
     public function solicituds(): HasMany
