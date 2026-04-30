@@ -9,12 +9,12 @@ import { useState, useEffect } from "react";
  */
 function PriceFilter({ value = {}, onChange }) {
   const [priceRange, setPriceRange] = useState([
-    value.minPrice ?? 1,
+    value.minPrice ?? 0,
     value.maxPrice ?? 100,
   ]);
 
   useEffect(() => {
-    setPriceRange([value.minPrice ?? 1, value.maxPrice ?? 100]);
+    setPriceRange([value.minPrice ?? 0, value.maxPrice ?? 100]);
   }, [value.minPrice, value.maxPrice]);
 
   const reportChange = (range) => {
@@ -36,7 +36,7 @@ function PriceFilter({ value = {}, onChange }) {
         value={priceRange}
         onChange={(_, v) => setPriceRange(v)}
         onChangeCommitted={(_, v) => reportChange(v)}
-        min={1}
+        min={0}
         max={100}
         step={1}
         valueLabelDisplay="auto"

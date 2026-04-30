@@ -1,55 +1,55 @@
-import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import BtnBack from '../components/elementos/BtnBack'
-import { getCategories } from '../services/categories'
-import { createObject } from '../services/objects'
-import { mapCategories } from '../mappers/categoryMapper'
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import BtnBack from "../components/elementos/BtnBack";
+import { getCategories } from "../services/categories";
+import { createObject } from "../services/objects";
+import { mapCategories } from "../mappers/categoryMapper";
 
 function CreateObjectPage() {
-  const navigate = useNavigate()
-  const categoryDropdownRef = useRef(null)
-  const fileInputRef = useRef(null)
+  const navigate = useNavigate();
+  const categoryDropdownRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const [form, setForm] = useState({
-    name: '',
-    pricePerDay: '',
-    description: '',
-    category: '',
-  })
+    name: "",
+    pricePerDay: "",
+    description: "",
+    category: "",
+  });
 
-  const [images, setImages] = useState([])
-  const [categories, setCategories] = useState([])
-  const [loadingCategories, setLoadingCategories] = useState(true)
-  const [loadingSubmit, setLoadingSubmit] = useState(false)
-  const [openCategories, setOpenCategories] = useState(false)
-  const [successMessage, setSuccessMessage] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [images, setImages] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [openCategories, setOpenCategories] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
-    name: '',
-    pricePerDay: '',
-    description: '',
-    category: '',
-    images: '',
-  })
+    name: "",
+    pricePerDay: "",
+    description: "",
+    category: "",
+    images: "",
+  });
 
   useEffect(() => {
     async function loadCategories() {
-      setLoadingCategories(true)
+      setLoadingCategories(true);
 
       try {
-        const rawCategories = await getCategories()
-        const mappedCategories = mapCategories(rawCategories)
-        setCategories(mappedCategories)
+        const rawCategories = await getCategories();
+        const mappedCategories = mapCategories(rawCategories);
+        setCategories(mappedCategories);
       } catch (error) {
-        console.error('Error cargando categorías:', error)
-        setCategories([])
+        console.error("Error cargando categorías:", error);
+        setCategories([]);
       } finally {
-        setLoadingCategories(false)
+        setLoadingCategories(false);
       }
     }
 
-    loadCategories()
-  }, [])
+    loadCategories();
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -57,85 +57,89 @@ function CreateObjectPage() {
         categoryDropdownRef.current &&
         !categoryDropdownRef.current.contains(event.target)
       ) {
-        setOpenCategories(false)
+        setOpenCategories(false);
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const selectedCategory =
-    categories.find((category) => String(category.id) === String(form.category)) || null
+    categories.find(
+      (category) => String(category.id) === String(form.category),
+    ) || null;
 
   const validateField = (name, value, currentImages = images) => {
     switch (name) {
-      case 'name':
-        if (!value.trim()) return 'El nombre es obligatorio'
-        if (value.trim().length < 3) return 'El nombre debe tener al menos 3 caracteres'
-        return ''
+      case "name":
+        if (!value.trim()) return "El nombre es obligatorio";
+        if (value.trim().length < 3)
+          return "El nombre debe tener al menos 3 caracteres";
+        return "";
 
-      case 'pricePerDay':
-        if (value === '') return 'El precio por día es obligatorio'
-        if (Number(value) <= 0) return 'El precio debe ser mayor que 0'
-        return ''
+      case "pricePerDay":
+        if (value === "") return "El precio por día es obligatorio";
+        if (Number(value) <= 0) return "El precio debe ser mayor que 0";
+        return "";
 
-      case 'description':
-        if (!value.trim()) return 'La descripción es obligatoria'
-        if (value.trim().length < 10) return 'La descripción debe tener al menos 10 caracteres'
-        return ''
+      case "description":
+        if (!value.trim()) return "La descripción es obligatoria";
+        if (value.trim().length < 10)
+          return "La descripción debe tener al menos 10 caracteres";
+        return "";
 
-      case 'category':
-        if (!value) return 'Debes seleccionar una categoría'
-        return ''
+      case "category":
+        if (!value) return "Debes seleccionar una categoría";
+        return "";
 
-      case 'images':
-        if (!currentImages.length) return 'Debes subir al menos una imagen'
-        return ''
+      case "images":
+        if (!currentImages.length) return "Debes subir al menos una imagen";
+        return "";
 
       default:
-        return ''
+        return "";
     }
-  }
+  };
 
   const validateForm = () => {
     const newErrors = {
-      name: validateField('name', form.name),
-      pricePerDay: validateField('pricePerDay', form.pricePerDay),
-      description: validateField('description', form.description),
-      category: validateField('category', form.category),
-      images: validateField('images', '', images),
-    }
+      name: validateField("name", form.name),
+      pricePerDay: validateField("pricePerDay", form.pricePerDay),
+      description: validateField("description", form.description),
+      category: validateField("category", form.category),
+      images: validateField("images", "", images),
+    };
 
-    setFieldErrors(newErrors)
+    setFieldErrors(newErrors);
 
-    return Object.values(newErrors).every((error) => !error)
-  }
+    return Object.values(newErrors).every((error) => !error);
+  };
 
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
 
     setForm((prev) => ({
       ...prev,
       [name]: value,
-    }))
+    }));
 
     setFieldErrors((prev) => ({
       ...prev,
       [name]: validateField(name, value),
-    }))
+    }));
 
-    setErrorMessage('')
-  }
+    setErrorMessage("");
+  };
 
   const handleImagesChange = (event) => {
-    const files = Array.from(event.target.files || [])
+    const files = Array.from(event.target.files || []);
 
     setImages((prevImages) => {
-      const mergedImages = [...prevImages, ...files]
+      const mergedImages = [...prevImages, ...files];
 
       const uniqueImages = mergedImages.filter((image, index, array) => {
         return (
@@ -144,22 +148,22 @@ function CreateObjectPage() {
             (item) =>
               item.name === image.name &&
               item.size === image.size &&
-              item.lastModified === image.lastModified
+              item.lastModified === image.lastModified,
           )
-        )
-      })
+        );
+      });
 
       setFieldErrors((prev) => ({
         ...prev,
-        images: validateField('images', '', uniqueImages),
-      }))
+        images: validateField("images", "", uniqueImages),
+      }));
 
-      return uniqueImages
-    })
+      return uniqueImages;
+    });
 
-    setErrorMessage('')
-    event.target.value = ''
-  }
+    setErrorMessage("");
+    event.target.value = "";
+  };
 
   const handleRemoveImage = (imageToRemove) => {
     setImages((prevImages) => {
@@ -169,91 +173,91 @@ function CreateObjectPage() {
             image.name === imageToRemove.name &&
             image.size === imageToRemove.size &&
             image.lastModified === imageToRemove.lastModified
-          )
-      )
+          ),
+      );
 
       setFieldErrors((prev) => ({
         ...prev,
-        images: validateField('images', '', updatedImages),
-      }))
+        images: validateField("images", "", updatedImages),
+      }));
 
-      return updatedImages
-    })
+      return updatedImages;
+    });
 
-    setErrorMessage('')
-  }
+    setErrorMessage("");
+  };
 
   const handleSelectCategory = (categoryId) => {
-    const categoryValue = String(categoryId)
+    const categoryValue = String(categoryId);
 
     setForm((prev) => ({
       ...prev,
       category: categoryValue,
-    }))
+    }));
 
     setFieldErrors((prev) => ({
       ...prev,
-      category: validateField('category', categoryValue),
-    }))
+      category: validateField("category", categoryValue),
+    }));
 
-    setErrorMessage('')
-    setOpenCategories(false)
-  }
+    setErrorMessage("");
+    setOpenCategories(false);
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    setSuccessMessage('')
-    setErrorMessage('')
+    setSuccessMessage("");
+    setErrorMessage("");
 
-    const isValid = validateForm()
+    const isValid = validateForm();
 
     if (!isValid) {
-      setErrorMessage('Revisa los campos marcados antes de publicar')
-      return
+      setErrorMessage("Revisa los campos marcados antes de publicar");
+      return;
     }
 
-    setLoadingSubmit(true)
+    setLoadingSubmit(true);
 
     try {
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append('nom', form.name)
-      formData.append('preu_diari', form.pricePerDay)
-      formData.append('descripcio', form.description)
-      formData.append('categoria_id', form.category)
-      formData.append('tipus', 'lloguer')
-      formData.append('lat', '41.3140')
-      formData.append('lng', '2.0143')
+      formData.append("nom", form.name);
+      formData.append("preu_diari", form.pricePerDay);
+      formData.append("descripcio", form.description);
+      formData.append("categoria_id", form.category);
+      formData.append("tipus", "lloguer");
+      formData.append("lat", "41.3140");
+      formData.append("lng", "2.0143");
 
       images.forEach((image) => {
-        formData.append('imatges[]', image)
-      })
+        formData.append("imatges[]", image);
+      });
 
-      await createObject(formData)
+      await createObject(formData);
 
-      setSuccessMessage('¡Producto publicado correctamente!')
-      setErrorMessage('')
+      setSuccessMessage("¡Producto publicado correctamente!");
+      setErrorMessage("");
 
       setTimeout(() => {
-        navigate('/objects')
-      }, 1200)
+        navigate("/objects");
+      }, 1200);
     } catch (error) {
-      console.error('Error creando producto:', error)
+      console.error("Error creando producto:", error);
 
       if (error.response?.status === 422 && error.response.data?.errors) {
-        const validationErrors = error.response.data.errors
-        const firstErrorKey = Object.keys(validationErrors)[0]
-        setErrorMessage(validationErrors[firstErrorKey][0])
+        const validationErrors = error.response.data.errors;
+        const firstErrorKey = Object.keys(validationErrors)[0];
+        setErrorMessage(validationErrors[firstErrorKey][0]);
       } else {
         setErrorMessage(
-          error.response?.data?.message || 'No se ha podido crear el producto'
-        )
+          error.response?.data?.message || "No se ha podido crear el producto",
+        );
       }
     } finally {
-      setLoadingSubmit(false)
+      setLoadingSubmit(false);
     }
-  }
+  };
 
   return (
     <>
@@ -334,12 +338,15 @@ function CreateObjectPage() {
 
                 {images.length > 0 && (
                   <p className="mt-4 text-sm text-[#B6BCC8]">
-                    {images.length} imagen{images.length > 1 ? 'es seleccionadas' : ' seleccionada'}
+                    {images.length} imagen
+                    {images.length > 1 ? "es seleccionadas" : " seleccionada"}
                   </p>
                 )}
 
                 {fieldErrors.images && (
-                  <p className="mt-3 text-sm text-[#ef4444]">{fieldErrors.images}</p>
+                  <p className="mt-3 text-sm text-[#ef4444]">
+                    {fieldErrors.images}
+                  </p>
                 )}
               </div>
             </div>
@@ -355,7 +362,7 @@ function CreateObjectPage() {
 
                 <div
                   className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
-                    fieldErrors.name ? 'border border-[#ef4444]' : ''
+                    fieldErrors.name ? "border border-[#ef4444]" : ""
                   }`}
                 >
                   <img
@@ -375,7 +382,9 @@ function CreateObjectPage() {
                 </div>
 
                 {fieldErrors.name && (
-                  <p className="mt-2 text-sm text-[#ef4444]">{fieldErrors.name}</p>
+                  <p className="mt-2 text-sm text-[#ef4444]">
+                    {fieldErrors.name}
+                  </p>
                 )}
               </div>
 
@@ -389,10 +398,12 @@ function CreateObjectPage() {
 
                 <div
                   className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
-                    fieldErrors.pricePerDay ? 'border border-[#ef4444]' : ''
+                    fieldErrors.pricePerDay ? "border border-[#ef4444]" : ""
                   }`}
                 >
-                  <span className="text-[28px] leading-none text-[#6E7480]">€</span>
+                  <span className="text-[28px] leading-none text-[#6E7480]">
+                    €
+                  </span>
                   <input
                     id="pricePerDay"
                     name="pricePerDay"
@@ -407,7 +418,9 @@ function CreateObjectPage() {
                 </div>
 
                 {fieldErrors.pricePerDay && (
-                  <p className="mt-2 text-sm text-[#ef4444]">{fieldErrors.pricePerDay}</p>
+                  <p className="mt-2 text-sm text-[#ef4444]">
+                    {fieldErrors.pricePerDay}
+                  </p>
                 )}
               </div>
 
@@ -427,19 +440,19 @@ function CreateObjectPage() {
                   onChange={handleChange}
                   placeholder="Describe los detalles y características del producto"
                   className={`w-full rounded-[16px] bg-[#101217] px-4 py-4 font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none ${
-                    fieldErrors.description ? 'border border-[#ef4444]' : ''
+                    fieldErrors.description ? "border border-[#ef4444]" : ""
                   }`}
                 />
 
                 {fieldErrors.description && (
-                  <p className="mt-2 text-sm text-[#ef4444]">{fieldErrors.description}</p>
+                  <p className="mt-2 text-sm text-[#ef4444]">
+                    {fieldErrors.description}
+                  </p>
                 )}
               </div>
 
               <div>
-                <label
-                  className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
-                >
+                <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                   Categoría
                 </label>
 
@@ -449,19 +462,28 @@ function CreateObjectPage() {
                     onClick={() => setOpenCategories(!openCategories)}
                     disabled={loadingCategories}
                     className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-[#101217] px-4 font-body text-[16px] text-white transition hover:bg-[#161a21] disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.category ? 'border border-[#ef4444]' : ''
+                      fieldErrors.category ? "border border-[#ef4444]" : ""
                     }`}
                   >
-                    <span className={selectedCategory ? 'text-white' : 'text-[#6E7480]'}>
-                      {loadingCategories
-                        ? 'Cargando categorías...'
-                        : selectedCategory
+                    {loadingCategories ? (
+                      <span className="inline-flex items-center gap-2 text-[#6E7480]">
+                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
+                        Cargando categorías…
+                      </span>
+                    ) : (
+                      <span
+                        className={
+                          selectedCategory ? "text-white" : "text-[#6E7480]"
+                        }
+                      >
+                        {selectedCategory
                           ? selectedCategory.name
-                          : 'Seleccione una categoría'}
-                    </span>
+                          : "Seleccione una categoría"}
+                      </span>
+                    )}
 
                     <svg
-                      className={`transition-transform duration-300 ${openCategories ? 'rotate-180' : ''}`}
+                      className={`transition-transform duration-300 ${openCategories ? "rotate-180" : ""}`}
                       xmlns="http://www.w3.org/2000/svg"
                       width="18"
                       height="18"
@@ -481,7 +503,8 @@ function CreateObjectPage() {
                   {openCategories && !loadingCategories && (
                     <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
                       {categories.map((category) => {
-                        const isActive = String(category.id) === String(form.category)
+                        const isActive =
+                          String(category.id) === String(form.category);
 
                         return (
                           <button
@@ -490,20 +513,22 @@ function CreateObjectPage() {
                             onClick={() => handleSelectCategory(category.id)}
                             className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                               isActive
-                                ? 'bg-[#0F766E]/20 text-[#14B8A6]'
-                                : 'text-[#F2F4F8] hover:bg-[#16181C]'
+                                ? "bg-[#0F766E]/20 text-[#14B8A6]"
+                                : "text-[#F2F4F8] hover:bg-[#16181C]"
                             }`}
                           >
                             {category.name}
                           </button>
-                        )
+                        );
                       })}
                     </div>
                   )}
                 </div>
 
                 {fieldErrors.category && (
-                  <p className="mt-2 text-sm text-[#ef4444]">{fieldErrors.category}</p>
+                  <p className="mt-2 text-sm text-[#ef4444]">
+                    {fieldErrors.category}
+                  </p>
                 )}
               </div>
             </div>
@@ -515,14 +540,16 @@ function CreateObjectPage() {
                   disabled={loadingSubmit}
                   className="rounded-[14px] bg-[#14B8A6] px-8 py-3 font-body text-[15px] font-semibold text-white transition-all hover:bg-[#0F766E] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {loadingSubmit ? 'Publicando...' : 'Publicar producto'}
+                  {loadingSubmit ? "Publicando..." : "Publicar producto"}
                 </button>
               </div>
 
               <div className="flex items-center">
                 {successMessage && (
                   <div className="flex w-fit items-center gap-2 rounded-lg border border-[#4fdbc8]/50 bg-[#4fdbc8]/10 px-4 py-2 text-[#4fdbc8] animate-pulse">
-                    <span className="material-symbols-outlined text-sm">check_circle</span>
+                    <span className="material-symbols-outlined text-sm">
+                      check_circle
+                    </span>
                     <p className="text-xs font-semibold uppercase tracking-wide">
                       {successMessage}
                     </p>
@@ -531,7 +558,9 @@ function CreateObjectPage() {
 
                 {errorMessage && (
                   <div className="flex w-fit items-center gap-2 rounded-lg border border-[#ef4444]/50 bg-[#ef4444]/10 px-4 py-2 text-[#ef4444] animate-pulse">
-                    <span className="material-symbols-outlined text-sm">error</span>
+                    <span className="material-symbols-outlined text-sm">
+                      error
+                    </span>
                     <p className="text-xs font-semibold uppercase tracking-wide">
                       {errorMessage}
                     </p>
@@ -543,7 +572,7 @@ function CreateObjectPage() {
         </div>
       </section>
     </>
-  )
+  );
 }
 
-export default CreateObjectPage
+export default CreateObjectPage;

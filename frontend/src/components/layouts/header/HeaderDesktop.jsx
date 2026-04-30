@@ -1,59 +1,62 @@
-import { Link, useLocation } from 'react-router-dom'
-import LogoDark from '/assets/logos/LogoDark.svg'
-import { useContext, useState, useRef, useEffect } from 'react'
-import { AuthContext } from '../../../contexts/AuthContext'
-import SearchBar from '../../elementos/SearchBar'
+import { Link, useLocation } from "react-router-dom";
+import LogoDark from "/assets/logos/LogoDark.svg";
+import { useContext, useState, useRef, useEffect } from "react";
+import { AuthContext } from "../../../contexts/AuthContext";
+import SearchBar from "../../elementos/SearchBar";
 
 function HeaderDesktop() {
-  const auth = useContext(AuthContext)
-  const location = useLocation()
+  const auth = useContext(AuthContext);
+  const location = useLocation();
 
-  const [open, setOpen] = useState(false)
-  const menuRef = useRef(null)
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpen(false)
+        setOpen(false);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  if (!auth) return null
+  if (!auth) return null;
 
-  const { user, logout, loading } = auth
-  if (loading) return null
+  const { user, logout, loading } = auth;
+  if (loading) return null;
 
   const getNavClass = (path) => {
     return location.pathname === path
-      ? 'text-[#4fdbc8] border-b-2 border-[#4fdbc8] font-bold pb-1 text-sm tracking-tight'
-      : 'text-[#aebdb9] font-medium hover:text-[#4fdbc8] transition-colors text-sm tracking-tight'
-  }
+      ? "text-[#4fdbc8] border-b-2 border-[#4fdbc8] font-bold pb-1 text-sm tracking-tight"
+      : "text-[#aebdb9] font-medium hover:text-[#4fdbc8] transition-colors text-sm tracking-tight";
+  };
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-[#333b39] bg-[#0f1715]/70 backdrop-blur-[20px]">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-
         {/* LEFT */}
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center">
-            <img src={LogoDark} alt="Logo modo oscuro" className="h-[45px] w-[136px]" />
+            <img
+              src={LogoDark}
+              alt="Logo modo oscuro"
+              className="h-[45px] w-[136px]"
+            />
           </Link>
 
           <nav className="hidden items-center gap-6 md:flex">
-            <Link to="/objects" className={getNavClass('/objects')}>
-              Productos
+            <Link to="/objects" className={getNavClass("/objects")}>
+              Objetos
             </Link>
-            <Link to="/how-it-works" className={getNavClass('/how-it-works')}>
+            <Link to="/how-it-works" className={getNavClass("/how-it-works")}>
               ¿Cómo funciona?
             </Link>
-            <Link to="/about" className={getNavClass('/about')}>
+            <Link to="/about" className={getNavClass("/about")}>
               Sobre Nosotros
             </Link>
           </nav>
@@ -110,7 +113,7 @@ function HeaderDesktop() {
                   <div className="absolute top-10 right-2 z-20 w-56">
                     <div className="overflow-hidden border border-white/5 bg-[#0f1715]/70 shadow-lg backdrop-blur-[20px]">
                       <div className="flex flex-col divide-y divide-[#14B8A6]/10">
-                        {user.rol === 'admin' ? (
+                        {user.rol === "admin" ? (
                           <Link
                             to="/dashboard"
                             className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
@@ -123,7 +126,9 @@ function HeaderDesktop() {
                             className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
                           >
                             <p className="py-2 text-base text-white">
-                              <span>{user.nom} {user.cognoms}</span>
+                              <span>
+                                {user.nom} {user.cognoms}
+                              </span>
                             </p>
                             Ver Perfil
                           </Link>
@@ -168,7 +173,7 @@ function HeaderDesktop() {
         </div>
       </div>
     </header>
-  )
+  );
 }
 
-export default HeaderDesktop
+export default HeaderDesktop;

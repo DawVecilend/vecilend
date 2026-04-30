@@ -17,7 +17,7 @@ import RatingFilter from "../filters/RatingFilter";
  * Modal de filtres avançats (ubicació, dates, preu, valoració).
  *
  * Aquest modal només estableix els filtres i NO redirigeix a
- * /results: simplement actualitza l'URL si ja hi som, o tanca i guarda l'estat
+ * /objects: simplement actualitza l'URL si ja hi som, o tanca i guarda l'estat
  * perquè la pròxima cerca des de la SearchBar inclogui els filtres.
  */
 function SearchModal({ open, onClose, initialFilters = {} }) {
@@ -45,7 +45,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
         : 10,
     );
     setPrice({
-      minPrice: initialFilters.min_price ? Number(initialFilters.min_price) : 1,
+      minPrice: initialFilters.min_price ? Number(initialFilters.min_price) : 0,
       maxPrice: initialFilters.max_price
         ? Number(initialFilters.max_price)
         : 100,
@@ -60,19 +60,19 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
 
   /**
    * Guarda els filtres a l'URL. Comportament:
-   *   - Si estem a /results: actualitza l'URL (els resultats es refresquen).
-   *   - Si NO estem a /results: només tanca el modal. Els filtres es
+   *   - Si estem a /objects: actualitza l'URL (els resultats es refresquen).
+   *   - Si NO estem a /objects: només tanca el modal. Els filtres es
    *     "recordaran" la pròxima vegada que l'usuari obri el modal des de
    *     la SearchBar (perquè els llegim de l'URL), però per provocar la
    *     navegació cal que premi Enter / clic a la lupa.
    *
-   * En realitat, com que els filtres viuen a l'URL, fora de /results
+   * En realitat, com que els filtres viuen a l'URL, fora de /objects
    * no tenim on guardar-los sense navegar. Resolem això guardant l'estat
    * a sessionStorage temporalment.
    */
   const handleApply = () => {
     const params = new URLSearchParams(
-      location.pathname === "/results" ? searchParams : new URLSearchParams(),
+      location.pathname === "/objects" ? searchParams : new URLSearchParams(),
     );
 
     // Aplica/elimina cada filtre
@@ -94,7 +94,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
       params.delete("data_fi");
     }
 
-    if (price.minPrice > 1) params.set("min_price", String(price.minPrice));
+    if (price.minPrice > 0) params.set("min_price", String(price.minPrice));
     else params.delete("min_price");
 
     if (price.maxPrice < 100) params.set("max_price", String(price.maxPrice));
@@ -104,11 +104,11 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
       params.set("min_user_rating", String(rating.minRating));
     else params.delete("min_user_rating");
 
-    if (location.pathname === "/results") {
-      // A /results: actualitzem l'URL i refresquem els resultats
-      navigate(`/results?${params.toString()}`, { replace: true });
+    if (location.pathname === "/objects") {
+      // A /objects: actualitzem l'URL i refresquem els resultats
+      navigate(`/objects?${params.toString()}`, { replace: true });
     } else {
-      // Fora de /results: guardem els filtres a sessionStorage perquè
+      // Fora de /objects: guardem els filtres a sessionStorage perquè
       // la SearchBar els reculli quan l'usuari executi la cerca amb Enter/lupa.
       const filtersToPersist = {};
       for (const [k, v] of params.entries()) {
@@ -127,7 +127,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
     setLocationCoords(null);
     setRadiusKm(10);
     setDateRange({ start: null, end: null });
-    setPrice({ minPrice: 1, maxPrice: 100 });
+    setPrice({ minPrice: 0, maxPrice: 100 });
     setRating({ minRating: 0 });
   };
 

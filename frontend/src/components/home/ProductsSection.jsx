@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import ProductCard from "../elementos/ProductCard";
 import ProfileProductCard from "../elementos/ProfileProductCard";
+import { cldTransform } from "../../utils/cloudinary";
 
 function ProductsSection({
   title,
@@ -29,7 +30,8 @@ function ProductsSection({
                   key={product.id}
                   id={product.id}
                   image={
-                    product.imatge_principal || "/assets/product1-image.jpg"
+                    cldTransform(product.imatge_principal, "card") ||
+                    "/assets/product1-image.jpg"
                   }
                   category={product.categoria?.nom || "Sin categoría"}
                   description={product.descripcio || "Sin descripción"}
@@ -48,7 +50,8 @@ function ProductsSection({
                   key={product.id}
                   id={product.id}
                   image={
-                    product.imatge_principal || "/assets/product1-image.jpg"
+                    cldTransform(product.imatge_principal, "card") ||
+                    "/assets/product1-image.jpg"
                   }
                   category={product.categoria?.nom || "Sin categoría"}
                   description={product.descripcio || "Sin descripción"}

@@ -23,8 +23,10 @@ api.interceptors.response.use(
       const wasAuthed = !!localStorage.getItem('auth_token');
       localStorage.removeItem('auth_token');
 
-      if (wasAuthed) {
-        window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+      const skipRedirect = error.config?.skipAuthRedirect === true
+
+      if (wasAuthed && !skipRedirect) {
+        window.dispatchEvent(new CustomEvent('auth:unauthorized'))
       }
     }
     return Promise.reject(error);

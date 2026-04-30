@@ -6,6 +6,7 @@ import BtnOrder from "../components/elementos/BtnOrder";
 import { getCategories } from "../services/categories";
 import { getObjects } from "../services/objects";
 import { mapCategories } from "../mappers/categoryMapper";
+import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
 
 function CategoryPage() {
   const { slug } = useParams();
@@ -68,9 +69,13 @@ function CategoryPage() {
           </div>
 
           {isLoading ? (
-            <p className="py-10 text-center text-vecilend-dark-text">
-              Cargando categoría...
-            </p>
+            <>
+              <section className="mb-8 mt-6">
+                <div className="h-10 w-64 bg-vecilend-dark-card rounded animate-pulse" />
+                <div className="mt-3 h-5 w-80 bg-vecilend-dark-card rounded animate-pulse" />
+              </section>
+              <ProductsGridSkeleton count={6} />
+            </>
           ) : !hasCategory ? (
             <section className="py-12 text-center">
               <h1 className="font-heading text-h2-desktop font-bold text-vecilend-dark-text">

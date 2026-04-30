@@ -12,14 +12,14 @@ function SearchBar() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
-  const isResultsPage = location.pathname === "/results";
+  const isObjectsPage = location.pathname === "/objects";
 
-  // Sincronitza l'input amb el param "search" si estem a /results
+  // Sincronitza l'input amb el param "search" si estem a /objects
   useEffect(() => {
-    if (isResultsPage) {
+    if (isObjectsPage) {
       setQuery(searchParams.get("search") || "");
     }
-  }, [isResultsPage, searchParams]);
+  }, [isObjectsPage, searchParams]);
 
   // Llegeix els filtres pendents del sessionStorage cada vegada que
   // canviem de pàgina o tanquem el modal (perquè el badge es refresqui).
@@ -32,9 +32,9 @@ function SearchBar() {
     }
   }, [filtersOpen, location.pathname, searchParams]);
 
-  // Filtres a passar al modal — els actius si som a /results, o els pendents
+  // Filtres a passar al modal — els actius si som a /objects, o els pendents
   const initialFilters = useMemo(() => {
-    if (isResultsPage) {
+    if (isObjectsPage) {
       return {
         lat: searchParams.get("lat"),
         lng: searchParams.get("lng"),
@@ -47,7 +47,7 @@ function SearchBar() {
       };
     }
     return pendingFilters;
-  }, [isResultsPage, searchParams, pendingFilters]);
+  }, [isObjectsPage, searchParams, pendingFilters]);
 
   // Compta filtres actius (només els visuals, sense el text)
   const activeFiltersCount = useMemo(() => {
@@ -60,7 +60,7 @@ function SearchBar() {
   }, [initialFilters]);
 
   /**
-   * Executa la cerca amb el text actual + filtres (URL si estem a /results,
+   * Executa la cerca amb el text actual + filtres (URL si estem a /objects,
    * o sessionStorage si ve d'una altra pàgina).
    */
   const executeSearch = () => {
@@ -70,8 +70,8 @@ function SearchBar() {
     const trimmed = query.trim();
     if (trimmed) params.set("search", trimmed);
 
-    // 2. Afegim els filtres (de l'URL si som a /results, altrament dels pendents)
-    const source = isResultsPage
+    // 2. Afegim els filtres (de l'URL si som a /objects, altrament dels pendents)
+    const source = isObjectsPage
       ? Object.fromEntries(searchParams.entries())
       : pendingFilters;
 
@@ -85,7 +85,7 @@ function SearchBar() {
     sessionStorage.removeItem(PENDING_FILTERS_KEY);
     setPendingFilters({});
 
-    navigate(`/results?${params.toString()}`);
+    navigate(`/objects?${params.toString()}`);
   };
 
   const handleKeyDown = (e) => {
@@ -113,7 +113,7 @@ function SearchBar() {
         <input
           className="w-48 bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-[#e1e3e0] placeholder:text-[#8b9390] px-3"
           type="text"
-          placeholder="Buscar Objeto..."
+          placeholder="Buscar objeto..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}

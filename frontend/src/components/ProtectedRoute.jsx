@@ -1,5 +1,5 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -7,7 +7,11 @@ function ProtectedRoute({ children }) {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-vecilend-dark-bg">
-        <p className="text-vecilend-dark-text-secondary">Carregant...</p>
+        <div
+          className="h-10 w-10 rounded-full border-4 border-vecilend-dark-border border-t-vecilend-dark-primary animate-spin"
+          role="status"
+          aria-label="Cargando"
+        />
       </div>
     );
   }
@@ -15,7 +19,7 @@ function ProtectedRoute({ children }) {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return children ? children : <Outlet />;
 }
 

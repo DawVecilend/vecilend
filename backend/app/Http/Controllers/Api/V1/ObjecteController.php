@@ -14,6 +14,7 @@ use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Api\V1\UpdateObjecteRequest;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 
 class ObjecteController extends Controller
 {
@@ -41,8 +42,13 @@ class ObjecteController extends Controller
             'radius'           => 'nullable|integer|min:500|max:50000',
             'data_inici'       => 'nullable|date',
             'data_fi'          => 'nullable|date|after_or_equal:data_inici',
-            'min_price'        => 'nullable|numeric|min:0',
-            'max_price'        => 'nullable|numeric|min:0|gte:min_price',
+            'min_price'        => ['nullable', 'numeric', 'min:0'],
+            'max_price'        => [
+                'nullable',
+                'numeric',
+                'min:0',
+                Rule::when($request->filled('min_price'), ['gte:min_price']),
+            ],
             'min_user_rating'  => 'nullable|numeric|min:0|max:5',
         ]);
 
@@ -89,7 +95,11 @@ class ObjecteController extends Controller
             $query->where('preu_diari', '>=', (float) $request->input('min_price'));
         }
         if ($request->filled('max_price')) {
-            $query->where('preu_diari', '<=', (float) $request->input('max_price'));
+            $maxPrice = (float) $request->input('max_price');
+            $query->where(function ($q) use ($maxPrice) {
+                $q->where('preu_diari', '<=', $maxPrice)
+                    ->orWhereNull('preu_diari');
+            });
         }
 
         if ($request->filled('min_user_rating')) {
@@ -187,7 +197,12 @@ class ObjecteController extends Controller
             'data_inici'       => ['nullable', 'date'],
             'data_fi'          => ['nullable', 'date', 'after_or_equal:data_inici'],
             'min_price'        => ['nullable', 'numeric', 'min:0'],
-            'max_price'        => ['nullable', 'numeric', 'min:0', 'gte:min_price'],
+            'max_price'        => [
+                'nullable',
+                'numeric',
+                'min:0',
+                Rule::when($request->filled('min_price'), ['gte:min_price']),
+            ],
             'min_user_rating'  => ['nullable', 'numeric', 'min:0', 'max:5'],
         ]);
 
@@ -221,8 +236,12 @@ class ObjecteController extends Controller
         if (isset($validated['min_price'])) {
             $query->where('preu_diari', '>=', (float) $validated['min_price']);
         }
-        if (isset($validated['max_price'])) {
-            $query->where('preu_diari', '<=', (float) $validated['max_price']);
+        if ($request->filled('max_price')) {
+            $maxPrice = (float) $request->input('max_price');
+            $query->where(function ($q) use ($maxPrice) {
+                $q->where('preu_diari', '<=', $maxPrice)
+                    ->orWhereNull('preu_diari');
+            });
         }
 
         if (isset($validated['min_user_rating'])) {
