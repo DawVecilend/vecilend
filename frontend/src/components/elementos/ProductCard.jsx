@@ -29,7 +29,7 @@ function ProductCard({
 
   return (
     <Link to={detailLink} className="w-63.75">
-      <div className="group bg-[#161d1b] rounded-2xl overflow-hidden border border-transparent hover:border-[#4fdbc8]/30 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(79,219,200,0.15)] flex flex-col">
+      <div className="group bg-[#161d1b] rounded-2xl overflow-hidden border border-transparent hover:border-[#4fdbc8]/30 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(79,219,200,0.15)] flex flex-col h-full ">
         <div className="relative aspect-4/3 overflow-hidden">
           <img
             alt={title}
@@ -48,7 +48,7 @@ function ProductCard({
             {availabilityLabel}
           </div>
         </div>
-        <div className="p-6 flex flex-col flex-1">
+        <div className="p-4 flex flex-col flex-1">
           <div
             className="relative px-4 -mt-5 mb-4 inline-flex items-center gap-2 cursor-pointer"
             onClick={(e) => {
@@ -65,7 +65,7 @@ function ProductCard({
             <p className="text-[#bbcac6] text-sm">{userName}</p>
           </div>
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-lg font-bold text-[#dde4e1] group-hover:text-[#4fdbc8] transition-colors line-clamp-2">
+            <h3 className="text-lg font-bold text-[#dde4e1] group-hover:text-[#4fdbc8] transition-colors line-clamp-2 h-14 ">
               {title}
             </h3>
             <div className="flex items-center text-[#f38764] text-sm font-bold">
@@ -81,17 +81,17 @@ function ProductCard({
           <p className="text-[#bbcac6] text-sm mb-4 line-clamp-2">
             {description}
           </p>
-          <div className="mt-auto flex items-center justify-between pt-4 border-t border-[#3c4947]">
+          <div className="mt-auto flex items-center justify-between gap-2 pt-4 border-t border-[#3c4947]">
             <div>
               {priceDay > 0 ? (
                 <>
-                  <span className="text-xl font-black text-[#dde4e1]">
+                  <span className="text-lg font-black text-[#dde4e1]">
                     {priceDay}€
                   </span>
                   <span className="text-[#bbcac6] text-sm"> / día</span>
                 </>
               ) : (
-                <span className="text-xl font-black text-[#dde4e1]">
+                <span className="text-lg font-black text-[#dde4e1]">
                   Gratuito
                 </span>
               )}
