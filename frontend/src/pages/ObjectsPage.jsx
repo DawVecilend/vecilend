@@ -1,30 +1,30 @@
-import { useEffect, useState } from 'react'
-import ProductsSection from '../components/home/ProductsSection'
-import { getObjects } from '../services/objects'
-import BtnOrder from '../components/elementos/BtnOrder'
-import BtnBack from '../components/elementos/BtnBack'
+import { useEffect, useState } from "react";
+import ProductsSection from "../components/home/ProductsSection";
+import { getObjects } from "../services/objects";
+import BtnOrder from "../components/elementos/BtnOrder";
+import BtnBack from "../components/elementos/BtnBack";
 
 function ObjectsPage() {
-  const [products, setProducts] = useState([])
-  const [loadingProducts, setLoadingProducts] = useState(true)
-  const [orderBy, setOrderBy] = useState('recent')
+  const [products, setProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [orderBy, setOrderBy] = useState("recent");
 
   useEffect(() => {
     async function loadObjects() {
-      setLoadingProducts(true)
+      setLoadingProducts(true);
       try {
-        const rawObjects = await getObjects({ sort: orderBy })
-        setProducts(rawObjects)
+        const { data: rawObjects } = await getObjects({ sort: orderBy });
+        setProducts(rawObjects);
       } catch (error) {
-        console.error('Error cargando objetos:', error)
-        setProducts([])
+        console.error("Error cargando objetos:", error);
+        setProducts([]);
       } finally {
-        setLoadingProducts(false)
+        setLoadingProducts(false);
       }
     }
 
-    loadObjects()
-  }, [orderBy])
+    loadObjects();
+  }, [orderBy]);
 
   return (
     <>
@@ -40,7 +40,7 @@ function ObjectsPage() {
         <ProductsSection title="Todos los Productos" products={products} />
       )}
     </>
-  )
+  );
 }
 
-export default ObjectsPage
+export default ObjectsPage;

@@ -13,6 +13,17 @@ class StoreObjecteRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Normalitza els camps abans de validar:
+     *   - Si tipus = prestec, forcem preu_diari a null (un préstec mai té preu).
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->input('tipus') === 'prestec') {
+            $this->merge(['preu_diari' => null]);
+        }
+    }
+
     public function rules(): array
     {
         return [
@@ -27,14 +38,23 @@ class StoreObjecteRequest extends FormRequest
                     $pertany = Subcategoria::where('id', $value)
                         ->where('categoria_id', $this->input('categoria_id'))
                         ->exists();
-
                     if (!$pertany) {
                         $fail('La subcategoria no pertany a la categoria seleccionada.');
                     }
                 },
             ],
             'tipus'         => ['required', 'string', 'in:prestec,lloguer'],
-            'preu_diari'    => ['nullable', 'numeric', 'min:0', 'max:99999.99'],
+
+            // Si és lloguer, preu_diari obligatori i > 0.
+            // Si és préstec, ja l'hem forçat a null al prepareForValidation.
+            'preu_diari'    => [
+                'nullable',
+                'numeric',
+                'min:1.00',
+                'max:99999.99',
+                'required_if:tipus,lloguer',
+            ],
+
             'lat'           => ['required', 'numeric', 'between:-90,90'],
             'lng'           => ['required', 'numeric', 'between:-180,180'],
 
@@ -56,8 +76,10 @@ class StoreObjecteRequest extends FormRequest
             'subcategoria_id.required' => 'Has de seleccionar una subcategoria.',
             'subcategoria_id.exists'   => 'La subcategoria seleccionada no existeix.',
             'tipus.required'           => 'Has d\'indicar el tipus (préstec o lloguer).',
-            'tipus.in'                 => 'El tipus ha de ser: préstec o lloguer',
+            'tipus.in'                 => 'El tipus ha de ser: préstec o lloguer.',
             'preu_diari.numeric'       => 'El preu ha de ser un número.',
+            'preu_diari.min'           => 'El preu ha de ser superior a 0.',
+            'preu_diari.required_if'   => 'El preu és obligatori per als objectes en lloguer.',
             'lat.required'             => 'La ubicació (latitud) és obligatòria.',
             'lng.required'             => 'La ubicació (longitud) és obligatòria.',
             'imatges.required'         => 'Has de pujar almenys una imatge.',

@@ -1,54 +1,54 @@
-import { useEffect, useState } from 'react'
-import HeroSection from '../components/home/HeroSection'
-import CategoriesSection from '../components/home/categories/CategoriesSection'
-import ProductsSection from '../components/home/ProductsSection'
-import TopUsersSection from '../components/home/TopUsersSection'
-import BenefitsSection from '../components/home/BenefitsSection'
-import { getObjects } from '../services/objects'
-import { getCategories } from '../services/categories'
-import { mapCategories } from '../mappers/categoryMapper'
+import { useEffect, useState } from "react";
+import HeroSection from "../components/home/HeroSection";
+import CategoriesSection from "../components/home/categories/CategoriesSection";
+import ProductsSection from "../components/home/ProductsSection";
+import TopUsersSection from "../components/home/TopUsersSection";
+import BenefitsSection from "../components/home/BenefitsSection";
+import { getObjects } from "../services/objects";
+import { getCategories } from "../services/categories";
+import { mapCategories } from "../mappers/categoryMapper";
 
 function HomePage() {
-  const [products, setProducts] = useState([])
-  const [categories, setCategories] = useState([])
-  const [loadingProducts, setLoadingProducts] = useState(true)
-  const [loadingCategories, setLoadingCategories] = useState(true)
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
   useEffect(() => {
     async function loadObjects() {
       try {
-        const rawObjects = await getObjects()
-        setProducts(rawObjects)
+        const { data: rawObjects } = await getObjects({ per_page: 10 });
+        setProducts(rawObjects);
       } catch (error) {
-        console.error('Error cargando objetos:', error)
-        setProducts([])
+        console.error("Error cargando objetos:", error);
+        setProducts([]);
       } finally {
-        setLoadingProducts(false)
+        setLoadingProducts(false);
       }
     }
 
     async function loadCategories() {
       try {
-        const rawCategories = await getCategories(6)
-        const mappedCategories = mapCategories(rawCategories)
-        setCategories(mappedCategories)
+        const rawCategories = await getCategories(6);
+        const mappedCategories = mapCategories(rawCategories);
+        setCategories(mappedCategories);
       } catch (error) {
-        console.error('Error cargando categorías:', error)
-        setCategories([])
+        console.error("Error cargando categorías:", error);
+        setCategories([]);
       } finally {
-        setLoadingCategories(false)
+        setLoadingCategories(false);
       }
     }
 
-    loadObjects()
-    loadCategories()
-  }, [])
+    loadObjects();
+    loadCategories();
+  }, []);
 
   const recentProducts = [...products]
     .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
-    .slice(0, 5)
+    .slice(0, 5);
 
-  const topProducts = recentProducts
+  const topProducts = recentProducts;
 
   return (
     <>
@@ -69,14 +69,17 @@ function HomePage() {
       ) : (
         <>
           <ProductsSection title="Mejores Productos" products={topProducts} />
-          <ProductsSection title="Publicaciones Recientes" products={recentProducts} />
+          <ProductsSection
+            title="Publicaciones Recientes"
+            products={recentProducts}
+          />
         </>
       )}
 
       <TopUsersSection />
       <BenefitsSection />
     </>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

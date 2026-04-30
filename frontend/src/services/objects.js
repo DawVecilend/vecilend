@@ -2,7 +2,13 @@ import api from './api'
 
 export async function getObjects(params = {}) {
   const response = await api.get('/objects', { params })
-  return response.data.data
+  // Retornem { data, meta } perquè ResultsPage pugui paginar.
+  // Per compatibilitat: si el caller només vol l'array, fa response.data.
+  return {
+    data: response.data.data,
+    meta: response.data.meta || null,
+    links: response.data.links || null,
+  }
 }
 
 export async function getProduct(id) {
@@ -10,19 +16,18 @@ export async function getProduct(id) {
   return response.data.data
 }
 
-export async function getNearbyObjects({ lat, lng, radius = 5000 } = {}) {
-  const response = await api.get('/objects/nearby', {
-    params: { lat, lng, radius },
-  })
-  return response.data.data
+export async function getNearbyObjects(params = {}) {
+  const response = await api.get('/objects/nearby', { params })
+  return {
+    data: response.data.data,
+    meta: response.data.meta || null,
+    links: response.data.links || null,
+  }
 }
 
 export async function createObject(payload) {
   const response = await api.post('/objects', payload, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+    headers: { 'Content-Type': 'multipart/form-data' },
   })
-
   return response.data
 }

@@ -1,62 +1,62 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import ProductsSection from '../components/home/ProductsSection'
-import BtnBack from '../components/elementos/BtnBack'
-import BtnOrder from '../components/elementos/BtnOrder'
-import { getCategories } from '../services/categories'
-import { getObjects } from '../services/objects'
-import { mapCategories } from '../mappers/categoryMapper'
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import ProductsSection from "../components/home/ProductsSection";
+import BtnBack from "../components/elementos/BtnBack";
+import BtnOrder from "../components/elementos/BtnOrder";
+import { getCategories } from "../services/categories";
+import { getObjects } from "../services/objects";
+import { mapCategories } from "../mappers/categoryMapper";
 
 function CategoryPage() {
-  const { slug } = useParams()
+  const { slug } = useParams();
 
-  const [categories, setCategories] = useState([])
-  const [products, setProducts] = useState([])
-  const [loadingCategories, setLoadingCategories] = useState(true)
-  const [loadingProducts, setLoadingProducts] = useState(true)
-  const [orderBy, setOrderBy] = useState('recent')
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [orderBy, setOrderBy] = useState("recent");
 
   // Trobar la categoria actual un cop carregades les categories
   const currentCategory = useMemo(() => {
-    return categories.find((category) => category.slug === slug) || null
-  }, [categories, slug])
+    return categories.find((category) => category.slug === slug) || null;
+  }, [categories, slug]);
 
   useEffect(() => {
     async function loadData() {
       try {
         // 1. Cargar categorías
-        const rawCats = await getCategories()
-        const mappedCats = mapCategories(rawCats)
-        setCategories(mappedCats)
+        const rawCats = await getCategories();
+        const mappedCats = mapCategories(rawCats);
+        setCategories(mappedCats);
 
         // 2. Encontrar la categoría actual por slug
-        const current = mappedCats.find((c) => c.slug === slug)
+        const current = mappedCats.find((c) => c.slug === slug);
         if (!current) {
-          setLoadingCategories(false)
-          setLoadingProducts(false)
-          return
+          setLoadingCategories(false);
+          setLoadingProducts(false);
+          return;
         }
 
         // 3. Cargar objetos filtrados y ordenados por el backend
-        const rawObjects = await getObjects({
+        const { data: rawObjects } = await getObjects({
           category: current.id,
           sort: orderBy,
-        })
-        setProducts(rawObjects)
+        });
+        setProducts(rawObjects);
       } catch (error) {
-        console.error('Error cargando datos:', error)
+        console.error("Error cargando datos:", error);
       } finally {
-        setLoadingCategories(false)
-        setLoadingProducts(false)
+        setLoadingCategories(false);
+        setLoadingProducts(false);
       }
     }
 
-    loadData()
-  }, [slug, orderBy])
+    loadData();
+  }, [slug, orderBy]);
 
-  const isLoading = loadingCategories || loadingProducts
-  const hasCategory = Boolean(currentCategory)
-  const hasProducts = products.length > 0
+  const isLoading = loadingCategories || loadingProducts;
+  const hasCategory = Boolean(currentCategory);
+  const hasProducts = products.length > 0;
 
   return (
     <>
@@ -87,7 +87,8 @@ function CategoryPage() {
                   {currentCategory.name}
                 </h1>
                 <p className="mt-2 font-body text-body-base text-vecilend-dark-text-secondary">
-                  Se han encontrado {products.length} productos en esta categoría.
+                  Se han encontrado {products.length} productos en esta
+                  categoría.
                 </p>
               </section>
               <ProductsSection
@@ -110,7 +111,8 @@ function CategoryPage() {
                   No hay productos en esta categoría
                 </h2>
                 <p className="mt-3 font-body text-body text-vecilend-dark-text-secondary">
-                  Todavía no hay productos publicados en "{currentCategory.name}".
+                  Todavía no hay productos publicados en "{currentCategory.name}
+                  ".
                 </p>
               </section>
             </>
@@ -118,7 +120,7 @@ function CategoryPage() {
         </div>
       </main>
     </>
-  )
+  );
 }
 
-export default CategoryPage
+export default CategoryPage;
