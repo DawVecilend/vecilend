@@ -6,6 +6,7 @@ use App\Models\Objecte;
 use App\Models\User;
 use App\Models\Categoria;
 use App\Models\Subcategoria;
+use App\Models\ImatgeObjecte;
 use Illuminate\Database\Seeder;
 
 class ObjecteSeeder extends Seeder
@@ -21,17 +22,46 @@ class ObjecteSeeder extends Seeder
             return;
         }
 
-        Objecte::factory()->count(30)->sequence(function ($sequence) use ($users, $categories, $subcategories) {
-            $categoria = $categories->random();
-            $subcategoria = $subcategories->where('categoria_id', $categoria->id)->random();
+        $objectes = Objecte::factory()
+            ->count(30)
+            ->sequence(function () use ($users, $categories, $subcategories) {
+                $categoria = $categories->random();
+                $subcategoria = $subcategories->where('categoria_id', $categoria->id)->random();
 
-            return [
-                'user_id'         => $users->random()->id,
-                'categoria_id'    => $categoria->id,
-                'subcategoria_id' => $subcategoria->id,
-            ];
-        })->create();
+                return [
+                    'user_id'         => $users->random()->id,
+                    'categoria_id'    => $categoria->id,
+                    'subcategoria_id' => $subcategoria->id,
+                ];
+            })
+            ->create();
 
-        $this->command->info(' 30 objectes creats amb coordenades.');
+        // ── Generar imatges mock ──
+        $imatges = [];
+        foreach ($objectes as $objecte) {
+            // Entre 1 i 4 imatges per objecte
+            $nImatges = rand(1, 4);
+
+            for ($i = 0; $i < $nImatges; $i++) {
+                $seed = "{$objecte->id}-{$i}";
+                $url  = "https://picsum.photos/seed/{$seed}/800/600";
+
+                $imatges[] = [
+                    'objecte_id'           => $objecte->id,
+                    'url_cloudinary'       => $url,
+                    'public_id_cloudinary' => "mock/{$seed}",
+                    'ordre'                => $i,
+                    'created_at'           => now(),
+                ];
+            }
+        }
+
+        ImatgeObjecte::insert($imatges);
+
+        $this->command->info(sprintf(
+            ' %d objectes creats amb un total de %d imatges mock.',
+            $objectes->count(),
+            count($imatges)
+        ));
     }
 }
