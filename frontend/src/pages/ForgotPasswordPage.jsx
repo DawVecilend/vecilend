@@ -27,11 +27,11 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="bg-[#0e1513] text-[#dde4e1] min-h-screen flex items-center justify-center px-6 py-12">
+    <div className="bg-app-bg text-app-text min-h-screen flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
         <Link
           to="/login"
-          className="inline-flex items-center gap-2 text-[#bbcac6] hover:text-[#4fdbc8] mb-6"
+          className="inline-flex items-center gap-2 text-app-text-secondary hover:text-[#4fdbc8] mb-6"
         >
           <span className="material-symbols-outlined">arrow_back</span>
           Volver al inicio de sesión
@@ -49,7 +49,7 @@ function ForgotPasswordPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-[#bbcac6]">
+                <label className="block text-sm font-semibold text-app-text-secondary">
                   Email
                 </label>
                 <input
@@ -57,7 +57,7 @@ function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 text-[#dde4e1] focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                  className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
                   placeholder="tu@email.com"
                 />
               </div>
@@ -78,18 +78,17 @@ function ForgotPasswordPage() {
             </form>
           </>
         ) : (
-          <div className="bg-[#161d1b] border border-[#3c4947] rounded-lg p-6 space-y-4">
+          <div className="bg-app-card border border-app-border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-[#4fdbc8] text-3xl">
                 mark_email_read
               </span>
               <h2 className="text-xl font-bold">Email enviado</h2>
             </div>
-            <p className="text-[#bbcac6]">
-              Si la dirección{" "}
-              <strong className="text-[#dde4e1]">{email}</strong> está
-              registrada, recibirás un correo con instrucciones para restablecer
-              tu contraseña.
+            <p className="text-app-text-secondary">
+              Si la dirección <strong className="text-app-text">{email}</strong>{" "}
+              está registrada, recibirás un correo con instrucciones para
+              restablecer tu contraseña.
             </p>
             <p className="text-sm text-[#859490]">
               Revisa también la carpeta de spam. El enlace caduca en 60 minutos.

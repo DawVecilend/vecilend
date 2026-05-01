@@ -1,26 +1,26 @@
 import { Link } from "react-router-dom";
-import LogoDark from "/assets/logos/LogoDark.svg";
+import Logo from "../../elementos/Logo";
 
 function Footer() {
   return (
-    <footer className="bg-vecilend-dark-bg-secondary px-6 py-10 md:h-[226px] md:px-10 md:py-0">
+    <footer className="bg-app-bg-secondary px-6 py-10 md:h-[226px] md:px-10 md:py-0">
       <div className="mx-auto flex max-w-[1380px] flex-col md:h-full md:flex-row md:items-center md:justify-around md:gap-20 xl:gap-75">
         <div className="order-1 flex flex-col">
-          <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-white md:text-h3-desktop">
+          <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">
             Empresa
           </h3>
 
           <div className="flex flex-wrap gap-x-6 gap-y-2 md:flex-col md:gap-x-0 md:gap-y-0">
             <Link
               to="/sobre-nosotros"
-              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
+              className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
             >
               Sobre Nosotros
             </Link>
 
             <Link
               to="/faq"
-              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary"
+              className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary"
             >
               FAQ
             </Link>
@@ -30,7 +30,7 @@ function Footer() {
         <div className="order-2 my-8 h-px w-full bg-vecilend-dark-border md:hidden" />
 
         <div className="order-3 flex flex-col">
-          <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-white md:text-h3-desktop">
+          <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">
             Síguenos
           </h3>
 
@@ -39,7 +39,7 @@ function Footer() {
               href="https://www.instagram.com/vecilend.official"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
+              className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
             >
               Instagram
             </a>
@@ -48,7 +48,7 @@ function Footer() {
               href="https://www.x.com/vecilend"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary"
+              className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary"
             >
               X
             </a>
@@ -57,7 +57,7 @@ function Footer() {
               href="https://www.tiktok.com/@vecilend"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-body text-body-base text-vecilend-light-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
+              className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
             >
               TikTok
             </a>
@@ -66,11 +66,7 @@ function Footer() {
 
         <div className="order-4 flex flex-col items-center pt-10 text-center md:order-2 md:pt-0">
           <Link to="/" className="flex items-center justify-center">
-            <img
-              src={LogoDark}
-              alt="Logo Vecilend"
-              className="h-[45px] w-auto object-contain"
-            />
+            <Logo className="h-[45px] w-auto object-contain" />
           </Link>
 
           <div className="mt-8 flex flex-col items-center gap-4 md:mt-[20px] md:gap-[32px]">
@@ -90,7 +86,7 @@ function Footer() {
               </Link>
             </div>
 
-            <p className="font-body text-body-base text-white md:text-vecilend-dark-text">
+            <p className="font-body text-body-base text-white md:text-app-text">
               © 2026 Todos los derechos reservados
             </p>
           </div>

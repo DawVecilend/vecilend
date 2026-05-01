@@ -20,7 +20,7 @@ function ProductsSection({
     <section className="w-full py-8">
       <div className="mx-auto w-full">
         {title && (
-          <h2 className="mb-8 text-center font-heading text-h2-desktop leading-h2 font-bold text-vecilend-dark-text">
+          <h2 className="mb-8 text-center font-heading text-h2-desktop leading-h2 font-bold text-app-text">
             {title}
           </h2>
         )}

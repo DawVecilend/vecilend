@@ -71,8 +71,8 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
   // Mentre no tinguem ni mapCenter ni value, mostrem un placeholder.
   if (!mapCenter && !value) {
     return (
-      <div className="h-[260px] md:h-[320px] w-full rounded-2xl bg-vecilend-dark-card border border-vecilend-dark-border flex items-center justify-center">
-        <span className="text-label text-vecilend-dark-text-secondary font-body">
+      <div className="h-[260px] md:h-[320px] w-full rounded-2xl bg-app-card border border-app-border flex items-center justify-center">
+        <span className="text-label text-app-text-secondary font-body">
           Obteniendo ubicación…
         </span>
       </div>
@@ -95,7 +95,7 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="h-[260px] md:h-[320px] w-full rounded-2xl overflow-hidden border border-vecilend-dark-border">
+      <div className="h-[260px] md:h-[320px] w-full rounded-2xl overflow-hidden border border-app-border">
         <MapContainer
           center={[center.lat, center.lng]}
           zoom={13}
@@ -143,13 +143,13 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
         type="button"
         onClick={handleUseMyLocation}
         disabled={status === "requesting"}
-        className="self-start inline-flex items-center gap-2 rounded-full bg-vecilend-dark-neutral border border-vecilend-dark-border px-4 py-2 text-label text-vecilend-dark-text font-body hover:border-vecilend-dark-primary disabled:opacity-50"
+        className="self-start inline-flex items-center gap-2 rounded-full bg-vecilend-dark-neutral border border-app-border px-4 py-2 text-label text-app-text font-body hover:border-vecilend-dark-primary disabled:opacity-50"
       >
         <span className="material-symbols-outlined text-base">my_location</span>
         {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación"}
       </button>
 
-      <p className="text-caption text-vecilend-dark-text-secondary font-body">
+      <p className="text-caption text-app-text-secondary font-body">
         Pulsa en el mapa o arrastra el marcador para seleccionar la ubicación.
       </p>
 

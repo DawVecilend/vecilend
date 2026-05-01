@@ -74,7 +74,7 @@ function ChangeLocationModal({ open, onClose, initial, onApply }) {
             onApply({ lat: null, lng: null, radius: null });
             onClose();
           }}
-          className="px-4 py-2 text-label text-vecilend-dark-text-secondary font-body underline"
+          className="px-4 py-2 text-label text-app-text-secondary font-body underline"
         >
           Quitar filtro
         </button>

@@ -12,7 +12,7 @@ function RadiusSlider({ value, onChange, disabled = false }) {
   return (
     <div className="w-full px-4 py-3">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-label text-vecilend-dark-text-secondary font-body">
+        <span className="text-label text-app-text-secondary font-body">
           Radio de búsqueda
         </span>
         <span className="text-label text-vecilend-dark-primary font-bold font-body">

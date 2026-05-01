@@ -58,9 +58,9 @@ function ProfilePage() {
   }, [username, currentUser]);
 
   return (
-    <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
+    <div className="bg-app-bg text-app-text antialiased min-h-screen dark">
       <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
-        <section className="relative bg-[#161d1b] rounded-xl p-8 md:p-12 overflow-hidden">
+        <section className="relative bg-app-card rounded-xl p-8 md:p-12 overflow-hidden">
           <div className="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
             <span className="material-symbols-outlined !text-[20rem] text-[#4fdbc8] rotate-12">
               camera_enhance
@@ -85,11 +85,11 @@ function ProfilePage() {
 
             <div className="flex-1 space-y-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-app-text tracking-tight">
                   {profile?.nom} {profile?.cognoms}
                 </h1>
 
-                <p className="flex items-center gap-1 text-[#bbcac6] font-medium mt-1">
+                <p className="flex items-center gap-1 text-app-text-secondary font-medium mt-1">
                   <span className="material-symbols-outlined !text-lg">
                     location_on
                   </span>
@@ -167,7 +167,7 @@ function ProfilePage() {
               Acerca de {profile?.nom}
             </h2>
 
-            <div className="space-y-4 text-[#bbcac6] leading-relaxed">
+            <div className="space-y-4 text-app-text-secondary leading-relaxed">
               <p>{profile?.biography || "Descripción no disponible"}</p>
             </div>
 
@@ -241,7 +241,7 @@ function ProfilePage() {
 
         <section className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
+            <h2 className="text-3xl font-extrabold tracking-tight text-app-text">
               {isOwnProfile
                 ? "Mis objetos publicados"
                 : `Objetos de ${profile?.nom}`}
@@ -259,12 +259,12 @@ function ProfilePage() {
           </div>
 
           {loading ? (
-            <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
-              <p className="text-[#bbcac6]">Cargando productos...</p>
+            <div className="rounded-lg border border-app-border bg-app-card p-10 text-center">
+              <p className="text-app-text-secondary">Cargando productos...</p>
             </div>
           ) : latestObjects.length === 0 ? (
-            <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
-              <p className="text-[#bbcac6]">
+            <div className="rounded-lg border border-app-border bg-app-card p-10 text-center">
+              <p className="text-app-text-secondary">
                 {isOwnProfile
                   ? "Aún no has publicado ningún objeto."
                   : `${profile?.nom || username} todavía no ha publicado objetos.`}
@@ -306,12 +306,12 @@ function ProfilePage() {
         </section>
 
         <section className="space-y-8">
-          <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
+          <h2 className="text-3xl font-extrabold tracking-tight text-app-text">
             Reviews from Filmmakers
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-[#161d1b] p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
+            <div className="bg-app-card p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
               <div className="flex items-center gap-4">
                 <img
                   alt="User Profile"
@@ -320,7 +320,7 @@ function ProfilePage() {
                 />
 
                 <div>
-                  <h4 className="font-bold text-[#dde4e1]">David S.</h4>
+                  <h4 className="font-bold text-app-text">David S.</h4>
 
                   <div className="flex">
                     <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
@@ -342,14 +342,14 @@ function ProfilePage() {
                 </div>
               </div>
 
-              <p className="text-[#bbcac6] italic">
+              <p className="text-app-text-secondary italic">
                 "Marcus is the gold standard for gear rental. The A7 kit was
                 immaculate, batteries were fully charged, and he even included
                 extra lens tissues. Will definitely rent from him again!"
               </p>
             </div>
 
-            <div className="bg-[#161d1b] p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
+            <div className="bg-app-card p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
               <div className="flex items-center gap-4">
                 <img
                   alt="User Profile"
@@ -358,7 +358,7 @@ function ProfilePage() {
                 />
 
                 <div>
-                  <h4 className="font-bold text-[#dde4e1]">Sarah J.</h4>
+                  <h4 className="font-bold text-app-text">Sarah J.</h4>
 
                   <div className="flex">
                     <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
@@ -380,7 +380,7 @@ function ProfilePage() {
                 </div>
               </div>
 
-              <p className="text-[#bbcac6] italic">
+              <p className="text-app-text-secondary italic">
                 "Communication was lightning fast. Picked up the Mavic 3 Pro for
                 a commercial shoot in the city. Marcus gave me a quick rundown
                 of the Cine features which was super helpful."

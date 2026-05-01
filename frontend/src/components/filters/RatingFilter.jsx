@@ -21,7 +21,7 @@ function RatingFilter({ value = {}, onChange }) {
   return (
     <div className="flex flex-col gap-2 px-4 py-4">
       <div className="flex items-center justify-between">
-        <span className="text-label text-vecilend-dark-text-secondary font-body">
+        <span className="text-label text-app-text-secondary font-body">
           Valoración mínima del propietario
         </span>
         {rating > 0 && (
@@ -51,7 +51,7 @@ function RatingFilter({ value = {}, onChange }) {
           "& .MuiRating-iconEmpty": { color: "#4B5563" },
         }}
       />
-      <p className="mt-1 text-caption text-vecilend-dark-text-secondary font-body">
+      <p className="mt-1 text-caption text-app-text-secondary font-body">
         {rating === 0
           ? "Sin filtro de valoración"
           : `Solo propietarios con ${rating}★ o más (excluye usuarios sin valoraciones)`}

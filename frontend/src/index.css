@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap');
 @import "tailwindcss";
 
+/* ─── Variables base ─── */
 @theme {
   --font-heading: "Montserrat", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -22,6 +23,7 @@
   --leading-label: 1.4;
   --leading-caption: 1.35;
 
+  /* Colors del design system */
   --color-vecilend-dark-bg: #0A0A0B;
   --color-vecilend-dark-bg-secondary: #071A16;
   --color-vecilend-dark-card: #121214;
@@ -33,7 +35,7 @@
   --color-vecilend-dark-primary-hover: #0F766E;
   --color-vecilend-dark-secondary: #22C55E;
 
-  --color-vecilend-light-bg: #0A0A0B;
+  --color-vecilend-light-bg: #F7F8FA;
   --color-vecilend-light-bg-secondary: #F1FBF8;
   --color-vecilend-light-card: #FFFFFF;
   --color-vecilend-light-neutral: #F1F3F6;
@@ -43,6 +45,46 @@
   --color-vecilend-light-primary: #14B8A6;
   --color-vecilend-light-primary-hover: #0F766E;
   --color-vecilend-light-secondary: #22C55E;
+
+  /* ─── Aliasses semàntics (apunten al dark per defecte) ─── */
+  --color-app-bg: var(--color-vecilend-dark-bg);
+  --color-app-bg-secondary: var(--color-vecilend-dark-bg-secondary);
+  --color-app-card: var(--color-vecilend-dark-card);
+  --color-app-neutral: var(--color-vecilend-dark-neutral);
+  --color-app-border: var(--color-vecilend-dark-border);
+  --color-app-text: var(--color-vecilend-dark-text);
+  --color-app-text-secondary: var(--color-vecilend-dark-text-secondary);
+  --color-app-primary: var(--color-vecilend-dark-primary);
+  --color-app-primary-hover: var(--color-vecilend-dark-primary-hover);
+  --color-app-secondary: var(--color-vecilend-dark-secondary);
+}
+
+/* ─── Override quan data-theme="light" ─── */
+:root[data-theme="light"] {
+  --color-app-bg: #F7F8FA;
+  --color-app-bg-secondary: #F1FBF8;
+  --color-app-card: #FFFFFF;
+  --color-app-neutral: #F1F3F6;
+  --color-app-border: #E3E7EE;
+  --color-app-text: #0B1220;
+  --color-app-text-secondary: #4B5563;
+  --color-app-primary: #14B8A6;
+  --color-app-primary-hover: #0F766E;
+  --color-app-secondary: #22C55E;
+}
+
+/* Dark explícit */
+:root[data-theme="dark"] {
+  --color-app-bg: #0A0A0B;
+  --color-app-bg-secondary: #071A16;
+  --color-app-card: #121214;
+  --color-app-neutral: #16181C;
+  --color-app-border: #2A2B31;
+  --color-app-text: #F2F4F8;
+  --color-app-text-secondary: #B6BCC8;
+  --color-app-primary: #14B8A6;
+  --color-app-primary-hover: #0F766E;
+  --color-app-secondary: #22C55E;
 }
 
 :root {
@@ -51,12 +93,17 @@
   font-weight: 400;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-  background-color: #0A0A0B;
+  background-color: var(--color-app-bg);
+  color: var(--color-app-text);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Aplica transicions globals als canvis de color */
+* {
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 
 /* ─── Leaflet dark theme overrides ─── */
