@@ -5,6 +5,7 @@ export function mapCategory(category) {
     slug: category.slug,
     icon: category.icona,
     description: category.descripcio,
+    subcategories: Array.isArray(category.subcategories) ? category.subcategories : []
   }
 }
 

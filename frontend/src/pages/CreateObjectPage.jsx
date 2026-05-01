@@ -8,6 +8,7 @@ import { mapCategories } from "../mappers/categoryMapper";
 function CreateObjectPage() {
   const navigate = useNavigate();
   const categoryDropdownRef = useRef(null);
+  const subcategoryDropdownRef = useRef(null);
   const fileInputRef = useRef(null);
 
   const [form, setForm] = useState({
@@ -15,6 +16,7 @@ function CreateObjectPage() {
     pricePerDay: "",
     description: "",
     category: "",
+    subcategory: "",
   });
 
   const [images, setImages] = useState([]);
@@ -22,6 +24,7 @@ function CreateObjectPage() {
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [openCategories, setOpenCategories] = useState(false);
+  const [openSubcategories, setOpenSubcategories] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
@@ -29,6 +32,7 @@ function CreateObjectPage() {
     pricePerDay: "",
     description: "",
     category: "",
+    subcategory: "",
     images: "",
   });
 
@@ -40,6 +44,7 @@ function CreateObjectPage() {
         const rawCategories = await getCategories();
         const mappedCategories = mapCategories(rawCategories);
         setCategories(mappedCategories);
+        console.log("Categorías cargadas:", mappedCategories);
       } catch (error) {
         console.error("Error cargando categorías:", error);
         setCategories([]);
@@ -61,16 +66,32 @@ function CreateObjectPage() {
       }
     }
 
+    function handleClickOutsideSubcategories(event) {
+      if (
+        subcategoryDropdownRef.current &&
+        !subcategoryDropdownRef.current.contains(event.target)
+      ) {
+        setOpenSubcategories(false);
+      }
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutsideSubcategories);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutsideSubcategories);
     };
   }, []);
 
   const selectedCategory =
     categories.find(
       (category) => String(category.id) === String(form.category),
+    ) || null;
+
+  const selectedSubcategory =
+    selectedCategory?.subcategories.find(
+      (subcategory) => String(subcategory.id) === String(form.subcategory),
     ) || null;
 
   const validateField = (name, value, currentImages = images) => {
@@ -96,6 +117,10 @@ function CreateObjectPage() {
         if (!value) return "Debes seleccionar una categoría";
         return "";
 
+      case "subcategory":
+        if (!value) return "Debes seleccionar una subcategoría";
+        return "";
+
       case "images":
         if (!currentImages.length) return "Debes subir al menos una imagen";
         return "";
@@ -111,6 +136,7 @@ function CreateObjectPage() {
       pricePerDay: validateField("pricePerDay", form.pricePerDay),
       description: validateField("description", form.description),
       category: validateField("category", form.category),
+      subcategory: validateField("subcategory", form.subcategory),
       images: validateField("images", "", images),
     };
 
@@ -204,6 +230,23 @@ function CreateObjectPage() {
     setOpenCategories(false);
   };
 
+  const handleSelectSubcategory = (subcategoryId) => {
+    const subcategoryValue = String(subcategoryId);
+
+    setForm((prev) => ({
+      ...prev,
+      subcategory: subcategoryValue,
+    }));
+
+    setFieldErrors((prev) => ({
+      ...prev,
+      subcategory: validateField("subcategory", subcategoryValue),
+    }));
+
+    setErrorMessage("");
+    setOpenSubcategories(false);
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -226,6 +269,7 @@ function CreateObjectPage() {
       formData.append("preu_diari", form.pricePerDay);
       formData.append("descripcio", form.description);
       formData.append("categoria_id", form.category);
+      formData.append("subcategoria_id", form.subcategory);
       formData.append("tipus", "lloguer");
       formData.append("lat", "41.3140");
       formData.append("lng", "2.0143");
@@ -528,6 +572,87 @@ function CreateObjectPage() {
                 {fieldErrors.category && (
                   <p className="mt-2 text-sm text-[#ef4444]">
                     {fieldErrors.category}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
+                  Subcategoría
+                </label>
+
+                <div ref={subcategoryDropdownRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setOpenSubcategories(!openSubcategories)}
+                    disabled={loadingCategories}
+                    className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-[#101217] px-4 font-body text-[16px] text-white transition hover:bg-[#161a21] disabled:cursor-not-allowed disabled:opacity-70 ${
+                      fieldErrors.subcategory ? "border border-[#ef4444]" : ""
+                    }`}
+                  >
+                    {loadingCategories ? (
+                      <span className="inline-flex items-center gap-2 text-[#6E7480]">
+                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
+                        Cargando subcategorías…
+                      </span>
+                    ) : (
+                      <span
+                        className={
+                          selectedSubcategory ? "text-white" : "text-[#6E7480]"
+                        }
+                      >
+                        {selectedSubcategory
+                          ? selectedSubcategory.nom
+                          : "Seleccione una subcategoría"}
+                      </span>
+                    )}
+
+                    <svg
+                      className={`transition-transform duration-300 ${openSubcategories ? "rotate-180" : ""}`}
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M6 9L12 15L18 9"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+
+                  {openSubcategories && !loadingCategories && (
+                    <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
+                      {(selectedCategory?.subcategories || []).map((subcategory) => {
+                        const isActive =
+                          String(subcategory.id) === String(form.subcategory);
+
+                        return (
+                          <button
+                            key={subcategory.id}
+                            type="button"
+                            onClick={() => handleSelectSubcategory(subcategory.id)}
+                            className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
+                              isActive
+                                ? "bg-[#0F766E]/20 text-[#14B8A6]"
+                                : "text-[#F2F4F8] hover:bg-[#16181C]"
+                            }`}
+                          >
+                            {subcategory.nom}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {fieldErrors.subcategory && (
+                  <p className="mt-2 text-sm text-[#ef4444]">
+                    {fieldErrors.subcategory}
                   </p>
                 )}
               </div>

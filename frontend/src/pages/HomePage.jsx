@@ -8,6 +8,7 @@ import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
 import { getObjects } from "../services/objects";
 import { getCategories } from "../services/categories";
 import { mapCategories } from "../mappers/categoryMapper";
+import CTASection from "../components/home/CTASection";
 
 function HomePage() {
   const [products, setProducts] = useState([]);
@@ -94,6 +95,7 @@ function HomePage() {
 
       <TopUsersSection />
       <BenefitsSection />
+      <CTASection />
     </>
   );
 }
