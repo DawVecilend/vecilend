@@ -63,11 +63,11 @@ function HeaderDesktop() {
         <div className="flex items-center gap-4">
           <SearchBar />
 
+          <ThemeToggle />
+
           {user ? (
             <>
               <div className="flex items-center gap-2">
-                <ThemeToggle />
-
                 <Link
                   to="/chats"
                   className="flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#333b39] cursor-pointer"
