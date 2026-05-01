@@ -147,25 +147,25 @@ function EditProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="bg-[#0e1513] text-[#dde4e1] antialiased flex flex-col">
+      <div className="bg-app-bg text-app-text antialiased flex flex-col">
         <div className="flex min-h-[calc(100vh-80px)]">
           {/* Sidebar (no animem la nav, només els blocs interns) */}
-          <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-[#3c4947]">
+          <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-app-border">
             <div className="mb-8 px-2">
-              <div className="h-5 w-32 bg-[#161d1b] rounded animate-pulse" />
-              <div className="mt-2 h-3 w-40 bg-[#161d1b] rounded animate-pulse" />
+              <div className="h-5 w-32 bg-app-card rounded animate-pulse" />
+              <div className="mt-2 h-3 w-40 bg-app-card rounded animate-pulse" />
             </div>
             <div className="space-y-2">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-12 bg-[#161d1b] rounded animate-pulse"
+                  className="h-12 bg-app-card rounded animate-pulse"
                 />
               ))}
             </div>
           </aside>
 
-          <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-[#0e1513]">
+          <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg">
             <header className="mb-8">
               <div className="h-12 w-80 bg-[#2f3634]/40 rounded animate-pulse" />
               <div className="mt-3 h-5 w-96 bg-[#2f3634]/40 rounded animate-pulse" />
@@ -174,29 +174,29 @@ function EditProfilePage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Columna esquerra: avatar + slider */}
               <div className="lg:col-span-4 space-y-6">
-                <div className="bg-[#2f3634]/40 rounded-xl p-6 border border-[#3c4947]/20">
-                  <div className="w-36 h-36 mx-auto mb-4 bg-[#161d1b] rounded-xl animate-pulse" />
-                  <div className="h-9 w-full bg-[#161d1b] rounded-lg animate-pulse" />
+                <div className="bg-[#2f3634]/40 rounded-xl p-6 border border-app-border/20">
+                  <div className="w-36 h-36 mx-auto mb-4 bg-app-card rounded-xl animate-pulse" />
+                  <div className="h-9 w-full bg-app-card rounded-lg animate-pulse" />
                 </div>
-                <div className="bg-[#2f3634]/40 rounded-xl p-6 border border-[#3c4947]/20">
-                  <div className="h-3 w-40 bg-[#161d1b] rounded animate-pulse mb-4" />
-                  <div className="h-2 w-full bg-[#161d1b] rounded animate-pulse" />
+                <div className="bg-[#2f3634]/40 rounded-xl p-6 border border-app-border/20">
+                  <div className="h-3 w-40 bg-app-card rounded animate-pulse mb-4" />
+                  <div className="h-2 w-full bg-app-card rounded animate-pulse" />
                 </div>
               </div>
 
               {/* Columna dreta: 5 camps */}
               <div className="lg:col-span-8">
-                <div className="bg-[#2f3634]/40 rounded-xl p-8 border border-[#3c4947]/20">
+                <div className="bg-[#2f3634]/40 rounded-xl p-8 border border-app-border/20">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div key={i} className="space-y-2">
-                        <div className="h-3 w-24 bg-[#161d1b] rounded animate-pulse" />
-                        <div className="h-12 w-full bg-[#161d1b] rounded-lg animate-pulse" />
+                        <div className="h-3 w-24 bg-app-card rounded animate-pulse" />
+                        <div className="h-12 w-full bg-app-card rounded-lg animate-pulse" />
                       </div>
                     ))}
                     <div className="md:col-span-2 space-y-2">
-                      <div className="h-3 w-24 bg-[#161d1b] rounded animate-pulse" />
-                      <div className="h-28 w-full bg-[#161d1b] rounded-lg animate-pulse" />
+                      <div className="h-3 w-24 bg-app-card rounded animate-pulse" />
+                      <div className="h-28 w-full bg-app-card rounded-lg animate-pulse" />
                     </div>
                   </div>
                 </div>
@@ -209,10 +209,10 @@ function EditProfilePage() {
   }
 
   return (
-    <div className="bg-[#0e1513] text-[#dde4e1] antialiased flex flex-col dark">
+    <div className="bg-app-bg text-app-text antialiased flex flex-col dark">
       {/* Contenedor con la altura calculada exacta */}
       <div className="flex min-h-[calc(100vh-80px)]">
-        <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-[#3c4947] transition-all duration-150 font-inter text-sm z-40">
+        <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-app-border transition-all duration-150 font-inter text-sm z-40">
           <div className="mb-8 px-2">
             <h2 className="text-[#4fdbc8] font-bold text-lg">Configuración</h2>
             <p className="text-[#859490] text-xs">Gestiona tu cuenta</p>
@@ -220,7 +220,7 @@ function EditProfilePage() {
           <nav className="space-y-1">
             <Link
               to={`/settings/profile/${user?.username}`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">home</span>
               <span>Página principal</span>
@@ -234,14 +234,14 @@ function EditProfilePage() {
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/security`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">security</span>
               <span>Seguridad</span>
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/notifications`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">privacy</span>
               <span>Privacidad</span>
@@ -249,12 +249,12 @@ function EditProfilePage() {
           </nav>
         </aside>
 
-        <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-[#0e1513] flex flex-col justify-center">
+        <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg flex flex-col justify-center">
           <header className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] mb-2 tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
               Perfil de <span className="text-[#4fdbc8]">Usuario</span>
             </h1>
-            <p className="text-[#bbcac6] text-lg max-w-2xl leading-relaxed">
+            <p className="text-app-text-secondary text-lg max-w-2xl leading-relaxed">
               Gestiona tu identidad y preferencias en Vecilend.
             </p>
           </header>
@@ -264,7 +264,7 @@ function EditProfilePage() {
             className="grid grid-cols-1 lg:grid-cols-12 gap-8"
           >
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-6 border border-[#3c4947]/20 shadow-xl text-center">
+              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-6 border border-app-border/20 shadow-xl text-center">
                 <div className="relative group w-36 h-36 mx-auto mb-4">
                   <img
                     alt="Avatar"
@@ -286,14 +286,14 @@ function EditProfilePage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current.click()}
-                  className="w-full py-2 bg-[#21514a] text-[#92c2b8] rounded-lg text-xs font-bold transition-colors hover:bg-[#161d1b]"
+                  className="w-full py-2 bg-[#21514a] text-[#92c2b8] rounded-lg text-xs font-bold transition-colors hover:bg-app-card"
                 >
                   Cambiar foto
                 </button>
               </div>
 
-              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-6 border border-[#3c4947]/20 shadow-xl">
-                <label className="text-xs font-bold text-[#bbcac6] uppercase block mb-4">
+              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-6 border border-app-border/20 shadow-xl">
+                <label className="text-xs font-bold text-app-text-secondary uppercase block mb-4">
                   Radio de Proximidad ({formData.radi_proximitat} km)
                 </label>
                 <input
@@ -303,7 +303,7 @@ function EditProfilePage() {
                   max="100"
                   value={formData.radi_proximitat}
                   onChange={handleChange}
-                  className="w-full h-2 bg-[#161d1b] rounded-lg appearance-none cursor-pointer accent-[#4fdbc8]"
+                  className="w-full h-2 bg-app-card rounded-lg appearance-none cursor-pointer accent-[#4fdbc8]"
                 />
                 <p className="text-[10px] text-[#859490] mt-2 italic">
                   Define la distancia máxima para buscar y prestar objetos.
@@ -312,47 +312,47 @@ function EditProfilePage() {
             </div>
 
             <div className="lg:col-span-8 flex flex-col justify-between">
-              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-[#3c4947]/20 shadow-xl">
+              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest ml-1">
+                    <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Nombre
                     </label>
                     <input
                       name="nom"
                       value={formData.nom}
                       onChange={handleChange}
-                      className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 text-[#dde4e1] focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
                       type="text"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest ml-1">
+                    <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Apellidos
                     </label>
                     <input
                       name="cognoms"
                       value={formData.cognoms}
                       onChange={handleChange}
-                      className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 text-[#dde4e1] focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
                       type="text"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest ml-1">
+                    <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Teléfono
                     </label>
                     <input
                       name="telefon"
                       value={formData.telefon}
                       onChange={handleChange}
-                      className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 text-[#dde4e1] focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
                       type="text"
                       placeholder="600 000 000"
                     />
                   </div>
                   <div className="space-y-2 relative">
-                    <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest ml-1">
+                    <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Ubicación principal
                     </label>
                     <input
@@ -365,19 +365,19 @@ function EditProfilePage() {
                       onBlur={() =>
                         setTimeout(() => setShowSuggestions(false), 200)
                       }
-                      className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 text-[#dde4e1] focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
                       type="text"
                       autoComplete="off"
                     />
                     {showSuggestions && suggestions.length > 0 && (
-                      <ul className="absolute z-50 w-full mt-1 bg-[#1a211f] border border-[#3c4947] rounded-lg shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
+                      <ul className="absolute z-50 w-full mt-1 bg-[#1a211f] border border-app-border rounded-lg shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
                         {suggestions.map((suggestion, index) => (
                           <li
                             key={index}
                             onMouseDown={() =>
                               handleSelectSuggestion(suggestion)
                             }
-                            className="px-4 py-2.5 text-sm text-[#dde4e1] hover:bg-[#2f3634] hover:text-[#4fdbc8] cursor-pointer transition-colors border-b border-[#3c4947]/50 last:border-none"
+                            className="px-4 py-2.5 text-sm text-app-text hover:bg-[#2f3634] hover:text-[#4fdbc8] cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
                           >
                             {suggestion}
                           </li>
@@ -386,14 +386,14 @@ function EditProfilePage() {
                     )}
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest ml-1">
+                    <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Biografía
                     </label>
                     <textarea
                       name="biography"
                       value={formData.biography}
                       onChange={handleChange}
-                      className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 text-[#dde4e1] focus:border-[#4fdbc8] outline-none resize-none transition-all"
+                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none resize-none transition-all"
                       rows="4"
                     ></textarea>
                   </div>
@@ -406,7 +406,7 @@ function EditProfilePage() {
                 <button
                   type="button"
                   onClick={handleDiscard}
-                  className="px-6 py-3 text-sm font-bold text-[#859490] hover:text-[#dde4e1] transition-colors"
+                  className="px-6 py-3 text-sm font-bold text-[#859490] hover:text-app-text transition-colors"
                 >
                   Descartar
                 </button>

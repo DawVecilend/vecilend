@@ -69,9 +69,9 @@ function SecuritySettingsPage() {
   };
 
   return (
-    <div className="bg-[#0e1513] text-[#dde4e1] antialiased flex flex-col dark font-inter">
+    <div className="bg-app-bg text-app-text antialiased flex flex-col dark font-inter">
       <div className="flex min-h-[calc(100vh-80px)]">
-        <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-[#3c4947] transition-all duration-150 text-sm z-40">
+        <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-app-border transition-all duration-150 text-sm z-40">
           <div className="mb-8 px-2">
             <h2 className="text-[#4fdbc8] font-bold text-lg">Configuración</h2>
             <p className="text-[#859490] text-xs">Gestiona tu cuenta</p>
@@ -79,14 +79,14 @@ function SecuritySettingsPage() {
           <nav className="space-y-1">
             <Link
               to={`/settings/profile/${user?.username}`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">home</span>
               <span>Página principal</span>
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/editing`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">person</span>
               <span>Perfil</span>
@@ -100,7 +100,7 @@ function SecuritySettingsPage() {
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/notifications`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-[#161d1b] hover:text-[#dde4e1] transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">privacy</span>
               <span>Privacidad</span>
@@ -108,12 +108,12 @@ function SecuritySettingsPage() {
           </nav>
         </aside>
 
-        <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-[#0e1513] flex flex-col justify-center">
+        <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg flex flex-col justify-center">
           <header className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] mb-2 tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
               Seguridad de la <span className="text-[#4fdbc8]">Cuenta</span>
             </h1>
-            <p className="text-[#bbcac6] text-lg max-w-2xl leading-relaxed">
+            <p className="text-app-text-secondary text-lg max-w-2xl leading-relaxed">
               Administra tus credenciales de acceso y protege tu información
               personal.
             </p>
@@ -121,7 +121,7 @@ function SecuritySettingsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             {/* Tarjeta: Cambiar Contraseña */}
-            <section className="lg:col-span-7 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-[#3c4947]/20 shadow-xl">
+            <section className="lg:col-span-7 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
               <div className="flex items-center gap-3 mb-6">
                 <span className="material-symbols-outlined text-[#4fdbc8]">
                   lock
@@ -153,40 +153,40 @@ function SecuritySettingsPage() {
 
               <form className="space-y-6" onSubmit={handlePasswordSubmit}>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest ml-1">
+                  <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                     Contraseña Actual
                   </label>
                   <input
                     name="current_password"
                     value={passwords.current_password}
                     onChange={handlePasswordChange}
-                    className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-[#dde4e1]"
+                    className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
                     placeholder="••••••••••••"
                     type="password"
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest ml-1">
+                    <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Nueva Contraseña
                     </label>
                     <input
                       name="password"
                       value={passwords.password}
                       onChange={handlePasswordChange}
-                      className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-[#dde4e1]"
+                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
                       type="password"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest ml-1">
+                    <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Confirmar Contraseña
                     </label>
                     <input
                       name="password_confirmation"
                       value={passwords.password_confirmation}
                       onChange={handlePasswordChange}
-                      className="w-full bg-[#161d1b] border border-[#3c4947] rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-[#dde4e1]"
+                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
                       type="password"
                     />
                   </div>
@@ -204,7 +204,7 @@ function SecuritySettingsPage() {
             </section>
 
             {/* Tarjeta: Autenticación 2FA */}
-            <section className="lg:col-span-5 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-[#3c4947]/20 shadow-xl flex flex-col justify-between">
+            <section className="lg:col-span-5 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
@@ -219,21 +219,21 @@ function SecuritySettingsPage() {
                       className="sr-only peer"
                       type="checkbox"
                     />
-                    <div className="w-11 h-6 bg-[#161d1b] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#161d1b] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#bbcac6] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4fdbc8]"></div>
+                    <div className="w-11 h-6 bg-app-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#161d1b] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#bbcac6] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4fdbc8]"></div>
                   </label>
                 </div>
-                <p className="text-sm text-[#bbcac6] mb-6 leading-relaxed">
+                <p className="text-sm text-app-text-secondary mb-6 leading-relaxed">
                   Añade una capa extra de seguridad a tu cuenta usando una
                   aplicación de autenticación.
                 </p>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 bg-[#161d1b] rounded-lg border border-[#3c4947]/20">
+                <div className="flex items-center justify-between p-4 bg-app-card rounded-lg border border-app-border/20">
                   <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-[#bbcac6]">
+                    <span className="material-symbols-outlined text-app-text-secondary">
                       smartphone
                     </span>
-                    <span className="text-sm font-bold text-[#dde4e1]">
+                    <span className="text-sm font-bold text-app-text">
                       Authenticator App
                     </span>
                   </div>
@@ -256,7 +256,7 @@ function SecuritySettingsPage() {
                   </span>
                   Zona de Peligro
                 </h2>
-                <p className="text-[13px] text-[#bbcac6]">
+                <p className="text-[13px] text-app-text-secondary">
                   Una vez que elimines tu cuenta, no hay vuelta atrás. Por
                   favor, asegúrate de que esto es lo que quieres hacer.
                 </p>

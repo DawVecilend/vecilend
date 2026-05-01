@@ -6,9 +6,9 @@ function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-vecilend-dark-bg">
+      <div className="flex min-h-screen items-center justify-center bg-app-bg">
         <div
-          className="h-10 w-10 rounded-full border-4 border-vecilend-dark-border border-t-vecilend-dark-primary animate-spin"
+          className="h-10 w-10 rounded-full border-4 border-app-border border-t-vecilend-dark-primary animate-spin"
           role="status"
           aria-label="Cargando"
         />

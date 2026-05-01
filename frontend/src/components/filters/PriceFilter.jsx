@@ -24,7 +24,7 @@ function PriceFilter({ value = {}, onChange }) {
   return (
     <div className="flex flex-col gap-2 px-4 py-4">
       <div className="flex items-center justify-between">
-        <span className="text-label text-vecilend-dark-text-secondary font-body">
+        <span className="text-label text-app-text-secondary font-body">
           Rango de precio (€/día)
         </span>
         <span className="text-label text-vecilend-dark-primary font-bold font-body">

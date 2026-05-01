@@ -143,7 +143,7 @@ function DateRangeCalendar({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
-      <div className="rounded-2xl bg-vecilend-dark-card border border-vecilend-dark-border p-2">
+      <div className="rounded-2xl bg-app-card border border-app-border p-2">
         <DateCalendar
           value={rangeStart}
           onChange={handleDateClick}
@@ -171,7 +171,7 @@ function DateRangeCalendar({
         />
 
         <div className="flex items-center justify-between px-3 pb-2">
-          <span className="text-caption text-vecilend-dark-text-secondary font-body">
+          <span className="text-caption text-app-text-secondary font-body">
             {rangeStart && rangeEnd
               ? `${rangeStart.format("DD/MM/YYYY")} – ${rangeEnd.format("DD/MM/YYYY")}`
               : rangeStart

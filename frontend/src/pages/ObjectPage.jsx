@@ -131,14 +131,12 @@ function ObjectPage() {
   };
 
   if (loading) {
-    return (
-      <p className="pt-24 text-center text-vecilend-dark-text">Cargando…</p>
-    );
+    return <p className="pt-24 text-center text-app-text">Cargando…</p>;
   }
 
   if (!product) {
     return (
-      <p className="pt-24 text-center text-vecilend-dark-text">
+      <p className="pt-24 text-center text-app-text">
         No se ha encontrado el objeto.
       </p>
     );
@@ -184,17 +182,17 @@ function ObjectPage() {
           {product.propietari && <UserCard user={product.propietari} />}
 
           <div>
-            <h2 className="text-vecilend-dark-text text-h3-desktop font-heading mb-2">
+            <h2 className="text-app-text text-h3-desktop font-heading mb-2">
               Descripción
             </h2>
-            <p className="text-vecilend-dark-text-secondary text-body-base font-body">
+            <p className="text-app-text-secondary text-body-base font-body">
               {product.descripcio}
             </p>
           </div>
 
           {product.ubicacio && (
             <div>
-              <h2 className="text-vecilend-dark-text text-h3-desktop font-heading mb-2">
+              <h2 className="text-app-text text-h3-desktop font-heading mb-2">
                 {searchCenter
                   ? "Ubicación y tu zona de búsqueda"
                   : "Ubicación aproximada"}
@@ -212,20 +210,17 @@ function ObjectPage() {
         {/* ── Dreta ── */}
         <div className="flex flex-col gap-6">
           <div>
-            <h1 className="text-vecilend-dark-text text-h2-desktop font-heading mb-2">
+            <h1 className="text-app-text text-h2-desktop font-heading mb-2">
               {product.nom}
             </h1>
             {product.tipus === "lloguer" && product.preu_diari && (
-              <p className="text-vecilend-dark-text text-h3-desktop font-body">
+              <p className="text-app-text text-h3-desktop font-body">
                 <span className="text-vecilend-dark-primary font-bold">
                   {product.preu_diari}€
                 </span>
-                <span className="text-vecilend-dark-text-secondary">
-                  {" "}
-                  / día
-                </span>
+                <span className="text-app-text-secondary"> / día</span>
                 {dies > 0 && (
-                  <span className="text-vecilend-dark-text-secondary text-label ml-2">
+                  <span className="text-app-text-secondary text-label ml-2">
                     · {dies} día{dies === 1 ? "" : "s"}
                   </span>
                 )}
@@ -239,7 +234,7 @@ function ObjectPage() {
           </div>
 
           <div>
-            <h3 className="text-vecilend-dark-text text-h3-desktop font-heading mb-2">
+            <h3 className="text-app-text text-h3-desktop font-heading mb-2">
               Selecciona las fechas
             </h3>
             <DateRangeCalendar
@@ -250,10 +245,10 @@ function ObjectPage() {
           </div>
 
           {!isOwnObject && (
-            <div className="rounded-2xl bg-vecilend-dark-card border border-vecilend-dark-border p-4 flex flex-col gap-3">
+            <div className="rounded-2xl bg-app-card border border-app-border p-4 flex flex-col gap-3">
               {dies > 0 && product.tipus === "lloguer" && (
                 <div className="flex items-center justify-between">
-                  <span className="text-label text-vecilend-dark-text-secondary font-body">
+                  <span className="text-label text-app-text-secondary font-body">
                     Total ({dies} día{dies === 1 ? "" : "s"})
                   </span>
                   <span className="text-h3-desktop font-bold text-vecilend-dark-primary font-body">
@@ -268,7 +263,7 @@ function ObjectPage() {
                 placeholder="Mensaje al propietario (opcional)"
                 rows={3}
                 maxLength={1000}
-                className="w-full rounded-xl bg-vecilend-dark-neutral border border-vecilend-dark-border p-3 text-body-base text-vecilend-dark-text font-body focus:outline-none focus:ring-2 focus:ring-vecilend-dark-primary"
+                className="w-full rounded-xl bg-vecilend-dark-neutral border border-app-border p-3 text-body-base text-app-text font-body focus:outline-none focus:ring-2 focus:ring-vecilend-dark-primary"
               />
 
               {submitError && (
@@ -294,8 +289,8 @@ function ObjectPage() {
           )}
 
           {isOwnObject && (
-            <div className="rounded-2xl bg-vecilend-dark-card border border-vecilend-dark-border p-4">
-              <p className="text-label text-vecilend-dark-text-secondary font-body text-center">
+            <div className="rounded-2xl bg-app-card border border-app-border p-4">
+              <p className="text-label text-app-text-secondary font-body text-center">
                 Este objeto es tuyo.
               </p>
             </div>

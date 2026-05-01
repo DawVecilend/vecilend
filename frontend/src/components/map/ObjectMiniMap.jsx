@@ -46,7 +46,7 @@ function ObjectMiniMap({ ubicacio, nom, searchCenter, searchRadiusKm }) {
     : ubicacio;
 
   return (
-    <div className="h-[220px] w-full rounded-2xl overflow-hidden border border-vecilend-dark-border">
+    <div className="h-[220px] w-full rounded-2xl overflow-hidden border border-app-border">
       <MapContainer
         center={[center.lat, center.lng]}
         zoom={showSearchContext ? 12 : 14}

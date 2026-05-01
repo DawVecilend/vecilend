@@ -61,7 +61,7 @@ function CategoryPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-vecilend-dark-bg px-6 py-10 text-vecilend-dark-text">
+      <main className="min-h-screen bg-app-bg px-6 py-10 text-app-text">
         <div className="mx-auto max-w-[1380px]">
           <div className="flex items-center justify-between gap-4">
             <BtnBack />
@@ -71,27 +71,27 @@ function CategoryPage() {
           {isLoading ? (
             <>
               <section className="mb-8 mt-6">
-                <div className="h-10 w-64 bg-vecilend-dark-card rounded animate-pulse" />
-                <div className="mt-3 h-5 w-80 bg-vecilend-dark-card rounded animate-pulse" />
+                <div className="h-10 w-64 bg-app-card rounded animate-pulse" />
+                <div className="mt-3 h-5 w-80 bg-app-card rounded animate-pulse" />
               </section>
               <ProductsGridSkeleton count={6} />
             </>
           ) : !hasCategory ? (
             <section className="py-12 text-center">
-              <h1 className="font-heading text-h2-desktop font-bold text-vecilend-dark-text">
+              <h1 className="font-heading text-h2-desktop font-bold text-app-text">
                 Categoría no encontrada
               </h1>
-              <p className="mt-3 font-body text-body text-vecilend-dark-text-secondary">
+              <p className="mt-3 font-body text-body text-app-text-secondary">
                 No existe ninguna categoría con el slug "{slug}".
               </p>
             </section>
           ) : hasProducts ? (
             <>
               <section className="mb-8 mt-6">
-                <h1 className="font-heading text-h1-mobile font-bold text-vecilend-dark-text">
+                <h1 className="font-heading text-h1-mobile font-bold text-app-text">
                   {currentCategory.name}
                 </h1>
-                <p className="mt-2 font-body text-body-base text-vecilend-dark-text-secondary">
+                <p className="mt-2 font-body text-body-base text-app-text-secondary">
                   Se han encontrado {products.length} productos en esta
                   categoría.
                 </p>
@@ -104,18 +104,18 @@ function CategoryPage() {
           ) : (
             <>
               <section className="mb-8 mt-6">
-                <h1 className="font-heading text-h1-mobile font-bold text-vecilend-dark-text">
+                <h1 className="font-heading text-h1-mobile font-bold text-app-text">
                   {currentCategory.name}
                 </h1>
-                <p className="mt-2 font-body text-body-base text-vecilend-dark-text-secondary">
+                <p className="mt-2 font-body text-body-base text-app-text-secondary">
                   Se han encontrado 0 productos en esta categoría.
                 </p>
               </section>
-              <section className="rounded-[20px] border border-vecilend-dark-border bg-vecilend-dark-card p-10 text-center">
-                <h2 className="font-heading text-h3-desktop text-vecilend-dark-text">
+              <section className="rounded-[20px] border border-app-border bg-app-card p-10 text-center">
+                <h2 className="font-heading text-h3-desktop text-app-text">
                   No hay productos en esta categoría
                 </h2>
-                <p className="mt-3 font-body text-body text-vecilend-dark-text-secondary">
+                <p className="mt-3 font-body text-body text-app-text-secondary">
                   Todavía no hay productos publicados en "{currentCategory.name}
                   ".
                 </p>

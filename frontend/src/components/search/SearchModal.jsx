@@ -171,7 +171,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
       <DialogContent sx={{ pt: 3 }}>
         {/* Lloc */}
         <div className="mb-6">
-          <label className="block text-label text-vecilend-dark-text-secondary font-body mb-2">
+          <label className="block text-label text-app-text-secondary font-body mb-2">
             ¿Dónde?
           </label>
           <LocationPicker
@@ -184,7 +184,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
 
         {/* Dates */}
         <div className="mb-6">
-          <label className="block text-label text-vecilend-dark-text-secondary font-body mb-2">
+          <label className="block text-label text-app-text-secondary font-body mb-2">
             ¿Cuándo?
           </label>
           <DateRangeCalendar
@@ -202,20 +202,20 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
 
         {/* Preu */}
         <div className="mb-6">
-          <label className="block text-label text-vecilend-dark-text-secondary font-body mb-2">
+          <label className="block text-label text-app-text-secondary font-body mb-2">
             Precio
           </label>
-          <div className="rounded-2xl bg-vecilend-dark-card border border-vecilend-dark-border">
+          <div className="rounded-2xl bg-app-card border border-app-border">
             <PriceFilter value={price} onChange={setPrice} />
           </div>
         </div>
 
         {/* Valoració */}
         <div className="mb-2">
-          <label className="block text-label text-vecilend-dark-text-secondary font-body mb-2">
+          <label className="block text-label text-app-text-secondary font-body mb-2">
             Valoración
           </label>
-          <div className="rounded-2xl bg-vecilend-dark-card border border-vecilend-dark-border">
+          <div className="rounded-2xl bg-app-card border border-app-border">
             <RatingFilter value={rating} onChange={setRating} />
           </div>
         </div>
@@ -232,7 +232,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
         <button
           type="button"
           onClick={handleClear}
-          className="px-4 py-2 text-label text-vecilend-dark-text-secondary font-body underline"
+          className="px-4 py-2 text-label text-app-text-secondary font-body underline"
         >
           Limpiar todo
         </button>

@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import LogoDark from "/assets/logos/LogoDark.svg";
+import Logo from "../../elementos/Logo";
 import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import SearchBar from "../../elementos/SearchBar";
+import ThemeToggle from "../../elementos/ThemeToggle";
 
 function HeaderDesktop() {
   const auth = useContext(AuthContext);
@@ -42,11 +43,7 @@ function HeaderDesktop() {
         {/* LEFT */}
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center">
-            <img
-              src={LogoDark}
-              alt="Logo modo oscuro"
-              className="h-[45px] w-[136px]"
-            />
+            <Logo className="h-[45px] w-[136px]" />
           </Link>
 
           <nav className="hidden items-center gap-6 md:flex">
@@ -69,6 +66,8 @@ function HeaderDesktop() {
           {user ? (
             <>
               <div className="flex items-center gap-2">
+                <ThemeToggle />
+
                 <Link
                   to="/chats"
                   className="flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#333b39] cursor-pointer"

@@ -161,22 +161,22 @@ function ObjectsPage() {
         <div className="mt-6">
           {hasAnyFilter ? (
             <>
-              <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-vecilend-dark-text">
+              <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
                 {filters.search
                   ? `Resultados de búsqueda para "${filters.search}"`
                   : "Resultados de búsqueda"}
               </h1>
-              <p className="mt-2 font-body text-body text-vecilend-dark-text-secondary">
+              <p className="mt-2 font-body text-body text-app-text-secondary">
                 Se han encontrado {totalResults} resultado
                 {totalResults === 1 ? "" : "s"}
               </p>
             </>
           ) : (
             <>
-              <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-vecilend-dark-text">
+              <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
                 Todos los objetos
               </h1>
-              <p className="mt-2 font-body text-body text-vecilend-dark-text-secondary">
+              <p className="mt-2 font-body text-body text-app-text-secondary">
                 {totalResults} objetos disponibles
               </p>
             </>
@@ -243,7 +243,7 @@ function ObjectsPage() {
                 type="button"
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="rounded-full bg-vecilend-dark-card border border-vecilend-dark-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-vecilend-dark-text disabled:opacity-50"
+                className="rounded-full bg-app-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50"
               >
                 {loadingMore
                   ? "Cargando…"
@@ -254,11 +254,11 @@ function ObjectsPage() {
         </>
       ) : (
         <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 py-12">
-          <div className="rounded-[20px] border border-vecilend-dark-border bg-vecilend-dark-card p-10 text-center">
-            <h2 className="font-heading text-h3-desktop text-vecilend-dark-text">
+          <div className="rounded-[20px] border border-app-border bg-app-card p-10 text-center">
+            <h2 className="font-heading text-h3-desktop text-app-text">
               No se han encontrado resultados
             </h2>
-            <p className="mt-3 font-body text-body text-vecilend-dark-text-secondary">
+            <p className="mt-3 font-body text-body text-app-text-secondary">
               Prueba a ampliar el radio, cambiar las fechas o quitar algún
               filtro.
             </p>
