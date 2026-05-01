@@ -2,8 +2,7 @@ import api from './api'
 
 export async function getObjects(params = {}) {
   const response = await api.get('/objects', { params })
-  // Retornem { data, meta } perquè ObjectsPage pugui paginar.
-  // Per compatibilitat: si el caller només vol l'array, fa response.data.
+
   return {
     data: response.data.data,
     meta: response.data.meta || null,
@@ -18,6 +17,7 @@ export async function getProduct(id) {
 
 export async function getNearbyObjects(params = {}) {
   const response = await api.get('/objects/nearby', { params })
+
   return {
     data: response.data.data,
     meta: response.data.meta || null,
@@ -29,5 +29,14 @@ export async function createObject(payload) {
   const response = await api.post('/objects', payload, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
+
+  return response.data
+}
+
+export async function updateObject(id, payload) {
+  const response = await api.put(`/objects/${id}`, payload, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+
   return response.data
 }

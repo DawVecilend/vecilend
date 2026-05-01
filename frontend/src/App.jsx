@@ -21,6 +21,7 @@ import UserObjectsPage from "./pages/UserObjectsPage";
 import ScrollToTop from "./components/ScrollToTop";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import EditObjectPage from "./pages/EditObjectPage";
 
 function App() {
   return (
@@ -55,6 +56,8 @@ function App() {
           {/* Rutas Protegidas */}
           <Route element={<ProtectedRoute />}>
             <Route path="/objects/create" element={<CreateObjectPage />} />
+            <Route path="/objects/:id/edit" element={<EditObjectPage />} />
+
             <Route
               path="/settings/profile/:username"
               element={<SettingsPage />}
