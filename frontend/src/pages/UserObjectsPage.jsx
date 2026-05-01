@@ -10,13 +10,17 @@ import BtnBack from "../components/elementos/BtnBack";
 function UserObjectsPage() {
   const { user } = useContext(AuthContext);
   const { username } = useParams();
+
   const [objects, setObjects] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [orderBy, setOrderBy] = useState("recent");
 
+  const isOwnProfile = user && user.username === username;
+
   useEffect(() => {
     async function loadObjects() {
       setLoadingProducts(true);
+
       try {
         const response = await getUserObjects(username);
         setObjects(response);
@@ -37,13 +41,19 @@ function UserObjectsPage() {
         <BtnBack />
         <BtnOrder value={orderBy} onChange={setOrderBy} />
       </div>
+
       {loadingProducts ? (
         <ProductsGridSkeleton count={6} />
       ) : (
         <ProductsSection
-          title={`Todos los productos de ${username}`}
+          title={
+            isOwnProfile
+              ? "Mis objetos publicados"
+              : `Todos los productos de ${username}`
+          }
           products={objects}
           profile={true}
+          isOwnProfile={isOwnProfile}
         />
       )}
     </>

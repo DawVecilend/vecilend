@@ -186,9 +186,9 @@ function ProfilePage() {
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
-              Últimos objetos publicados
+              {isOwnProfile ? "Mis objetos publicados" : `Objetos de ${profile?.nom}`}
             </h2>
-            {latestObjects.length > 0 && (
+            {latestObjects.length > 0 && !isOwnProfile && (
               <Link
                 to={`/profile/${username}/objects`}
                 className="text-[#4fdbc8] font-bold hover:underline flex items-center gap-1"
@@ -216,7 +216,12 @@ function ProfilePage() {
               )}
             </div>
           ) : (
-            <ProductsSection title="" products={latestObjects} profile={true} />
+            <ProductsSection
+              title=""
+              products={latestObjects}
+              profile={true}
+              isOwnProfile={isOwnProfile}
+            />
           )}
         </section>
 

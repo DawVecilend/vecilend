@@ -8,8 +8,10 @@ function ProductsSection({
   products = [],
   profile = false,
   preserveSearchParams = false,
+  isOwnProfile = false,
 }) {
   const location = useLocation();
+
   const searchParamsString = preserveSearchParams
     ? location.search.replace(/^\?/, "")
     : "";
@@ -43,6 +45,7 @@ function ProductsSection({
                   rating={product.valoracio_mitjana ?? 0}
                   priceDay={product.preu_diari ? Number(product.preu_diari) : 0}
                   status={product.estat}
+                  isOwnProfile={isOwnProfile}
                 />
               ))
             : products.map((product) => (
