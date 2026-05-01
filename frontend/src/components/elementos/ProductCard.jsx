@@ -1,4 +1,3 @@
-// frontend/src/components/elementos/ProductCard.jsx
 import { Link } from "react-router-dom";
 
 function getAvailabilityLabel(status) {
