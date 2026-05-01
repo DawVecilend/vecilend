@@ -1,7 +1,8 @@
+// frontend/src/pages/ProfilePage.jsx
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getProfile } from "../services/profile";
+import { getProfile, getUserObjects } from "../services/profile";
 import { AuthContext } from "../contexts/AuthContext";
 import ProductsSection from "../components/home/ProductsSection";
 
@@ -9,24 +10,52 @@ function ProfilePage() {
   const [profile, setProfile] = useState(null);
   const [latestObjects, setLatestObjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleObjectsCount, setVisibleObjectsCount] = useState(15);
+
   const { username } = useParams();
   const { user: currentUser } = useContext(AuthContext);
+
   const isOwnProfile = currentUser && currentUser.username === username;
+
+  const visibleObjects = isOwnProfile
+    ? latestObjects.slice(0, visibleObjectsCount)
+    : latestObjects;
+
+  const hasMoreOwnObjects =
+    isOwnProfile && visibleObjectsCount < latestObjects.length;
+
+  const remainingObjects = latestObjects.length - visibleObjectsCount;
+  const nextObjectsCount = remainingObjects >= 15 ? 15 : remainingObjects;
 
   useEffect(() => {
     async function loadProfile() {
+      setLoading(true);
+      setVisibleObjectsCount(15);
+
       try {
         const { user, latest_objects } = await getProfile(username);
+
         setProfile(user);
-        setLatestObjects(latest_objects);
+
+        const ownProfile = currentUser && currentUser.username === username;
+
+        if (ownProfile) {
+          const allUserObjects = await getUserObjects(username);
+          setLatestObjects(allUserObjects || []);
+        } else {
+          setLatestObjects(latest_objects || []);
+        }
       } catch (error) {
         console.error("Error cargando perfil:", error);
         setProfile(null);
         setLatestObjects([]);
+      } finally {
+        setLoading(false);
       }
     }
+
     loadProfile();
-  }, [username]);
+  }, [username, currentUser]);
 
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
@@ -37,6 +66,7 @@ function ProfilePage() {
               camera_enhance
             </span>
           </div>
+
           <div className="relative flex flex-col md:flex-row gap-8 items-start md:items-center">
             <div className="relative group">
               <img
@@ -44,6 +74,7 @@ function ProfilePage() {
                 className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500"
                 src={profile?.avatar_url || "/assets/icons/empty-user-icon.svg"}
               />
+
               <div className="absolute -bottom-3 -right-3 bg-[#f38764] text-[#6c2106] px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 border border-white">
                 <span className="material-symbols-outlined icon-filled text-sm">
                   verified
@@ -51,11 +82,13 @@ function ProfilePage() {
                 Verificado
               </div>
             </div>
+
             <div className="flex-1 space-y-4">
               <div>
                 <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight">
                   {profile?.nom} {profile?.cognoms}
                 </h1>
+
                 <p className="flex items-center gap-1 text-[#bbcac6] font-medium mt-1">
                   <span className="material-symbols-outlined !text-lg">
                     location_on
@@ -63,33 +96,41 @@ function ProfilePage() {
                   {profile?.direccio || "Ubicación no disponible"}
                 </p>
               </div>
+
               <div className="flex flex-wrap gap-4">
                 <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
                   <span className="text-[#4fdbc8] font-bold text-xl">350+</span>
+
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">
                     Alquileres
                   </span>
                 </div>
+
                 <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
                   <span className="text-[#4fdbc8] font-bold text-xl">100%</span>
+
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">
                     Respuesta
                   </span>
                 </div>
+
                 <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
                   <div className="flex items-center gap-1">
                     <span className="text-[#4fdbc8] font-bold text-xl">
                       4.9
                     </span>
+
                     <span className="material-symbols-outlined icon-filled text-orange-500 text-sm">
                       star
                     </span>
                   </div>
+
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">
                     Puntuación
                   </span>
                 </div>
               </div>
+
               <div className="flex gap-4 pt-2">
                 {isOwnProfile ? (
                   <Link
@@ -109,6 +150,7 @@ function ProfilePage() {
                       </span>
                       Contacta a {profile?.nom}
                     </button>
+
                     <button className="bg-[#21514a] text-[#92c2b8] px-8 py-4 rounded-full font-bold hover:bg-[#bbece2] transition-colors active:scale-95">
                       Seguir
                     </button>
@@ -124,57 +166,71 @@ function ProfilePage() {
             <h2 className="text-2xl font-bold text-[#4fdbc8]">
               Acerca de {profile?.nom}
             </h2>
+
             <div className="space-y-4 text-[#bbcac6] leading-relaxed">
               <p>{profile?.biography || "Descripción no disponible"}</p>
             </div>
+
             <div className="flex flex-wrap gap-3 pt-4">
               <span className="bg-[#252b2a] px-4 py-2 rounded-full text-sm font-semibold">
                 Cinematography
               </span>
+
               <span className="bg-[#252b2a] px-4 py-2 rounded-full text-sm font-semibold">
                 Color Grading
               </span>
+
               <span className="bg-[#252b2a] px-4 py-2 rounded-full text-sm font-semibold">
                 Technical Advisor
               </span>
             </div>
           </div>
+
           <div className="md:col-span-4 bg-[#4fdbc8] text-[#003731] p-8 rounded-lg relative overflow-hidden group">
             <div className="absolute -right-8 -bottom-8 opacity-20 transform group-hover:scale-110 transition-transform duration-700">
               <span className="material-symbols-outlined !text-[12rem]">
                 verified_user
               </span>
             </div>
+
             <h3 className="text-xl font-bold mb-6">Lender Commitment</h3>
+
             <ul className="space-y-4 relative z-10">
               <li className="flex items-start gap-3">
                 <span className="material-symbols-outlined icon-filled text-[#ffdbd0]">
                   check_circle
                 </span>
+
                 <p className="text-sm font-medium">
                   Same-day inspection on all returns
                 </p>
               </li>
+
               <li className="flex items-start gap-3">
                 <span className="material-symbols-outlined icon-filled text-[#ffdbd0]">
                   check_circle
                 </span>
+
                 <p className="text-sm font-medium">
                   Sensor cleaning before every body rental
                 </p>
               </li>
+
               <li className="flex items-start gap-3">
                 <span className="material-symbols-outlined icon-filled text-[#ffdbd0]">
                   check_circle
                 </span>
+
                 <p className="text-sm font-medium">
                   Firmware kept up to date monthly
                 </p>
               </li>
+
               <li className="flex items-start gap-3">
                 <span className="material-symbols-outlined icon-filled text-[#ffdbd0]">
                   check_circle
                 </span>
+
                 <p className="text-sm font-medium">
                   Flexible pickup in Williamsburg
                 </p>
@@ -186,8 +242,11 @@ function ProfilePage() {
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
-              {isOwnProfile ? "Mis objetos publicados" : `Objetos de ${profile?.nom}`}
+              {isOwnProfile
+                ? "Mis objetos publicados"
+                : `Objetos de ${profile?.nom}`}
             </h2>
+
             {latestObjects.length > 0 && !isOwnProfile && (
               <Link
                 to={`/profile/${username}/objects`}
@@ -199,13 +258,18 @@ function ProfilePage() {
             )}
           </div>
 
-          {latestObjects.length === 0 ? (
+          {loading ? (
+            <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
+              <p className="text-[#bbcac6]">Cargando productos...</p>
+            </div>
+          ) : latestObjects.length === 0 ? (
             <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
               <p className="text-[#bbcac6]">
                 {isOwnProfile
                   ? "Aún no has publicado ningún objeto."
-                  : `${profile?.nom} todavía no ha publicado objetos.`}
+                  : `${profile?.nom || username} todavía no ha publicado objetos.`}
               </p>
+
               {isOwnProfile && (
                 <Link
                   to="/objects/create"
@@ -216,12 +280,28 @@ function ProfilePage() {
               )}
             </div>
           ) : (
-            <ProductsSection
-              title=""
-              products={latestObjects}
-              profile={true}
-              isOwnProfile={isOwnProfile}
-            />
+            <>
+              <ProductsSection
+                title=""
+                products={visibleObjects}
+                profile={true}
+                isOwnProfile={isOwnProfile}
+              />
+
+              {hasMoreOwnObjects && (
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setVisibleObjectsCount((current) => current + 15)
+                    }
+                    className="rounded-full bg-[#4fdbc8] px-8 py-3 font-bold text-[#003731] transition-colors hover:bg-[#14b8a6] active:scale-95"
+                  >
+                    Ver más {nextObjectsCount > 0 && `(${nextObjectsCount})`}
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
 
@@ -229,6 +309,7 @@ function ProfilePage() {
           <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
             Reviews from Filmmakers
           </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-[#161d1b] p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
               <div className="flex items-center gap-4">
@@ -237,8 +318,10 @@ function ProfilePage() {
                   className="w-12 h-12 rounded-full"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeEqSaikQJZ9NyhaeByH7mNkoQaDgO_9cyQiWUksGlDctNMV0--xgG-UcMBJDNVrQmfNQYR3YO8eTQDfBln6kVPTsnElbQkorJAiH6_aAihwvGCnhudhzqU6XC1THU08yyo9voih6Vizg0zdjS42_N9T-hMApuFRwzd_v_4wTRAmo-cKdTegtEhxYr9AdRK7l0qvDKlqFSuw_Ym7T3HaELXNjQNll5t_Uev_uYODmlCmfFw1eq3L5WB1iJCkjwFk8xRLvx8EVSiEdS"
                 />
+
                 <div>
                   <h4 className="font-bold text-[#dde4e1]">David S.</h4>
+
                   <div className="flex">
                     <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
                       star
@@ -258,12 +341,14 @@ function ProfilePage() {
                   </div>
                 </div>
               </div>
+
               <p className="text-[#bbcac6] italic">
                 "Marcus is the gold standard for gear rental. The A7 kit was
                 immaculate, batteries were fully charged, and he even included
                 extra lens tissues. Will definitely rent from him again!"
               </p>
             </div>
+
             <div className="bg-[#161d1b] p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
               <div className="flex items-center gap-4">
                 <img
@@ -271,8 +356,10 @@ function ProfilePage() {
                   className="w-12 h-12 rounded-full"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT73IMdFWPKHxMqksyR2MCl4XQcJ1X0CXN0AuGLaIsDsCXq-tuIibwjcU_1BmOGXse2LDOy66gcF2Hl92iZrf6wYHmnHIx-BVGUr6m7V3PIBsg5lD8qAdIuj14q2O8CgvgX85B6RYhiiQxfR249Gns_KiJi3cxwndjmI2YJ9FGoKj1xa0KSyRWgI4ZXYkPhhOeDYzLw_ktDwt04Bz3YMM-pT2XXwLfnEob_kDTsLlJeuH_J8Otfey4nZ6XiKlu-7IXA9y3wuikqzQZ"
                 />
+
                 <div>
                   <h4 className="font-bold text-[#dde4e1]">Sarah J.</h4>
+
                   <div className="flex">
                     <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
                       star
@@ -292,6 +379,7 @@ function ProfilePage() {
                   </div>
                 </div>
               </div>
+
               <p className="text-[#bbcac6] italic">
                 "Communication was lightning fast. Picked up the Mavic 3 Pro for
                 a commercial shoot in the city. Marcus gave me a quick rundown
