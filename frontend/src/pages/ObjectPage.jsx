@@ -241,10 +241,10 @@ function ObjectPage() {
           </span>
           <div>
             <p className="text-h3-mobile text-app-text font-heading mb-1">
-              Ya tienes una solicitud pendiente
+              Ya tienes una solicitud pendiente sobre este objeto
             </p>
             <p className="text-label text-app-text-secondary font-body">
-              Espera a que el propietario responda antes de hacer otra.
+              Espera a que el propietario responda antes de enviar otra.
             </p>
           </div>
         </div>
@@ -252,7 +252,7 @@ function ObjectPage() {
           to="/transactions?role=requester&status=pendent"
           className="block w-full text-center rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95"
         >
-          Ver mis solicitudes
+          Ver mis solicitudes enviadas
         </Link>
       </div>
     );

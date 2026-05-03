@@ -17,9 +17,18 @@ class TransactionController extends Controller
      * GET /api/v1/transactions?role=&status=&objecte_id=
      *
      * Llista les sol·licituds en què participa l'usuari autenticat.
+     * 
+     * Filtres:
+     *   - role: 'requester' (les que l'usuari ha fet) | 'owner' (les que l'usuari ha rebut com a propietari)
+     *           Si s'omet, retorna les dues llistes barrejades.
+     *   - status: 'pendent' | 'acceptat' | 'rebutjat' | 'finalitzat'
+     *   - objecte_id: Filtra les sol·licituds per un objecte específic (si s'omet, es mostren totes les sol·licituds).
+     *
+     * Ordre: més recents primer.
      */
     public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
+        // Validación de parámetros
         $request->validate([
             'role'       => ['nullable', 'string', 'in:requester,owner'],
             'status'     => ['nullable', 'string', 'in:pendent,acceptat,rebutjat,finalitzat'],
@@ -29,6 +38,7 @@ class TransactionController extends Controller
         $user = $request->user();
         $role = $request->input('role');
 
+        // Inicialización de la consulta base
         $query = Solicitud::with([
             'objecte.user:id,username,nom,cognoms,avatar_url',
             'objecte.imatges',
@@ -36,28 +46,34 @@ class TransactionController extends Controller
             'transaccio',
         ]);
 
+        // Filtrar por rol
         if ($role === 'requester') {
             $query->where('solicitant_id', $user->id);
         } elseif ($role === 'owner') {
             $query->whereHas('objecte', fn($q) => $q->where('user_id', $user->id));
         } else {
+            // Filtrar por ambos roles si no se especifica
             $query->where(function ($q) use ($user) {
                 $q->where('solicitant_id', $user->id)
                     ->orWhereHas('objecte', fn($oq) => $oq->where('user_id', $user->id));
             });
         }
 
+        // Filtrar por estado
         if ($request->filled('status')) {
             $query->where('estat', $request->input('status'));
         }
 
+        // Filtrar por objecte_id si está presente
         if ($request->filled('objecte_id')) {
             $query->where('objecte_id', $request->input('objecte_id'));
         }
 
-        return TransactionResource::collection(
-            $query->orderByDesc('created_at')->get()
-        );
+        // Ordenar por fecha de creación descendente
+        $solicituds = $query->orderByDesc('created_at')->get();
+
+        // Retornar la colección de transacciones
+        return TransactionResource::collection($solicituds);
     }
 
     /**

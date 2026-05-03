@@ -22,6 +22,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EditObjectPage from "./pages/EditObjectPage";
+import TransactionsPage from "./pages/TransactionsPage";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
               path="/settings/profile/:username/notifications"
               element={<SettingsPage />}
             />
+            <Route path="/transactions" element={<TransactionsPage />} />
           </Route>
         </Routes>
       </main>
