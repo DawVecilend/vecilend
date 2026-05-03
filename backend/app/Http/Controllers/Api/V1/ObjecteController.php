@@ -156,7 +156,7 @@ class ObjecteController extends Controller
     {
         $objecte = Objecte::query()
             ->with([
-                'user:id,nom,cognoms,avatar_url,created_at',
+                'user:id,username,nom,cognoms,avatar_url,created_at',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',

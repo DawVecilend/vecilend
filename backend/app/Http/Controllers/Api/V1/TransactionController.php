@@ -14,6 +14,53 @@ use Illuminate\Support\Facades\DB;
 class TransactionController extends Controller
 {
     /**
+     * GET /api/v1/transactions?role=&status=&objecte_id=
+     *
+     * Llista les sol·licituds en què participa l'usuari autenticat.
+     */
+    public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    {
+        $request->validate([
+            'role'       => ['nullable', 'string', 'in:requester,owner'],
+            'status'     => ['nullable', 'string', 'in:pendent,acceptat,rebutjat,finalitzat'],
+            'objecte_id' => ['nullable', 'integer', 'exists:objectes,id'],
+        ]);
+
+        $user = $request->user();
+        $role = $request->input('role');
+
+        $query = Solicitud::with([
+            'objecte.user:id,username,nom,cognoms,avatar_url',
+            'objecte.imatges',
+            'solicitant:id,username,nom,cognoms,avatar_url',
+            'transaccio',
+        ]);
+
+        if ($role === 'requester') {
+            $query->where('solicitant_id', $user->id);
+        } elseif ($role === 'owner') {
+            $query->whereHas('objecte', fn($q) => $q->where('user_id', $user->id));
+        } else {
+            $query->where(function ($q) use ($user) {
+                $q->where('solicitant_id', $user->id)
+                    ->orWhereHas('objecte', fn($oq) => $oq->where('user_id', $user->id));
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('estat', $request->input('status'));
+        }
+
+        if ($request->filled('objecte_id')) {
+            $query->where('objecte_id', $request->input('objecte_id'));
+        }
+
+        return TransactionResource::collection(
+            $query->orderByDesc('created_at')->get()
+        );
+    }
+
+    /**
      * POST /api/v1/transactions
      *
      * Crea una sol·licitud de préstec/lloguer per un objecte.
@@ -32,7 +79,7 @@ class TransactionController extends Controller
 
         $objecte = Objecte::findOrFail($validated['objecte_id']);
 
-        // ── Regla 2: no pots sol·licitar el teu propi objecte ──
+        // ── Regla 1: no pots sol·licitar el teu propi objecte ──
         if ($objecte->user_id === $user->id) {
             return response()->json([
                 'message' => 'No puedes solicitar tu propio objeto.',
@@ -40,11 +87,24 @@ class TransactionController extends Controller
             ], 422);
         }
 
-        // ── Regla 3: si lloguer, l'objecte ha de tenir preu_diari ──
+        // ── Regla 2: si és lloguer, l'objecte ha de tenir preu_diari ──
         if ($objecte->tipus === 'lloguer' && !$objecte->preu_diari) {
             return response()->json([
                 'message' => 'Este objeto no tiene precio de alquiler configurado.',
                 'errors'  => ['objecte_id' => ['L\'objecte no té preu_diari per a lloguer.']],
+            ], 422);
+        }
+
+        // ── Regla 3: no es pot tenir més d'una sol·licitud pendent del mateix usuari ──
+        $jaPendent = Solicitud::where('solicitant_id', $user->id)
+            ->where('objecte_id', $objecte->id)
+            ->where('estat', 'pendent')
+            ->exists();
+
+        if ($jaPendent) {
+            return response()->json([
+                'message' => 'Ya tienes una solicitud pendiente sobre este objeto. Espera a que el propietario responda.',
+                'errors'  => ['objecte_id' => ['Ja tens una sol·licitud pendent sobre aquest objecte.']],
             ], 422);
         }
 

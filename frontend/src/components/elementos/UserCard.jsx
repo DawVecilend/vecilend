@@ -2,56 +2,55 @@ import React from "react";
 import { Rating } from "@mui/material";
 
 function UserCard({ user }) {
-  const valoracion = user.valoracio_mitjana ?? 3.5;
-  const totalreseñas = user.total_reseñas ?? 5;
+  const avg = user?.valoracio_mitjana;
+  const total = user?.valoracio_total ?? 0;
+  const hasRating = avg != null && total > 0;
+
   return (
-    <>
-      <div className="flex bg-app-card w-full rounded-2xl h-[183px] p-4 gap-2">
-        <div>
-          {user.avatar_url ? (
-            <img
-              src={user.avatar_url}
-              alt="Avatar usuario"
-              className="h-[80px] w-[80px] rounded-full object-cover"
-            />
-          ) : (
-            <img
-              src="/assets/icons/empty-user-icon.svg"
-              alt=""
-              className="h-[80px]"
-            />
-          )}
-        </div>
-        <div>
-          <div>
-            <p className="text-app-text text-h2-desktop">
-              {user.nom} {user.cognoms}
-            </p>
-          </div>
-          <div className="flex gap-1">
+    <div className="flex bg-app-card w-full rounded-2xl p-4 gap-3 items-center">
+      {user?.avatar_url ? (
+        <img
+          src={user.avatar_url}
+          alt="Avatar usuario"
+          className="h-[80px] w-[80px] rounded-full object-cover shrink-0"
+        />
+      ) : (
+        <img
+          src="/assets/icons/empty-user-icon.svg"
+          alt=""
+          className="h-[80px] w-[80px] shrink-0"
+        />
+      )}
+
+      <div className="flex flex-col gap-1 flex-1 min-w-0">
+        <p className="text-app-text text-h3-desktop font-heading truncate">
+          {user?.nom} {user?.cognoms}
+        </p>
+
+        {hasRating ? (
+          <div className="flex items-center gap-2 flex-wrap">
             <Rating
-              defaultValue={valoracion}
+              value={Number(avg)}
               precision={0.5}
               readOnly
-              className="h-[28px]"
+              size="small"
               sx={{
-                "& .MuiRating-iconFilled": {
-                  color: " #14B8A6",
-                },
-                "& .MuiRating-iconEmpty": {
-                  color: "#14B8A6",
-                  opacity: 1,
-                },
+                "& .MuiRating-iconFilled": { color: "#14B8A6" },
+                "& .MuiRating-iconEmpty": { color: "#14B8A6", opacity: 0.3 },
               }}
             />
-            <p className="text-app-text text-body-desktop">
-              ({totalreseñas} reseñas)
-            </p>
+            <span className="text-app-text-secondary text-label">
+              {Number(avg).toFixed(1)} ({total}{" "}
+              {total === 1 ? "valoración" : "valoraciones"})
+            </span>
           </div>
-          <div></div>
-        </div>
+        ) : (
+          <p className="text-app-text-secondary text-label italic">
+            Sin valoraciones
+          </p>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 
