@@ -79,14 +79,14 @@ function SecuritySettingsPage() {
           <nav className="space-y-1">
             <Link
               to={`/settings/profile/${user?.username}`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">home</span>
               <span>Página principal</span>
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/editing`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">person</span>
               <span>Perfil</span>
@@ -100,7 +100,7 @@ function SecuritySettingsPage() {
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/notifications`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">privacy</span>
               <span>Privacidad</span>
@@ -160,7 +160,7 @@ function SecuritySettingsPage() {
                     name="current_password"
                     value={passwords.current_password}
                     onChange={handlePasswordChange}
-                    className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
                     placeholder="••••••••••••"
                     type="password"
                   />
@@ -174,7 +174,7 @@ function SecuritySettingsPage() {
                       name="password"
                       value={passwords.password}
                       onChange={handlePasswordChange}
-                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
                       type="password"
                     />
                   </div>
@@ -186,7 +186,7 @@ function SecuritySettingsPage() {
                       name="password_confirmation"
                       value={passwords.password_confirmation}
                       onChange={handlePasswordChange}
-                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
                       type="password"
                     />
                   </div>
@@ -219,7 +219,7 @@ function SecuritySettingsPage() {
                       className="sr-only peer"
                       type="checkbox"
                     />
-                    <div className="w-11 h-6 bg-app-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#161d1b] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#bbcac6] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4fdbc8]"></div>
+                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#161d1b] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#bbcac6] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4fdbc8]"></div>
                   </label>
                 </div>
                 <p className="text-sm text-app-text-secondary mb-6 leading-relaxed">
@@ -228,7 +228,7 @@ function SecuritySettingsPage() {
                 </p>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 bg-app-card rounded-lg border border-app-border/20">
+                <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20">
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-app-text-secondary">
                       smartphone

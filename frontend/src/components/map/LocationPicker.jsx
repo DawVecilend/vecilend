@@ -71,7 +71,7 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
   // Mentre no tinguem ni mapCenter ni value, mostrem un placeholder.
   if (!mapCenter && !value) {
     return (
-      <div className="h-[260px] md:h-[320px] w-full rounded-2xl bg-app-card border border-app-border flex items-center justify-center">
+      <div className="h-[260px] md:h-[320px] w-full rounded-2xl bg-app-bg-card border border-app-border flex items-center justify-center">
         <span className="text-label text-app-text-secondary font-body">
           Obteniendo ubicación…
         </span>

@@ -205,7 +205,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
           <label className="block text-label text-app-text-secondary font-body mb-2">
             Precio
           </label>
-          <div className="rounded-2xl bg-app-card border border-app-border">
+          <div className="rounded-2xl bg-app-bg-card border border-app-border">
             <PriceFilter value={price} onChange={setPrice} />
           </div>
         </div>
@@ -215,7 +215,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
           <label className="block text-label text-app-text-secondary font-body mb-2">
             Valoración
           </label>
-          <div className="rounded-2xl bg-app-card border border-app-border">
+          <div className="rounded-2xl bg-app-bg-card border border-app-border">
             <RatingFilter value={rating} onChange={setRating} />
           </div>
         </div>

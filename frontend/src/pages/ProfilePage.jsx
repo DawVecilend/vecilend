@@ -60,7 +60,7 @@ function ProfilePage() {
   return (
     <div className="bg-app-bg text-app-text antialiased min-h-screen dark">
       <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
-        <section className="relative bg-app-card rounded-xl p-8 md:p-12 overflow-hidden">
+        <section className="relative bg-app-bg-card rounded-xl p-8 md:p-12 overflow-hidden">
           <div className="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
             <span className="material-symbols-outlined !text-[20rem] text-[#4fdbc8] rotate-12">
               camera_enhance
@@ -259,11 +259,11 @@ function ProfilePage() {
           </div>
 
           {loading ? (
-            <div className="rounded-lg border border-app-border bg-app-card p-10 text-center">
+            <div className="rounded-lg border border-app-border bg-app-bg-card p-10 text-center">
               <p className="text-app-text-secondary">Cargando productos...</p>
             </div>
           ) : latestObjects.length === 0 ? (
-            <div className="rounded-lg border border-app-border bg-app-card p-10 text-center">
+            <div className="rounded-lg border border-app-border bg-app-bg-card p-10 text-center">
               <p className="text-app-text-secondary">
                 {isOwnProfile
                   ? "Aún no has publicado ningún objeto."
@@ -311,7 +311,7 @@ function ProfilePage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-app-card p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
+            <div className="bg-app-bg-card p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
               <div className="flex items-center gap-4">
                 <img
                   alt="User Profile"
@@ -349,7 +349,7 @@ function ProfilePage() {
               </p>
             </div>
 
-            <div className="bg-app-card p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
+            <div className="bg-app-bg-card p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
               <div className="flex items-center gap-4">
                 <img
                   alt="User Profile"

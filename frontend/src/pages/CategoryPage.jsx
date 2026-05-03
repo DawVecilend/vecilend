@@ -71,8 +71,8 @@ function CategoryPage() {
           {isLoading ? (
             <>
               <section className="mb-8 mt-6">
-                <div className="h-10 w-64 bg-app-card rounded animate-pulse" />
-                <div className="mt-3 h-5 w-80 bg-app-card rounded animate-pulse" />
+                <div className="h-10 w-64 bg-app-bg-card rounded animate-pulse" />
+                <div className="mt-3 h-5 w-80 bg-app-bg-card rounded animate-pulse" />
               </section>
               <ProductsGridSkeleton count={6} />
             </>
@@ -111,7 +111,7 @@ function CategoryPage() {
                   Se han encontrado 0 productos en esta categoría.
                 </p>
               </section>
-              <section className="rounded-[20px] border border-app-border bg-app-card p-10 text-center">
+              <section className="rounded-[20px] border border-app-border bg-app-bg-card p-10 text-center">
                 <h2 className="font-heading text-h3-desktop text-app-text">
                   No hay productos en esta categoría
                 </h2>

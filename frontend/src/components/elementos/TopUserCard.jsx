@@ -1,6 +1,6 @@
 function TopUserCard({ name, image, rating }) {
   return (
-    <article className="flex h-[66px] w-[196px] items-center gap-3 rounded-[12px] border border-vecilend-dark-primary/30 bg-app-card px-3">
+    <article className="flex h-[66px] w-[196px] items-center gap-3 rounded-[12px] border border-vecilend-dark-primary/30 bg-app-bg-card px-3">
       <img
         src={image}
         alt={name}

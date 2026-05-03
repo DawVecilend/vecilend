@@ -68,12 +68,12 @@ function HomePage() {
           {/* Placeholder de categories (alçada similar a CategoriesSection) */}
           <div className="py-8 text-center">
             <div className="mx-auto max-w-[1380px] px-4 md:px-10">
-              <div className="h-8 w-48 mx-auto mb-6 bg-app-card rounded animate-pulse" />
+              <div className="h-8 w-48 mx-auto mb-6 bg-app-bg-card rounded animate-pulse" />
               <div className="flex flex-wrap justify-center gap-3">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-20 w-32 bg-app-card rounded-2xl animate-pulse"
+                    className="h-20 w-32 bg-app-bg-card rounded-2xl animate-pulse"
                   />
                 ))}
               </div>

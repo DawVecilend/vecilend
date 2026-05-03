@@ -152,14 +152,14 @@ function EditProfilePage() {
           {/* Sidebar (no animem la nav, només els blocs interns) */}
           <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-app-border">
             <div className="mb-8 px-2">
-              <div className="h-5 w-32 bg-app-card rounded animate-pulse" />
-              <div className="mt-2 h-3 w-40 bg-app-card rounded animate-pulse" />
+              <div className="h-5 w-32 bg-app-bg-card rounded animate-pulse" />
+              <div className="mt-2 h-3 w-40 bg-app-bg-card rounded animate-pulse" />
             </div>
             <div className="space-y-2">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-12 bg-app-card rounded animate-pulse"
+                  className="h-12 bg-app-bg-card rounded animate-pulse"
                 />
               ))}
             </div>
@@ -175,12 +175,12 @@ function EditProfilePage() {
               {/* Columna esquerra: avatar + slider */}
               <div className="lg:col-span-4 space-y-6">
                 <div className="bg-[#2f3634]/40 rounded-xl p-6 border border-app-border/20">
-                  <div className="w-36 h-36 mx-auto mb-4 bg-app-card rounded-xl animate-pulse" />
-                  <div className="h-9 w-full bg-app-card rounded-lg animate-pulse" />
+                  <div className="w-36 h-36 mx-auto mb-4 bg-app-bg-card rounded-xl animate-pulse" />
+                  <div className="h-9 w-full bg-app-bg-card rounded-lg animate-pulse" />
                 </div>
                 <div className="bg-[#2f3634]/40 rounded-xl p-6 border border-app-border/20">
-                  <div className="h-3 w-40 bg-app-card rounded animate-pulse mb-4" />
-                  <div className="h-2 w-full bg-app-card rounded animate-pulse" />
+                  <div className="h-3 w-40 bg-app-bg-card rounded animate-pulse mb-4" />
+                  <div className="h-2 w-full bg-app-bg-card rounded animate-pulse" />
                 </div>
               </div>
 
@@ -190,13 +190,13 @@ function EditProfilePage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div key={i} className="space-y-2">
-                        <div className="h-3 w-24 bg-app-card rounded animate-pulse" />
-                        <div className="h-12 w-full bg-app-card rounded-lg animate-pulse" />
+                        <div className="h-3 w-24 bg-app-bg-card rounded animate-pulse" />
+                        <div className="h-12 w-full bg-app-bg-card rounded-lg animate-pulse" />
                       </div>
                     ))}
                     <div className="md:col-span-2 space-y-2">
-                      <div className="h-3 w-24 bg-app-card rounded animate-pulse" />
-                      <div className="h-28 w-full bg-app-card rounded-lg animate-pulse" />
+                      <div className="h-3 w-24 bg-app-bg-card rounded animate-pulse" />
+                      <div className="h-28 w-full bg-app-bg-card rounded-lg animate-pulse" />
                     </div>
                   </div>
                 </div>
@@ -220,7 +220,7 @@ function EditProfilePage() {
           <nav className="space-y-1">
             <Link
               to={`/settings/profile/${user?.username}`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">home</span>
               <span>Página principal</span>
@@ -234,14 +234,14 @@ function EditProfilePage() {
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/security`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">security</span>
               <span>Seguridad</span>
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/notifications`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">privacy</span>
               <span>Privacidad</span>
@@ -286,7 +286,7 @@ function EditProfilePage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current.click()}
-                  className="w-full py-2 bg-[#21514a] text-[#92c2b8] rounded-lg text-xs font-bold transition-colors hover:bg-app-card"
+                  className="w-full py-2 bg-[#21514a] text-[#92c2b8] rounded-lg text-xs font-bold transition-colors hover:bg-app-bg-card"
                 >
                   Cambiar foto
                 </button>
@@ -303,7 +303,7 @@ function EditProfilePage() {
                   max="100"
                   value={formData.radi_proximitat}
                   onChange={handleChange}
-                  className="w-full h-2 bg-app-card rounded-lg appearance-none cursor-pointer accent-[#4fdbc8]"
+                  className="w-full h-2 bg-app-bg-card rounded-lg appearance-none cursor-pointer accent-[#4fdbc8]"
                 />
                 <p className="text-[10px] text-[#859490] mt-2 italic">
                   Define la distancia máxima para buscar y prestar objetos.
@@ -322,7 +322,7 @@ function EditProfilePage() {
                       name="nom"
                       value={formData.nom}
                       onChange={handleChange}
-                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
                       type="text"
                     />
                   </div>
@@ -334,7 +334,7 @@ function EditProfilePage() {
                       name="cognoms"
                       value={formData.cognoms}
                       onChange={handleChange}
-                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
                       type="text"
                     />
                   </div>
@@ -346,7 +346,7 @@ function EditProfilePage() {
                       name="telefon"
                       value={formData.telefon}
                       onChange={handleChange}
-                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
                       type="text"
                       placeholder="600 000 000"
                     />
@@ -365,7 +365,7 @@ function EditProfilePage() {
                       onBlur={() =>
                         setTimeout(() => setShowSuggestions(false), 200)
                       }
-                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
                       type="text"
                       autoComplete="off"
                     />
@@ -393,7 +393,7 @@ function EditProfilePage() {
                       name="biography"
                       value={formData.biography}
                       onChange={handleChange}
-                      className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none resize-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none resize-none transition-all"
                       rows="4"
                     ></textarea>
                   </div>

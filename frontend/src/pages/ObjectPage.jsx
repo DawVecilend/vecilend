@@ -245,7 +245,7 @@ function ObjectPage() {
           </div>
 
           {!isOwnObject && (
-            <div className="rounded-2xl bg-app-card border border-app-border p-4 flex flex-col gap-3">
+            <div className="rounded-2xl bg-app-bg-card border border-app-border p-4 flex flex-col gap-3">
               {dies > 0 && product.tipus === "lloguer" && (
                 <div className="flex items-center justify-between">
                   <span className="text-label text-app-text-secondary font-body">
@@ -289,7 +289,7 @@ function ObjectPage() {
           )}
 
           {isOwnObject && (
-            <div className="rounded-2xl bg-app-card border border-app-border p-4">
+            <div className="rounded-2xl bg-app-bg-card border border-app-border p-4">
               <p className="text-label text-app-text-secondary font-body text-center">
                 Este objeto es tuyo.
               </p>

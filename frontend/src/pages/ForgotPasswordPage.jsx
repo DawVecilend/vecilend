@@ -57,7 +57,7 @@ function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
                   placeholder="tu@email.com"
                 />
               </div>
@@ -78,7 +78,7 @@ function ForgotPasswordPage() {
             </form>
           </>
         ) : (
-          <div className="bg-app-card border border-app-border rounded-lg p-6 space-y-4">
+          <div className="bg-app-bg-card border border-app-border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-[#4fdbc8] text-3xl">
                 mark_email_read

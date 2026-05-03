@@ -6,7 +6,7 @@ function UserCard({ user }) {
   const totalreseñas = user.total_reseñas ?? 5;
   return (
     <>
-      <div className="flex bg-app-card w-full rounded-2xl h-[183px] p-4 gap-2">
+      <div className="flex bg-app-bg-card w-full rounded-2xl h-[183px] p-4 gap-2">
         <div>
           {user.avatar_url ? (
             <img

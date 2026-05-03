@@ -22,6 +22,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EditObjectPage from "./pages/EditObjectPage";
+import HowItWorksPage from "./pages/HowItWorksPage";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/objects" element={<ObjectsPage />} />
           <Route path="/objects/:id" element={<ObjectPage />} />
