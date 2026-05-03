@@ -73,20 +73,20 @@ function Footer() {
             <div className="flex flex-col items-center gap-4 md:flex-row md:flex-wrap md:justify-center md:gap-6">
               <Link
                 to="/terminos-y-condiciones"
-                className="font-body text-body-base text-white underline underline-offset-4 transition-colors duration-200 hover:text-vecilend-dark-primary"
+                className="font-body text-body-base text-app-text underline underline-offset-4 transition-colors duration-200 hover:text-vecilend-dark-primary"
               >
                 Términos & Condiciones
               </Link>
 
               <Link
                 to="/politica-de-privacidad"
-                className="font-body text-body-base text-white underline underline-offset-4 transition-colors duration-200 hover:text-vecilend-dark-primary"
+                className="font-body text-body-base text-app-text underline underline-offset-4 transition-colors duration-200 hover:text-vecilend-dark-primary"
               >
                 Políticas de Privacidad
               </Link>
             </div>
 
-            <p className="font-body text-body-base text-white md:text-app-text">
+            <p className="font-body text-body-base text-app-text md:text-app-text">
               © 2026 Todos los derechos reservados
             </p>
           </div>

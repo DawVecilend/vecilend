@@ -24,6 +24,7 @@ class ObjecteDetailResource extends JsonResource
             // ── Propietari ──
             'propietari' => $this->whenLoaded('user', fn() => [
                 'id'                => $this->user->id,
+                'username'          => $this->user->username,
                 'nom'               => $this->user->nom,
                 'cognoms'           => $this->user->cognoms,
                 'avatar_url'        => $this->user->avatar_url,
