@@ -6,7 +6,7 @@ import {
   useLocation,
   useSearchParams,
 } from "react-router-dom";
-import { getProduct } from "../services/objects";
+import { getProduct, deleteObject } from "../services/objects";
 import { createTransaction, getTransactions } from "../services/transactions";
 import { useAuth } from "../contexts/AuthContext";
 import BtnBack from "../components/elementos/BtnBack";
@@ -14,6 +14,7 @@ import UserCard from "../components/elementos/UserCard";
 import DateRangeCalendar from "../components/calendar/DateRangeCalendar";
 import ObjectMiniMap from "../components/map/ObjectMiniMap";
 import { cldTransform } from "../utils/cloudinary";
+import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
 
 function ObjectPage() {
   const { id } = useParams();
@@ -32,6 +33,10 @@ function ObjectPage() {
   const [submitError, setSubmitError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [hasPendingRequest, setHasPendingRequest] = useState(false);
+
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   // ── Context de cerca de l'URL ──
   const searchContext = useMemo(
@@ -196,6 +201,22 @@ function ObjectPage() {
   const propietari = product.propietari;
   const images = product.imatges?.map((img) => img.url) || [];
 
+  const handleConfirmDelete = async () => {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteObject(product.id);
+      navigate("/objects");
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+      setDeleteError(msg);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   // ── Decidir el contingut de la caixa d'acció (4 estats) ──
   let actionBox;
   if (isOwnObject) {
@@ -208,14 +229,30 @@ function ObjectPage() {
           Este objeto es tuyo
         </p>
         <p className="text-label text-app-text-secondary font-body mb-4">
-          Solo tú puedes editarlo.
+          Solo tú puedes editarlo o eliminarlo.
         </p>
-        <Link
-          to={`/objects/${product.id}/edit`}
-          className="inline-block rounded-full bg-vecilend-dark-primary px-6 py-2 text-label font-bold text-[#003730] active:scale-95"
-        >
-          Editar objeto
-        </Link>
+
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          <Link
+            to={`/objects/${product.id}/edit`}
+            className="inline-flex items-center gap-2 rounded-full bg-vecilend-dark-primary px-5 py-2 text-label font-bold text-[#003730] active:scale-95 hover:opacity-90 transition"
+          >
+            <span className="material-symbols-outlined text-base">edit</span>
+            Editar
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => {
+              setDeleteError(null);
+              setConfirmDeleteOpen(true);
+            }}
+            className="inline-flex items-center gap-2 rounded-full border border-[#ef4444] px-5 py-2 text-label font-bold text-[#ef4444] hover:bg-[#ef4444]/10 active:scale-95 transition"
+          >
+            <span className="material-symbols-outlined text-base">delete</span>
+            Eliminar
+          </button>
+        </div>
       </div>
     );
   } else if (isUnavailable) {
@@ -457,6 +494,19 @@ function ObjectPage() {
           {actionBox}
         </div>
       </div>
+      <ConfirmDeleteModal
+        open={confirmDeleteOpen}
+        onClose={() => {
+          if (!deleting) setConfirmDeleteOpen(false);
+        }}
+        onConfirm={handleConfirmDelete}
+        title="¿Eliminar producto?"
+        message={`Vas a eliminar "${product.nom}".`}
+        description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
+        confirmLabel="Sí, eliminar"
+        busy={deleting}
+        errorMessage={deleteError}
+      />
     </section>
   );
 }
