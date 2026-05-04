@@ -49,16 +49,18 @@ function FlyTo({ position }) {
  * Selector visual de lloc + radi.
  *
  * Distinció important:
- *   - `value` (prop controlada): el lloc seleccionat de manera explícita per
- *     l'usuari (click, drag, o "Usar mi ubicación"). null si l'usuari no ha
- *     tocat res — en aquest cas el filtre d'ubicació NO s'ha d'aplicar.
- *   - `mapCenter` (state intern): on es centra visualment el mapa per defecte
+ *   - 'value' (prop controlada): el lloc seleccionat explícitament per l'usuari
+ *     (click, drag, o "Usar mi ubicación"). Pot ser null si l'usuari no ha
+ *     interactuat — en aquest cas, el component consumidor pot decidir no
+ *     aplicar cap filtre d'ubicació.
+ *   - 'mapCenter' (state intern): on es centra visualment el mapa per defecte
  *     (geolocalització del navegador o fallback). Sempre té valor perquè el
  *     mapa s'ha de mostrar en algun lloc, però NO surt del component.
  */
 function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
   const { coords, status, requestLocation } = useGeolocation();
   const [mapCenter, setMapCenter] = useState(null);
+  const [geoFailed, setGeoFailed] = useState(false);
 
   // Primera vegada que arriben coords del navegador (o el fallback),
   // les usem per centrar el mapa — però no per fer setState a `value`.
@@ -79,17 +81,15 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
     );
   }
 
-  // El centre del mapa és: el valor seleccionat (si n'hi ha) o el centre visual.
   const center = value || mapCenter;
 
-  /**
-   * "Usar mi ubicación" no només recentra el mapa, també SELECCIONA aquesta
-   * ubicació com a valor (l'usuari ho ha demanat explícitament).
-   */
-  const handleUseMyLocation = () => {
-    requestLocation();
-    if (coords) {
-      onChange(coords);
+  const handleUseMyLocation = async () => {
+    setGeoFailed(false);
+    try {
+      const fresh = await requestLocation();
+      onChange(fresh);
+    } catch {
+      setGeoFailed(true);
     }
   };
 
@@ -139,15 +139,25 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
         </MapContainer>
       </div>
 
-      <button
-        type="button"
-        onClick={handleUseMyLocation}
-        disabled={status === "requesting"}
-        className="self-start inline-flex items-center gap-2 rounded-full bg-vecilend-dark-neutral border border-app-border px-4 py-2 text-label text-app-text font-body hover:border-vecilend-dark-primary disabled:opacity-50"
-      >
-        <span className="material-symbols-outlined text-base">my_location</span>
-        {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación"}
-      </button>
+      <div className="flex flex-col gap-1">
+        <button
+          type="button"
+          onClick={handleUseMyLocation}
+          disabled={status === "requesting"}
+          className="self-start inline-flex items-center gap-2 rounded-full bg-vecilend-dark-neutral border border-app-border px-4 py-2 text-label text-app-text font-body hover:border-vecilend-dark-primary disabled:opacity-50"
+        >
+          <span className="material-symbols-outlined text-base">
+            my_location
+          </span>
+          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación"}
+        </button>
+        {geoFailed && (
+          <p className="text-caption text-amber-400 font-body ml-1">
+            No hemos podido obtener tu ubicación. Puedes seleccionarla pulsando
+            en el mapa.
+          </p>
+        )}
+      </div>
 
       <p className="text-caption text-app-text-secondary font-body">
         Pulsa en el mapa o arrastra el marcador para seleccionar la ubicación.

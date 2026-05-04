@@ -103,6 +103,10 @@ body {
   transition: background-color 200ms ease, color 200ms ease;
 }
 
+textarea {
+  resize: none;
+}
+
 /* Aplica transicions globals als canvis de color */
 * {
   transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;

@@ -14,6 +14,69 @@ use Illuminate\Support\Facades\DB;
 class TransactionController extends Controller
 {
     /**
+     * GET /api/v1/transactions?role=&status=&objecte_id=
+     *
+     * Llista les sol·licituds en què participa l'usuari autenticat.
+     * 
+     * Filtres:
+     *   - role: 'requester' (les que l'usuari ha fet) | 'owner' (les que l'usuari ha rebut com a propietari)
+     *           Si s'omet, retorna les dues llistes barrejades.
+     *   - status: 'pendent' | 'acceptat' | 'rebutjat' | 'finalitzat'
+     *   - objecte_id: Filtra les sol·licituds per un objecte específic (si s'omet, es mostren totes les sol·licituds).
+     *
+     * Ordre: més recents primer.
+     */
+    public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    {
+        // Validación de parámetros
+        $request->validate([
+            'role'       => ['nullable', 'string', 'in:requester,owner'],
+            'status'     => ['nullable', 'string', 'in:pendent,acceptat,rebutjat,finalitzat'],
+            'objecte_id' => ['nullable', 'integer', 'exists:objectes,id'],
+        ]);
+
+        $user = $request->user();
+        $role = $request->input('role');
+
+        // Inicialización de la consulta base
+        $query = Solicitud::with([
+            'objecte.user:id,username,nom,cognoms,avatar_url',
+            'objecte.imatges',
+            'solicitant:id,username,nom,cognoms,avatar_url',
+            'transaccio',
+        ]);
+
+        // Filtrar por rol
+        if ($role === 'requester') {
+            $query->where('solicitant_id', $user->id);
+        } elseif ($role === 'owner') {
+            $query->whereHas('objecte', fn($q) => $q->where('user_id', $user->id));
+        } else {
+            // Filtrar por ambos roles si no se especifica
+            $query->where(function ($q) use ($user) {
+                $q->where('solicitant_id', $user->id)
+                    ->orWhereHas('objecte', fn($oq) => $oq->where('user_id', $user->id));
+            });
+        }
+
+        // Filtrar por estado
+        if ($request->filled('status')) {
+            $query->where('estat', $request->input('status'));
+        }
+
+        // Filtrar por objecte_id si está presente
+        if ($request->filled('objecte_id')) {
+            $query->where('objecte_id', $request->input('objecte_id'));
+        }
+
+        // Ordenar por fecha de creación descendente
+        $solicituds = $query->orderByDesc('created_at')->get();
+
+        // Retornar la colección de transacciones
+        return TransactionResource::collection($solicituds);
+    }
+
+    /**
      * POST /api/v1/transactions
      *
      * Crea una sol·licitud de préstec/lloguer per un objecte.
@@ -32,7 +95,7 @@ class TransactionController extends Controller
 
         $objecte = Objecte::findOrFail($validated['objecte_id']);
 
-        // ── Regla 2: no pots sol·licitar el teu propi objecte ──
+        // ── Regla 1: no pots sol·licitar el teu propi objecte ──
         if ($objecte->user_id === $user->id) {
             return response()->json([
                 'message' => 'No puedes solicitar tu propio objeto.',
@@ -40,11 +103,24 @@ class TransactionController extends Controller
             ], 422);
         }
 
-        // ── Regla 3: si lloguer, l'objecte ha de tenir preu_diari ──
+        // ── Regla 2: si és lloguer, l'objecte ha de tenir preu_diari ──
         if ($objecte->tipus === 'lloguer' && !$objecte->preu_diari) {
             return response()->json([
                 'message' => 'Este objeto no tiene precio de alquiler configurado.',
                 'errors'  => ['objecte_id' => ['L\'objecte no té preu_diari per a lloguer.']],
+            ], 422);
+        }
+
+        // ── Regla 3: no es pot tenir més d'una sol·licitud pendent del mateix usuari ──
+        $jaPendent = Solicitud::where('solicitant_id', $user->id)
+            ->where('objecte_id', $objecte->id)
+            ->where('estat', 'pendent')
+            ->exists();
+
+        if ($jaPendent) {
+            return response()->json([
+                'message' => 'Ya tienes una solicitud pendiente sobre este objeto. Espera a que el propietario responda.',
+                'errors'  => ['objecte_id' => ['Ja tens una sol·licitud pendent sobre aquest objecte.']],
             ], 422);
         }
 

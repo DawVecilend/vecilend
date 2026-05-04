@@ -2,15 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BtnBack from "../components/elementos/BtnBack";
 import { getCategories } from "../services/categories";
-import { getProduct, updateObject } from "../services/objects";
+import { getProduct, updateObject, deleteObject } from "../services/objects";
 import { mapCategories } from "../mappers/categoryMapper";
 import { cldTransform } from "../utils/cloudinary";
+import ObjectLocationPicker from "../components/map/ObjectLocationPicker";
+import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
 
 function EditObjectPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const categoryDropdownRef = useRef(null);
+  const subcategoryDropdownRef = useRef(null);
   const fileInputRef = useRef(null);
 
   const [form, setForm] = useState({
@@ -18,8 +21,12 @@ function EditObjectPage() {
     pricePerDay: "",
     description: "",
     category: "",
+    subcategory: "",
     status: "disponible",
+    tipus: "lloguer",
   });
+
+  const [location, setLocation] = useState(null);
 
   const [existingImages, setExistingImages] = useState([]);
   const [imagesToDelete, setImagesToDelete] = useState([]);
@@ -31,15 +38,23 @@ function EditObjectPage() {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const [openCategories, setOpenCategories] = useState(false);
+  const [openSubcategories, setOpenSubcategories] = useState(false);
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   const [fieldErrors, setFieldErrors] = useState({
     name: "",
     pricePerDay: "",
     description: "",
     category: "",
+    subcategory: "",
     images: "",
+    location: "",
   });
 
   useEffect(() => {
@@ -54,7 +69,6 @@ function EditObjectPage() {
         ]);
 
         const mappedCategories = mapCategories(rawCategories);
-
         setCategories(mappedCategories);
 
         setForm({
@@ -65,8 +79,19 @@ function EditObjectPage() {
               : "",
           description: product.descripcio || "",
           category: product.categoria?.id ? String(product.categoria.id) : "",
+          subcategory: product.subcategoria?.id
+            ? String(product.subcategoria.id)
+            : "",
           status: product.estat || "disponible",
+          tipus: product.tipus || "lloguer",
         });
+
+        if (product.ubicacio?.lat != null && product.ubicacio?.lng != null) {
+          setLocation({
+            lat: Number(product.ubicacio.lat),
+            lng: Number(product.ubicacio.lng),
+          });
+        }
 
         setExistingImages(product.imatges || []);
       } catch (error) {
@@ -89,6 +114,13 @@ function EditObjectPage() {
       ) {
         setOpenCategories(false);
       }
+
+      if (
+        subcategoryDropdownRef.current &&
+        !subcategoryDropdownRef.current.contains(event.target)
+      ) {
+        setOpenSubcategories(false);
+      }
     }
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -103,37 +135,65 @@ function EditObjectPage() {
       (category) => String(category.id) === String(form.category),
     ) || null;
 
+  const availableSubcategories = selectedCategory?.subcategories || [];
+
+  const selectedSubcategory =
+    availableSubcategories.find(
+      (subcategory) => String(subcategory.id) === String(form.subcategory),
+    ) || null;
+
   const activeExistingImages = existingImages.filter(
     (image) => !imagesToDelete.includes(image.id),
   );
 
   const totalImages = activeExistingImages.length + newImages.length;
 
-  const validateField = (name, value, currentTotalImages = totalImages) => {
+  const validateField = (
+    name,
+    value,
+    currentTotalImages = totalImages,
+    currentLocation = location,
+  ) => {
     switch (name) {
       case "name":
         if (!value.trim()) return "El nombre es obligatorio";
-        if (value.trim().length < 3)
+        if (value.trim().length < 3) {
           return "El nombre debe tener al menos 3 caracteres";
+        }
         return "";
 
       case "pricePerDay":
+        if (form.tipus === "prestec") return "";
         if (value === "") return "El precio por día es obligatorio";
-        if (Number(value) <= 0) return "El precio debe ser mayor que 0";
+        if (Number(value) < 1) return "El precio mínimo es 1,00€";
+        if (Number(value) > 9999.99) return "El precio máximo es 9.999,99€";
         return "";
 
       case "description":
         if (!value.trim()) return "La descripción es obligatoria";
-        if (value.trim().length < 10)
+        if (value.trim().length < 10) {
           return "La descripción debe tener al menos 10 caracteres";
+        }
         return "";
 
       case "category":
         if (!value) return "Debes seleccionar una categoría";
         return "";
 
+      case "subcategory":
+        if (!value) return "Debes seleccionar una subcategoría";
+        return "";
+
       case "images":
-        if (currentTotalImages <= 0) return "El producto debe tener al menos una imagen";
+        if (currentTotalImages <= 0) {
+          return "El producto debe tener al menos una imagen";
+        }
+        return "";
+
+      case "location":
+        if (!currentLocation) {
+          return "Debes seleccionar la ubicación del objeto";
+        }
         return "";
 
       default:
@@ -144,10 +204,15 @@ function EditObjectPage() {
   const validateForm = () => {
     const newErrors = {
       name: validateField("name", form.name),
-      pricePerDay: validateField("pricePerDay", form.pricePerDay),
+      pricePerDay:
+        form.tipus === "lloguer"
+          ? validateField("pricePerDay", form.pricePerDay)
+          : "",
       description: validateField("description", form.description),
       category: validateField("category", form.category),
+      subcategory: validateField("subcategory", form.subcategory),
       images: validateField("images", "", totalImages),
+      location: validateField("location", "", totalImages, location),
     };
 
     setFieldErrors(newErrors);
@@ -171,21 +236,51 @@ function EditObjectPage() {
     setErrorMessage("");
   };
 
+  const handleLocationChange = (newLocation) => {
+    setLocation(newLocation);
+
+    setFieldErrors((prev) => ({
+      ...prev,
+      location: validateField("location", "", totalImages, newLocation),
+    }));
+
+    setErrorMessage("");
+  };
+
   const handleSelectCategory = (categoryId) => {
     const categoryValue = String(categoryId);
 
     setForm((prev) => ({
       ...prev,
       category: categoryValue,
+      subcategory: "",
     }));
 
     setFieldErrors((prev) => ({
       ...prev,
       category: validateField("category", categoryValue),
+      subcategory: "Debes seleccionar una subcategoría",
     }));
 
     setErrorMessage("");
     setOpenCategories(false);
+  };
+
+  const handleSelectSubcategory = (subcategoryId) => {
+    const subcategoryValue = String(subcategoryId);
+
+    setForm((prev) => ({
+      ...prev,
+      subcategory: subcategoryValue,
+    }));
+
+    setFieldErrors((prev) => ({
+      ...prev,
+      subcategory: validateField("subcategory", subcategoryValue),
+    }));
+
+    setErrorMessage("");
+    setOpenSubcategories(false);
   };
 
   const handleNewImagesChange = (event) => {
@@ -231,7 +326,8 @@ function EditObjectPage() {
           ),
       );
 
-      const nextTotalImages = activeExistingImages.length + updatedImages.length;
+      const nextTotalImages =
+        activeExistingImages.length + updatedImages.length;
 
       setFieldErrors((prev) => ({
         ...prev,
@@ -273,15 +369,31 @@ function EditObjectPage() {
     return cldTransform(imageUrl, "card") || imageUrl;
   };
 
+  const handleConfirmDelete = async () => {
+    setDeleting(true);
+    setDeleteError(null);
+
+    try {
+      await deleteObject(id);
+      navigate("/objects");
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+
+      setDeleteError(message);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     setSuccessMessage("");
     setErrorMessage("");
 
-    const isValid = validateForm();
-
-    if (!isValid) {
+    if (!validateForm()) {
       setErrorMessage("Revisa los campos marcados antes de guardar");
       return;
     }
@@ -292,11 +404,22 @@ function EditObjectPage() {
       const formData = new FormData();
 
       formData.append("nom", form.name);
-      formData.append("preu_diari", form.pricePerDay);
       formData.append("descripcio", form.description);
       formData.append("categoria_id", form.category);
-      formData.append("tipus", "lloguer");
+      formData.append("subcategoria_id", form.subcategory);
+      formData.append("tipus", form.tipus);
       formData.append("estat", form.status);
+
+      if (form.tipus === "lloguer") {
+        formData.append("preu_diari", form.pricePerDay);
+      } else {
+        formData.append("preu_diari", "");
+      }
+
+      if (location) {
+        formData.append("lat", String(location.lat));
+        formData.append("lng", String(location.lng));
+      }
 
       imagesToDelete.forEach((imageId) => {
         formData.append("imatges_eliminar[]", imageId);
@@ -464,44 +587,97 @@ function EditObjectPage() {
               </div>
             </div>
 
-            <div className="space-y-8">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
-                >
-                  Nombre del producto
-                </label>
+            <div>
+              <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
+                Tipo de publicación
+              </label>
 
-                <div
-                  className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
-                    fieldErrors.name ? "border border-[#ef4444]" : ""
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      tipus: "lloguer",
+                    }))
+                  }
+                  className={`flex h-[56px] items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
+                    form.tipus === "lloguer"
+                      ? "bg-[#14B8A6] text-white"
+                      : "bg-[#101217] text-[#F2F4F8] hover:bg-[#161a21]"
                   }`}
                 >
-                  <img
-                    src="/assets/icons/label-icon.svg"
-                    alt=""
-                    className="h-5 w-5 opacity-60"
-                  />
+                  <span className="material-symbols-outlined">payments</span>
+                  Alquiler
+                </button>
 
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Introducir el nombre del producto"
-                    className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none"
-                  />
-                </div>
-
-                {fieldErrors.name && (
-                  <p className="mt-2 text-sm text-[#ef4444]">
-                    {fieldErrors.name}
-                  </p>
-                )}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      tipus: "prestec",
+                      pricePerDay: "",
+                    }))
+                  }
+                  className={`flex h-[56px] items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
+                    form.tipus === "prestec"
+                      ? "bg-[#14B8A6] text-white"
+                      : "bg-[#101217] text-[#F2F4F8] hover:bg-[#161a21]"
+                  }`}
+                >
+                  <span className="material-symbols-outlined">
+                    volunteer_activism
+                  </span>
+                  Préstamo gratuito
+                </button>
               </div>
 
+              <p className="mt-2 text-xs text-[#6E7480]">
+                {form.tipus === "lloguer"
+                  ? "Cobrarás un precio por día por el uso del objeto."
+                  : "Prestarás el objeto sin coste para la persona que lo solicite."}
+              </p>
+            </div>
+
+            <div>
+              <label
+                htmlFor="name"
+                className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
+              >
+                Nombre del producto
+              </label>
+
+              <div
+                className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
+                  fieldErrors.name ? "border border-[#ef4444]" : ""
+                }`}
+              >
+                <img
+                  src="/assets/icons/label-icon.svg"
+                  alt=""
+                  className="h-5 w-5 opacity-60"
+                />
+
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Introducir el nombre del producto"
+                  className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none"
+                />
+              </div>
+
+              {fieldErrors.name && (
+                <p className="mt-2 text-sm text-[#ef4444]">
+                  {fieldErrors.name}
+                </p>
+              )}
+            </div>
+
+            {form.tipus === "lloguer" && (
               <div>
                 <label
                   htmlFor="pricePerDay"
@@ -523,11 +699,11 @@ function EditObjectPage() {
                     id="pricePerDay"
                     name="pricePerDay"
                     type="number"
-                    min="0"
+                    min="1"
                     step="0.01"
                     value={form.pricePerDay}
                     onChange={handleChange}
-                    placeholder="Precio por día"
+                    placeholder="Mínimo 1,00€"
                     className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none"
                   />
                 </div>
@@ -538,35 +714,37 @@ function EditObjectPage() {
                   </p>
                 )}
               </div>
+            )}
 
-              <div>
-                <label
-                  htmlFor="description"
-                  className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
-                >
-                  Descripción
-                </label>
+            <div>
+              <label
+                htmlFor="description"
+                className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
+              >
+                Descripción
+              </label>
 
-                <textarea
-                  id="description"
-                  name="description"
-                  rows="5"
-                  value={form.description}
-                  onChange={handleChange}
-                  placeholder="Describe los detalles y características del producto"
-                  className={`w-full rounded-[16px] bg-[#101217] px-4 py-4 font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none ${
-                    fieldErrors.description ? "border border-[#ef4444]" : ""
-                  }`}
-                />
+              <textarea
+                id="description"
+                name="description"
+                rows="5"
+                value={form.description}
+                onChange={handleChange}
+                placeholder="Describe los detalles y características del producto"
+                className={`w-full rounded-[16px] bg-[#101217] px-4 py-4 font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none ${
+                  fieldErrors.description ? "border border-[#ef4444]" : ""
+                }`}
+              />
 
-                {fieldErrors.description && (
-                  <p className="mt-2 text-sm text-[#ef4444]">
-                    {fieldErrors.description}
-                  </p>
-                )}
-              </div>
+              {fieldErrors.description && (
+                <p className="mt-2 text-sm text-[#ef4444]">
+                  {fieldErrors.description}
+                </p>
+              )}
+            </div>
 
-              <div>
+            <div className="flex flex-col gap-6 md:flex-row">
+              <div className="flex-1">
                 <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                   Categoría
                 </label>
@@ -582,7 +760,7 @@ function EditObjectPage() {
                   >
                     {loadingCategories ? (
                       <span className="inline-flex items-center gap-2 text-[#6E7480]">
-                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
+                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#6E7480] border-t-transparent" />
                         Cargando categorías…
                       </span>
                     ) : (
@@ -649,25 +827,141 @@ function EditObjectPage() {
                 )}
               </div>
 
-              <div>
-                <label
-                  htmlFor="status"
-                  className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
-                >
-                  Estado
+              <div className="flex-1">
+                <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
+                  Subcategoría
                 </label>
 
-                <select
-                  id="status"
-                  name="status"
-                  value={form.status}
-                  onChange={handleChange}
-                  className="h-[56px] w-full rounded-[16px] bg-[#101217] px-4 font-body text-[16px] text-white focus:outline-none"
-                >
-                  <option value="disponible">Disponible</option>
-                  <option value="no_disponible">No disponible</option>
-                </select>
+                <div ref={subcategoryDropdownRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setOpenSubcategories(!openSubcategories)}
+                    disabled={loadingCategories || !selectedCategory}
+                    className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-[#101217] px-4 font-body text-[16px] text-white transition hover:bg-[#161a21] disabled:cursor-not-allowed disabled:opacity-70 ${
+                      fieldErrors.subcategory ? "border border-[#ef4444]" : ""
+                    }`}
+                  >
+                    {loadingCategories ? (
+                      <span className="inline-flex items-center gap-2 text-[#6E7480]">
+                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#6E7480] border-t-transparent" />
+                        Cargando subcategorías…
+                      </span>
+                    ) : (
+                      <span
+                        className={
+                          selectedSubcategory ? "text-white" : "text-[#6E7480]"
+                        }
+                      >
+                        {selectedSubcategory
+                          ? selectedSubcategory.name
+                          : selectedCategory
+                            ? "Seleccione una subcategoría"
+                            : "Selecciona antes una categoría"}
+                      </span>
+                    )}
+
+                    <svg
+                      className={`transition-transform duration-300 ${
+                        openSubcategories ? "rotate-180" : ""
+                      }`}
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M6 9L12 15L18 9"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+
+                  {openSubcategories && !loadingCategories && (
+                    <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
+                      {availableSubcategories.length > 0 ? (
+                        availableSubcategories.map((subcategory) => {
+                          const isActive =
+                            String(subcategory.id) ===
+                            String(form.subcategory);
+
+                          return (
+                            <button
+                              key={subcategory.id}
+                              type="button"
+                              onClick={() =>
+                                handleSelectSubcategory(subcategory.id)
+                              }
+                              className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
+                                isActive
+                                  ? "bg-[#0F766E]/20 text-[#14B8A6]"
+                                  : "text-[#F2F4F8] hover:bg-[#16181C]"
+                              }`}
+                            >
+                              {subcategory.name}
+                            </button>
+                          );
+                        })
+                      ) : (
+                        <p className="px-4 py-3 text-left font-body text-[15px] text-[#6E7480]">
+                          Esta categoría no tiene subcategorías
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {fieldErrors.subcategory && (
+                  <p className="mt-2 text-sm text-[#ef4444]">
+                    {fieldErrors.subcategory}
+                  </p>
+                )}
               </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="status"
+                className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
+              >
+                Estado
+              </label>
+
+              <select
+                id="status"
+                name="status"
+                value={form.status}
+                onChange={handleChange}
+                className="h-[56px] w-full rounded-[16px] bg-[#101217] px-4 font-body text-[16px] text-white focus:outline-none"
+              >
+                <option value="disponible">Disponible</option>
+                <option value="no_disponible">No disponible</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
+                Ubicación del objeto
+              </label>
+
+              <p className="mb-3 text-xs text-[#6E7480]">
+                Puedes ajustar la ubicación pulsando en el mapa o arrastrando el
+                marcador.
+              </p>
+
+              <ObjectLocationPicker
+                value={location}
+                onChange={handleLocationChange}
+              />
+
+              {fieldErrors.location && (
+                <p className="mt-2 text-sm text-[#ef4444]">
+                  {fieldErrors.location}
+                </p>
+              )}
             </div>
 
             <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -716,8 +1010,47 @@ function EditObjectPage() {
               </div>
             </div>
           </form>
+
+          <div className="mt-12 rounded-[16px] border border-[#ef4444]/30 bg-[#ef4444]/5 p-6">
+            <h2 className="mb-1 font-heading text-[18px] font-semibold text-[#ef4444]">
+              Zona de peligro
+            </h2>
+
+            <p className="mb-4 font-body text-sm text-[#B6BCC8]">
+              Una vez eliminado, no podrás recuperar este producto ni sus
+              imágenes.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => {
+                setDeleteError(null);
+                setConfirmDeleteOpen(true);
+              }}
+              className="inline-flex items-center gap-2 rounded-[14px] border border-[#ef4444] px-6 py-3 font-body text-[15px] font-semibold text-[#ef4444] transition-all hover:bg-[#ef4444]/10"
+            >
+              <span className="material-symbols-outlined text-base">
+                delete
+              </span>
+              Eliminar producto
+            </button>
+          </div>
         </div>
       </section>
+
+      <ConfirmDeleteModal
+        open={confirmDeleteOpen}
+        onClose={() => {
+          if (!deleting) setConfirmDeleteOpen(false);
+        }}
+        onConfirm={handleConfirmDelete}
+        title="¿Eliminar producto?"
+        message={`Vas a eliminar "${form.name}".`}
+        description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
+        confirmLabel="Sí, eliminar"
+        busy={deleting}
+        errorMessage={deleteError}
+      />
     </>
   );
 }

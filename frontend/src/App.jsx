@@ -24,6 +24,8 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EditObjectPage from "./pages/EditObjectPage";
 import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
+import TransactionsPage from "./pages/TransactionsPage";
+import PaymentMockPage from "./pages/PaymentMockPage";
 
 function App() {
   return (
@@ -77,6 +79,11 @@ function App() {
             <Route
               path="/settings/profile/:username/notifications"
               element={<SettingsPage />}
+            />
+            <Route path="/transactions" element={<TransactionsPage />} />
+            <Route
+              path="/transactions/:id/payment"
+              element={<PaymentMockPage />}
             />
           </Route>
         </Routes>
