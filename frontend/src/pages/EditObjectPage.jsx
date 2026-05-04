@@ -6,6 +6,8 @@ import { getProduct, updateObject } from "../services/objects";
 import { mapCategories } from "../mappers/categoryMapper";
 import { cldTransform } from "../utils/cloudinary";
 import ObjectLocationPicker from "../components/map/ObjectLocationPicker";
+import { deleteObject } from "../services/objects";
+import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
 
 function EditObjectPage() {
   const { id } = useParams();
@@ -41,6 +43,10 @@ function EditObjectPage() {
   const [openSubcategories, setOpenSubcategories] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   const [fieldErrors, setFieldErrors] = useState({
     name: "",
@@ -317,6 +323,23 @@ function EditObjectPage() {
   const getExistingImageUrl = (image) => {
     const imageUrl = image.url || image.url_cloudinary || image.imatge || "";
     return cldTransform(imageUrl, "card") || imageUrl;
+  };
+
+  const handleConfirmDelete = async () => {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteObject(id);
+      navigate("/objects");
+    } catch (err) {
+      // 409 = té sol·licituds pendents/acceptades
+      const msg =
+        err.response?.data?.message ||
+        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+      setDeleteError(msg);
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -899,8 +922,44 @@ function EditObjectPage() {
               </div>
             </div>
           </form>
+          {/* ── Zona de peligro ── */}
+          <div className="mt-12 rounded-[16px] border border-[#ef4444]/30 bg-[#ef4444]/5 p-6">
+            <h2 className="font-heading text-[18px] font-semibold text-[#ef4444] mb-1">
+              Zona de peligro
+            </h2>
+            <p className="text-sm text-[#B6BCC8] font-body mb-4">
+              Una vez eliminado, no podrás recuperar este producto ni sus
+              imágenes.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setDeleteError(null);
+                setConfirmDeleteOpen(true);
+              }}
+              className="inline-flex items-center gap-2 rounded-[14px] border border-[#ef4444] px-6 py-3 font-body text-[15px] font-semibold text-[#ef4444] transition-all hover:bg-[#ef4444]/10"
+            >
+              <span className="material-symbols-outlined text-base">
+                delete
+              </span>
+              Eliminar producto
+            </button>
+          </div>
         </div>
       </section>
+      <ConfirmDeleteModal
+        open={confirmDeleteOpen}
+        onClose={() => {
+          if (!deleting) setConfirmDeleteOpen(false);
+        }}
+        onConfirm={handleConfirmDelete}
+        title="¿Eliminar producto?"
+        message={`Vas a eliminar "${form.name}".`}
+        description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
+        confirmLabel="Sí, eliminar"
+        busy={deleting}
+        errorMessage={deleteError}
+      />
     </>
   );
 }

@@ -617,14 +617,22 @@ class ObjecteController extends Controller
     public function destroy(int $id)
     {
         $objecte = Objecte::findOrFail($id);
-
-        // Autorització via Policy
         $this->authorize('delete', $objecte);
 
-        // ── 1. Eliminar imatges de Cloudinary ──
-        $imatges = $objecte->imatges;
+        // ── Guardia: si l'objecte té sol·licituds pendents o acceptades,
+        //    no es pot eliminar fins que el propietari les resolgui ──
+        $teObertes = $objecte->solicituds()
+            ->whereIn('estat', ['pendent', 'acceptat'])
+            ->exists();
 
-        foreach ($imatges as $img) {
+        if ($teObertes) {
+            return response()->json([
+                'message' => 'No puedes eliminar este objeto mientras tenga solicitudes pendientes o aceptadas. Resuélvelas primero.',
+            ], 409);
+        }
+
+        // ── 1. Eliminar imatges de Cloudinary ──
+        foreach ($objecte->imatges as $img) {
             try {
                 $this->cloudinary->delete($img->public_id_cloudinary);
             } catch (\Throwable $e) {
@@ -632,7 +640,6 @@ class ObjecteController extends Controller
                     'public_id' => $img->public_id_cloudinary,
                     'error'     => $e->getMessage(),
                 ]);
-                // Continuem — no volem que una imatge bloquegi l'eliminació
             }
         }
 
