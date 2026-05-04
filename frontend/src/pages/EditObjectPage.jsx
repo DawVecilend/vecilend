@@ -2,11 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BtnBack from "../components/elementos/BtnBack";
 import { getCategories } from "../services/categories";
-import { getProduct, updateObject } from "../services/objects";
+import { getProduct, updateObject, deleteObject } from "../services/objects";
 import { mapCategories } from "../mappers/categoryMapper";
 import { cldTransform } from "../utils/cloudinary";
 import ObjectLocationPicker from "../components/map/ObjectLocationPicker";
-import { deleteObject } from "../services/objects";
 import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
 
 function EditObjectPage() {
@@ -27,7 +26,6 @@ function EditObjectPage() {
     tipus: "lloguer",
   });
 
-  // Ubicació de l'objecte: { lat, lng } | null
   const [location, setLocation] = useState(null);
 
   const [existingImages, setExistingImages] = useState([]);
@@ -41,6 +39,7 @@ function EditObjectPage() {
 
   const [openCategories, setOpenCategories] = useState(false);
   const [openSubcategories, setOpenSubcategories] = useState(false);
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -58,7 +57,6 @@ function EditObjectPage() {
     location: "",
   });
 
-  // ── Carregar producte i categories ──
   useEffect(() => {
     async function loadData() {
       setLoadingPage(true);
@@ -70,7 +68,8 @@ function EditObjectPage() {
           getCategories(),
         ]);
 
-        setCategories(mapCategories(rawCategories));
+        const mappedCategories = mapCategories(rawCategories);
+        setCategories(mappedCategories);
 
         setForm({
           name: product.nom || "",
@@ -87,7 +86,6 @@ function EditObjectPage() {
           tipus: product.tipus || "lloguer",
         });
 
-        // Si el backend retorna ubicacio com a {lat, lng}, ho posem.
         if (product.ubicacio?.lat != null && product.ubicacio?.lng != null) {
           setLocation({
             lat: Number(product.ubicacio.lat),
@@ -104,10 +102,10 @@ function EditObjectPage() {
         setLoadingCategories(false);
       }
     }
+
     loadData();
   }, [id]);
 
-  // ── Tancar dropdowns en clicar fora ──
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -116,6 +114,7 @@ function EditObjectPage() {
       ) {
         setOpenCategories(false);
       }
+
       if (
         subcategoryDropdownRef.current &&
         !subcategoryDropdownRef.current.contains(event.target)
@@ -123,8 +122,12 @@ function EditObjectPage() {
         setOpenSubcategories(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const selectedCategory =
@@ -132,14 +135,17 @@ function EditObjectPage() {
       (category) => String(category.id) === String(form.category),
     ) || null;
 
+  const availableSubcategories = selectedCategory?.subcategories || [];
+
   const selectedSubcategory =
-    selectedCategory?.subcategories.find(
+    availableSubcategories.find(
       (subcategory) => String(subcategory.id) === String(form.subcategory),
     ) || null;
 
   const activeExistingImages = existingImages.filter(
     (image) => !imagesToDelete.includes(image.id),
   );
+
   const totalImages = activeExistingImages.length + newImages.length;
 
   const validateField = (
@@ -151,8 +157,9 @@ function EditObjectPage() {
     switch (name) {
       case "name":
         if (!value.trim()) return "El nombre es obligatorio";
-        if (value.trim().length < 3)
+        if (value.trim().length < 3) {
           return "El nombre debe tener al menos 3 caracteres";
+        }
         return "";
 
       case "pricePerDay":
@@ -164,8 +171,9 @@ function EditObjectPage() {
 
       case "description":
         if (!value.trim()) return "La descripción es obligatoria";
-        if (value.trim().length < 10)
+        if (value.trim().length < 10) {
           return "La descripción debe tener al menos 10 caracteres";
+        }
         return "";
 
       case "category":
@@ -177,13 +185,15 @@ function EditObjectPage() {
         return "";
 
       case "images":
-        if (currentTotalImages <= 0)
+        if (currentTotalImages <= 0) {
           return "El producto debe tener al menos una imagen";
+        }
         return "";
 
       case "location":
-        if (!currentLocation)
+        if (!currentLocation) {
           return "Debes seleccionar la ubicación del objeto";
+        }
         return "";
 
       default:
@@ -204,61 +214,81 @@ function EditObjectPage() {
       images: validateField("images", "", totalImages),
       location: validateField("location", "", totalImages, location),
     };
+
     setFieldErrors(newErrors);
+
     return Object.values(newErrors).every((error) => !error);
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
     setFieldErrors((prev) => ({
       ...prev,
       [name]: validateField(name, value),
     }));
+
     setErrorMessage("");
   };
 
   const handleLocationChange = (newLocation) => {
     setLocation(newLocation);
+
     setFieldErrors((prev) => ({
       ...prev,
       location: validateField("location", "", totalImages, newLocation),
     }));
+
     setErrorMessage("");
   };
 
   const handleSelectCategory = (categoryId) => {
     const categoryValue = String(categoryId);
+
     setForm((prev) => ({
       ...prev,
       category: categoryValue,
-      // Reset de subcategoria en canviar categoria
       subcategory: "",
     }));
+
     setFieldErrors((prev) => ({
       ...prev,
       category: validateField("category", categoryValue),
-      subcategory: "",
+      subcategory: "Debes seleccionar una subcategoría",
     }));
+
     setErrorMessage("");
     setOpenCategories(false);
   };
 
   const handleSelectSubcategory = (subcategoryId) => {
     const subcategoryValue = String(subcategoryId);
-    setForm((prev) => ({ ...prev, subcategory: subcategoryValue }));
+
+    setForm((prev) => ({
+      ...prev,
+      subcategory: subcategoryValue,
+    }));
+
     setFieldErrors((prev) => ({
       ...prev,
       subcategory: validateField("subcategory", subcategoryValue),
     }));
+
     setErrorMessage("");
     setOpenSubcategories(false);
   };
 
   const handleNewImagesChange = (event) => {
     const files = Array.from(event.target.files || []);
+
     setNewImages((prevImages) => {
       const mergedImages = [...prevImages, ...files];
+
       const uniqueImages = mergedImages.filter((image, index, array) => {
         return (
           index ===
@@ -270,13 +300,17 @@ function EditObjectPage() {
           )
         );
       });
+
       const nextTotalImages = activeExistingImages.length + uniqueImages.length;
+
       setFieldErrors((prev) => ({
         ...prev,
         images: validateField("images", "", nextTotalImages),
       }));
+
       return uniqueImages;
     });
+
     setErrorMessage("");
     event.target.value = "";
   };
@@ -291,14 +325,18 @@ function EditObjectPage() {
             image.lastModified === imageToRemove.lastModified
           ),
       );
+
       const nextTotalImages =
         activeExistingImages.length + updatedImages.length;
+
       setFieldErrors((prev) => ({
         ...prev,
         images: validateField("images", "", nextTotalImages),
       }));
+
       return updatedImages;
     });
+
     setErrorMessage("");
   };
 
@@ -307,36 +345,43 @@ function EditObjectPage() {
       const updatedImagesToDelete = prev.includes(imageId)
         ? prev
         : [...prev, imageId];
+
       const nextExistingImages = existingImages.filter(
         (image) => !updatedImagesToDelete.includes(image.id),
       );
+
       const nextTotalImages = nextExistingImages.length + newImages.length;
+
       setFieldErrors((prevErrors) => ({
         ...prevErrors,
         images: validateField("images", "", nextTotalImages),
       }));
+
       return updatedImagesToDelete;
     });
+
     setErrorMessage("");
   };
 
   const getExistingImageUrl = (image) => {
     const imageUrl = image.url || image.url_cloudinary || image.imatge || "";
+
     return cldTransform(imageUrl, "card") || imageUrl;
   };
 
   const handleConfirmDelete = async () => {
     setDeleting(true);
     setDeleteError(null);
+
     try {
       await deleteObject(id);
       navigate("/objects");
-    } catch (err) {
-      // 409 = té sol·licituds pendents/acceptades
-      const msg =
-        err.response?.data?.message ||
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
         "No se ha podido eliminar el producto. Inténtalo de nuevo.";
-      setDeleteError(msg);
+
+      setDeleteError(message);
     } finally {
       setDeleting(false);
     }
@@ -344,6 +389,7 @@ function EditObjectPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     setSuccessMessage("");
     setErrorMessage("");
 
@@ -356,6 +402,7 @@ function EditObjectPage() {
 
     try {
       const formData = new FormData();
+
       formData.append("nom", form.name);
       formData.append("descripcio", form.description);
       formData.append("categoria_id", form.category);
@@ -377,6 +424,7 @@ function EditObjectPage() {
       imagesToDelete.forEach((imageId) => {
         formData.append("imatges_eliminar[]", imageId);
       });
+
       newImages.forEach((image) => {
         formData.append("imatges_noves[]", image);
       });
@@ -385,9 +433,13 @@ function EditObjectPage() {
 
       setSuccessMessage("Producto actualizado correctamente");
       setErrorMessage("");
-      setTimeout(() => navigate(`/objects/${id}`), 1000);
+
+      setTimeout(() => {
+        navigate(`/objects/${id}`);
+      }, 1000);
     } catch (error) {
       console.error("Error actualizando producto:", error);
+
       if (error.response?.status === 422 && error.response.data?.errors) {
         const validationErrors = error.response.data.errors;
         const firstErrorKey = Object.keys(validationErrors)[0];
@@ -408,11 +460,14 @@ function EditObjectPage() {
       <>
         <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
           <BtnBack />
+
           <h1 className="font-heading text-[28px] font-semibold text-[#F2F4F8] md:text-[32px]">
             Editar producto
           </h1>
+
           <div className="w-[90px]" />
         </div>
+
         <section className="min-h-screen bg-[#0A0A0B] px-4 pb-16 pt-6 text-[#F2F4F8] md:px-6">
           <div className="mx-auto w-full max-w-4xl rounded-[24px] border border-[#1D222A] bg-[#101217] p-8">
             <p className="text-[#B6BCC8]">Cargando producto...</p>
@@ -426,16 +481,17 @@ function EditObjectPage() {
     <>
       <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
         <BtnBack />
+
         <h1 className="font-heading text-[28px] font-semibold text-[#F2F4F8] md:text-[32px]">
           Editar producto
         </h1>
+
         <div className="w-[90px]" />
       </div>
 
       <section className="min-h-screen bg-[#0A0A0B] px-4 pb-16 pt-6 text-[#F2F4F8] md:px-6">
         <div className="mx-auto w-full max-w-4xl">
           <form onSubmit={handleSubmit} className="space-y-10">
-            {/* ── Imatges ── */}
             <div className="rounded-[24px] border border-dashed border-[#1D222A] bg-[#050608] px-6 py-10 md:px-10 md:py-12">
               <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-6 font-body text-[16px] text-[#F2F4F8]">
@@ -450,6 +506,7 @@ function EditObjectPage() {
                         alt={form.name}
                         className="h-[132px] w-[132px] rounded-[20px] object-cover"
                       />
+
                       <button
                         type="button"
                         onClick={() => handleRemoveExistingImage(image.id)}
@@ -470,6 +527,7 @@ function EditObjectPage() {
                         alt={image.name}
                         className="h-[132px] w-[132px] rounded-[20px] object-cover"
                       />
+
                       <button
                         type="button"
                         onClick={() => handleRemoveNewImage(image)}
@@ -529,16 +587,21 @@ function EditObjectPage() {
               </div>
             </div>
 
-            {/* ── Tipus: préstec o lloguer ── */}
             <div>
               <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                 Tipo de publicación
               </label>
+
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setForm((p) => ({ ...p, tipus: "lloguer" }))}
-                  className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      tipus: "lloguer",
+                    }))
+                  }
+                  className={`flex h-[56px] items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "lloguer"
                       ? "bg-[#14B8A6] text-white"
                       : "bg-[#101217] text-[#F2F4F8] hover:bg-[#161a21]"
@@ -547,16 +610,17 @@ function EditObjectPage() {
                   <span className="material-symbols-outlined">payments</span>
                   Alquiler
                 </button>
+
                 <button
                   type="button"
                   onClick={() =>
-                    setForm((p) => ({
-                      ...p,
+                    setForm((prev) => ({
+                      ...prev,
                       tipus: "prestec",
                       pricePerDay: "",
                     }))
                   }
-                  className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  className={`flex h-[56px] items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "prestec"
                       ? "bg-[#14B8A6] text-white"
                       : "bg-[#101217] text-[#F2F4F8] hover:bg-[#161a21]"
@@ -568,6 +632,7 @@ function EditObjectPage() {
                   Préstamo gratuito
                 </button>
               </div>
+
               <p className="mt-2 text-xs text-[#6E7480]">
                 {form.tipus === "lloguer"
                   ? "Cobrarás un precio por día por el uso del objeto."
@@ -575,7 +640,6 @@ function EditObjectPage() {
               </p>
             </div>
 
-            {/* ── Nombre ── */}
             <div>
               <label
                 htmlFor="name"
@@ -583,6 +647,7 @@ function EditObjectPage() {
               >
                 Nombre del producto
               </label>
+
               <div
                 className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
                   fieldErrors.name ? "border border-[#ef4444]" : ""
@@ -593,6 +658,7 @@ function EditObjectPage() {
                   alt=""
                   className="h-5 w-5 opacity-60"
                 />
+
                 <input
                   id="name"
                   name="name"
@@ -603,6 +669,7 @@ function EditObjectPage() {
                   className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none"
                 />
               </div>
+
               {fieldErrors.name && (
                 <p className="mt-2 text-sm text-[#ef4444]">
                   {fieldErrors.name}
@@ -610,7 +677,6 @@ function EditObjectPage() {
               )}
             </div>
 
-            {/* ── Precio (només lloguer) ── */}
             {form.tipus === "lloguer" && (
               <div>
                 <label
@@ -619,6 +685,7 @@ function EditObjectPage() {
                 >
                   Precio (por día)
                 </label>
+
                 <div
                   className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
                     fieldErrors.pricePerDay ? "border border-[#ef4444]" : ""
@@ -627,6 +694,7 @@ function EditObjectPage() {
                   <span className="text-[28px] leading-none text-[#6E7480]">
                     €
                   </span>
+
                   <input
                     id="pricePerDay"
                     name="pricePerDay"
@@ -639,6 +707,7 @@ function EditObjectPage() {
                     className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none"
                   />
                 </div>
+
                 {fieldErrors.pricePerDay && (
                   <p className="mt-2 text-sm text-[#ef4444]">
                     {fieldErrors.pricePerDay}
@@ -647,7 +716,6 @@ function EditObjectPage() {
               </div>
             )}
 
-            {/* ── Descripción ── */}
             <div>
               <label
                 htmlFor="description"
@@ -655,6 +723,7 @@ function EditObjectPage() {
               >
                 Descripción
               </label>
+
               <textarea
                 id="description"
                 name="description"
@@ -666,6 +735,7 @@ function EditObjectPage() {
                   fieldErrors.description ? "border border-[#ef4444]" : ""
                 }`}
               />
+
               {fieldErrors.description && (
                 <p className="mt-2 text-sm text-[#ef4444]">
                   {fieldErrors.description}
@@ -673,12 +743,12 @@ function EditObjectPage() {
               )}
             </div>
 
-            {/* ── Categoria + Subcategoria ── */}
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-col gap-6 md:flex-row">
               <div className="flex-1">
                 <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                   Categoría
                 </label>
+
                 <div ref={categoryDropdownRef} className="relative">
                   <button
                     type="button"
@@ -690,7 +760,7 @@ function EditObjectPage() {
                   >
                     {loadingCategories ? (
                       <span className="inline-flex items-center gap-2 text-[#6E7480]">
-                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
+                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#6E7480] border-t-transparent" />
                         Cargando categorías…
                       </span>
                     ) : (
@@ -704,6 +774,7 @@ function EditObjectPage() {
                           : "Seleccione una categoría"}
                       </span>
                     )}
+
                     <svg
                       className={`transition-transform duration-300 ${
                         openCategories ? "rotate-180" : ""
@@ -723,11 +794,13 @@ function EditObjectPage() {
                       />
                     </svg>
                   </button>
+
                   {openCategories && !loadingCategories && (
                     <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
                       {categories.map((category) => {
                         const isActive =
                           String(category.id) === String(form.category);
+
                         return (
                           <button
                             key={category.id}
@@ -746,6 +819,7 @@ function EditObjectPage() {
                     </div>
                   )}
                 </div>
+
                 {fieldErrors.category && (
                   <p className="mt-2 text-sm text-[#ef4444]">
                     {fieldErrors.category}
@@ -757,6 +831,7 @@ function EditObjectPage() {
                 <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                   Subcategoría
                 </label>
+
                 <div ref={subcategoryDropdownRef} className="relative">
                   <button
                     type="button"
@@ -768,7 +843,7 @@ function EditObjectPage() {
                   >
                     {loadingCategories ? (
                       <span className="inline-flex items-center gap-2 text-[#6E7480]">
-                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
+                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#6E7480] border-t-transparent" />
                         Cargando subcategorías…
                       </span>
                     ) : (
@@ -778,12 +853,13 @@ function EditObjectPage() {
                         }
                       >
                         {selectedSubcategory
-                          ? selectedSubcategory.nom
+                          ? selectedSubcategory.name
                           : selectedCategory
                             ? "Seleccione una subcategoría"
                             : "Selecciona antes una categoría"}
                       </span>
                     )}
+
                     <svg
                       className={`transition-transform duration-300 ${
                         openSubcategories ? "rotate-180" : ""
@@ -803,12 +879,15 @@ function EditObjectPage() {
                       />
                     </svg>
                   </button>
+
                   {openSubcategories && !loadingCategories && (
                     <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
-                      {(selectedCategory?.subcategories || []).map(
-                        (subcategory) => {
+                      {availableSubcategories.length > 0 ? (
+                        availableSubcategories.map((subcategory) => {
                           const isActive =
-                            String(subcategory.id) === String(form.subcategory);
+                            String(subcategory.id) ===
+                            String(form.subcategory);
+
                           return (
                             <button
                               key={subcategory.id}
@@ -822,14 +901,19 @@ function EditObjectPage() {
                                   : "text-[#F2F4F8] hover:bg-[#16181C]"
                               }`}
                             >
-                              {subcategory.nom}
+                              {subcategory.name}
                             </button>
                           );
-                        },
+                        })
+                      ) : (
+                        <p className="px-4 py-3 text-left font-body text-[15px] text-[#6E7480]">
+                          Esta categoría no tiene subcategorías
+                        </p>
                       )}
                     </div>
                   )}
                 </div>
+
                 {fieldErrors.subcategory && (
                   <p className="mt-2 text-sm text-[#ef4444]">
                     {fieldErrors.subcategory}
@@ -838,7 +922,6 @@ function EditObjectPage() {
               </div>
             </div>
 
-            {/* ── Estado ── */}
             <div>
               <label
                 htmlFor="status"
@@ -846,6 +929,7 @@ function EditObjectPage() {
               >
                 Estado
               </label>
+
               <select
                 id="status"
                 name="status"
@@ -858,19 +942,21 @@ function EditObjectPage() {
               </select>
             </div>
 
-            {/* ── Ubicación ── */}
             <div>
               <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                 Ubicación del objeto
               </label>
+
               <p className="mb-3 text-xs text-[#6E7480]">
                 Puedes ajustar la ubicación pulsando en el mapa o arrastrando el
                 marcador.
               </p>
+
               <ObjectLocationPicker
                 value={location}
                 onChange={handleLocationChange}
               />
+
               {fieldErrors.location && (
                 <p className="mt-2 text-sm text-[#ef4444]">
                   {fieldErrors.location}
@@ -878,7 +964,6 @@ function EditObjectPage() {
               )}
             </div>
 
-            {/* ── Submit + alertes ── */}
             <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex flex-wrap items-center gap-4">
                 <button
@@ -904,16 +989,19 @@ function EditObjectPage() {
                     <span className="material-symbols-outlined text-sm">
                       check_circle
                     </span>
+
                     <p className="text-xs font-semibold uppercase tracking-wide">
                       {successMessage}
                     </p>
                   </div>
                 )}
+
                 {errorMessage && (
                   <div className="flex w-fit items-center gap-2 rounded-lg border border-[#ef4444]/50 bg-[#ef4444]/10 px-4 py-2 text-[#ef4444] animate-pulse">
                     <span className="material-symbols-outlined text-sm">
                       error
                     </span>
+
                     <p className="text-xs font-semibold uppercase tracking-wide">
                       {errorMessage}
                     </p>
@@ -922,15 +1010,17 @@ function EditObjectPage() {
               </div>
             </div>
           </form>
-          {/* ── Zona de peligro ── */}
+
           <div className="mt-12 rounded-[16px] border border-[#ef4444]/30 bg-[#ef4444]/5 p-6">
-            <h2 className="font-heading text-[18px] font-semibold text-[#ef4444] mb-1">
+            <h2 className="mb-1 font-heading text-[18px] font-semibold text-[#ef4444]">
               Zona de peligro
             </h2>
-            <p className="text-sm text-[#B6BCC8] font-body mb-4">
+
+            <p className="mb-4 font-body text-sm text-[#B6BCC8]">
               Una vez eliminado, no podrás recuperar este producto ni sus
               imágenes.
             </p>
+
             <button
               type="button"
               onClick={() => {
@@ -947,6 +1037,7 @@ function EditObjectPage() {
           </div>
         </div>
       </section>
+
       <ConfirmDeleteModal
         open={confirmDeleteOpen}
         onClose={() => {
