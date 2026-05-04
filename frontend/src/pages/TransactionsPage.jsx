@@ -131,7 +131,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
         )}
 
         {/* ── Accions per rol/estat ── */}
-        <div className="flex flex-wrap gap-2 mt-1">
+        <div className="flex flex-wrap gap-2 mt-1 flex-col">
           {role === "requester" &&
             tx.estat === "acceptat" &&
             isLloguer &&
@@ -139,7 +139,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               <button
                 type="button"
                 onClick={() => navigate(`/transactions/${tx.id}/payment`)}
-                className="rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 max-w-max"
               >
                 <span className="material-symbols-outlined text-base align-middle mr-1">
                   payments
@@ -147,31 +147,28 @@ function TransactionCard({ tx, role, onAction, busyId }) {
                 Efectuar pago
               </button>
             )}
-
           {role === "requester" &&
             tx.estat === "acceptat" &&
             isLloguer &&
             paid && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-400 px-4 py-1.5 text-label font-bold border border-emerald-500/40">
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-400 px-4 py-1.5 text-label font-bold border border-emerald-500/40 max-w-max">
                 <span className="material-symbols-outlined text-base">
                   check_circle
                 </span>
                 Pago realizado
               </span>
             )}
-
-          {role === "requester" && tx.estat === "acceptat" && !isLloguer && (
-            <span className="text-caption text-app-text-secondary italic">
+          {role === "requester" && tx.estat === "acceptat" && (
+            <span className="text-caption text-app-text-secondary italic mt-3 w-full">
               Coordina la recogida con el propietario.
             </span>
           )}
-
           {role === "requester" && tx.estat === "finalitzat" && (
             <button
               type="button"
               disabled
               title="Disponible en próximas versiones"
-              className="rounded-full border border-app-border px-5 py-2 text-label text-app-text-secondary opacity-60 cursor-not-allowed"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-app-border px-5 py-2 text-label text-app-text-secondary opacity-60 cursor-not-allowed max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 star
@@ -179,14 +176,15 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               Valorar (próximamente)
             </button>
           )}
-
           {role === "owner" && tx.estat === "pendent" && (
-            <>
+            <div className="flex gap-2">
+              {" "}
+              {/* Contenedor flex para los botones Aceptar y Rechazar */}
               <button
                 type="button"
                 disabled={busy}
                 onClick={() => onAction("accept", tx.id)}
-                className="rounded-full bg-emerald-500 hover:bg-emerald-600 px-5 py-2 text-label font-bold text-white active:scale-95 disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-600 px-5 py-2 text-label font-bold text-white active:scale-95 disabled:opacity-50 max-w-max"
               >
                 Aceptar
               </button>
@@ -194,19 +192,18 @@ function TransactionCard({ tx, role, onAction, busyId }) {
                 type="button"
                 disabled={busy}
                 onClick={() => onAction("reject", tx.id)}
-                className="rounded-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 px-5 py-2 text-label font-bold text-red-400 active:scale-95 disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 px-5 py-2 text-label font-bold text-red-400 active:scale-95 disabled:opacity-50 max-w-max"
               >
                 Rechazar
               </button>
-            </>
+            </div>
           )}
-
           {role === "owner" && tx.estat === "acceptat" && (
             <button
               type="button"
               disabled={busy}
               onClick={() => onAction("return", tx.id)}
-              className="rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 disabled:opacity-50 max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 assignment_turned_in

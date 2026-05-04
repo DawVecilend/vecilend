@@ -23,6 +23,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EditObjectPage from "./pages/EditObjectPage";
 import TransactionsPage from "./pages/TransactionsPage";
+import PaymentMockPage from "./pages/PaymentMockPage";
 
 function App() {
   return (
@@ -76,6 +77,10 @@ function App() {
               element={<SettingsPage />}
             />
             <Route path="/transactions" element={<TransactionsPage />} />
+            <Route
+              path="/transactions/:id/payment"
+              element={<PaymentMockPage />}
+            />
           </Route>
         </Routes>
       </main>
