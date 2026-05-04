@@ -4,6 +4,7 @@ import { getProfile, updateProfile } from "../services/profile";
 import { AuthContext } from "../contexts/AuthContext";
 import municipalitiesData from "../data/municipios.json";
 import HeaderDesktop from "../components/layouts/header/HeaderDesktop";
+import { normalizeString } from "../utils/string";
 
 function EditProfilePage() {
   const { username } = useParams();
@@ -29,6 +30,7 @@ function EditProfilePage() {
     biography: "",
     radi_proximitat: 10,
     avatar: null,
+    ubicacio: null,
   });
 
   useEffect(() => {
@@ -67,21 +69,13 @@ function EditProfilePage() {
     }
   };
 
-  const normalizeString = (str) => {
-    return str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
-  };
-
   const handleDireccioChange = (e) => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, direccio: value }));
     if (value.length >= 2) {
       const searchNormalized = normalizeString(value);
-      const filtered = municipalitiesData.data
-        .map((row) => row[9])
-        .filter((name) => normalizeString(name).includes(searchNormalized))
+      const filtered = municipalitiesData
+        .filter((m) => normalizeString(m.name).includes(searchNormalized))
         .slice(0, 8);
       setSuggestions(filtered);
       setShowSuggestions(true);
@@ -92,7 +86,11 @@ function EditProfilePage() {
   };
 
   const handleSelectSuggestion = (municipality) => {
-    setFormData((prev) => ({ ...prev, direccio: municipality }));
+    setFormData((prev) => ({
+      ...prev,
+      direccio: municipality.name,
+      ubicacio: { lat: municipality.lat, lng: municipality.lng },
+    }));
     setShowSuggestions(false);
     setSuggestions([]);
   };
@@ -371,15 +369,18 @@ function EditProfilePage() {
                     />
                     {showSuggestions && suggestions.length > 0 && (
                       <ul className="absolute z-50 w-full mt-1 bg-[#1a211f] border border-app-border rounded-lg shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
-                        {suggestions.map((suggestion, index) => (
+                        {suggestions.map((suggestion) => (
                           <li
-                            key={index}
-                            onMouseDown={() =>
-                              handleSelectSuggestion(suggestion)
-                            }
+                            key={suggestion.id}
+                            onClick={() => handleSelectSuggestion(suggestion)}
                             className="px-4 py-2.5 text-sm text-app-text hover:bg-[#2f3634] hover:text-[#4fdbc8] cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
                           >
-                            {suggestion}
+                            <span className="font-medium">
+                              {suggestion.name}
+                            </span>
+                            <span className="text-xs text-[#859490] ml-2">
+                              {suggestion.province}
+                            </span>
                           </li>
                         ))}
                       </ul>

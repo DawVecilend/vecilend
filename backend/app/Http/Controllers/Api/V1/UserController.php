@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Api\V1\UpdateProximityRadiusRequest;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -75,17 +76,31 @@ class UserController extends Controller
 
         $data = $request->validated();
 
+        // ── 1. Avatar (si s'envia) ──
         if ($request->hasFile('avatar')) {
             if ($user->avatar_public_id) {
                 $this->cloudinaryService->delete($user->avatar_public_id);
             }
-
             $upload = $this->cloudinaryService->upload($request->file('avatar'), 'vecilend/avatars');
-            $data['avatar_url'] = $upload['url'];
+            $data['avatar_url']       = $upload['url'];
             $data['avatar_public_id'] = $upload['public_id'];
         }
 
+        // ── 2. Coordenades (si s'envien) — UPDATE raw per PostGIS ──
+        $ubicacio = $data['ubicacio'] ?? null;
+        unset($data['ubicacio']); // No la passem al ->update() normal
+
+        // ── 3. Camps normals ──
         $user->update($data);
+
+        // ── 4. Si hi ha coordenades, fem l'UPDATE raw ──
+        if ($ubicacio && isset($ubicacio['lat'], $ubicacio['lng'])) {
+            DB::statement(
+                'UPDATE users SET ubicacio = ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography WHERE id = ?',
+                [$ubicacio['lng'], $ubicacio['lat'], $user->id]
+            );
+            $user->refresh();
+        }
 
         return new UserResource($user);
     }

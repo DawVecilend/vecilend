@@ -7,18 +7,26 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
-class RegisterRequest extends FormRequest {
-    public function authorize(): bool {
+class RegisterRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
         return true;
     }
 
-    public function rules(): array {
+    public function rules(): array
+    {
         return [
             'username' => ['required', 'string', 'max:100'],
             'nom' => ['required', 'string', 'max:100'],
             'cognoms' => ['required', 'string', 'max:150'],
-            'email' => ['required', 'string', 'email', 'max:255',
-            'unique:users,email'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users,email'
+            ],
             'password' => [
                 'required',
                 'confirmed',
@@ -28,18 +36,25 @@ class RegisterRequest extends FormRequest {
             'biography' => ['nullable', 'string', 'max:1000'],
             'telefon' => ['nullable', 'string', 'max:20'],
             'direccio' => ['nullable', 'string', 'max:500', Rule::in($this->getMunicipios())],
-            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:3072'],      
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:3072'],
             'ubicacio' => ['nullable', 'array'],
-            'ubicacio.lat' => ['required_with:ubicacio', 'numeric',
-            'between:-90,90'],
-            'ubicacio.lng' => ['required_with:ubicacio', 'numeric',
-            'between:-180,180'],
+            'ubicacio.lat' => [
+                'required_with:ubicacio',
+                'numeric',
+                'between:-90,90'
+            ],
+            'ubicacio.lng' => [
+                'required_with:ubicacio',
+                'numeric',
+                'between:-180,180'
+            ],
             'radi_proximitat' => ['nullable', 'integer', 'between:1,50'],
             'accepta_termes' => ['required', 'accepted']
         ];
     }
 
-    public function messages(): array {
+    public function messages(): array
+    {
         return [
             'avatar.image' => 'L\'avatar ha de ser una imatge.',
             'avatar.mimes' => 'L\'avatar ha de ser JPEG, PNG o WebP.',
@@ -54,15 +69,16 @@ class RegisterRequest extends FormRequest {
         ];
     }
 
-    private function getMunicipios(): array {
+    private function getMunicipios(): array
+    {
         return Cache::rememberForever('municipios_list', function () {
             $path = database_path('data/municipios.json');
             if (!file_exists($path)) {
                 return [];
             }
 
-            $json = json_decode(file_get_contents($path), true);
-            return array_column($json['data'] ?? [], 9);
+            $rows = json_decode(file_get_contents($path), true);
+            return array_column($rows ?? [], 'name');
         });
     }
 }
