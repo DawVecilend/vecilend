@@ -89,7 +89,7 @@ function ResetPasswordPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={8}
-                className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none"
+                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none"
                 placeholder="••••••••"
               />
               <p className="text-xs text-[#859490]">Al menos 8 caracteres.</p>
@@ -104,7 +104,7 @@ function ResetPasswordPage() {
                 value={passwordConfirmation}
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
                 required
-                className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none"
+                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none"
                 placeholder="••••••••"
               />
             </div>
@@ -124,7 +124,7 @@ function ResetPasswordPage() {
             </button>
           </form>
         ) : (
-          <div className="bg-app-card border border-app-border rounded-lg p-6 text-center">
+          <div className="bg-app-bg-card border border-app-border rounded-lg p-6 text-center">
             <span className="material-symbols-outlined text-[#4fdbc8] text-5xl mb-2">
               check_circle
             </span>

@@ -22,7 +22,7 @@ function CTASection() {
                         <Link to="/objects/create" className="bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] text-[#003730] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-[#4fdbc8]/30 hover:scale-105 active:scale-95 transition-all">
                             Comenzar a alquilar
                         </Link>
-                        <Link to="/how-it-works" className="bg-white/5 backdrop-blur-md text-[#e1e3e0] border border-white/10 px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/10 transition-all">
+                        <Link to="/how-it-works/renters" className="bg-white/5 backdrop-blur-md text-[#e1e3e0] border border-white/10 px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/10 transition-all">
                             ¿Cómo funciona?
                         </Link>
                     </div>

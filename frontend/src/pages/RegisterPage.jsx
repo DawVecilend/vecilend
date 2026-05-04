@@ -375,7 +375,7 @@ function RegisterPage() {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
                     placeholder="Nombre de usuario"
                     type="text"
                     required
@@ -391,7 +391,7 @@ function RegisterPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full bg-app-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
                     placeholder="correo@ejemplo.com"
                     type="email"
                     required
@@ -828,7 +828,7 @@ function RegisterPage() {
             </div>
 
             <div className="w-full md:w-1/3 flex flex-col gap-6 lg:gap-8 justify-center h-full">
-              <div className="p-6 bg-app-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
+              <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
                 <div className="w-10 h-10 rounded-lg bg-[#14b8a6]/20 flex items-center justify-center text-[#4fdbc8] mb-4">
                   <span className="material-symbols-outlined">
                     verified_user
@@ -847,7 +847,7 @@ function RegisterPage() {
                 </div>
               </div>
 
-              <div className="p-6 bg-app-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
+              <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
                 <div className="w-10 h-10 rounded-lg bg-[#f38764]/20 flex items-center justify-center text-[#ffb59e] mb-4">
                   <span className="material-symbols-outlined">
                     visibility_off
@@ -866,7 +866,7 @@ function RegisterPage() {
                 </div>
               </div>
 
-              <div className="p-6 bg-app-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
+              <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
                 <div className="w-10 h-10 rounded-lg bg-[#b9e9e0]/20 flex items-center justify-center text-[#a0d0c6] mb-4">
                   <span className="material-symbols-outlined">speed</span>
                 </div>

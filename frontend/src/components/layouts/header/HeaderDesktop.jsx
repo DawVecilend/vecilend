@@ -32,9 +32,10 @@ function HeaderDesktop() {
   if (loading) return null;
 
   const getNavClass = (path) => {
-    return location.pathname === path
-      ? "text-[#4fdbc8] border-b-2 border-[#4fdbc8] font-bold pb-1 text-sm tracking-tight"
-      : "text-[#aebdb9] font-medium hover:text-[#4fdbc8] transition-colors text-sm tracking-tight";
+    const isActive = location.pathname === path || (path === "/how-it-works/renters" && location.pathname.startsWith("/how-it-works"));
+    return isActive
+      ? "text-[#4fdbc8] border-b-2 border-[#4fdbc8] font-bold p-1 text-sm tracking-tight"
+      : "text-[#aebdb9] font-medium hover:text-[#4fdbc8] transition-colors p-1 text-sm tracking-tight";
   };
 
   return (
@@ -50,7 +51,7 @@ function HeaderDesktop() {
             <Link to="/objects" className={getNavClass("/objects")}>
               Objetos
             </Link>
-            <Link to="/how-it-works" className={getNavClass("/how-it-works")}>
+            <Link to="/how-it-works/renters" className={getNavClass("/how-it-works/renters")}>
               ¿Cómo funciona?
             </Link>
             <Link to="/about" className={getNavClass("/about")}>

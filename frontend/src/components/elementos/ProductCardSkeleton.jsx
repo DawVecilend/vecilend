@@ -1,6 +1,6 @@
 function ProductCardSkeleton() {
   return (
-    <div className="w-63.75 bg-app-card rounded-2xl overflow-hidden flex flex-col animate-pulse">
+    <div className="w-63.75 bg-app-bg-card rounded-2xl overflow-hidden flex flex-col animate-pulse">
       <div className="aspect-4/3 bg-[#1f2725]" />
       <div className="p-6 flex flex-col gap-3">
         <div className="h-4 bg-[#1f2725] rounded w-1/3" />

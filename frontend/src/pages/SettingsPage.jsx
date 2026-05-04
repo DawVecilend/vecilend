@@ -24,21 +24,21 @@ function SettingsPage() {
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/editing`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">person</span>
               <span>Perfil</span>
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/security`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">security</span>
               <span>Seguridad</span>
             </Link>
             <Link
               to={`/settings/profile/${user?.username}/notifications`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-card hover:text-app-text transition-all duration-150"
+              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
             >
               <span className="material-symbols-outlined">privacy</span>
               <span>Privacidad</span>

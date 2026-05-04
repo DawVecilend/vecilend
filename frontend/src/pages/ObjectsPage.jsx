@@ -243,7 +243,7 @@ function ObjectsPage() {
                 type="button"
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="rounded-full bg-app-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50"
+                className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50"
               >
                 {loadingMore
                   ? "Cargando…"
@@ -254,7 +254,7 @@ function ObjectsPage() {
         </>
       ) : (
         <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 py-12">
-          <div className="rounded-[20px] border border-app-border bg-app-card p-10 text-center">
+          <div className="rounded-[20px] border border-app-border bg-app-bg-card p-10 text-center">
             <h2 className="font-heading text-h3-desktop text-app-text">
               No se han encontrado resultados
             </h2>

@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Api\V1\StoreObjecteRequest;
 use App\Models\ImatgeObjecte;
-use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Api\V1\UpdateObjecteRequest;
 use App\Models\User;
@@ -18,9 +17,10 @@ use Illuminate\Validation\Rule;
 
 class ObjecteController extends Controller
 {
-    public function __construct(
-        private readonly CloudinaryService $cloudinary,
-    ) {}
+    private function getCloudinary(): CloudinaryService
+    {
+        return app(CloudinaryService::class);
+    }
 
     /**
      * GET /api/v1/objects?search=&category=&sort=&page=&per_page=&lat=&lng=&radius=
@@ -435,7 +435,7 @@ class ObjecteController extends Controller
 
         foreach ($request->file('imatges') as $index => $fitxer) {
             try {
-                $result = $this->cloudinary->upload($fitxer, 'vecilend/objectes');
+                $result = $this->getCloudinary()->upload($fitxer, 'vecilend/objectes');
 
                 $imatgesData[] = [
                     'objecte_id'           => $objecte->id,
@@ -484,7 +484,7 @@ class ObjecteController extends Controller
     {
         foreach ($imatgesData as $img) {
             try {
-                $this->cloudinary->delete($img['public_id_cloudinary']);
+                $this->getCloudinary()->delete($img['public_id_cloudinary']);
             } catch (\Throwable $e) {
                 Log::warning('Cloudinary rollback failed', [
                     'public_id' => $img['public_id_cloudinary'],
@@ -539,7 +539,7 @@ class ObjecteController extends Controller
 
             foreach ($imatgesAEliminar as $img) {
                 try {
-                    $this->cloudinary->delete($img->public_id_cloudinary);
+                    $this->getCloudinary()->delete($img->public_id_cloudinary);
                 } catch (\Throwable $e) {
                     Log::warning('Cloudinary delete error (update)', [
                         'public_id' => $img->public_id_cloudinary,
@@ -557,7 +557,7 @@ class ObjecteController extends Controller
 
             foreach ($request->file('imatges_noves') as $fitxer) {
                 try {
-                    $result = $this->cloudinary->upload($fitxer, 'vecilend/objectes');
+                    $result = $this->getCloudinary()->upload($fitxer, 'vecilend/objectes');
 
                     ImatgeObjecte::create([
                         'objecte_id'           => $objecte->id,
@@ -634,7 +634,7 @@ class ObjecteController extends Controller
         // ── 1. Eliminar imatges de Cloudinary ──
         foreach ($objecte->imatges as $img) {
             try {
-                $this->cloudinary->delete($img->public_id_cloudinary);
+                $this->getCloudinary()->delete($img->public_id_cloudinary);
             } catch (\Throwable $e) {
                 Log::warning('Cloudinary delete error (destroy)', [
                     'public_id' => $img->public_id_cloudinary,

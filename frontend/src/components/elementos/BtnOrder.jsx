@@ -24,7 +24,7 @@ function BtnOrder({ value = "recent", onChange }) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="inline-flex min-w-[190px] items-center justify-between gap-3 rounded-[10px] border border-app-border bg-app-card px-4 py-2 font-body text-[14px] font-medium text-app-text transition hover:border-vecilend-dark-primary"
+        className="inline-flex min-w-[190px] items-center justify-between gap-3 rounded-[10px] border border-app-border bg-app-bg-card px-4 py-2 font-body text-[14px] font-medium text-app-text transition hover:border-vecilend-dark-primary"
       >
         <span>{selectedOption.label}</span>
 
@@ -47,7 +47,7 @@ function BtnOrder({ value = "recent", onChange }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-20 mt-2 w-full overflow-hidden rounded-[12px] border border-app-border bg-app-card shadow-lg">
+        <div className="absolute right-0 z-20 mt-2 w-full overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card shadow-lg">
           {options.map((option) => {
             const isActive = option.value === value;
 

@@ -22,6 +22,8 @@ import ScrollToTop from "./components/ScrollToTop";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EditObjectPage from "./pages/EditObjectPage";
+import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
+import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import PaymentMockPage from "./pages/PaymentMockPage";
 
@@ -43,6 +45,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/how-it-works/renters" element={<HowItWorksRentersPage />} />
+          <Route path="/how-it-works/lenders" element={<HowItWorksLendersPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/objects" element={<ObjectsPage />} />
           <Route path="/objects/:id" element={<ObjectPage />} />

@@ -19,8 +19,13 @@ until php -r "
 done
 echo "✅ Base de dades connectada"
 
+echo "⏳ Verificant .env..."
+if [ ! -f .env ]; then
+  cp .env.example .env
+fi
+
 echo "⏳ Generant APP_KEY si no existeix..."
-php artisan key:generate --no-interaction 2>/dev/null || true
+php artisan key:generate --no-interaction
 
 echo "⏳ Executant migracions..."
 php artisan migrate --force

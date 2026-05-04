@@ -25,7 +25,7 @@
 
   /* Colors del design system */
   --color-vecilend-dark-bg: #0A0A0B;
-  --color-vecilend-dark-bg-secondary: #071A16;
+  --color-vecilend-dark-bg-secondary: #161D1B;
   --color-vecilend-dark-card: #121214;
   --color-vecilend-dark-neutral: #16181C;
   --color-vecilend-dark-border: #2A2B31;
@@ -36,7 +36,7 @@
   --color-vecilend-dark-secondary: #22C55E;
 
   --color-vecilend-light-bg: #F7F8FA;
-  --color-vecilend-light-bg-secondary: #F1FBF8;
+  --color-vecilend-light-bg-secondary: #1A2320;
   --color-vecilend-light-card: #FFFFFF;
   --color-vecilend-light-neutral: #F1F3F6;
   --color-vecilend-light-border: #E3E7EE;
@@ -49,7 +49,7 @@
   /* ─── Aliasses semàntics (apunten al dark per defecte) ─── */
   --color-app-bg: var(--color-vecilend-dark-bg);
   --color-app-bg-secondary: var(--color-vecilend-dark-bg-secondary);
-  --color-app-card: var(--color-vecilend-dark-card);
+  --color-app-bg-card: var(--color-vecilend-dark-card);
   --color-app-neutral: var(--color-vecilend-dark-neutral);
   --color-app-border: var(--color-vecilend-dark-border);
   --color-app-text: var(--color-vecilend-dark-text);
@@ -62,8 +62,9 @@
 /* ─── Override quan data-theme="light" ─── */
 :root[data-theme="light"] {
   --color-app-bg: #F7F8FA;
-  --color-app-bg-secondary: #F1FBF8;
-  --color-app-card: #FFFFFF;
+  --color-app-bg-card: #FFFFFF;
+  --color-app-bg-secondary: #EDF1F0;
+  --color-app-bg-card-secondary: #EDEFEF;
   --color-app-neutral: #F1F3F6;
   --color-app-border: #E3E7EE;
   --color-app-text: #0B1220;
@@ -76,8 +77,9 @@
 /* Dark explícit */
 :root[data-theme="dark"] {
   --color-app-bg: #0A0A0B;
-  --color-app-bg-secondary: #071A16;
-  --color-app-card: #121214;
+  --color-app-bg-card: #121214;
+  --color-app-bg-secondary: #161D1B;
+  --color-app-bg-card-secondary: #333b39;
   --color-app-neutral: #16181C;
   --color-app-border: #2A2B31;
   --color-app-text: #F2F4F8;
