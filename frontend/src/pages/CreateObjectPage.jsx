@@ -636,7 +636,7 @@ function CreateObjectPage() {
                         }
                       >
                         {selectedSubcategory
-                          ? selectedSubcategory.nom
+                          ? selectedSubcategory.name
                           : selectedCategory
                             ? "Seleccione una subcategoría"
                             : "Selecciona antes una categoría"}
@@ -680,7 +680,7 @@ function CreateObjectPage() {
                                   : "text-[#F2F4F8] hover:bg-[#16181C]"
                               }`}
                             >
-                              {subcategory.nom}
+                              {subcategory.name}
                             </button>
                           );
                         },

@@ -11,7 +11,7 @@ function CategoriesSection({ categories = [] }) {
                   <h2 className="font-inter text-3xl font-extrabold tracking-tight mb-2 text-[#e1e3e0]">Descubre nuestras categorías</h2>
                   <p className="text-[#aebdb9]">Encuentra todo lo que necesitas en una sola ubicación</p>
               </div>
-              <Link className="text-[#4fdbc8] font-bold text-sm flex items-center gap-1 hover:underline" to="#">
+              <Link className="text-[#4fdbc8] font-bold text-sm flex items-center gap-1" to="#">
                   Ver todas las categorías <span className="material-symbols-outlined text-base">arrow_forward</span>
               </Link>
           </div>
