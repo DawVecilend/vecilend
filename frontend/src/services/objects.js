@@ -41,6 +41,24 @@ export async function updateObject(id, payload) {
   return response.data
 }
 
+export async function updateObjectStatus(product, status) {
+  const formData = new FormData()
+
+  formData.append("nom", product.nom || "")
+  formData.append("preu_diari", product.preu_diari || 0)
+  formData.append("descripcio", product.descripcio || "")
+  formData.append("categoria_id", product.categoria?.id || product.categoria_id || "")
+  formData.append("subcategoria_id", product.subcategoria?.id || product.subcategoria_id || "")
+  formData.append("tipus", product.tipus || "lloguer")
+  formData.append("estat", status)
+
+  const response = await api.put(`/objects/${product.id}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+
+  return response.data
+}
+
 /**
  * DELETE /api/v1/objects/{id}
  *

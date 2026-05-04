@@ -9,6 +9,8 @@ function ProductsSection({
   profile = false,
   preserveSearchParams = false,
   isOwnProfile = false,
+  onToggleVisibility,
+  onDeleteProduct,
 }) {
   const location = useLocation();
 
@@ -20,7 +22,7 @@ function ProductsSection({
     <section className="w-full py-8">
       <div className="mx-auto w-full">
         {title && (
-          <h2 className="mb-8 text-center font-heading text-h2-desktop leading-h2 font-bold text-app-text">
+          <h2 className="mb-8 text-center font-heading text-h2-desktop leading-h2 font-bold text-vecilend-dark-text">
             {title}
           </h2>
         )}
@@ -46,6 +48,8 @@ function ProductsSection({
                   priceDay={product.preu_diari ? Number(product.preu_diari) : 0}
                   status={product.estat}
                   isOwnProfile={isOwnProfile}
+                  onToggleVisibility={onToggleVisibility}
+                  onDeleteProduct={onDeleteProduct}
                 />
               ))
             : products.map((product) => (

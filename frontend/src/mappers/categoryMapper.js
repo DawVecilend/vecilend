@@ -5,11 +5,17 @@ export function mapCategory(category) {
     slug: category.slug,
     icon: category.icona,
     description: category.descripcio,
-    subcategories: Array.isArray(category.subcategories) ? category.subcategories : []
-  }
+    subcategories: Array.isArray(category.subcategories)
+      ? category.subcategories.map((subcategory) => ({
+          id: subcategory.id,
+          name: subcategory.nom,
+          slug: subcategory.slug,
+        }))
+      : [],
+  };
 }
 
 export function mapCategories(categories) {
-  if (!Array.isArray(categories)) return []
-  return categories.map(mapCategory)
+  if (!Array.isArray(categories)) return [];
+  return categories.map(mapCategory);
 }
