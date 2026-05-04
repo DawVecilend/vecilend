@@ -73,13 +73,13 @@ class UpdateObjecteRequest extends FormRequest
 
             // Si el tipus final (enviat o existent) és lloguer, preu obligatori i ≥ 1€.
             // Si és préstec, ja l'hem forçat a null al prepareForValidation.
-            'preu_diari' => array_filter([
+            'preu_diari' => [
                 'nullable',
                 'numeric',
                 'min:1.00',
-                'max:99999.99',
-                $tipusFinal === 'lloguer' ? 'required' : null,
-            ]),
+                'max:9999.99',
+                'required_if:tipus,lloguer',
+            ],
 
             'estat'         => ['sometimes', 'string', 'in:disponible,no_disponible'],
             'lat'           => ['sometimes', 'numeric', 'between:-90,90'],

@@ -20,6 +20,11 @@ export const updateProfile = async (username, data) => {
   if (data.radi_proximitat) formData.append("radi_proximitat", data.radi_proximitat);
   if (data.avatar) formData.append("avatar", data.avatar);
 
+  if (data.ubicacio?.lat != null && data.ubicacio?.lng != null) {
+    formData.append("ubicacio[lat]", data.ubicacio.lat);
+    formData.append("ubicacio[lng]", data.ubicacio.lng);
+  }
+
   const response = await api.post(`/profile/${username}/editing`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });

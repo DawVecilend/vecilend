@@ -23,6 +23,9 @@ class UpdateProfileRequest extends FormRequest
             'biography'       => ['nullable', 'string', 'max:1000'],
             'radi_proximitat' => ['nullable', 'integer', 'between:1,50'],
             'avatar'          => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
+            'ubicacio'        => ['nullable', 'array'],
+            'ubicacio.lat'    => ['required_with:ubicacio', 'numeric', 'between:-90,90'],
+            'ubicacio.lng'    => ['required_with:ubicacio', 'numeric', 'between:-180,180'],
         ];
     }
 
@@ -44,8 +47,8 @@ class UpdateProfileRequest extends FormRequest
                 return [];
             }
 
-            $json = json_decode(file_get_contents($path), true);
-            return array_column($json['data'] ?? [], 9);
+            $rows = json_decode(file_get_contents($path), true);
+            return array_column($rows ?? [], 'name');
         });
     }
 }
