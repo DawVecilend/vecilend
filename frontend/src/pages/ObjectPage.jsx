@@ -15,6 +15,7 @@ import DateRangeCalendar from "../components/calendar/DateRangeCalendar";
 import ObjectMiniMap from "../components/map/ObjectMiniMap";
 import { cldTransform } from "../utils/cloudinary";
 import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
+import NotFoundPage from "./NotFoundPage";
 
 function ObjectPage() {
   const { id } = useParams();
@@ -190,11 +191,11 @@ function ObjectPage() {
   }
 
   if (!product) {
-    // TODO §7 de la guia: substituir per <NotFoundPage ... />
     return (
-      <p className="pt-24 text-center text-app-text">
-        No se ha encontrado el objeto.
-      </p>
+      <NotFoundPage
+        title="Objeto no encontrado"
+        message="El objeto que buscas no existe o ha sido eliminado."
+      />
     );
   }
 
