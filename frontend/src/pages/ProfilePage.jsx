@@ -6,6 +6,7 @@ import { deleteObject, updateObjectStatus } from "../services/objects";
 import { AuthContext } from "../contexts/AuthContext";
 import ProductsSection from "../components/home/ProductsSection";
 import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
+import NotFoundPage from "./NotFoundPage";
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -33,14 +34,16 @@ function ProfilePage() {
   const remainingObjects = latestObjects.length - visibleObjectsCount;
   const nextObjectsCount = remainingObjects >= 15 ? 15 : remainingObjects;
 
+  const [notFound, setNotFound] = useState(false);
+
   useEffect(() => {
     async function loadProfile() {
       setLoading(true);
+      setNotFound(false);
       setVisibleObjectsCount(15);
 
       try {
         const { user, latest_objects } = await getProfile(username);
-
         setProfile(user);
 
         const ownProfile = currentUser && currentUser.username === username;
@@ -53,6 +56,9 @@ function ProfilePage() {
         }
       } catch (error) {
         console.error("Error cargando perfil:", error);
+        if (error.response?.status === 404) {
+          setNotFound(true);
+        }
         setProfile(null);
         setLatestObjects([]);
       } finally {
@@ -132,6 +138,15 @@ function ProfilePage() {
     } finally {
       setDeleting(false);
     }
+  }
+
+  if (notFound) {
+    return (
+      <NotFoundPage
+        title="Perfil no encontrado"
+        message={`No existe ningún usuario con el nombre "${username}".`}
+      />
+    );
   }
 
   return (

@@ -7,6 +7,7 @@ import { getCategories } from "../services/categories";
 import { getObjects } from "../services/objects";
 import { mapCategories } from "../mappers/categoryMapper";
 import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
+import NotFoundPage from "./NotFoundPage";
 
 function CategoryPage() {
   const { slug } = useParams();
@@ -77,14 +78,10 @@ function CategoryPage() {
               <ProductsGridSkeleton count={6} />
             </>
           ) : !hasCategory ? (
-            <section className="py-12 text-center">
-              <h1 className="font-heading text-h2-desktop font-bold text-app-text">
-                Categoría no encontrada
-              </h1>
-              <p className="mt-3 font-body text-body text-app-text-secondary">
-                No existe ninguna categoría con el slug "{slug}".
-              </p>
-            </section>
+            <NotFoundPage
+              title="Categoría no encontrada"
+              message={`No existe ninguna categoría con el slug "${slug}".`}
+            />
           ) : hasProducts ? (
             <>
               <section className="mb-8 mt-6">

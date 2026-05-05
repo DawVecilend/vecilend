@@ -26,6 +26,7 @@ import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import PaymentMockPage from "./pages/PaymentMockPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -45,8 +46,14 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/how-it-works/renters" element={<HowItWorksRentersPage />} />
-          <Route path="/how-it-works/lenders" element={<HowItWorksLendersPage />} />
+          <Route
+            path="/how-it-works/renters"
+            element={<HowItWorksRentersPage />}
+          />
+          <Route
+            path="/how-it-works/lenders"
+            element={<HowItWorksLendersPage />}
+          />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/objects" element={<ObjectsPage />} />
           <Route path="/objects/:id" element={<ObjectPage />} />
@@ -86,6 +93,7 @@ function App() {
               element={<PaymentMockPage />}
             />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
 
