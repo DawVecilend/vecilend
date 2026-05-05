@@ -22,4 +22,13 @@ class ObjectePolicy
     {
         return $user->id === $objecte->user_id;
     }
+
+    /**
+     * L'administrador no pot publicar objectes: el seu rol és
+     * supervisar la plataforma, no participar com a usuari corrent.
+     */
+    public function create(\App\Models\User $user): bool
+    {
+        return $user->rol !== 'admin';
+    }
 }
