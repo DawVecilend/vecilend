@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 
 function DetailsPriceCardProduct({ product, diasSelected }) {
-
-
     const [open, setOpen] = useState(true)
     const porcentaje = 0.15
     const subtotal = product.preu_diari * diasSelected
@@ -10,16 +8,12 @@ function DetailsPriceCardProduct({ product, diasSelected }) {
     const total = parseFloat((subtotal + gastos_servicio).toFixed(2))
 
     return (
-
         <div className='bg-vecilend-dark-card mt-2'>
             <button type="button" onClick={() => setOpen(!open)} className="flex gap-2 items-center justify-between px-4 py-4 font-body text-[14px] font-medium text-vecilend-dark-text transition hover:border-vecilend-dark-primary cursor-pointer">
-
                 <svg className={`transition-transform ${open ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path  d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-
                 <p className='text-vecilend-dark-text text-h3-desktop'>Resumen del precio</p>
-
             </button>
 
             {open && (
