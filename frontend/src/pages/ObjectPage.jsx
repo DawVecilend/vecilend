@@ -415,6 +415,8 @@ function ObjectPage() {
               ? "bg-app-card border border-app-border text-app-text-secondary"
               : "bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] text-[#003730] disabled:opacity-50")
           }
+          disabled={submitting || !range.start || !range.end}
+          className="w-full rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95 disabled:opacity-50  cursor-pointer"
         >
           {submitting
             ? "Enviando…"
