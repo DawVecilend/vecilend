@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
+use App\Http\Controllers\Api\V1\AdminCategoriaController;
+use App\Http\Controllers\Api\V1\AdminSubcategoriaController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\FavoriteController;
@@ -49,5 +51,19 @@ Route::middleware('auth:sanctum')->group(function () {
         ->where('id', '[0-9]+');
     Route::post('/objects/{id}/favorite', [FavoriteController::class, 'store'])->where('id', '[0-9]+');
     Route::delete('/objects/{id}/favorite', [FavoriteController::class, 'destroy'])->where('id', '[0-9]+');
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/categories', [AdminCategoriaController::class, 'index']);
+        Route::get('/categories/{id}', [AdminCategoriaController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('/categories', [AdminCategoriaController::class, 'store']);
+        Route::put('/categories/{id}', [AdminCategoriaController::class, 'update'])->where('id', '[0-9]+');
+        Route::delete('/categories/{id}', [AdminCategoriaController::class, 'destroy'])->where('id', '[0-9]+');
+
+        Route::get('/subcategories', [AdminSubcategoriaController::class, 'index']);
+        Route::get('/subcategories/{id}', [AdminSubcategoriaController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('/subcategories', [AdminSubcategoriaController::class, 'store']);
+        Route::put('/subcategories/{id}', [AdminSubcategoriaController::class, 'update'])->where('id', '[0-9]+');
+        Route::delete('/subcategories/{id}', [AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
+    });
     Route::get('/favorites', [FavoriteController::class, 'index']);
 });

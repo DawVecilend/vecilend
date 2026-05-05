@@ -225,7 +225,7 @@ class ObjecteController extends Controller
             ->disponible()
             ->with([
                 'user:id,nom,avatar_url',
-                'categoria:id,nom,icona',
+                'categoria:id,nom,icona,slug',
                 'subcategoria:id,nom,slug',
                 'imatges',
             ])
