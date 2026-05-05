@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Api\V1\UpdateObjecteRequest;
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use App\Services\CloudinaryService;
 
 class ObjecteController extends Controller
 {
@@ -411,6 +412,13 @@ class ObjecteController extends Controller
     {
         $validated = $request->validated();
         $user = $request->user();
+
+        // Admin no pot publicar objectes
+        if ($user->rol === 'admin') {
+            return response()->json([
+                'message' => 'Los administradores no pueden publicar objetos.',
+            ], 403);
+        }
 
         // ── 1. Crear l'objecte (sense ubicació encara) ──
         $objecte = Objecte::create([

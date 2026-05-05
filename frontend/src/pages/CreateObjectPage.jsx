@@ -5,9 +5,11 @@ import { getCategories } from "../services/categories";
 import { createObject } from "../services/objects";
 import { mapCategories } from "../mappers/categoryMapper";
 import ObjectLocationPicker from "../components/map/ObjectLocationPicker";
+import { useAuth } from "../contexts/AuthContext";
 
 function CreateObjectPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const categoryDropdownRef = useRef(null);
   const subcategoryDropdownRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -41,6 +43,12 @@ function CreateObjectPage() {
     images: "",
     location: "",
   });
+
+  useEffect(() => {
+    if (user?.rol === "admin") {
+      navigate("/", { replace: true });
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     async function loadCategories() {
