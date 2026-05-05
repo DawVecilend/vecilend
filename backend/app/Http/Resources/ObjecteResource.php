@@ -35,6 +35,7 @@ class ObjecteResource extends JsonResource
                 return [
                     'id' => $this->categoria->id,
                     'nom' => $this->categoria->nom,
+                    'slug' => $this->categoria->slug,
                     'icona' => $this->categoria->icona
                 ];
             }),
