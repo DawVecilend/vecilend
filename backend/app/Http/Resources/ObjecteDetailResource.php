@@ -37,6 +37,7 @@ class ObjecteDetailResource extends JsonResource
             'categoria'     => $this->whenLoaded('categoria', fn() => [
                 'id'    => $this->categoria->id,
                 'nom'   => $this->categoria->nom,
+                'slug'  => $this->categoria->slug,
                 'icona' => $this->categoria->icona,
             ]),
 
