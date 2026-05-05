@@ -233,7 +233,7 @@ function ObjectPage() {
         <div className="flex items-center justify-center gap-3 flex-wrap">
           <Link
             to={`/objects/${product.id}/edit`}
-            className="inline-flex items-center gap-2 rounded-full bg-vecilend-dark-primary px-5 py-2 text-label font-bold text-[#003730] active:scale-95 hover:opacity-90 transition"
+            className="inline-flex items-center gap-2 rounded-full bg-vecilend-dark-primary px-5 py-2 text-label font-bold text-[#003730] active:scale-95 hover:opacity-90 transition cursor-pointer"
           >
             <span className="material-symbols-outlined text-base">edit</span>
             Editar
@@ -245,7 +245,7 @@ function ObjectPage() {
               setDeleteError(null);
               setConfirmDeleteOpen(true);
             }}
-            className="inline-flex items-center gap-2 rounded-full border border-[#ef4444] px-5 py-2 text-label font-bold text-[#ef4444] hover:bg-[#ef4444]/10 active:scale-95 transition"
+            className="inline-flex items-center gap-2 rounded-full border border-[#ef4444] px-5 py-2 text-label font-bold text-[#ef4444] hover:bg-[#ef4444]/10 active:scale-95 transition cursor-pointer"
           >
             <span className="material-symbols-outlined text-base">delete</span>
             Eliminar
@@ -294,18 +294,14 @@ function ObjectPage() {
   } else {
     actionBox = (
       <div className="rounded-2xl bg-app-card border border-app-border p-6 flex flex-col gap-4">
-        <div className="pb-4 border-b border-app-border">
+        <div className="pb-4">
           {product.tipus === "lloguer" && product.preu_diari ? (
             <div className="flex flex-col">
-              <div className="flex items-baseline gap-2">
-                <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
-                  {Number(product.preu_diari).toFixed(2)}€
-                </span>
-                <span className="text-app-text-secondary text-body-base">
-                  / día
-                </span>
-              </div>
-              <DateRangeCalendar />
+              <DateRangeCalendar
+                datesOcupades={product.dates_ocupades || []}
+                initialRange={initialRange}
+                onRangeChange={setRange}
+              />
               <DetailsPriceCardProduct product={product} diasSelected={dies}/>
             </div>
             
@@ -364,7 +360,7 @@ function ObjectPage() {
           type="button"
           onClick={handleSubmit}
           disabled={submitting || !range.start || !range.end}
-          className="w-full rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95 disabled:opacity-50  cursor-pointer"
         >
           {submitting ? "Enviando…" : "Enviar solicitud"}
         </button>
@@ -449,6 +445,14 @@ function ObjectPage() {
             <p className="text-app-text-secondary text-body-base font-body whitespace-pre-line">
               {product.descripcio}
             </p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
+                  {Number(product.preu_diari).toFixed(2)}€
+                </span>
+                <span className="text-app-text-secondary text-body-base">
+                  / día
+                </span>
+              </div>
           </div>
 
           {actionBox}
