@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Objecte;
 
 class User extends Authenticatable
@@ -151,5 +152,18 @@ class User extends Authenticatable
             ];
         }
         return $result;
+    }
+
+    /**
+     * Objectes que aquest usuari ha marcat com a favorits.
+     */
+    public function favorits(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Objecte::class,
+            'favorits',
+            'user_id',
+            'objecte_id'
+        )->withPivot('created_at');
     }
 }

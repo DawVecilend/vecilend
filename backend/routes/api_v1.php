@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\TransactionController;
+use App\Http\Controllers\FavoriteController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
@@ -46,4 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->where('id', '[0-9]+');
     Route::put('/transactions/{id}/return', [TransactionController::class, 'returnObject'])
         ->where('id', '[0-9]+');
+    Route::post('/objects/{id}/favorite', [FavoriteController::class, 'store'])->where('id', '[0-9]+');
+    Route::delete('/objects/{id}/favorite', [FavoriteController::class, 'destroy'])->where('id', '[0-9]+');
+    Route::get('/favorites', [FavoriteController::class, 'index']);
 });
