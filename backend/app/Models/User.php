@@ -104,4 +104,52 @@ class User extends Authenticatable
             'id'           // PK a objectes
         );
     }
+
+    /**
+     * Calcula la valoració mitjana i total d'un usuari (com a propietari d'objectes).
+     * Retorna ['avg' => float|null, 'total' => int].
+     */
+    public static function getValoracioStats(int $userId): array
+    {
+        $stats = DB::table('valoracions')
+            ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
+            ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
+            ->join('objectes', 'objectes.id', '=', 'solicituds.objecte_id')
+            ->where('objectes.user_id', $userId)
+            ->selectRaw('AVG(valoracions.puntuacio) as avg_rating, COUNT(*) as total')
+            ->first();
+
+        return [
+            'avg'   => $stats->avg_rating !== null ? round((float) $stats->avg_rating, 1) : null,
+            'total' => (int) ($stats->total ?? 0),
+        ];
+    }
+
+    /**
+     * Versió bulk per evitar N+1 en llistats. Retorna [userId => ['avg', 'total']].
+     */
+    public static function getValoracionsBulk(array $userIds): array
+    {
+        if (empty($userIds)) return [];
+
+        $rows = DB::table('valoracions')
+            ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
+            ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
+            ->join('objectes', 'objectes.id', '=', 'solicituds.objecte_id')
+            ->whereIn('objectes.user_id', $userIds)
+            ->groupBy('objectes.user_id')
+            ->selectRaw('objectes.user_id, AVG(valoracions.puntuacio) as avg_rating, COUNT(*) as total')
+            ->get()
+            ->keyBy('user_id');
+
+        $result = [];
+        foreach ($userIds as $id) {
+            $row = $rows->get($id);
+            $result[$id] = [
+                'avg'   => $row && $row->avg_rating !== null ? round((float) $row->avg_rating, 1) : null,
+                'total' => (int) ($row->total ?? 0),
+            ];
+        }
+        return $result;
+    }
 }

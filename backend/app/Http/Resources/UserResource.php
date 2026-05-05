@@ -1,11 +1,15 @@
 <?php
+
 namespace App\Http\Resources;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 
-class UserResource extends JsonResource {
-    public function toArray(Request $request): array {
+class UserResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
         return [
             'id' => $this->id,
             'username' => $this->username,
@@ -21,6 +25,8 @@ class UserResource extends JsonResource {
             'rol' => $this->rol,
             'actiu' => $this->actiu,
             'email_verified_at' => $this->email_verified_at?->toISOString(),
+            'valoracio_mitjana' => $this->valoracio_mitjana ?? null,
+            'valoracio_total'   => $this->valoracio_total ?? 0,
             'created_at' => $this->created_at?->toISOString(),
         ];
     }
