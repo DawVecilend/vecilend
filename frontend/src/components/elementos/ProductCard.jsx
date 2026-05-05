@@ -102,13 +102,21 @@ function ProductCard({
             </h3>
 
             <div className="flex shrink-0 items-center text-[#f38764] text-sm font-bold">
-              <span
-                className="material-symbols-outlined text-xs mr-0.5"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                star
-              </span>
-              {rating}
+              {rating != null ? (
+                <>
+                  <span
+                    className="material-symbols-outlined text-xs mr-0.5"
+                    style={{ fontVariationSettings: "'FILL' 1" }}
+                  >
+                    star
+                  </span>
+                  {rating}
+                </>
+              ) : (
+                <span className="text-app-text-secondary font-normal">
+                  Nuevo
+                </span>
+              )}
             </div>
           </div>
 

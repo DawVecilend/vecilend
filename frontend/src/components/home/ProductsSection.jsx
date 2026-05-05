@@ -44,7 +44,7 @@ function ProductsSection({
                   userAvatar={
                     product.user?.avatar_url || "/assets/avatar-omar.jpg"
                   }
-                  rating={product.valoracio_mitjana ?? 0}
+                  rating={product.user?.valoracio_mitjana ?? null}
                   priceDay={product.preu_diari ? Number(product.preu_diari) : 0}
                   status={product.estat}
                   isOwnProfile={isOwnProfile}
@@ -69,7 +69,7 @@ function ProductsSection({
                   userAvatar={
                     product.user?.avatar_url || "/assets/avatar-omar.jpg"
                   }
-                  rating={product.valoracio_mitjana ?? 0}
+                  rating={product.user?.valoracio_mitjana ?? null}
                   priceDay={product.preu_diari ? Number(product.preu_diari) : 0}
                   status={product.estat}
                   searchParamsString={searchParamsString}

@@ -144,6 +144,16 @@ class ObjecteController extends Controller
         $perPage = (int) $request->input('per_page', 20);
         $objectes = $query->paginate($perPage);
 
+        $ownerIds = $objectes->pluck('user_id')->unique()->values()->all();
+        $valoracions = User::getValoracionsBulk($ownerIds);
+
+        foreach ($objectes as $objecte) {
+            if ($objecte->user && isset($valoracions[$objecte->user_id])) {
+                $objecte->user->valoracio_mitjana = $valoracions[$objecte->user_id]['avg'];
+                $objecte->user->valoracio_total   = $valoracions[$objecte->user_id]['total'];
+            }
+        }
+
         return ObjecteResource::collection($objectes);
     }
 
@@ -164,8 +174,8 @@ class ObjecteController extends Controller
             ])
             ->findOrFail($id);
 
-        // Valoracions del propietari (mitjana + total)
-        $statsPropietari = $this->calcularValoracioPropietari($objecte->user_id);
+        // Valoracions del propietari (mitjana + total) — ara via helper centralitzat
+        $statsPropietari = User::getValoracioStats($objecte->user_id);
         $objecte->user->valoracio_mitjana = $statsPropietari['avg'];
         $objecte->user->valoracio_total   = $statsPropietari['total'];
 
@@ -275,22 +285,6 @@ class ObjecteController extends Controller
         }
 
         return 5000;
-    }
-
-    private function calcularValoracioPropietari(int $userId): array
-    {
-        $stats = DB::table('valoracions')
-            ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
-            ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
-            ->join('objectes', 'objectes.id', '=', 'solicituds.objecte_id')
-            ->where('objectes.user_id', $userId)
-            ->selectRaw('AVG(valoracions.puntuacio) as avg_rating, COUNT(*) as total')
-            ->first();
-
-        return [
-            'avg'   => $stats->avg_rating !== null ? round((float) $stats->avg_rating, 1) : null,
-            'total' => (int) ($stats->total ?? 0),
-        ];
     }
 
     /**

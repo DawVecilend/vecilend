@@ -23,7 +23,9 @@ class UserFactory extends Factory
             'biography' => fake()->paragraph(),
             'telefon' => fake()->phoneNumber(),
             'direccio' => fake()->city(),
-            'avatar_url' => null,
+            'avatar_url' => 'https://randomuser.me/api/portraits/'
+                . (fake()->boolean() ? 'men' : 'women')
+                . '/' . fake()->numberBetween(0, 99) . '.jpg',
             'google_id' => null,
             'ubicacio' => DB::raw(sprintf(
                 "ST_SetSRID(ST_MakePoint(%f, %f), 4326)::geography",

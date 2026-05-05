@@ -158,14 +158,19 @@ function ProfileProductCard({
               </h3>
 
               <div className="flex shrink-0 items-center text-[#f38764] text-sm font-bold">
-                <span
-                  className="material-symbols-outlined text-xs mr-0.5"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  star
-                </span>
-
-                {rating}
+                {rating != null ? (
+                  <>
+                    <span
+                      className="material-symbols-outlined text-xs mr-0.5"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      star
+                    </span>
+                    {rating}
+                  </>
+                ) : (
+                  <span className="text-[#bbcac6] font-normal">Nuevo</span>
+                )}
               </div>
             </div>
 
@@ -216,10 +221,7 @@ function ProfileProductCard({
             onClick={handleEditClick}
             className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[#F2F4F8] transition hover:bg-[#16181C]"
           >
-            <span className="material-symbols-outlined text-[20px]">
-              edit
-            </span>
-
+            <span className="material-symbols-outlined text-[20px]">edit</span>
             Editar
           </button>
 
@@ -231,7 +233,6 @@ function ProfileProductCard({
             <span className="material-symbols-outlined text-[20px]">
               delete
             </span>
-
             Eliminar
           </button>
         </div>

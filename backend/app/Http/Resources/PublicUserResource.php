@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * Versió pública del User (per a profile/{username}, propietari d'objectes, etc).
  *
  * NO inclou: email, telefon, direccio, ubicacio (lat/lng exactes),
- *            radi_proximitat, rol, actiu, email_verified_at.
+ *            rol, actiu, email_verified_at.
  *
  * Aquests camps només es retornen via /me (UserResource complet).
  */
@@ -24,6 +24,8 @@ class PublicUserResource extends JsonResource
             'cognoms'    => $this->cognoms,
             'biography'  => $this->biography,
             'avatar_url' => $this->avatar_url,
+            'valoracio_mitjana' => $this->valoracio_mitjana ?? null,
+            'valoracio_total'   => $this->valoracio_total ?? 0,
             'created_at' => $this->created_at?->toISOString(),
         ];
     }
