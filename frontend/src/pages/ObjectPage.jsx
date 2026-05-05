@@ -181,6 +181,7 @@ function ObjectPage() {
       setSubmitting(false);
     }
   };
+  console.log(product)
 
   async function openChatWith(userId) {
     if (!userId) return;
