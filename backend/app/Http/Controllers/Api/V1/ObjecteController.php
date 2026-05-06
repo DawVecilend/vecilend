@@ -154,6 +154,8 @@ class ObjecteController extends Controller
             }
         }
 
+        $this->applyFavoritStatus($request, $objectes);
+
         return ObjecteResource::collection($objectes);
     }
 
@@ -163,7 +165,7 @@ class ObjecteController extends Controller
      * Retorna el detall complet d'un objecte: propietari, categoria,
      * subcategoria, imatges, valoracions i dates ocupades.
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         $objecte = Objecte::query()
             ->with([
@@ -186,8 +188,49 @@ class ObjecteController extends Controller
 
         $objecte->valoracions_data = $this->obtenirValoracionsObjecte($id);
         $objecte->dates_ocupades   = $this->obtenirDatesOcupades($id);
+        $objecte->favorit         = $this->isObjectFavorit($request, $objecte->id);
 
         return new ObjecteDetailResource($objecte);
+    }
+
+    private function applyFavoritStatus(Request $request, $objectes): void
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            foreach ($objectes as $objecte) {
+                $objecte->favorit = false;
+            }
+            return;
+        }
+
+        $objecteIds = $objectes->pluck('id')->all();
+        if (empty($objecteIds)) {
+            return;
+        }
+
+        $favoritIds = DB::table('favorits')
+            ->where('user_id', $user->id)
+            ->whereIn('objecte_id', $objecteIds)
+            ->pluck('objecte_id')
+            ->all();
+
+        foreach ($objectes as $objecte) {
+            $objecte->favorit = in_array($objecte->id, $favoritIds, true);
+        }
+    }
+
+    private function isObjectFavorit(Request $request, int $objecteId): bool
+    {
+        $user = $request->user();
+        if (!$user) {
+            return false;
+        }
+
+        return DB::table('favorits')
+            ->where('user_id', $user->id)
+            ->where('objecte_id', $objecteId)
+            ->exists();
     }
 
     /**

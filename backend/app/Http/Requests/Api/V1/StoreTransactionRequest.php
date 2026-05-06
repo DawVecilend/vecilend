@@ -5,15 +5,12 @@ namespace App\Http\Requests\Api\V1;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreTransactionRequest extends FormRequest
-{
-    public function authorize(): bool
-    {
+class StoreTransactionRequest extends FormRequest {
+    public function authorize(): bool {
         return Auth::check();
     }
 
-    public function rules(): array
-    {
+    public function rules(): array {
         return [
             'objecte_id' => ['required', 'integer', 'exists:objectes,id'],
             'data_inici' => ['required', 'date', 'after_or_equal:today'],
@@ -22,8 +19,7 @@ class StoreTransactionRequest extends FormRequest
         ];
     }
 
-    public function messages(): array
-    {
+    public function messages(): array {
         return [
             'objecte_id.required'      => 'Has d\'indicar l\'objecte que vols sol·licitar.',
             'objecte_id.exists'        => 'L\'objecte indicat no existeix.',

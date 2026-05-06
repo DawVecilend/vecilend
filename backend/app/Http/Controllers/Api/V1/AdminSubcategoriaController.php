@@ -12,19 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
-class AdminSubcategoriaController extends Controller
-{
-    private function authorizeAdmin(Request $request): void
-    {
-        if (!$request->user() || $request->user()->rol !== 'admin') {
-            abort(Response::HTTP_FORBIDDEN, 'Accés denegat.');
-        }
-    }
-
-    public function index(Request $request)
-    {
-        $this->authorizeAdmin($request);
-
+class AdminSubcategoriaController extends Controller {
+    public function index(Request $request) {
         $subcategories = Subcategoria::with('categoria')
             ->withCount('objectes')
             ->orderBy('nom')
@@ -33,13 +22,8 @@ class AdminSubcategoriaController extends Controller
         return SubcategoriaResource::collection($subcategories);
     }
 
-    public function show(Request $request, $id)
-    {
-        $this->authorizeAdmin($request);
-
-        $subcategory = Subcategoria::with('categoria')
-            ->withCount('objectes')
-            ->find($id);
+    public function show(Request $request, $id) {
+        $subcategory = Subcategoria::with('categoria')->withCount('objectes')->find($id);
 
         if (!$subcategory) {
             return response()->json([
@@ -50,21 +34,14 @@ class AdminSubcategoriaController extends Controller
         return new SubcategoriaResource($subcategory);
     }
 
-    public function store(StoreSubcategoriaRequest $request)
-    {
-        $this->authorizeAdmin($request);
-
+    public function store(StoreSubcategoriaRequest $request) {
         $subcategory = Subcategoria::create($request->validated());
         $this->logAdminAction($request, 'create', $subcategory, ['payload' => $request->validated()]);
 
-        return (new SubcategoriaResource($subcategory))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+        return (new SubcategoriaResource($subcategory))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function update(UpdateSubcategoriaRequest $request, $id)
-    {
-        $this->authorizeAdmin($request);
+    public function update(UpdateSubcategoriaRequest $request, $id) {
 
         $subcategory = Subcategoria::find($id);
         if (!$subcategory) {
@@ -74,8 +51,7 @@ class AdminSubcategoriaController extends Controller
         }
 
         $data = $request->validated();
-        $categoriaChanged = array_key_exists('categoria_id', $data)
-            && $data['categoria_id'] !== $subcategory->categoria_id;
+        $categoriaChanged = array_key_exists('categoria_id', $data) && $data['categoria_id'] !== $subcategory->categoria_id;
 
         DB::transaction(function () use ($subcategory, $data, $categoriaChanged) {
             $subcategory->update($data);
@@ -91,9 +67,7 @@ class AdminSubcategoriaController extends Controller
         return new SubcategoriaResource($subcategory->refresh());
     }
 
-    public function destroy(Request $request, $id)
-    {
-        $this->authorizeAdmin($request);
+    public function destroy(Request $request, $id) {
 
         $subcategory = Subcategoria::find($id);
         if (!$subcategory) {
@@ -109,7 +83,7 @@ class AdminSubcategoriaController extends Controller
         }
 
         $subcategory->delete();
-        $this->logAdminAction($request, 'delete', $subcategory);
+        $this->logAdminAction($request, 'delete', $subcategory, ['payload' => $subcategory->toArray()]);
 
         return response()->json([
             'message' => 'Subcategoria eliminada correctament.',
@@ -117,8 +91,7 @@ class AdminSubcategoriaController extends Controller
         ], Response::HTTP_OK);
     }
 
-    protected function logAdminAction(Request $request, string $action, Subcategoria $subcategory, array $details = []): void
-    {
+    protected function logAdminAction(Request $request, string $action, Subcategoria $subcategory, array $details = []): void {
         DB::table('logs')->insert([
             'user_id' => $request->user()->id,
             'tipus' => 'admin',
