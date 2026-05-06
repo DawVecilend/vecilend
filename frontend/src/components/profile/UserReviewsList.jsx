@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Rating } from "@mui/material";
 import { getUserReviews } from "../../services/reviews";
+
+const PER_PAGE = 6;
 
 /**
  * @param {string} username   El perfil que estem mirant
  */
 function UserReviewsList({ username }) {
   const [role, setRole] = useState("qualsevol");
-  const [page, setPage] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [meta, setMeta] = useState({ current_page: 1, last_page: 1, total: 0 });
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
+  // Càrrega inicial / quan canvia el rol
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    getUserReviews(username, { role, page, per_page: 5 })
+    getUserReviews(username, { role, page: 1, per_page: PER_PAGE })
       .then((res) => {
         if (cancelled) return;
         setReviews(res.data || []);
@@ -32,11 +35,29 @@ function UserReviewsList({ username }) {
     return () => {
       cancelled = true;
     };
-  }, [username, role, page]);
+  }, [username, role]);
+
+  const handleLoadMore = useCallback(async () => {
+    if (loadingMore || meta.current_page >= meta.last_page) return;
+    setLoadingMore(true);
+    try {
+      const res = await getUserReviews(username, {
+        role,
+        page: meta.current_page + 1,
+        per_page: PER_PAGE,
+      });
+      setReviews((prev) => [...prev, ...(res.data || [])]);
+      setMeta(res.meta || meta);
+    } catch (err) {
+      console.error("Error cargando más reviews:", err);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [loadingMore, meta, role, username]);
 
   const handleRoleChange = (newRole) => {
+    if (newRole === role) return;
     setRole(newRole);
-    setPage(1);
   };
 
   const ROLES = [
@@ -44,6 +65,8 @@ function UserReviewsList({ username }) {
     { id: "propietari", label: "Como propietario" },
     { id: "solicitant", label: "Como solicitante" },
   ];
+
+  const remaining = Math.max(0, (meta.total ?? 0) - reviews.length);
 
   return (
     <section className="space-y-6">
@@ -150,26 +173,17 @@ function UserReviewsList({ username }) {
         </div>
       )}
 
-      {meta.last_page > 1 && (
-        <div className="flex items-center justify-center gap-3 pt-2">
+      {!loading && meta.current_page < meta.last_page && (
+        <div className="flex justify-center pt-2">
           <button
             type="button"
-            disabled={page <= 1}
-            onClick={() => setPage((p) => p - 1)}
-            className="px-4 py-2 rounded-full bg-[#161d1b] border border-[#3c4947] text-[#dde4e1] disabled:opacity-40"
+            onClick={handleLoadMore}
+            disabled={loadingMore}
+            className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
           >
-            ← Anterior
-          </button>
-          <span className="text-[#bbcac6] text-sm">
-            Página {meta.current_page} de {meta.last_page}
-          </span>
-          <button
-            type="button"
-            disabled={page >= meta.last_page}
-            onClick={() => setPage((p) => p + 1)}
-            className="px-4 py-2 rounded-full bg-[#161d1b] border border-[#3c4947] text-[#dde4e1] disabled:opacity-40"
-          >
-            Siguiente →
+            {loadingMore
+              ? "Cargando…"
+              : `Cargar más${remaining > 0 ? ` (${remaining} restantes)` : ""}`}
           </button>
         </div>
       )}

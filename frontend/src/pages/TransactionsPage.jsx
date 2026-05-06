@@ -241,28 +241,58 @@ function TransactionsPage() {
   const [role, setRole] = useState(initialRole);
   const [status, setStatus] = useState(initialStatus);
   const [transactions, setTransactions] = useState([]);
+  const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
   const [busyId, setBusyId] = useState(null);
   const [reviewModalTx, setReviewModalTx] = useState(null);
 
+  // Càrrega inicial
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getTransactions({
+      const res = await getTransactions({
         role,
         status: status === "all" ? null : status,
+        page: 1,
+        per_page: 8,
       });
-      setTransactions(Array.isArray(data) ? data : []);
+      setTransactions(Array.isArray(res.data) ? res.data : []);
+      setMeta(res.meta);
     } catch (err) {
       console.error("Error cargando transacciones:", err);
       setError("No se han podido cargar las transacciones.");
       setTransactions([]);
+      setMeta(null);
     } finally {
       setLoading(false);
     }
   }, [role, status]);
+
+  // Cargar més
+  const handleLoadMore = useCallback(async () => {
+    if (!meta || meta.current_page >= meta.last_page || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      const res = await getTransactions({
+        role,
+        status: status === "all" ? null : status,
+        page: meta.current_page + 1,
+        per_page: 8,
+      });
+      setTransactions((prev) => [
+        ...prev,
+        ...(Array.isArray(res.data) ? res.data : []),
+      ]);
+      setMeta(res.meta);
+    } catch (err) {
+      console.error("Error cargando más transacciones:", err);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [meta, loadingMore, role, status]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -272,7 +302,7 @@ function TransactionsPage() {
     if (user) load();
   }, [user, authLoading, load, navigate]);
 
-  // Mantenir l'URL sincronitzada amb els filtres
+  // URL sincronitzada
   useEffect(() => {
     const next = new URLSearchParams();
     next.set("role", role);
@@ -302,13 +332,9 @@ function TransactionsPage() {
     }
   };
 
-  const counts = useMemo(() => {
-    const base = { all: transactions.length };
-    for (const s of ["pendent", "acceptat", "rebutjat", "finalitzat"]) {
-      base[s] = transactions.filter((t) => t.estat === s).length;
-    }
-    return base;
-  }, [transactions]);
+  // Counts es calculen sobre el total real (meta.total) no sobre la pàgina carregada
+  const totalCount = meta?.total ?? transactions.length;
+  const remaining = Math.max(0, totalCount - transactions.length);
 
   return (
     <section className="mx-auto w-full max-w-[1100px] px-4 md:px-8 pt-6 pb-32">
@@ -356,8 +382,6 @@ function TransactionsPage() {
             }`}
           >
             {s.label}
-            {s.id === "all" && counts.all != null && ` (${counts.all})`}
-            {s.id !== "all" && counts[s.id] > 0 && ` (${counts[s.id]})`}
           </button>
         ))}
       </div>
@@ -396,18 +420,36 @@ function TransactionsPage() {
       )}
 
       {!loading && !error && transactions.length > 0 && (
-        <div className="flex flex-col gap-4">
-          {transactions.map((tx) => (
-            <TransactionCard
-              key={tx.id}
-              tx={tx}
-              role={role}
-              onAction={handleAction}
-              busyId={busyId}
-            />
-          ))}
-        </div>
+        <>
+          <div className="flex flex-col gap-4">
+            {transactions.map((tx) => (
+              <TransactionCard
+                key={tx.id}
+                tx={tx}
+                role={role}
+                onAction={handleAction}
+                busyId={busyId}
+              />
+            ))}
+          </div>
+
+          {meta && meta.current_page < meta.last_page && (
+            <div className="flex justify-center mt-6">
+              <button
+                type="button"
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
+              >
+                {loadingMore
+                  ? "Cargando…"
+                  : `Cargar más${remaining > 0 ? ` (${remaining} restantes)` : ""}`}
+              </button>
+            </div>
+          )}
+        </>
       )}
+
       <ReviewModal
         open={!!reviewModalTx}
         transactionId={reviewModalTx?.id}

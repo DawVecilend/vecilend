@@ -1,8 +1,15 @@
-import { Rating } from "@mui/material";
 import { useState, useEffect } from "react";
+
+const OPTIONS = [
+  { value: 0, label: "Sin filtro" },
+  { value: 4, label: "4 ★ o más" },
+  { value: 5, label: "5 ★" },
+];
 
 /**
  * Filtre de valoració mínima del propietari.
+ * Limitat a 4 i 5 estrelles (decisió de producte: la mitjana del propietari
+ * ja és exigent, no té sentit filtrar per <4 perquè perd valor).
  *
  * @param {Object} value             {minRating}
  * @param {Function} onChange        (newValue) => void
@@ -15,46 +22,43 @@ function RatingFilter({ value = {}, onChange }) {
   }, [value.minRating]);
 
   const reportChange = (newRating) => {
+    setRating(newRating);
     onChange?.({ minRating: newRating });
   };
 
   return (
-    <div className="flex flex-col gap-2 px-4 py-4">
-      <div className="flex items-center justify-between">
-        <span className="text-label text-app-text-secondary font-body">
-          Valoración mínima del propietario
-        </span>
-        {rating > 0 && (
+    <div className="flex flex-col gap-3 px-4 py-4">
+      <span className="text-label text-app-text-secondary font-body">
+        Valoración mínima del propietario
+      </span>
+      <div className="flex gap-2 flex-wrap">
+        {OPTIONS.map((opt) => (
           <button
+            key={opt.value}
             type="button"
-            onClick={() => {
-              setRating(0);
-              reportChange(0);
-            }}
-            className="text-caption text-vecilend-dark-primary underline"
+            onClick={() => reportChange(opt.value)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
+              rating === opt.value
+                ? "bg-vecilend-dark-primary text-[#003730]"
+                : "bg-app-card border border-app-border text-app-text hover:border-vecilend-dark-primary"
+            }`}
           >
-            Limpiar
+            {opt.value > 0 && (
+              <span
+                className="material-symbols-outlined text-base"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                star
+              </span>
+            )}
+            {opt.label}
           </button>
-        )}
+        ))}
       </div>
-      <Rating
-        value={rating}
-        onChange={(_, v) => {
-          const newRating = v ?? 0;
-          setRating(newRating);
-          reportChange(newRating);
-        }}
-        precision={1}
-        size="large"
-        sx={{
-          "& .MuiRating-iconFilled": { color: "#FBBF24" },
-          "& .MuiRating-iconEmpty": { color: "#4B5563" },
-        }}
-      />
-      <p className="mt-1 text-caption text-app-text-secondary font-body">
+      <p className="text-caption text-app-text-secondary font-body italic">
         {rating === 0
-          ? "Sin filtro de valoración"
-          : `Solo objetos con ${rating}★ o más (excluye objetos sin valoraciones)`}
+          ? "No se aplicará filtro de valoración."
+          : `Solo verás objetos con propietarios de ${rating}★ o más (excluye los que no tengan valoraciones).`}
       </p>
     </div>
   );

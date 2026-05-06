@@ -59,14 +59,14 @@ class ObjecteDetailResource extends JsonResource
                 ])
             ),
 
-            // ── Stats del propietari ESPECÍFIQUES per a aquest objecte ──
+            // ── Stats per a aquest objecte concret (no per al propietari en general) ──
             'valoracio_objecte' => [
                 'avg'   => $this->valoracions_objecte_avg   ?? null,
                 'total' => $this->valoracions_objecte_total ?? 0,
             ],
 
-            // ── Llista de comentaris de les valoracions d'aquest objecte ──
-            'valoracions'    => $this->valoracions_data ?? [],
+            // ── Valoracions del propietari per a aquest objecte ──
+            'valoracions' => $this->valoracions_data ?? [],
 
             // ── Dates ocupades (transaccions actives) ──
             'dates_ocupades' => $this->dates_ocupades ?? [],

@@ -40,8 +40,8 @@ function ReviewModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-app-card border border-app-border rounded-2xl max-w-md w-full p-6 space-y-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4">
+      <div className="bg-[#161d1b] border border-[#3c4947] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
         <h2 className="text-app-text font-heading text-h2-desktop">
           Valorar a {otherUserName}
         </h2>

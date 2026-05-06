@@ -50,7 +50,7 @@ class ObjecteController extends Controller
                 'min:0',
                 Rule::when($request->filled('min_price'), ['gte:min_price']),
             ],
-            'min_user_rating'  => 'nullable|integer|min:1|max:5',
+            'min_user_rating' => ['nullable', 'integer', 'min:4', 'max:5'],
         ]);
 
         $query = Objecte::query()
@@ -168,12 +168,21 @@ class ObjecteController extends Controller
             ])
             ->findOrFail($id);
 
-        // Stats del propietari específics per a aquest objecte (la "valoració que apareix a la card")
+        // ── Stats: dues mitjanes diferents ──
+        //   1. La GENERAL del propietari (al UserCard del detall)
+        //   2. La ESPECÍFICA per a aquest objecte (sota el títol)
+        $statsGeneral = \App\Models\Valoracio::statsUsuari($objecte->user->id, 'propietari');
         $statsObjecte = \App\Models\Valoracio::statsPropietariPerObjecte($objecte->id);
-        $objecte->user->valoracio_mitjana = $statsObjecte['avg'];
-        $objecte->user->valoracio_total   = $statsObjecte['total'];
 
-        // Llista de comentaris del propietari per a aquest objecte (per mostrar al detall)
+        // Stats general → al propietari (mateix nom que PublicUserResource)
+        $objecte->user->valoracio_propietari_avg   = $statsGeneral['avg'];
+        $objecte->user->valoracio_propietari_total = $statsGeneral['total'];
+
+        // Stats específica de l'objecte → atribut top-level
+        $objecte->valoracions_objecte_avg   = $statsObjecte['avg'];
+        $objecte->valoracions_objecte_total = $statsObjecte['total'];
+
+        // Llista de comentaris del propietari per a aquest objecte
         $objecte->valoracions_data = $this->obtenirValoracionsObjecte($id);
         $objecte->dates_ocupades   = $this->obtenirDatesOcupades($id);
         $objecte->favorit         = $this->isObjectFavorit($request, $objecte->id);
@@ -245,7 +254,7 @@ class ObjecteController extends Controller
                 'min:0',
                 Rule::when($request->filled('min_price'), ['gte:min_price']),
             ],
-            'min_user_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+            'min_user_rating' => ['nullable', 'integer', 'min:4', 'max:5'],
         ]);
 
         $lat    = (float) $validated['lat'];
@@ -287,7 +296,7 @@ class ObjecteController extends Controller
         }
 
         if (isset($validated['min_user_rating'])) {
-            $query->ambValoracioPropietariMinima((float) $validated['min_user_rating']);
+            $query->ambValoracioPropietariMinima((int) $validated['min_user_rating']);
         }
 
         $perPage  = (int) ($validated['per_page'] ?? 20);

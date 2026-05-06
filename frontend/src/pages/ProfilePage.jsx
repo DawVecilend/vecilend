@@ -169,83 +169,69 @@ function ProfilePage() {
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
       <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
         <section className="relative bg-[#161d1b] rounded-xl p-8 md:p-12 overflow-hidden">
-          <div className="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
-            <span className="material-symbols-outlined !text-[20rem] text-[#4fdbc8] rotate-12">
-              camera_enhance
-            </span>
-          </div>
-
           <div className="relative flex flex-col md:flex-row gap-8 items-start">
-            {/* Avatar */}
-            <div className="relative group shrink-0">
+            {/* ── Avatar ── */}
+            <div className="relative shrink-0">
               <img
                 alt="Foto de perfil"
                 className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl"
                 src={profile?.avatar_url || "/assets/icons/empty-user-icon.svg"}
               />
-              <div className="absolute -bottom-3 -right-3 bg-[#f38764] text-[#6c2106] px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 border border-white">
-                <span className="material-symbols-outlined icon-filled text-sm">
-                  verified
-                </span>
-                Verificado
-              </div>
             </div>
 
-            {/* Columna dreta: nom + 4 tarjetes + ubicació + bio + botó */}
-            <div className="flex-1 space-y-5 w-full">
-              {/* Nom */}
-              <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight">
-                {profile?.nom} {profile?.cognoms}
-              </h1>
+            <div className="flex-1 flex flex-col gap-6 w-full">
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-x-8 gap-y-6">
+                <div className="space-y-4 min-w-0">
+                  <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight break-words">
+                    {profile?.nom} {profile?.cognoms}
+                  </h1>
 
-              {/* 4 tarjetes */}
-              <div className="flex flex-wrap gap-3">
-                <RatingCard
-                  value={profile?.total_transaccions ?? 0}
-                  label="Transacciones"
-                />
-                <RatingCard value="100%" label="Respuesta" />
-                <RatingCard
-                  value={profile?.valoracio_propietari_avg ?? null}
-                  label={`Como propietario${
-                    profile?.valoracio_propietari_total
-                      ? ` (${profile.valoracio_propietari_total})`
-                      : ""
-                  }`}
-                  starred
-                />
-                <RatingCard
-                  value={profile?.valoracio_solicitant_avg ?? null}
-                  label={`Como solicitante${
-                    profile?.valoracio_solicitant_total
-                      ? ` (${profile.valoracio_solicitant_total})`
-                      : ""
-                  }`}
-                  starred
-                />
+                  <p className="flex items-center gap-1 text-[#bbcac6] font-medium">
+                    <span className="material-symbols-outlined !text-lg">
+                      location_on
+                    </span>
+                    {profile?.direccio || "Ubicación no disponible"}
+                  </p>
+
+                  <div className="space-y-2">
+                    <h2 className="text-xl font-bold text-[#4fdbc8]">
+                      Acerca de {profile?.nom}
+                    </h2>
+                    <p className="text-[#bbcac6] leading-relaxed line-clamp-4 whitespace-pre-line">
+                      {profile?.biography ||
+                        "Este usuario aún no ha añadido biografía."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 self-start">
+                  <RatingCard
+                    value={profile?.total_transaccions ?? 0}
+                    label="Transacciones"
+                  />
+                  <RatingCard value="100%" label="Respuesta" />
+                  <RatingCard
+                    value={profile?.valoracio_propietari_avg ?? null}
+                    label={`Como propietario${
+                      profile?.valoracio_propietari_total
+                        ? ` (${profile.valoracio_propietari_total})`
+                        : ""
+                    }`}
+                    starred
+                  />
+                  <RatingCard
+                    value={profile?.valoracio_solicitant_avg ?? null}
+                    label={`Como solicitante${
+                      profile?.valoracio_solicitant_total
+                        ? ` (${profile.valoracio_solicitant_total})`
+                        : ""
+                    }`}
+                    starred
+                  />
+                </div>
               </div>
 
-              {/* Ubicació real (municipi) */}
-              <p className="flex items-center gap-1 text-[#bbcac6] font-medium">
-                <span className="material-symbols-outlined !text-lg">
-                  location_on
-                </span>
-                {profile?.direccio || "Ubicación no disponible"}
-              </p>
-
-              {/* Acerca de... */}
-              <div className="space-y-2">
-                <h2 className="text-xl font-bold text-[#4fdbc8]">
-                  Acerca de {profile?.nom}
-                </h2>
-                <p className="text-[#bbcac6] leading-relaxed">
-                  {profile?.biography ||
-                    "Este usuario aún no ha añadido biografía."}
-                </p>
-              </div>
-
-              {/* Botó */}
-              <div className="flex gap-4 pt-2">
+              <div className="flex md:justify-end">
                 {isOwnProfile ? (
                   <Link
                     to={`/settings/profile/${username}/editing`}
