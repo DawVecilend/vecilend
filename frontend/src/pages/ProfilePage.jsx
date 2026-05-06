@@ -7,6 +7,10 @@ import { AuthContext } from "../contexts/AuthContext";
 import ProductsSection from "../components/home/ProductsSection";
 import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
 import NotFoundPage from "./NotFoundPage";
+import RatingCard from "../components/profile/RatingCard";
+import RatingEvolutionChart from "../components/profile/RatingEvolutionChart";
+import UserReviewsList from "../components/profile/UserReviewsList";
+import { getReviewsEvolution } from "../services/reviews";
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -18,6 +22,11 @@ function ProfilePage() {
   const [productToDelete, setProductToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+
+  const [evolution, setEvolution] = useState({
+    propietari: [],
+    solicitant: [],
+  });
 
   const { username } = useParams();
   const { user: currentUser } = useContext(AuthContext);
@@ -63,6 +72,13 @@ function ProfilePage() {
         setLatestObjects([]);
       } finally {
         setLoading(false);
+      }
+
+      try {
+        const evo = await getReviewsEvolution(username);
+        setEvolution(evo || { propietari: [], solicitant: [] });
+      } catch (e) {
+        console.error("Error cargando evolución:", e);
       }
     }
 
@@ -159,14 +175,14 @@ function ProfilePage() {
             </span>
           </div>
 
-          <div className="relative flex flex-col md:flex-row gap-8 items-start md:items-center">
-            <div className="relative group">
+          <div className="relative flex flex-col md:flex-row gap-8 items-start">
+            {/* Avatar */}
+            <div className="relative group shrink-0">
               <img
                 alt="Foto de perfil"
-                className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl scale-105 group-hover:scale-100 transition-transform duration-500"
+                className="w-32 h-32 md:w-48 md:h-48 rounded-lg object-cover shadow-2xl"
                 src={profile?.avatar_url || "/assets/icons/empty-user-icon.svg"}
               />
-
               <div className="absolute -bottom-3 -right-3 bg-[#f38764] text-[#6c2106] px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 border border-white">
                 <span className="material-symbols-outlined icon-filled text-sm">
                   verified
@@ -175,55 +191,60 @@ function ProfilePage() {
               </div>
             </div>
 
-            <div className="flex-1 space-y-4">
-              <div>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight">
-                  {profile?.nom} {profile?.cognoms}
-                </h1>
+            {/* Columna dreta: nom + 4 tarjetes + ubicació + bio + botó */}
+            <div className="flex-1 space-y-5 w-full">
+              {/* Nom */}
+              <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight">
+                {profile?.nom} {profile?.cognoms}
+              </h1>
 
-                <p className="flex items-center gap-1 text-[#bbcac6] font-medium mt-1">
-                  <span className="material-symbols-outlined !text-lg">
-                    location_on
-                  </span>
-                  {profile?.direccio || "Ubicación no disponible"}
+              {/* 4 tarjetes */}
+              <div className="flex flex-wrap gap-3">
+                <RatingCard
+                  value={profile?.total_transaccions ?? 0}
+                  label="Transacciones"
+                />
+                <RatingCard value="100%" label="Respuesta" />
+                <RatingCard
+                  value={profile?.valoracio_propietari_avg ?? null}
+                  label={`Como propietario${
+                    profile?.valoracio_propietari_total
+                      ? ` (${profile.valoracio_propietari_total})`
+                      : ""
+                  }`}
+                  starred
+                />
+                <RatingCard
+                  value={profile?.valoracio_solicitant_avg ?? null}
+                  label={`Como solicitante${
+                    profile?.valoracio_solicitant_total
+                      ? ` (${profile.valoracio_solicitant_total})`
+                      : ""
+                  }`}
+                  starred
+                />
+              </div>
+
+              {/* Ubicació real (municipi) */}
+              <p className="flex items-center gap-1 text-[#bbcac6] font-medium">
+                <span className="material-symbols-outlined !text-lg">
+                  location_on
+                </span>
+                {profile?.direccio || "Ubicación no disponible"}
+              </p>
+
+              {/* Acerca de... */}
+              <div className="space-y-2">
+                <h2 className="text-xl font-bold text-[#4fdbc8]">
+                  Acerca de {profile?.nom}
+                </h2>
+                <p className="text-[#bbcac6] leading-relaxed">
+                  {profile?.biography ||
+                    "Este usuario aún no ha añadido biografía."}
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-4">
-                <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
-                  <span className="text-[#4fdbc8] font-bold text-xl">350+</span>
-
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">
-                    Alquileres
-                  </span>
-                </div>
-
-                <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
-                  <span className="text-[#4fdbc8] font-bold text-xl">100%</span>
-
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">
-                    Respuesta
-                  </span>
-                </div>
-
-                <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[100px]">
-                  <div className="flex items-center gap-1">
-                    <span className="text-[#4fdbc8] font-bold text-xl">
-                      {profile?.valoracio_mitjana ?? "-"}
-                    </span>
-                    {profile?.valoracio_mitjana != null && (
-                      <span className="material-symbols-outlined icon-filled text-orange-500 text-sm">
-                        star
-                      </span>
-                    )}
-                  </div>
-
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490]">
-                    Puntuación
-                  </span>
-                </div>
-              </div>
-
+              {/* Botó */}
               <div className="flex gap-4 pt-2">
                 {isOwnProfile ? (
                   <Link
@@ -236,99 +257,36 @@ function ProfilePage() {
                     Editar Perfil
                   </Link>
                 ) : (
-                  <>
-                    <button className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2">
-                      <span className="material-symbols-outlined !text-xl">
-                        mail
-                      </span>
-                      Contacta a {profile?.nom}
-                    </button>
-
-                    <button className="bg-[#21514a] text-[#92c2b8] px-8 py-4 rounded-full font-bold hover:bg-[#bbece2] transition-colors active:scale-95">
-                      Seguir
-                    </button>
-                  </>
+                  <button
+                    type="button"
+                    className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2"
+                  >
+                    <span className="material-symbols-outlined !text-xl">
+                      mail
+                    </span>
+                    Contacta a {profile?.nom}
+                  </button>
                 )}
               </div>
             </div>
           </div>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <div className="md:col-span-8 bg-[#090f0e] p-8 rounded-lg space-y-6">
-            <h2 className="text-2xl font-bold text-[#4fdbc8]">
-              Acerca de {profile?.nom}
-            </h2>
-
-            <div className="space-y-4 text-[#bbcac6] leading-relaxed">
-              <p>{profile?.biography || "Descripción no disponible"}</p>
-            </div>
-
-            <div className="flex flex-wrap gap-3 pt-4">
-              <span className="bg-[#252b2a] px-4 py-2 rounded-full text-sm font-semibold">
-                Cinematography
-              </span>
-
-              <span className="bg-[#252b2a] px-4 py-2 rounded-full text-sm font-semibold">
-                Color Grading
-              </span>
-
-              <span className="bg-[#252b2a] px-4 py-2 rounded-full text-sm font-semibold">
-                Technical Advisor
-              </span>
-            </div>
-          </div>
-
-          <div className="md:col-span-4 bg-[#4fdbc8] text-[#003731] p-8 rounded-lg relative overflow-hidden group">
-            <div className="absolute -right-8 -bottom-8 opacity-20 transform group-hover:scale-110 transition-transform duration-700">
-              <span className="material-symbols-outlined !text-[12rem]">
-                verified_user
-              </span>
-            </div>
-
-            <h3 className="text-xl font-bold mb-6">Lender Commitment</h3>
-
-            <ul className="space-y-4 relative z-10">
-              <li className="flex items-start gap-3">
-                <span className="material-symbols-outlined icon-filled text-[#ffdbd0]">
-                  check_circle
-                </span>
-
-                <p className="text-sm font-medium">
-                  Same-day inspection on all returns
-                </p>
-              </li>
-
-              <li className="flex items-start gap-3">
-                <span className="material-symbols-outlined icon-filled text-[#ffdbd0]">
-                  check_circle
-                </span>
-
-                <p className="text-sm font-medium">
-                  Sensor cleaning before every body rental
-                </p>
-              </li>
-
-              <li className="flex items-start gap-3">
-                <span className="material-symbols-outlined icon-filled text-[#ffdbd0]">
-                  check_circle
-                </span>
-
-                <p className="text-sm font-medium">
-                  Firmware kept up to date monthly
-                </p>
-              </li>
-
-              <li className="flex items-start gap-3">
-                <span className="material-symbols-outlined icon-filled text-[#ffdbd0]">
-                  check_circle
-                </span>
-
-                <p className="text-sm font-medium">
-                  Flexible pickup in Williamsburg
-                </p>
-              </li>
-            </ul>
+        <section className="space-y-6">
+          <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
+            Evolución de las valoraciones
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <RatingEvolutionChart
+              data={evolution.propietari}
+              title="Como propietario"
+              color="#4fdbc8"
+            />
+            <RatingEvolutionChart
+              data={evolution.solicitant}
+              title="Como solicitante"
+              color="#f38764"
+            />
           </div>
         </section>
 
@@ -400,89 +358,7 @@ function ProfilePage() {
           )}
         </section>
 
-        <section className="space-y-8">
-          <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
-            Reviews from Filmmakers
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-[#161d1b] p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
-              <div className="flex items-center gap-4">
-                <img
-                  alt="User Profile"
-                  className="w-12 h-12 rounded-full"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeEqSaikQJZ9NyhaeByH7mNkoQaDgO_9cyQiWUksGlDctNMV0--xgG-UcMBJDNVrQmfNQYR3YO8eTQDfBln6kVPTsnElbQkorJAiH6_aAihwvGCnhudhzqU6XC1THU08yyo9voih6Vizg0zdjS42_N9T-hMApuFRwzd_v_4wTRAmo-cKdTegtEhxYr9AdRK7l0qvDKlqFSuw_Ym7T3HaELXNjQNll5t_Uev_uYODmlCmfFw1eq3L5WB1iJCkjwFk8xRLvx8EVSiEdS"
-                />
-
-                <div>
-                  <h4 className="font-bold text-[#dde4e1]">David S.</h4>
-
-                  <div className="flex">
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-[#bbcac6] italic">
-                "Marcus is the gold standard for gear rental. The A7 kit was
-                immaculate, batteries were fully charged, and he even included
-                extra lens tissues. Will definitely rent from him again!"
-              </p>
-            </div>
-
-            <div className="bg-[#161d1b] p-8 rounded-lg space-y-4 border-l-4 border-[#4fdbc8]">
-              <div className="flex items-center gap-4">
-                <img
-                  alt="User Profile"
-                  className="w-12 h-12 rounded-full"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT73IMdFWPKHxMqksyR2MCl4XQcJ1X0CXN0AuGLaIsDsCXq-tuIibwjcU_1BmOGXse2LDOy66gcF2Hl92iZrf6wYHmnHIx-BVGUr6m7V3PIBsg5lD8qAdIuj14q2O8CgvgX85B6RYhiiQxfR249Gns_KiJi3cxwndjmI2YJ9FGoKj1xa0KSyRWgI4ZXYkPhhOeDYzLw_ktDwt04Bz3YMM-pT2XXwLfnEob_kDTsLlJeuH_J8Otfey4nZ6XiKlu-7IXA9y3wuikqzQZ"
-                />
-
-                <div>
-                  <h4 className="font-bold text-[#dde4e1]">Sarah J.</h4>
-
-                  <div className="flex">
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                    <span className="material-symbols-outlined icon-filled text-orange-500 text-xs">
-                      star
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-[#bbcac6] italic">
-                "Communication was lightning fast. Picked up the Mavic 3 Pro for
-                a commercial shoot in the city. Marcus gave me a quick rundown
-                of the Cine features which was super helpful."
-              </p>
-            </div>
-          </div>
-        </section>
+        <UserReviewsList username={username} />
       </main>
 
       <ConfirmDeleteModal

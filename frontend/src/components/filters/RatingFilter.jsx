@@ -44,7 +44,7 @@ function RatingFilter({ value = {}, onChange }) {
           setRating(newRating);
           reportChange(newRating);
         }}
-        precision={0.5}
+        precision={1}
         size="large"
         sx={{
           "& .MuiRating-iconFilled": { color: "#FBBF24" },
@@ -54,7 +54,7 @@ function RatingFilter({ value = {}, onChange }) {
       <p className="mt-1 text-caption text-app-text-secondary font-body">
         {rating === 0
           ? "Sin filtro de valoración"
-          : `Solo propietarios con ${rating}★ o más (excluye usuarios sin valoraciones)`}
+          : `Solo objetos con ${rating}★ o más (excluye objetos sin valoraciones)`}
       </p>
     </div>
   );

@@ -10,6 +10,7 @@ import {
 import { isPaid } from "../utils/paymentMock";
 import { cldTransform } from "../utils/cloudinary";
 import BtnBack from "../components/elementos/BtnBack";
+import ReviewModal from "../components/transactions/ReviewModal";
 
 const STATUS_LABELS = {
   pendent: {
@@ -166,14 +167,25 @@ function TransactionCard({ tx, role, onAction, busyId }) {
           {role === "requester" && tx.estat === "finalitzat" && (
             <button
               type="button"
-              disabled
-              title="Disponible en próximas versiones"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-app-border px-5 py-2 text-label text-app-text-secondary opacity-60 cursor-not-allowed max-w-max"
+              onClick={() => onAction("review", tx.id, tx)}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 star
               </span>
-              Valorar (próximamente)
+              Valorar
+            </button>
+          )}
+          {role === "owner" && tx.estat === "finalitzat" && (
+            <button
+              type="button"
+              onClick={() => onAction("review", tx.id, tx)}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 max-w-max"
+            >
+              <span className="material-symbols-outlined text-base align-middle mr-1">
+                star
+              </span>
+              Valorar
             </button>
           )}
           {role === "owner" && tx.estat === "pendent" && (
@@ -232,6 +244,7 @@ function TransactionsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [busyId, setBusyId] = useState(null);
+  const [reviewModalTx, setReviewModalTx] = useState(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -267,7 +280,11 @@ function TransactionsPage() {
     setSearchParams(next, { replace: true });
   }, [role, status, setSearchParams]);
 
-  const handleAction = async (action, id) => {
+  const handleAction = async (action, id, tx) => {
+    if (action === "review") {
+      setReviewModalTx(tx);
+      return;
+    }
     setBusyId(id);
     try {
       if (action === "accept") await acceptTransaction(id);
@@ -391,6 +408,22 @@ function TransactionsPage() {
           ))}
         </div>
       )}
+      <ReviewModal
+        open={!!reviewModalTx}
+        transactionId={reviewModalTx?.id}
+        otherUserName={
+          reviewModalTx
+            ? (role === "requester"
+                ? reviewModalTx.owner?.nom
+                : reviewModalTx.requester?.nom) || "el usuario"
+            : ""
+        }
+        onClose={() => setReviewModalTx(null)}
+        onSuccess={() => {
+          setReviewModalTx(null);
+          load();
+        }}
+      />
     </section>
   );
 }
