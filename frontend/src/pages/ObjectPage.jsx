@@ -104,8 +104,9 @@ function ObjectPage() {
       status: "pendent",
       objecte_id: product.id,
     })
-      .then((rows) => {
+      .then((res) => {
         if (!cancelled) {
+          const rows = res?.data || [];
           setHasPendingRequest(Array.isArray(rows) && rows.length > 0);
         }
       })
@@ -480,9 +481,38 @@ function ObjectPage() {
           )}
 
           {/* Títol */}
-          <h1 className="text-app-text text-h1-mobile lg:text-h1-desktop font-heading">
-            {product.nom}
-          </h1>
+          <div className="space-y-2">
+            <h1 className="text-app-text text-h1-mobile lg:text-h1-desktop font-heading">
+              {product.nom}
+            </h1>
+
+            {/* Valoració específica d'aquest objecte (mitjana ponderada per temps) */}
+            {product.valoracio_objecte?.avg != null &&
+            product.valoracio_objecte?.total > 0 ? (
+              <div className="flex items-center gap-2">
+                <span
+                  className="material-symbols-outlined text-[#f38764] text-base"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  star
+                </span>
+                <span className="text-[#f38764] font-bold">
+                  {Number(product.valoracio_objecte.avg).toFixed(1)}
+                </span>
+                <span className="text-app-text-secondary text-label">
+                  ({product.valoracio_objecte.total}{" "}
+                  {product.valoracio_objecte.total === 1
+                    ? "valoración "
+                    : "valoraciones "}
+                  para este objeto)
+                </span>
+              </div>
+            ) : (
+              <p className="text-app-text-secondary text-label italic">
+                Sin valoraciones específicas para este objeto
+              </p>
+            )}
+          </div>
 
           {/* Descripció (just sota el títol) */}
           <div>

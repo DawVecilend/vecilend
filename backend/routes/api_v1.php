@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Middleware\EnsureAdminRole;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\Api\V1\ValoracioController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
@@ -31,6 +32,8 @@ Route::get('/categories', [CategoriaController::class, 'index']);
 Route::get('/objects', [ObjecteController::class, 'index']);
 Route::get('/objects/nearby', [ObjecteController::class, 'nearby']);
 Route::get('/objects/{id}', [ObjecteController::class, 'show'])->where('id', '[0-9]+');
+Route::get('/users/{username}/reviews',           [ValoracioController::class, 'userReviews']);
+Route::get('/users/{username}/reviews/evolution', [ValoracioController::class, 'evolution']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', function (Request $request) {
@@ -46,9 +49,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/objects/{id}', [ObjecteController::class, 'destroy'])->where('id', '[0-9]+');
     Route::get('/transactions',  [TransactionController::class, 'index']);
     Route::post('/transactions', [TransactionController::class, 'store']);
-    Route::put('/transactions/{id}/accept', [TransactionController::class, 'accept'])->where('id', '[0-9]+');
-    Route::put('/transactions/{id}/reject', [TransactionController::class, 'reject'])->where('id', '[0-9]+');
-    Route::put('/transactions/{id}/return', [TransactionController::class, 'returnObject'])->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/accept', [TransactionController::class, 'accept'])
+        ->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/reject', [TransactionController::class, 'reject'])
+        ->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/return', [TransactionController::class, 'returnObject'])
+        ->where('id', '[0-9]+');
+    Route::post('/transactions/{id}/review', [ValoracioController::class, 'store'])
+        ->where('id', '[0-9]+');
     Route::post('/objects/{id}/favorite', [FavoriteController::class, 'store'])->where('id', '[0-9]+');
     Route::delete('/objects/{id}/favorite', [FavoriteController::class, 'destroy'])->where('id', '[0-9]+');
     Route::get('/favorites', [FavoriteController::class, 'index']);

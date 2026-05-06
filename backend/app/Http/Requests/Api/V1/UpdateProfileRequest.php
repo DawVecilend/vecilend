@@ -20,7 +20,7 @@ class UpdateProfileRequest extends FormRequest
             'cognoms'         => ['required', 'string', 'max:150'],
             'telefon'         => ['nullable', 'string', 'max:20'],
             'direccio'        => ['nullable', 'string', 'max:500', Rule::in($this->getMunicipios())],
-            'biography'       => ['nullable', 'string', 'max:1000'],
+            'biography'       => ['nullable', 'string', 'max:255'],
             'radi_proximitat' => ['nullable', 'integer', 'between:1,50'],
             'avatar'          => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
             'ubicacio'        => ['nullable', 'array'],

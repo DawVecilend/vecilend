@@ -50,7 +50,7 @@ class ObjecteController extends Controller
                 'min:0',
                 Rule::when($request->filled('min_price'), ['gte:min_price']),
             ],
-            'min_user_rating'  => 'nullable|numeric|min:0|max:5',
+            'min_user_rating' => ['nullable', 'integer', 'min:4', 'max:5'],
         ]);
 
         $query = Objecte::query()
@@ -104,7 +104,7 @@ class ObjecteController extends Controller
         }
 
         if ($request->filled('min_user_rating')) {
-            $query->ambValoracioPropietariMinima((float) $request->input('min_user_rating'));
+            $query->ambValoracioPropietariMinima((int) $request->input('min_user_rating'));
         }
 
         $sort = $request->input('sort', 'recent');
@@ -123,15 +123,9 @@ class ObjecteController extends Controller
                 break;
 
             case 'rating':
-                $avgRatingSub = DB::table('valoracions')
-                    ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
-                    ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
-                    ->select('solicituds.objecte_id', DB::raw('AVG(valoracions.puntuacio) as avg_rating'))
-                    ->groupBy('solicituds.objecte_id');
-
+                $sub = \App\Models\Valoracio::rawSubqueryWeightedAvgPerObjecte();
                 $query
-                    ->leftJoinSub($avgRatingSub, 'ratings', 'ratings.objecte_id', '=', 'objectes.id')
-                    ->orderByRaw('ratings.avg_rating DESC NULLS LAST')
+                    ->orderByRaw("{$sub} DESC NULLS LAST")
                     ->orderByDesc('objectes.created_at');
                 break;
 
@@ -144,17 +138,15 @@ class ObjecteController extends Controller
         $perPage = (int) $request->input('per_page', 20);
         $objectes = $query->paginate($perPage);
 
-        $ownerIds = $objectes->pluck('user_id')->unique()->values()->all();
-        $valoracions = User::getValoracionsBulk($ownerIds);
+        // ── Stats del propietari per objecte (mitjana ponderada per temps) ──
+        $objecteIds = $objectes->pluck('id')->all();
+        $statsPerObjecte = \App\Models\Valoracio::statsPropietariPerObjectesBulk($objecteIds);
 
         foreach ($objectes as $objecte) {
-            if ($objecte->user && isset($valoracions[$objecte->user_id])) {
-                $objecte->user->valoracio_mitjana = $valoracions[$objecte->user_id]['avg'];
-                $objecte->user->valoracio_total   = $valoracions[$objecte->user_id]['total'];
-            }
+            $stats = $statsPerObjecte[$objecte->id] ?? ['avg' => null, 'total' => 0];
+            $objecte->valoracions_objecte_avg   = $stats['avg'];
+            $objecte->valoracions_objecte_total = $stats['total'];
         }
-
-        $this->applyFavoritStatus($request, $objectes);
 
         return ObjecteResource::collection($objectes);
     }
@@ -176,16 +168,21 @@ class ObjecteController extends Controller
             ])
             ->findOrFail($id);
 
-        // Valoracions del propietari (mitjana + total) — ara via helper centralitzat
-        $statsPropietari = User::getValoracioStats($objecte->user_id);
-        $objecte->user->valoracio_mitjana = $statsPropietari['avg'];
-        $objecte->user->valoracio_total   = $statsPropietari['total'];
+        // ── Stats: dues mitjanes diferents ──
+        //   1. La GENERAL del propietari (al UserCard del detall)
+        //   2. La ESPECÍFICA per a aquest objecte (sota el títol)
+        $statsGeneral = \App\Models\Valoracio::statsUsuari($objecte->user->id, 'propietari');
+        $statsObjecte = \App\Models\Valoracio::statsPropietariPerObjecte($objecte->id);
 
-        // Valoracions de l'objecte (mitjana + total)
-        $stats = $this->obtenirEstadistiquesValoracio($id);
-        $objecte->valoracio_mitjana = $stats->avg_rating;
-        $objecte->total_valoracions = (int) $stats->count_ratings;
+        // Stats general → al propietari (mateix nom que PublicUserResource)
+        $objecte->user->valoracio_propietari_avg   = $statsGeneral['avg'];
+        $objecte->user->valoracio_propietari_total = $statsGeneral['total'];
 
+        // Stats específica de l'objecte → atribut top-level
+        $objecte->valoracions_objecte_avg   = $statsObjecte['avg'];
+        $objecte->valoracions_objecte_total = $statsObjecte['total'];
+
+        // Llista de comentaris del propietari per a aquest objecte
         $objecte->valoracions_data = $this->obtenirValoracionsObjecte($id);
         $objecte->dates_ocupades   = $this->obtenirDatesOcupades($id);
         $objecte->favorit         = $this->isObjectFavorit($request, $objecte->id);
@@ -257,7 +254,7 @@ class ObjecteController extends Controller
                 'min:0',
                 Rule::when($request->filled('min_price'), ['gte:min_price']),
             ],
-            'min_user_rating'  => ['nullable', 'numeric', 'min:0', 'max:5'],
+            'min_user_rating' => ['nullable', 'integer', 'min:4', 'max:5'],
         ]);
 
         $lat    = (float) $validated['lat'];
@@ -299,11 +296,20 @@ class ObjecteController extends Controller
         }
 
         if (isset($validated['min_user_rating'])) {
-            $query->ambValoracioPropietariMinima((float) $validated['min_user_rating']);
+            $query->ambValoracioPropietariMinima((int) $validated['min_user_rating']);
         }
 
         $perPage  = (int) ($validated['per_page'] ?? 20);
         $objectes = $query->paginate($perPage)->withQueryString();
+
+        $objecteIds = $objectes->pluck('id')->all();
+        $statsPerObjecte = \App\Models\Valoracio::statsPropietariPerObjectesBulk($objecteIds);
+
+        foreach ($objectes as $objecte) {
+            $stats = $statsPerObjecte[$objecte->id] ?? ['avg' => null, 'total' => 0];
+            $objecte->valoracions_objecte_avg   = $stats['avg'];
+            $objecte->valoracions_objecte_total = $stats['total'];
+        }
 
         return ObjecteResource::collection($objectes);
     }
@@ -331,24 +337,6 @@ class ObjecteController extends Controller
     }
 
     /**
-     * Estadístiques de valoracions d'un objecte concret.
-     */
-    private function obtenirEstadistiquesValoracio(int $objecteId): object
-    {
-        $result = DB::table('valoracions')
-            ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
-            ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
-            ->where('solicituds.objecte_id', $objecteId)
-            ->selectRaw('AVG(puntuacio) as avg_rating, COUNT(*) as count_ratings')
-            ->first();
-
-        return (object) [
-            'avg_rating'    => $result->avg_rating !== null ? round((float) $result->avg_rating, 1) : null,
-            'count_ratings' => $result->count_ratings ?? 0,
-        ];
-    }
-
-    /**
      * Dates ocupades per transaccions actives d'un objecte.
      */
     private function obtenirDatesOcupades(int $objecteId): array
@@ -373,17 +361,24 @@ class ObjecteController extends Controller
     private function obtenirValoracionsObjecte(int $objecteId): array
     {
         return DB::table('valoracions')
-            ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
-            ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
             ->join('users', 'users.id', '=', 'valoracions.autor_id')
-            ->where('solicituds.objecte_id', $objecteId)
+            ->where('valoracions.objecte_id', $objecteId)
+            // Només les que valoren el PROPIETARI (no les recíproques cap al sol·licitant)
+            ->whereExists(function ($q) {
+                $q->select(DB::raw(1))
+                    ->from('objectes')
+                    ->whereColumn('objectes.id', 'valoracions.objecte_id')
+                    ->whereColumn('objectes.user_id', 'valoracions.valorat_id');
+            })
             ->select(
                 'valoracions.id',
                 'valoracions.puntuacio',
                 'valoracions.comentari',
                 'valoracions.created_at',
                 'users.id as autor_id',
-                'users.nom as autor_nom'
+                'users.nom as autor_nom',
+                'users.username as autor_username',
+                'users.avatar_url as autor_avatar'
             )
             ->orderByDesc('valoracions.created_at')
             ->get()
@@ -393,8 +388,10 @@ class ObjecteController extends Controller
                 'comentari'  => $row->comentari,
                 'created_at' => $row->created_at,
                 'autor'      => [
-                    'id'  => $row->autor_id,
-                    'nom' => $row->autor_nom,
+                    'id'         => $row->autor_id,
+                    'nom'        => $row->autor_nom,
+                    'username'   => $row->autor_username,
+                    'avatar_url' => $row->autor_avatar,
                 ],
             ])
             ->toArray();
@@ -435,6 +432,16 @@ class ObjecteController extends Controller
         }
 
         $objectes = $query->get();
+
+        // ── Stats del propietari per objecte (mitjana ponderada per temps) ──
+        $objecteIds = $objectes->pluck('id')->all();
+        $statsPerObjecte = \App\Models\Valoracio::statsPropietariPerObjectesBulk($objecteIds);
+
+        foreach ($objectes as $objecte) {
+            $stats = $statsPerObjecte[$objecte->id] ?? ['avg' => null, 'total' => 0];
+            $objecte->valoracions_objecte_avg   = $stats['avg'];
+            $objecte->valoracions_objecte_total = $stats['total'];
+        }
 
         return ObjecteResource::collection($objectes);
     }

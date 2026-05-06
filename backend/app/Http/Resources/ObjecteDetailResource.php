@@ -23,14 +23,15 @@ class ObjecteDetailResource extends JsonResource
 
             // ── Propietari ──
             'propietari' => $this->whenLoaded('user', fn() => [
-                'id'                => $this->user->id,
-                'username'          => $this->user->username,
-                'nom'               => $this->user->nom,
-                'cognoms'           => $this->user->cognoms,
-                'avatar_url'        => $this->user->avatar_url,
-                'valoracio_mitjana' => $this->user->valoracio_mitjana ?? null,
-                'valoracio_total'   => $this->user->valoracio_total ?? 0,
-                'created_at'        => $this->user->created_at?->toIso8601String(),
+                'id'                         => $this->user->id,
+                'username'                   => $this->user->username,
+                'nom'                        => $this->user->nom,
+                'cognoms'                    => $this->user->cognoms,
+                'avatar_url'                 => $this->user->avatar_url,
+                // Stats GENERALS de l'usuari com a propietari (mitjana ponderada per temps)
+                'valoracio_propietari_avg'   => $this->user->valoracio_propietari_avg   ?? null,
+                'valoracio_propietari_total' => $this->user->valoracio_propietari_total ?? 0,
+                'created_at'                 => $this->user->created_at?->toIso8601String(),
             ]),
 
             // ── Categoria ──
@@ -43,33 +44,35 @@ class ObjecteDetailResource extends JsonResource
 
             // ── Subcategoria ──
             'subcategoria' => $this->whenLoaded('subcategoria', fn() => $this->subcategoria ? [
-                'id'  => $this->subcategoria->id,
-                'nom' => $this->subcategoria->nom,
+                'id'   => $this->subcategoria->id,
+                'nom'  => $this->subcategoria->nom,
                 'slug' => $this->subcategoria->slug,
             ] : null),
 
             // ── Imatges ──
             'imatges'       => $this->whenLoaded(
                 'imatges',
-                fn() =>
-                $this->imatges->map(fn($img) => [
+                fn() => $this->imatges->map(fn($img) => [
                     'id'    => $img->id,
                     'url'   => $img->url_cloudinary,
                     'ordre' => $img->ordre,
                 ])
             ),
 
-            // ── Valoracions ──
-            'valoracions'       => $this->valoracions_data ?? [],
-            'valoracio_mitjana' => $this->valoracio_mitjana ?? null,
-            'total_valoracions' => $this->total_valoracions ?? 0,
-            'favorit'           => (bool) ($this->favorit ?? false),
+            // ── Stats per a aquest objecte concret (no per al propietari en general) ──
+            'valoracio_objecte' => [
+                'avg'   => $this->valoracions_objecte_avg   ?? null,
+                'total' => $this->valoracions_objecte_total ?? 0,
+            ],
+
+            // ── Valoracions del propietari per a aquest objecte ──
+            'valoracions' => $this->valoracions_data ?? [],
 
             // ── Dates ocupades (transaccions actives) ──
             'dates_ocupades' => $this->dates_ocupades ?? [],
 
-            'created_at'    => $this->created_at?->toIso8601String(),
-            'updated_at'    => $this->updated_at?->toIso8601String(),
+            'created_at'     => $this->created_at?->toIso8601String(),
+            'updated_at'     => $this->updated_at?->toIso8601String(),
         ];
     }
 }

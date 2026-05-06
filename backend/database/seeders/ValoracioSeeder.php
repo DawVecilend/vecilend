@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
 /**
- * Genera transaccions finalitzades + valoracions perquè els usuaris
- * tinguin una mitjana de valoració realista a la UI.
+ * Genera transaccions finalitzades + valoracions BIDIRECCIONALS perquè els usuaris
+ * tinguin mitjanes realistes als dos rols (propietari i sol·licitant).
  */
 class ValoracioSeeder extends Seeder
 {
@@ -20,14 +20,13 @@ class ValoracioSeeder extends Seeder
         $objectes    = Objecte::all();
 
         if ($solicitants->count() < 2 || $objectes->isEmpty()) {
-            $this->command->warn('Necessites com a mínim 2 usuaris i 1 objecte. Executa UserSeeder i ObjecteSeeder primer.');
+            $this->command->warn('Necessites com a mínim 2 usuaris i 1 objecte.');
             return;
         }
 
         $now = Carbon::now();
         $valoracionsCreades = 0;
 
-        // Per cada objecte, generem entre 1 i 4 valoracions completes
         foreach ($objectes as $objecte) {
             $solicitantsPossibles = $solicitants->where('id', '!=', $objecte->user_id);
             if ($solicitantsPossibles->isEmpty()) continue;
@@ -37,12 +36,12 @@ class ValoracioSeeder extends Seeder
             for ($i = 0; $i < $nValoracions; $i++) {
                 $solicitant = $solicitantsPossibles->random();
 
-                // Dates al passat: 30-60 dies enrere, 3-7 dies de durada
-                $diaInici = $now->copy()->subDays(rand(30, 60));
+                // Distribuïm dates en finestres de 5-180 dies enrere per crear evolució temporal
+                $diaInici = $now->copy()->subDays(rand(5, 180));
                 $durada   = rand(3, 7);
                 $diaFi    = $diaInici->copy()->addDays($durada);
 
-                // 1) Solicitud (estat finalitzat)
+                // Solicitud
                 $solicitudId = DB::table('solicituds')->insertGetId([
                     'solicitant_id' => $solicitant->id,
                     'objecte_id'    => $objecte->id,
@@ -55,7 +54,7 @@ class ValoracioSeeder extends Seeder
                     'updated_at'    => $diaFi,
                 ]);
 
-                // 2) Transacció (estat finalitzat)
+                // Transacció
                 $transaccioId = DB::table('transaccions')->insertGetId([
                     'solicitud_id'    => $solicitudId,
                     'data_inici_real' => $diaInici,
@@ -65,16 +64,31 @@ class ValoracioSeeder extends Seeder
                     'updated_at'      => $diaFi,
                 ]);
 
-                // 3) Valoració (puntuació entre 3 i 5)
+                // 1) El sol·licitant valora el PROPIETARI
                 DB::table('valoracions')->insert([
                     'transaccio_id' => $transaccioId,
                     'autor_id'      => $solicitant->id,
+                    'valorat_id'    => $objecte->user_id,
+                    'objecte_id'    => $objecte->id,
                     'puntuacio'     => rand(3, 5),
                     'comentari'     => fake('ca_ES')->sentence(),
                     'created_at'    => $diaFi,
                 ]);
-
                 $valoracionsCreades++;
+
+                // 2) Amb 70% de probabilitat, el PROPIETARI també valora el sol·licitant
+                if (rand(1, 100) <= 70) {
+                    DB::table('valoracions')->insert([
+                        'transaccio_id' => $transaccioId,
+                        'autor_id'      => $objecte->user_id,
+                        'valorat_id'    => $solicitant->id,
+                        'objecte_id'    => $objecte->id,
+                        'puntuacio'     => rand(3, 5),
+                        'comentari'     => fake('ca_ES')->sentence(),
+                        'created_at'    => $diaFi->copy()->addHours(rand(1, 12)),
+                    ]);
+                    $valoracionsCreades++;
+                }
             }
         }
 

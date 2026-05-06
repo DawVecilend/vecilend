@@ -124,8 +124,8 @@ function EditProfilePage() {
     try {
       await updateProfile(username, formData);
       await getUser();
-      const updatedData = await getProfile(username);
-      setProfile(updatedData);
+      const { user: updatedUser } = await getProfile(username);
+      setProfile(updatedUser);
       setSuccessMessage("¡Cambios guardados!");
       setPreviewImage(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -394,9 +394,13 @@ function EditProfilePage() {
                       name="biography"
                       value={formData.biography}
                       onChange={handleChange}
+                      maxLength={255}
+                      rows={4}
                       className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none resize-none transition-all"
-                      rows="4"
                     ></textarea>
+                    <p className="text-[10px] text-[#859490] mt-1 text-right">
+                      {(formData.biography || "").length} / 255
+                    </p>
                   </div>
                 </div>
               </div>

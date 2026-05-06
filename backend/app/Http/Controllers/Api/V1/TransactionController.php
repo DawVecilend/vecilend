@@ -26,19 +26,19 @@ class TransactionController extends Controller
      *
      * Ordre: més recents primer.
      */
-    public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function index(Request $request)
     {
-        // Validación de parámetros
         $request->validate([
             'role'       => ['nullable', 'string', 'in:requester,owner'],
             'status'     => ['nullable', 'string', 'in:pendent,acceptat,rebutjat,finalitzat'],
             'objecte_id' => ['nullable', 'integer', 'exists:objectes,id'],
+            'per_page'   => ['nullable', 'integer', 'min:1', 'max:30'],
+            'page'       => ['nullable', 'integer', 'min:1'],
         ]);
 
         $user = $request->user();
         $role = $request->input('role');
 
-        // Inicialización de la consulta base
         $query = Solicitud::with([
             'objecte.user:id,username,nom,cognoms,avatar_url',
             'objecte.imatges',
@@ -46,33 +46,29 @@ class TransactionController extends Controller
             'transaccio',
         ]);
 
-        // Filtrar por rol
         if ($role === 'requester') {
             $query->where('solicitant_id', $user->id);
         } elseif ($role === 'owner') {
             $query->whereHas('objecte', fn($q) => $q->where('user_id', $user->id));
         } else {
-            // Filtrar por ambos roles si no se especifica
             $query->where(function ($q) use ($user) {
                 $q->where('solicitant_id', $user->id)
                     ->orWhereHas('objecte', fn($oq) => $oq->where('user_id', $user->id));
             });
         }
 
-        // Filtrar por estado
         if ($request->filled('status')) {
             $query->where('estat', $request->input('status'));
         }
 
-        // Filtrar por objecte_id si está presente
         if ($request->filled('objecte_id')) {
             $query->where('objecte_id', $request->input('objecte_id'));
         }
 
-        // Ordenar por fecha de creación descendente
-        $solicituds = $query->orderByDesc('created_at')->get();
+        $perPage = (int) $request->input('per_page', 8);
 
-        // Retornar la colección de transacciones
+        $solicituds = $query->orderByDesc('created_at')->paginate($perPage);
+
         return TransactionResource::collection($solicituds);
     }
 
