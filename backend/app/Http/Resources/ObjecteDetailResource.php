@@ -59,11 +59,8 @@ class ObjecteDetailResource extends JsonResource
                 ])
             ),
 
-            // ── Valoracions ──
-            'valoracions'       => $this->valoracions_data ?? [],
-            'valoracio_mitjana' => $this->valoracio_mitjana ?? null,
-            'total_valoracions' => $this->total_valoracions ?? 0,
-            'favorit'           => (bool) ($this->favorit ?? false),
+            // ── Valoracions del propietari per a aquest objecte ──
+            'valoracions' => $this->valoracions_data ?? [],
 
             // ── Dates ocupades (transaccions actives) ──
             'dates_ocupades' => $this->dates_ocupades ?? [],
