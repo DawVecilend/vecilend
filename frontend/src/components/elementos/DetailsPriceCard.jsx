@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-function DetailsPriceCardProduct({ product, diasSelected }) {
+function DetailsPriceCardProduct({ product, diasSelected, onTotalChange }) {
     const [open, setOpen] = useState(true)
     const porcentaje = 0.15
-    const subtotal = product.preu_diari * diasSelected
+    const subtotal = parseFloat((product.preu_diari * diasSelected).toFixed(2))
     const gastos_servicio = parseFloat((subtotal * porcentaje).toFixed(2))
     const total = parseFloat((subtotal + gastos_servicio).toFixed(2))
+
+    useEffect(() => {
+        if (onTotalChange) {
+            onTotalChange(total)
+        }
+    }, [total])
 
     return (
         <div className='bg-vecilend-dark-card mt-2'>

@@ -122,11 +122,10 @@ function ObjectPage() {
     if (!range.start || !range.end) return 0;
     return range.end.diff(range.start, "day") + 1;
   }, [range]);
+  
+  const [total, setTotal] = useState(0);
 
-  const preuTotal = useMemo(() => {
-    if (!product?.preu_diari || product.tipus !== "lloguer") return 0;
-    return Number(product.preu_diari) * dies;
-  }, [product, dies]);
+  const preuTotal = product?.preu_diari && product.tipus === "lloguer" ? total : 0;
 
   const isOwnObject = !!(user && product?.propietari?.id === user.id);
   const isUnavailable = product?.estat === "no_disponible";
@@ -174,7 +173,6 @@ function ObjectPage() {
       setSubmitting(false);
     }
   };
-  console.log(product)
 
   if (loading) {
     return (
@@ -302,7 +300,11 @@ function ObjectPage() {
                 initialRange={initialRange}
                 onRangeChange={setRange}
               />
-              <DetailsPriceCardProduct product={product} diasSelected={dies}/>
+              <DetailsPriceCardProduct
+                product={product}
+                diasSelected={dies}
+                onTotalChange={setTotal}
+              />
             </div>
             
           ) : (
