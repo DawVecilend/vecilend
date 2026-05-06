@@ -2,8 +2,8 @@ import React from "react";
 import { Rating } from "@mui/material";
 
 function UserCard({ user }) {
-  const avg = user?.valoracio_mitjana;
-  const total = user?.valoracio_total ?? 0;
+  const avg = user?.valoracio_propietari_avg;
+  const total = user?.valoracio_propietari_total ?? 0;
   const hasRating = avg != null && total > 0;
 
   return (

@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo } from "react";
 import HeroSection from "../components/home/HeroSection";
 import CategoriesSection from "../components/home/categories/CategoriesSection";
 import ProductsSection from "../components/home/ProductsSection";
-import TopUsersSection from "../components/home/TopUsersSection";
 import BenefitsSection from "../components/home/BenefitsSection";
 import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
 import { getObjects } from "../services/objects";
@@ -93,7 +92,6 @@ function HomePage() {
         </>
       )}
 
-      <TopUsersSection />
       <BenefitsSection />
       <CTASection />
     </>

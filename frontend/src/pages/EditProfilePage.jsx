@@ -124,8 +124,8 @@ function EditProfilePage() {
     try {
       await updateProfile(username, formData);
       await getUser();
-      const updatedData = await getProfile(username);
-      setProfile(updatedData);
+      const { user: updatedUser } = await getProfile(username);
+      setProfile(updatedUser);
       setSuccessMessage("¡Cambios guardados!");
       setPreviewImage(null);
       if (fileInputRef.current) fileInputRef.current.value = "";

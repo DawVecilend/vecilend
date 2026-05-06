@@ -56,6 +56,12 @@ class ObjecteResource extends JsonResource
                 ]);
             }),
 
+            // ── Stats del propietari per a aquest objecte (mitjana ponderada per temps) ──
+            'valoracio_objecte' => [
+                'avg'   => $this->valoracions_objecte_avg   ?? null,
+                'total' => $this->valoracions_objecte_total ?? 0,
+            ],
+
             'favorit' => (bool) ($this->favorit ?? false),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String()

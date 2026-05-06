@@ -26,7 +26,7 @@ class PublicUserResource extends JsonResource
             'direccio'   => $this->direccio,
             'avatar_url' => $this->avatar_url,
 
-            // Stats noves (mitjana ponderada per temps)
+            // Stats de l'usuari (mitjanes ponderades per temps)
             'valoracio_propietari_avg'   => $this->valoracio_propietari_avg   ?? null,
             'valoracio_propietari_total' => $this->valoracio_propietari_total ?? 0,
             'valoracio_solicitant_avg'   => $this->valoracio_solicitant_avg   ?? null,

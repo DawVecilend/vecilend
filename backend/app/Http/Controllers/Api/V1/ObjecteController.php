@@ -144,13 +144,9 @@ class ObjecteController extends Controller
 
         foreach ($objectes as $objecte) {
             $stats = $statsPerObjecte[$objecte->id] ?? ['avg' => null, 'total' => 0];
-            if ($objecte->user) {
-                $objecte->user->valoracio_mitjana = $stats['avg'];
-                $objecte->user->valoracio_total   = $stats['total'];
-            }
+            $objecte->valoracions_objecte_avg   = $stats['avg'];
+            $objecte->valoracions_objecte_total = $stats['total'];
         }
-
-        $this->applyFavoritStatus($request, $objectes);
 
         return ObjecteResource::collection($objectes);
     }
@@ -302,10 +298,8 @@ class ObjecteController extends Controller
 
         foreach ($objectes as $objecte) {
             $stats = $statsPerObjecte[$objecte->id] ?? ['avg' => null, 'total' => 0];
-            if ($objecte->user) {
-                $objecte->user->valoracio_mitjana = $stats['avg'];
-                $objecte->user->valoracio_total   = $stats['total'];
-            }
+            $objecte->valoracions_objecte_avg   = $stats['avg'];
+            $objecte->valoracions_objecte_total = $stats['total'];
         }
 
         return ObjecteResource::collection($objectes);
@@ -429,6 +423,16 @@ class ObjecteController extends Controller
         }
 
         $objectes = $query->get();
+
+        // ── Stats del propietari per objecte (mitjana ponderada per temps) ──
+        $objecteIds = $objectes->pluck('id')->all();
+        $statsPerObjecte = \App\Models\Valoracio::statsPropietariPerObjectesBulk($objecteIds);
+
+        foreach ($objectes as $objecte) {
+            $stats = $statsPerObjecte[$objecte->id] ?? ['avg' => null, 'total' => 0];
+            $objecte->valoracions_objecte_avg   = $stats['avg'];
+            $objecte->valoracions_objecte_total = $stats['total'];
+        }
 
         return ObjecteResource::collection($objectes);
     }
