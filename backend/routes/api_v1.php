@@ -12,8 +12,10 @@ use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
 use App\Http\Controllers\Api\V1\AdminCategoriaController;
 use App\Http\Controllers\Api\V1\AdminSubcategoriaController;
+use App\Http\Controllers\Api\V1\AdminUserController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\TransactionController;
+use App\Http\Middleware\EnsureAdminRole;
 use App\Http\Controllers\FavoriteController;
 
 Route::post('/register', [RegisterController::class, 'register']);
@@ -34,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
+
     Route::put('/user/proximity-radius', [UserController::class, 'updateProximityRadius']);
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);
@@ -43,16 +46,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/objects/{id}', [ObjecteController::class, 'destroy'])->where('id', '[0-9]+');
     Route::get('/transactions',  [TransactionController::class, 'index']);
     Route::post('/transactions', [TransactionController::class, 'store']);
-    Route::put('/transactions/{id}/accept', [TransactionController::class, 'accept'])
-        ->where('id', '[0-9]+');
-    Route::put('/transactions/{id}/reject', [TransactionController::class, 'reject'])
-        ->where('id', '[0-9]+');
-    Route::put('/transactions/{id}/return', [TransactionController::class, 'returnObject'])
-        ->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/accept', [TransactionController::class, 'accept'])->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/reject', [TransactionController::class, 'reject'])->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/return', [TransactionController::class, 'returnObject'])->where('id', '[0-9]+');
     Route::post('/objects/{id}/favorite', [FavoriteController::class, 'store'])->where('id', '[0-9]+');
     Route::delete('/objects/{id}/favorite', [FavoriteController::class, 'destroy'])->where('id', '[0-9]+');
+    Route::get('/favorites', [FavoriteController::class, 'index']);
 
-    Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->middleware(EnsureAdminRole::class)->group(function () {
+        Route::get('/users', [AdminUserController::class, 'index']);
+        Route::put('/users/{id}/block', [AdminUserController::class, 'block'])->where('id', '[0-9]+');
+        Route::put('/users/{id}/unblock', [AdminUserController::class, 'unblock'])->where('id', '[0-9]+');
+        Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->where('id', '[0-9]+');
+
         Route::get('/categories', [AdminCategoriaController::class, 'index']);
         Route::get('/categories/{id}', [AdminCategoriaController::class, 'show'])->where('id', '[0-9]+');
         Route::post('/categories', [AdminCategoriaController::class, 'store']);
@@ -65,5 +71,4 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/subcategories/{id}', [AdminSubcategoriaController::class, 'update'])->where('id', '[0-9]+');
         Route::delete('/subcategories/{id}', [AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
     });
-    Route::get('/favorites', [FavoriteController::class, 'index']);
 });

@@ -11,32 +11,17 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
-class AdminCategoriaController extends Controller
-{
-    private function authorizeAdmin(Request $request): void
-    {
-        if (!$request->user() || $request->user()->rol !== 'admin') {
-            abort(Response::HTTP_FORBIDDEN, 'Accés denegat.');
-        }
-    }
+class AdminCategoriaController extends Controller {
 
-    public function index(Request $request)
-    {
-        $this->authorizeAdmin($request);
-
+    public function index(Request $request) {
         $categories = Categoria::with(['subcategories' => function ($query) {
             $query->orderBy('nom');
-        }])->withCount(['objectes', 'subcategories'])
-            ->orderBy('nom')
-            ->get();
+        }])->withCount(['objectes', 'subcategories'])->orderBy('nom')->get();
 
         return CategoriaResource::collection($categories);
     }
 
-    public function show(Request $request, $id)
-    {
-        $this->authorizeAdmin($request);
-
+    public function show(Request $request, $id) {
         $category = Categoria::with(['subcategories' => function ($query) {
             $query->orderBy('nom');
         }])->withCount(['objectes', 'subcategories'])->find($id);
@@ -50,10 +35,7 @@ class AdminCategoriaController extends Controller
         return new CategoriaResource($category);
     }
 
-    public function store(StoreCategoriaRequest $request)
-    {
-        $this->authorizeAdmin($request);
-
+    public function store(StoreCategoriaRequest $request) {
         $category = Categoria::create($request->validated());
         $this->logAdminAction($request, 'create', $category, ['payload' => $request->validated()]);
 
@@ -62,10 +44,7 @@ class AdminCategoriaController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function update(UpdateCategoriaRequest $request, $id)
-    {
-        $this->authorizeAdmin($request);
-
+    public function update(UpdateCategoriaRequest $request, $id) {
         $category = Categoria::find($id);
         if (!$category) {
             return response()->json([
@@ -79,10 +58,7 @@ class AdminCategoriaController extends Controller
         return new CategoriaResource($category);
     }
 
-    public function destroy(Request $request, $id)
-    {
-        $this->authorizeAdmin($request);
-
+    public function destroy(Request $request, $id) {
         $category = Categoria::find($id);
         if (!$category) {
             return response()->json([
@@ -97,7 +73,7 @@ class AdminCategoriaController extends Controller
         }
 
         $category->delete();
-        $this->logAdminAction($request, 'delete', $category);
+        $this->logAdminAction($request, 'delete', $category, ['payload' => $category->toArray()]);
 
         return response()->json([
             'message' => 'Categoria eliminada correctament.',
@@ -105,8 +81,7 @@ class AdminCategoriaController extends Controller
         ], Response::HTTP_OK);
     }
 
-    protected function logAdminAction(Request $request, string $action, Categoria $category, array $details = []): void
-    {
+    protected function logAdminAction(Request $request, string $action, Categoria $category, array $details = []): void {
         DB::table('logs')->insert([
             'user_id' => $request->user()->id,
             'tipus' => 'admin',

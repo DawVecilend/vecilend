@@ -63,6 +63,7 @@ class ObjecteDetailResource extends JsonResource
             'valoracions'       => $this->valoracions_data ?? [],
             'valoracio_mitjana' => $this->valoracio_mitjana ?? null,
             'total_valoracions' => $this->total_valoracions ?? 0,
+            'favorit'           => (bool) ($this->favorit ?? false),
 
             // ── Dates ocupades (transaccions actives) ──
             'dates_ocupades' => $this->dates_ocupades ?? [],

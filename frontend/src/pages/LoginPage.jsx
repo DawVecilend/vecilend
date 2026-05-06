@@ -23,6 +23,7 @@ function LoginPage() {
       navigate("/");
     } catch (err) {
       if (err.response?.status === 401) setError("Credenciales incorrectas");
+      else if (err.response?.status === 403) setError(err.response.data.message || "Acceso denegado");
       else if (err.response?.status === 422)
         setError(Object.values(err.response.data.errors).flat()[0]);
       else setError("Error de conexión");
