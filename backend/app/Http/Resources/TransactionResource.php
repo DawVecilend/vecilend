@@ -17,7 +17,7 @@ class TransactionResource extends JsonResource
         // disparar query lazy.
         $transaccio = $this->relationLoaded('transaccio') ? $this->transaccio : null;
 
-        $diesPrestec = $this->data_inici->diffInDays($this->data_fi) + 1;
+        $diesPrestec = (int) abs($this->data_inici->diffInDays($this->data_fi)) + 1;
         $preuTotal   = $this->calcularPreuTotal($diesPrestec);
 
         return [

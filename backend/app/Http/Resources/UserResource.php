@@ -25,8 +25,11 @@ class UserResource extends JsonResource
             'rol' => $this->rol,
             'actiu' => $this->actiu,
             'email_verified_at' => $this->email_verified_at?->toISOString(),
-            'valoracio_mitjana' => $this->valoracio_mitjana ?? null,
-            'valoracio_total'   => $this->valoracio_total ?? 0,
+            'valoracio_propietari_avg'   => $this->valoracio_propietari_avg   ?? null,
+            'valoracio_propietari_total' => $this->valoracio_propietari_total ?? 0,
+            'valoracio_solicitant_avg'   => $this->valoracio_solicitant_avg   ?? null,
+            'valoracio_solicitant_total' => $this->valoracio_solicitant_total ?? 0,
+            'total_transaccions'         => $this->total_transaccions         ?? 0,
             'created_at' => $this->created_at?->toISOString(),
         ];
     }

@@ -107,51 +107,93 @@ class User extends Authenticatable
     }
 
     /**
-     * Calcula la valoració mitjana i total d'un usuari (com a propietari d'objectes).
-     * Retorna ['avg' => float|null, 'total' => int].
+     * Stats com a propietari (mitjana ponderada per temps + total).
      */
-    public static function getValoracioStats(int $userId): array
+    public static function statsComPropietari(int $userId): array
     {
-        $stats = DB::table('valoracions')
-            ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
-            ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
-            ->join('objectes', 'objectes.id', '=', 'solicituds.objecte_id')
-            ->where('objectes.user_id', $userId)
-            ->selectRaw('AVG(valoracions.puntuacio) as avg_rating, COUNT(*) as total')
-            ->first();
+        return \App\Models\Valoracio::statsUsuari($userId, 'propietari');
+    }
+
+    /**
+     * Stats com a sol·licitant.
+     */
+    public static function statsComSolicitant(int $userId): array
+    {
+        return \App\Models\Valoracio::statsUsuari($userId, 'solicitant');
+    }
+
+    /**
+     * Versió bulk per a llistats: només mitjana com a propietari per usuari.
+     */
+    public static function statsPropietariBulk(array $userIds): array
+    {
+        if (empty($userIds)) return [];
+
+        $rows = \App\Models\Valoracio::query()
+            ->whereIn('valoracions.valorat_id', $userIds)
+            ->join('objectes', function ($j) {
+                $j->on('objectes.id', '=', 'valoracions.objecte_id')
+                    ->on('objectes.user_id', '=', 'valoracions.valorat_id');
+            })
+            ->select('valoracions.valorat_id', 'valoracions.puntuacio', 'valoracions.created_at')
+            ->orderBy('valoracions.created_at')
+            ->get();
+
+        $grouped = $rows->groupBy('valorat_id');
+
+        $result = [];
+        foreach ($userIds as $id) {
+            $stats = \App\Models\Valoracio::query()->getModel(); // qualsevol per accedir al mètode
+            // utilitzem reflection del helper privat via wrapper públic
+            $rowsUser = $grouped->get($id) ?? collect();
+            $result[$id] = self::computeStatsFromRows($rowsUser);
+        }
+        return $result;
+    }
+
+    /**
+     * Helper públic perquè el bulk pugui calcular stats sense duplicar codi.
+     */
+    public static function computeStatsFromRows(\Illuminate\Support\Collection $rows): array
+    {
+        if ($rows->isEmpty()) return ['avg' => null, 'total' => 0];
+
+        $now           = now();
+        $totalWeight   = 0.0;
+        $weightedSum   = 0.0;
+        $halfLifeSec   = \App\Models\Valoracio::HALF_LIFE_DAYS * 86400;
+
+        foreach ($rows as $row) {
+            $createdAt = $row->created_at instanceof \DateTimeInterface
+                ? $row->created_at
+                : \Carbon\Carbon::parse($row->created_at);
+
+            $ageSec = max(0, $now->getTimestamp() - $createdAt->getTimestamp());
+            $weight = pow(0.5, $ageSec / $halfLifeSec);
+
+            $weightedSum += ((int) $row->puntuacio) * $weight;
+            $totalWeight += $weight;
+        }
 
         return [
-            'avg'   => $stats->avg_rating !== null ? round((float) $stats->avg_rating, 1) : null,
-            'total' => (int) ($stats->total ?? 0),
+            'avg'   => $totalWeight > 0 ? round($weightedSum / $totalWeight, 1) : null,
+            'total' => $rows->count(),
         ];
     }
 
     /**
-     * Versió bulk per evitar N+1 en llistats. Retorna [userId => ['avg', 'total']].
+     * Compta el total de transaccions (finalitzades o en curs) en què l'usuari
+     * ha participat — com a propietari o com a sol·licitant.
      */
-    public static function getValoracionsBulk(array $userIds): array
+    public static function totalTransaccions(int $userId): int
     {
-        if (empty($userIds)) return [];
-
-        $rows = DB::table('valoracions')
-            ->join('transaccions', 'transaccions.id', '=', 'valoracions.transaccio_id')
-            ->join('solicituds', 'solicituds.id', '=', 'transaccions.solicitud_id')
-            ->join('objectes', 'objectes.id', '=', 'solicituds.objecte_id')
-            ->whereIn('objectes.user_id', $userIds)
-            ->groupBy('objectes.user_id')
-            ->selectRaw('objectes.user_id, AVG(valoracions.puntuacio) as avg_rating, COUNT(*) as total')
-            ->get()
-            ->keyBy('user_id');
-
-        $result = [];
-        foreach ($userIds as $id) {
-            $row = $rows->get($id);
-            $result[$id] = [
-                'avg'   => $row && $row->avg_rating !== null ? round((float) $row->avg_rating, 1) : null,
-                'total' => (int) ($row->total ?? 0),
-            ];
-        }
-        return $result;
+        return \App\Models\Transaccio::query()
+            ->whereIn('estat', ['en_curs', 'finalitzat'])
+            ->where(function ($q) use ($userId) {
+                $q->whereHas('solicitud', fn($sq) => $sq->where('solicitant_id', $userId))
+                    ->orWhereHas('solicitud.objecte', fn($oq) => $oq->where('user_id', $userId));
+            })
+            ->count();
     }
 
     /**

@@ -55,10 +55,16 @@ class UserController extends Controller
 
         $latestObjects = $latestObjectsQuery->get();
 
-        // Stats de valoració del propietari (mitjana + total)
-        $stats = User::getValoracioStats($user->id);
-        $user->valoracio_mitjana = $stats['avg'];
-        $user->valoracio_total   = $stats['total'];
+        // Stats com a propietari + sol·licitant (mitjana ponderada per temps)
+        $statsPropietari = User::statsComPropietari($user->id);
+        $statsSolicitant = User::statsComSolicitant($user->id);
+
+        $user->valoracio_propietari_avg   = $statsPropietari['avg'];
+        $user->valoracio_propietari_total = $statsPropietari['total'];
+        $user->valoracio_solicitant_avg   = $statsSolicitant['avg'];
+        $user->valoracio_solicitant_total = $statsSolicitant['total'];
+
+        $user->total_transaccions = User::totalTransaccions($user->id);
 
         // Triem el resource segons si és el propietari
         $resourceClass = $isOwn

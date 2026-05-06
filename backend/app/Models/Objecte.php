@@ -182,16 +182,11 @@ class Objecte extends Model
      */
     public function scopeAmbValoracioPropietariMinima(
         Builder $query,
-        float $minRating
+        int $minRating
     ): Builder {
-        return $query->whereIn('user_id', function ($sub) use ($minRating) {
-            $sub->select('objectes.user_id')
-                ->from('objectes')
-                ->join('solicituds', 'solicituds.objecte_id', '=', 'objectes.id')
-                ->join('transaccions', 'transaccions.solicitud_id', '=', 'solicituds.id')
-                ->join('valoracions', 'valoracions.transaccio_id', '=', 'transaccions.id')
-                ->groupBy('objectes.user_id')
-                ->havingRaw('AVG(valoracions.puntuacio) >= ?', [$minRating]);
-        });
+        $sub = \App\Models\Valoracio::rawSubqueryWeightedAvgPerObjecte();
+
+        // L'objecte ha de tenir mitjana ≥ minRating (i com a mínim 1 valoració del propietari)
+        return $query->whereRaw("({$sub}) >= ?", [$minRating]);
     }
 }
