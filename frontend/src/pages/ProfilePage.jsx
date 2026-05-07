@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProfile, getUserObjects } from "../services/profile";
 import { deleteObject, updateObjectStatus } from "../services/objects";
 import { AuthContext } from "../contexts/AuthContext";
@@ -11,6 +11,7 @@ import RatingCard from "../components/profile/RatingCard";
 import RatingEvolutionChart from "../components/profile/RatingEvolutionChart";
 import UserReviewsList from "../components/profile/UserReviewsList";
 import { getReviewsEvolution } from "../services/reviews";
+import { createChat } from "../services/chats";
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -29,6 +30,8 @@ function ProfilePage() {
   });
 
   const { username } = useParams();
+  const navigate = useNavigate();
+  const [contacting, setContacting] = useState(false);
   const { user: currentUser } = useContext(AuthContext);
 
   const isOwnProfile = currentUser && currentUser.username === username;
@@ -165,6 +168,28 @@ function ProfilePage() {
     );
   }
 
+  async function handleContact() {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+    if (!profile?.id) return;
+
+    setContacting(true);
+    try {
+      const chat = await createChat({ user_id: profile.id });
+      navigate(`/chats/${chat.id}`);
+    } catch (e) {
+      console.error("Error creando chat:", e);
+      alert(
+        e.response?.data?.message ||
+          "No se ha podido abrir la conversación. Inténtalo de nuevo.",
+      );
+    } finally {
+      setContacting(false);
+    }
+  }
+
   return (
     <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
       <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
@@ -245,12 +270,14 @@ function ProfilePage() {
                 ) : (
                   <button
                     type="button"
-                    className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2"
+                    onClick={handleContact}
+                    disabled={contacting}
+                    className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     <span className="material-symbols-outlined !text-xl">
                       mail
                     </span>
-                    Contacta a {profile?.nom}
+                    {contacting ? "Abriendo…" : `Contacta a ${profile?.nom}`}
                   </button>
                 )}
               </div>

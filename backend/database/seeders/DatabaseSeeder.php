@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ObjecteSeeder::class,
             ValoracioSeeder::class,
+            ChatSeeder::class,
+            NotificacioSeeder::class,
         ]);
     }
 }

@@ -222,7 +222,9 @@ function ObjectsPage() {
             icon="star"
             label={
               hasRating
-                ? `${filters.min_user_rating}★ o más`
+                ? Number(filters.min_user_rating) === 5
+                  ? "5 estrellas"
+                  : `${filters.min_user_rating} estrellas o más`
                 : "Añadir valoración mínima"
             }
             active={hasRating}
