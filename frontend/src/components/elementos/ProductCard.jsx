@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
 
 function getAvailabilityLabel(status) {
   if (status === "disponible") return "Disponible";
@@ -13,6 +14,7 @@ function getAvailabilityClasses(status) {
       dot: "bg-[#ef4444]",
     };
   }
+
   return {
     container: "bg-app-bg/60 text-[#4fdbc8]",
     dot: "bg-[#4fdbc8]",
@@ -31,8 +33,12 @@ function ProductCard({
   priceDay,
   status,
   searchParamsString = "",
+  initialIsFavorite = false,
+  onFavoriteAdded,
+  onFavoriteRemoved,
 }) {
   const navigate = useNavigate();
+
   const availabilityLabel = getAvailabilityLabel(status);
   const availabilityClasses = getAvailabilityClasses(status);
 
@@ -40,11 +46,14 @@ function ProductCard({
     ? `/objects/${id}?${searchParamsString}`
     : `/objects/${id}`;
 
-  const handleProfileClick = (e) => {
+  function handleProfileClick(e) {
     e.preventDefault();
     e.stopPropagation();
-    navigate(`/profile/${userName.toLowerCase()}`);
-  };
+
+    if (userName) {
+      navigate(`/profile/${userName.toLowerCase()}`);
+    }
+  }
 
   return (
     <Link to={detailLink} className="w-63.75">
@@ -53,28 +62,29 @@ function ProductCard({
           <img
             alt={title}
             src={image}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
 
-          <button
-            type="button"
-            onClick={(e) => e.preventDefault()}
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-app-bg/40 backdrop-blur-md flex items-center justify-center text-white hover:text-[#ffb4ab] transition-colors"
-          >
-            <span className="material-symbols-outlined">favorite</span>
-          </button>
+          <FavoriteButton
+            objectId={id}
+            initialIsFavorite={initialIsFavorite}
+            onAdded={onFavoriteAdded}
+            onRemoved={onFavoriteRemoved}
+            className="absolute right-4 top-4"
+          />
 
           <div
-            className={`absolute bottom-4 left-4 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold flex items-center ${availabilityClasses.container}`}
+            className={`absolute bottom-4 left-4 flex items-center rounded-full px-3 py-1 text-xs font-bold backdrop-blur-md ${availabilityClasses.container}`}
           >
             <span
-              className={`w-2 h-2 rounded-full mr-2 ${availabilityClasses.dot}`}
+              className={`mr-2 h-2 w-2 rounded-full ${availabilityClasses.dot}`}
             ></span>
+
             {availabilityLabel}
           </div>
         </div>
 
-        <div className="p-6 flex flex-col flex-1">
+        <div className="flex flex-1 flex-col p-6">
           <div
             role="link"
             tabIndex={0}
@@ -84,54 +94,56 @@ function ProductCard({
                 handleProfileClick(e);
               }
             }}
-            className="mb-4 inline-flex items-center gap-2 self-start cursor-pointer"
+            className="mb-4 inline-flex cursor-pointer items-center gap-2 self-start"
           >
             <img
               alt={userName}
               src={userAvatar}
-              className="w-8 h-8 rounded-full object-cover border-2 border-[#0e1513]/60"
+              className="h-8 w-8 rounded-full border-2 border-[#0e1513]/60 object-cover"
             />
-            <p className="text-app-text-secondary text-sm hover:text-[#4fdbc8] transition-colors">
+
+            <p className="text-sm text-app-text-secondary transition-colors hover:text-[#4fdbc8]">
               {userName}
             </p>
           </div>
 
-          <div className="flex justify-between items-start gap-3 mb-2">
-            <h3 className="min-h-[56px] text-lg font-bold text-app-text group-hover:text-[#4fdbc8] transition-colors line-clamp-2">
+          <div className="mb-2 flex items-start justify-between gap-3">
+            <h3 className="min-h-[56px] text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-[#4fdbc8]">
               {title}
             </h3>
 
-            <div className="flex shrink-0 items-center text-[#f38764] text-sm font-bold">
+            <div className="flex shrink-0 items-center text-sm font-bold text-[#f38764]">
               {rating != null ? (
                 <>
                   <span
-                    className="material-symbols-outlined text-xs mr-0.5"
+                    className="material-symbols-outlined mr-0.5 text-xs"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     star
                   </span>
-                  {rating}
+                  {Number(rating).toFixed(1)}
                 </>
               ) : (
-                <span className="text-app-text-secondary font-normal">
+                <span className="font-normal text-app-text-secondary">
                   Nuevo
                 </span>
               )}
             </div>
           </div>
 
-          <p className="min-h-[42px] text-app-text-secondary text-sm mb-4 line-clamp-2">
+          <p className="mb-4 min-h-[42px] text-sm text-app-text-secondary line-clamp-2">
             {description}
           </p>
 
-          <div className="mt-auto flex items-center justify-between pt-4 border-t border-app-border">
+          <div className="mt-auto flex items-center justify-between border-t border-app-border pt-4">
             <div>
               {priceDay > 0 ? (
                 <>
                   <span className="text-xl font-black text-app-text">
                     {priceDay}€
                   </span>
-                  <span className="text-app-text-secondary text-sm">
+
+                  <span className="text-sm text-app-text-secondary">
                     {" "}
                     / día
                   </span>
