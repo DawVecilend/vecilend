@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
 
 function getAvailabilityLabel(status) {
   if (status === "disponible") return "Disponible";
@@ -33,6 +34,8 @@ function ProfileProductCard({
   priceDay,
   status,
   isOwnProfile = false,
+  initialIsFavorite = false,
+  onFavoriteRemoved,
   onToggleVisibility,
   onDeleteProduct,
 }) {
@@ -70,11 +73,6 @@ function ProfileProductCard({
     e.stopPropagation();
 
     setOpenMenu((current) => !current);
-  }
-
-  function handleFavoriteClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
   }
 
   function handleToggleVisibility(e) {
@@ -117,8 +115,8 @@ function ProfileProductCard({
           <div className="relative aspect-4/3 overflow-hidden">
             <img
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               src={image}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
 
             {isOwnProfile ? (
@@ -126,42 +124,41 @@ function ProfileProductCard({
                 ref={buttonRef}
                 type="button"
                 onClick={handleOpenMenu}
-                className="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-[#0e1513]/40 backdrop-blur-md flex items-center justify-center text-white hover:text-[#4fdbc8] transition-colors"
+                className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-[#0e1513]/40 text-white backdrop-blur-md transition-colors hover:text-[#4fdbc8]"
               >
                 <span className="material-symbols-outlined">more_horiz</span>
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={handleFavoriteClick}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#0e1513]/40 backdrop-blur-md flex items-center justify-center text-white hover:text-[#ffb4ab] transition-colors"
-              >
-                <span className="material-symbols-outlined">favorite</span>
-              </button>
+              <FavoriteButton
+                objectId={id}
+                initialIsFavorite={initialIsFavorite}
+                onRemoved={onFavoriteRemoved}
+                className="absolute right-4 top-4"
+              />
             )}
 
             <div
-              className={`absolute bottom-4 left-4 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold flex items-center ${availabilityClasses.container}`}
+              className={`absolute bottom-4 left-4 flex items-center rounded-full px-3 py-1 text-xs font-bold backdrop-blur-md ${availabilityClasses.container}`}
             >
               <span
-                className={`w-2 h-2 rounded-full mr-2 ${availabilityClasses.dot}`}
+                className={`mr-2 h-2 w-2 rounded-full ${availabilityClasses.dot}`}
               ></span>
 
               {availabilityLabel}
             </div>
           </div>
 
-          <div className="p-6 flex flex-col flex-1">
-            <div className="flex justify-between items-start gap-3 mb-2">
-              <h3 className="min-h-[56px] text-lg font-bold text-[#dde4e1] group-hover:text-[#4fdbc8] transition-colors line-clamp-2">
+          <div className="flex flex-1 flex-col p-6">
+            <div className="mb-2 flex items-start justify-between gap-3">
+              <h3 className="min-h-[56px] text-lg font-bold text-[#dde4e1] line-clamp-2 transition-colors group-hover:text-[#4fdbc8]">
                 {title}
               </h3>
 
-              <div className="flex shrink-0 items-center text-[#f38764] text-sm font-bold">
+              <div className="flex shrink-0 items-center text-sm font-bold text-[#f38764]">
                 {rating != null ? (
                   <>
                     <span
-                      className="material-symbols-outlined text-xs mr-0.5"
+                      className="material-symbols-outlined mr-0.5 text-xs"
                       style={{ fontVariationSettings: "'FILL' 1" }}
                     >
                       star
@@ -169,16 +166,16 @@ function ProfileProductCard({
                     {rating}
                   </>
                 ) : (
-                  <span className="text-[#bbcac6] font-normal">Nuevo</span>
+                  <span className="font-normal text-[#bbcac6]">Nuevo</span>
                 )}
               </div>
             </div>
 
-            <p className="min-h-[42px] text-[#bbcac6] text-sm mb-4 line-clamp-2">
+            <p className="mb-4 min-h-[42px] text-sm text-[#bbcac6] line-clamp-2">
               {description}
             </p>
 
-            <div className="mt-auto flex items-center justify-between pt-4 border-t border-[#3c4947]">
+            <div className="mt-auto flex items-center justify-between border-t border-[#3c4947] pt-4">
               <div>
                 {priceDay > 0 ? (
                   <>
@@ -186,7 +183,7 @@ function ProfileProductCard({
                       {priceDay}€
                     </span>
 
-                    <span className="text-[#bbcac6] text-sm"> / día</span>
+                    <span className="text-sm text-[#bbcac6]"> / día</span>
                   </>
                 ) : (
                   <span className="text-xl font-black text-[#dde4e1]">

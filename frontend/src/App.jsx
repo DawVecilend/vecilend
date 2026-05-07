@@ -25,6 +25,7 @@ import EditObjectPage from "./pages/EditObjectPage";
 import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
 import TransactionsPage from "./pages/TransactionsPage";
+import FavoritesPage from "./pages/FavoritesPage";
 import PaymentMockPage from "./pages/PaymentMockPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ChatsListPage from "./pages/ChatsListPage";
@@ -37,6 +38,7 @@ function App() {
     <AuthProvider>
       <UnreadCountsProvider>
         <ScrollToTop />
+
         <div className="hidden md:block">
           <HeaderDesktop />
         </div>
@@ -51,23 +53,28 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+
             <Route
               path="/how-it-works/renters"
               element={<HowItWorksRentersPage />}
             />
+
             <Route
               path="/how-it-works/lenders"
               element={<HowItWorksLendersPage />}
             />
+
             <Route path="/status" element={<StatusPage />} />
             <Route path="/objects" element={<ObjectsPage />} />
             <Route path="/objects/:id" element={<ObjectPage />} />
             <Route path="/categorias/:slug" element={<CategoryPage />} />
             <Route path="/profile/:username" element={<ProfilePage />} />
+
             <Route
               path="/profile/:username/objects"
               element={<UserObjectsPage />}
             />
+
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
 
@@ -80,27 +87,35 @@ function App() {
                 path="/settings/profile/:username"
                 element={<SettingsPage />}
               />
+
               <Route
                 path="/settings/profile/:username/editing"
                 element={<EditProfilePage />}
               />
+
               <Route
                 path="/settings/profile/:username/security"
                 element={<SecuritySettingsPage />}
               />
+
               <Route
                 path="/settings/profile/:username/notifications"
                 element={<SettingsPage />}
               />
+
               <Route path="/transactions" element={<TransactionsPage />} />
+
               <Route
                 path="/transactions/:id/payment"
                 element={<PaymentMockPage />}
               />
+
+              <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/chats" element={<ChatsListPage />} />
               <Route path="/chats/:id" element={<ChatPage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
             </Route>
+
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

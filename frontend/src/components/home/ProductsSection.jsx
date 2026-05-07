@@ -3,12 +3,22 @@ import ProductCard from "../elementos/ProductCard";
 import ProfileProductCard from "../elementos/ProfileProductCard";
 import { cldTransform } from "../../utils/cloudinary";
 
+function isProductFavorite(product) {
+  return Boolean(
+    product.is_favorite ||
+      product.is_favorited ||
+      product.isFavorite ||
+      product.favorited,
+  );
+}
+
 function ProductsSection({
   title,
   products = [],
   profile = false,
   preserveSearchParams = false,
   isOwnProfile = false,
+  onFavoriteRemoved,
   onToggleVisibility,
   onDeleteProduct,
 }) {
@@ -22,7 +32,7 @@ function ProductsSection({
     <section className="w-full py-8">
       <div className="mx-auto w-full">
         {title && (
-          <h2 className="mb-8 text-center font-heading text-h2-desktop leading-h2 font-bold text-vecilend-dark-text">
+          <h2 className="mb-8 text-center font-heading text-h2-desktop font-bold leading-h2 text-vecilend-dark-text">
             {title}
           </h2>
         )}
@@ -40,7 +50,9 @@ function ProductsSection({
                   category={product.categoria?.nom || "Sin categoría"}
                   description={product.descripcio || "Sin descripción"}
                   title={product.nom || "producto"}
-                  userName={product.user?.nom || "Usuario"}
+                  userName={
+                    product.user?.username || product.user?.nom || "Usuario"
+                  }
                   userAvatar={
                     product.user?.avatar_url || "/assets/avatar-omar.jpg"
                   }
@@ -48,6 +60,8 @@ function ProductsSection({
                   priceDay={product.preu_diari ? Number(product.preu_diari) : 0}
                   status={product.estat}
                   isOwnProfile={isOwnProfile}
+                  initialIsFavorite={isProductFavorite(product)}
+                  onFavoriteRemoved={onFavoriteRemoved}
                   onToggleVisibility={onToggleVisibility}
                   onDeleteProduct={onDeleteProduct}
                 />
@@ -73,6 +87,8 @@ function ProductsSection({
                   priceDay={product.preu_diari ? Number(product.preu_diari) : 0}
                   status={product.estat}
                   searchParamsString={searchParamsString}
+                  initialIsFavorite={isProductFavorite(product)}
+                  onFavoriteRemoved={onFavoriteRemoved}
                 />
               ))}
         </div>

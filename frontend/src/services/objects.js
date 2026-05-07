@@ -59,12 +59,6 @@ export async function updateObjectStatus(product, status) {
   return response.data
 }
 
-/**
- * DELETE /api/v1/objects/{id}
- *
- * Elimina un objecte propi. El backend retorna 409 si té sol·licituds
- * pendents o acceptades — el caller hauria de mostrar el missatge tal qual.
- */
 export async function deleteObject(id) {
   const response = await api.delete(`/objects/${id}`)
   return response.data

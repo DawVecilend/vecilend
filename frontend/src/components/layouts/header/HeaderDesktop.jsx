@@ -153,6 +153,13 @@ function HeaderDesktop() {
                         </Link>
 
                         <Link
+                          to="/favorites"
+                          className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
+                        >
+                          Mis favoritos
+                        </Link>
+
+                        <Link
                           to={`/settings/profile/${user?.username}`}
                           className="flex gap-2 px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
                         >
