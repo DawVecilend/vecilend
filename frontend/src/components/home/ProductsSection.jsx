@@ -145,7 +145,7 @@ function ProductsSection({
           </h2>
         )}
 
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-wrap gap-4">
           {profile
             ? products.map((product) => (
                 <ProfileProductCard

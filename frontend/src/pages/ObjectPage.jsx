@@ -17,6 +17,9 @@ import ObjectMiniMap from "../components/map/ObjectMiniMap";
 import { cldTransform } from "../utils/cloudinary";
 import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
 import NotFoundPage from "./NotFoundPage";
+import NavCategori from "../components/elementos/NavCategori";
+import DetailsPriceCardProduct from "../components/elementos/DetailsPriceCard";
+
 
 function ObjectPage() {
   const { id } = useParams();
@@ -41,7 +44,6 @@ function ObjectPage() {
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
 
-  // ── Context de cerca de l'URL ──
   const searchContext = useMemo(
     () => ({
       data_inici: searchParams.get("data_inici"),
@@ -67,7 +69,6 @@ function ObjectPage() {
     ? Math.round(Number(searchContext.radius) / 1000)
     : null;
 
-  // ── Càrrega del producte ──
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -89,7 +90,6 @@ function ObjectPage() {
     };
   }, [id]);
 
-  // ── Detectar si l'usuari ja té una sol·licitud pendent ──
   useEffect(() => {
     if (!isAuthenticated || !product) {
       setHasPendingRequest(false);
@@ -121,23 +121,20 @@ function ObjectPage() {
     };
   }, [isAuthenticated, product, user?.id]);
 
-  // ── Càlculs derivats ──
   const dies = useMemo(() => {
     if (!range.start || !range.end) return 0;
     return range.end.diff(range.start, "day") + 1;
   }, [range]);
+  
+  const [total, setTotal] = useState(0);
 
-  const preuTotal = useMemo(() => {
-    if (!product?.preu_diari || product.tipus !== "lloguer") return 0;
-    return Number(product.preu_diari) * dies;
-  }, [product, dies]);
+  const preuTotal = product?.preu_diari && product.tipus === "lloguer" ? total : 0;
 
   const needsDates = !range.start || !range.end;
 
   const isOwnObject = !!(user && product?.propietari?.id === user.id);
   const isUnavailable = product?.estat === "no_disponible";
 
-  // ── Submit ──
   const handleSubmit = async () => {
     setSubmitError(null);
     setSubmitSuccess(false);
@@ -240,7 +237,6 @@ function ObjectPage() {
     }
   };
 
-  // ── Decidir el contingut de la caixa d'acció (4 estats) ──
   let actionBox;
   if (isOwnObject) {
     actionBox = (
@@ -258,7 +254,7 @@ function ObjectPage() {
         <div className="flex items-center justify-center gap-3 flex-wrap">
           <Link
             to={`/objects/${product.id}/edit`}
-            className="inline-flex items-center gap-2 rounded-full bg-vecilend-dark-primary px-5 py-2 text-label font-bold text-[#003730] active:scale-95 hover:opacity-90 transition"
+            className="inline-flex items-center gap-2 rounded-full bg-vecilend-dark-primary px-5 py-2 text-label font-bold text-[#003730] active:scale-95 hover:opacity-90 transition cursor-pointer"
           >
             <span className="material-symbols-outlined text-base">edit</span>
             Editar
@@ -270,7 +266,7 @@ function ObjectPage() {
               setDeleteError(null);
               setConfirmDeleteOpen(true);
             }}
-            className="inline-flex items-center gap-2 rounded-full border border-[#ef4444] px-5 py-2 text-label font-bold text-[#ef4444] hover:bg-[#ef4444]/10 active:scale-95 transition"
+            className="inline-flex items-center gap-2 rounded-full border border-[#ef4444] px-5 py-2 text-label font-bold text-[#ef4444] hover:bg-[#ef4444]/10 active:scale-95 transition cursor-pointer"
           >
             <span className="material-symbols-outlined text-base">delete</span>
             Eliminar
@@ -331,17 +327,21 @@ function ObjectPage() {
   } else {
     actionBox = (
       <div className="rounded-2xl bg-app-card border border-app-border p-6 flex flex-col gap-4">
-        {/* Preu / Préstec */}
-        <div className="pb-4 border-b border-app-border">
+        <div className="pb-4">
           {product.tipus === "lloguer" && product.preu_diari ? (
-            <div className="flex items-baseline gap-2">
-              <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
-                {Number(product.preu_diari).toFixed(2)}€
-              </span>
-              <span className="text-app-text-secondary text-body-base">
-                / día
-              </span>
+            <div className="flex flex-col">
+              <DateRangeCalendar
+                datesOcupades={product.dates_ocupades || []}
+                initialRange={initialRange}
+                onRangeChange={setRange}
+              />
+              <DetailsPriceCardProduct
+                product={product}
+                diasSelected={dies}
+                onTotalChange={setTotal}
+              />
             </div>
+            
           ) : (
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-vecilend-dark-secondary">
@@ -354,14 +354,6 @@ function ObjectPage() {
           )}
         </div>
 
-        {/* Calendari (sense capçalera — el component ja porta el seu text) */}
-        <DateRangeCalendar
-          datesOcupades={product.dates_ocupades || []}
-          initialRange={initialRange}
-          onRangeChange={setRange}
-        />
-
-        {/* Total estimat */}
         {dies > 0 && product.tipus === "lloguer" && (
           <div className="flex items-center justify-between pt-3 border-t border-app-border">
             <span className="text-label text-app-text-secondary font-body">
@@ -383,7 +375,6 @@ function ObjectPage() {
           </div>
         )}
 
-        {/* Missatge opcional */}
         <textarea
           value={missatge}
           onChange={(e) => setMissatge(e.target.value)}
@@ -423,6 +414,8 @@ function ObjectPage() {
               ? "bg-app-card border border-app-border text-app-text-secondary"
               : "bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] text-[#003730] disabled:opacity-50")
           }
+          disabled={submitting || !range.start || !range.end}
+          className="w-full rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95 disabled:opacity-50  cursor-pointer"
         >
           {submitting
             ? "Enviando…"
@@ -437,14 +430,8 @@ function ObjectPage() {
   return (
     <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 pt-6 pb-32">
       <BtnBack />
-
-      {/* ── Layout 2 columnes ── */}
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* ═══════════════════════════════════════════════ */}
-        {/* ESQUERRA — galeria + propietari + mapa          */}
-        {/* ═══════════════════════════════════════════════ */}
         <div className="flex flex-col gap-6">
-          {/* Galeria */}
           <div>
             <img
               src={
@@ -479,7 +466,6 @@ function ObjectPage() {
             )}
           </div>
 
-          {/* Propietari (clicable cap al perfil si tenim username) */}
           {propietari && propietari.username && (
             <Link
               to={`/profile/${propietari.username}`}
@@ -489,8 +475,6 @@ function ObjectPage() {
             </Link>
           )}
           {propietari && !propietari.username && <UserCard user={propietari} />}
-
-          {/* Mapa */}
           {product.ubicacio && (
             <div>
               <h2 className="text-app-text text-h3-desktop font-heading mb-3">
@@ -507,30 +491,9 @@ function ObjectPage() {
             </div>
           )}
         </div>
-
-        {/* ═══════════════════════════════════════════════ */}
-        {/* DRETA — info + acció                            */}
-        {/* ═══════════════════════════════════════════════ */}
         <div className="flex flex-col gap-6">
-          {/* Pills (només categoria i subcategoria) */}
           {(product.categoria || product.subcategoria) && (
-            <div className="flex items-center gap-2 flex-wrap">
-              {product.categoria && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-app-card border border-app-border text-caption text-app-text-secondary">
-                  {product.categoria.icona && (
-                    <span className="material-symbols-outlined text-base">
-                      {product.categoria.icona}
-                    </span>
-                  )}
-                  {product.categoria.nom}
-                </span>
-              )}
-              {product.subcategoria && (
-                <span className="px-3 py-1 rounded-full bg-app-card border border-app-border text-caption text-app-text-secondary">
-                  {product.subcategoria.nom}
-                </span>
-              )}
-            </div>
+            <NavCategori mainCategory={product.categoria} subCategory={product.subcategoria}/>
           )}
 
           {/* Títol */}
@@ -567,14 +530,20 @@ function ObjectPage() {
             )}
           </div>
 
-          {/* Descripció (just sota el títol) */}
           <div>
             <p className="text-app-text-secondary text-body-base font-body whitespace-pre-line">
               {product.descripcio}
             </p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
+                  {Number(product.preu_diari).toFixed(2)}€
+                </span>
+                <span className="text-app-text-secondary text-body-base">
+                  / día
+                </span>
+              </div>
           </div>
 
-          {/* Caixa d'acció */}
           {actionBox}
         </div>
       </div>

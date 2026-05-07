@@ -170,7 +170,7 @@ function DateRangeCalendar({
           }}
         />
 
-        <div className="flex items-center justify-between px-3 pb-2">
+        <div className="flex items-center justify-center px-3 pb-2 gap-3">
           <span className="text-caption text-app-text-secondary font-body">
             {rangeStart && rangeEnd
               ? `${rangeStart.format("DD/MM/YYYY")} – ${rangeEnd.format("DD/MM/YYYY")}`
@@ -182,7 +182,7 @@ function DateRangeCalendar({
             <button
               type="button"
               onClick={handleClear}
-              className="text-caption text-vecilend-dark-primary font-body underline"
+              className="text-caption text-vecilend-dark-primary font-body underline cursor-pointer"
             >
               Limpiar
             </button>
