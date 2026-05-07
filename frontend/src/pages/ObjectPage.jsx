@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { getProduct, deleteObject } from "../services/objects";
 import { createTransaction, getTransactions } from "../services/transactions";
+import { createChat } from "../services/chats";
 import { useAuth } from "../contexts/AuthContext";
 import BtnBack from "../components/elementos/BtnBack";
 import UserCard from "../components/elementos/UserCard";
@@ -34,6 +35,7 @@ function ObjectPage() {
   const [submitError, setSubmitError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [hasPendingRequest, setHasPendingRequest] = useState(false);
+  const [chatHint, setChatHint] = useState(null); // { otherUserId } | null
 
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -130,6 +132,8 @@ function ObjectPage() {
     return Number(product.preu_diari) * dies;
   }, [product, dies]);
 
+  const needsDates = !range.start || !range.end;
+
   const isOwnObject = !!(user && product?.propietari?.id === user.id);
   const isUnavailable = product?.estat === "no_disponible";
 
@@ -159,6 +163,9 @@ function ObjectPage() {
         missatge: missatge.trim() || null,
       });
       setSubmitSuccess(true);
+      if (missatge.trim() && product.propietari?.id) {
+        setChatHint({ otherUserId: product.propietari.id });
+      }
       setMissatge("");
       setRange({ start: null, end: null });
       setHasPendingRequest(true);
@@ -177,6 +184,20 @@ function ObjectPage() {
       setSubmitting(false);
     }
   };
+
+  async function openChatWith(userId) {
+    if (!userId) return;
+    try {
+      const chat = await createChat({ user_id: userId });
+      navigate(`/chats/${chat.id}`);
+    } catch (err) {
+      console.error("Error abriendo chat:", err);
+      alert(
+        err.response?.data?.message ||
+          "No se ha podido abrir la conversación. Inténtalo de nuevo.",
+      );
+    }
+  }
 
   // ── Estats de càrrega / no trobat ──
   if (loading) {
@@ -287,12 +308,24 @@ function ObjectPage() {
             </p>
           </div>
         </div>
-        <Link
-          to="/transactions?role=requester&status=pendent"
-          className="block w-full text-center rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95"
-        >
-          Ver mis solicitudes enviadas
-        </Link>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => openChatWith(product.propietari?.id)}
+            className="block w-full text-center rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95 flex items-center justify-center gap-2"
+          >
+            <span className="material-symbols-outlined !text-xl">
+              chat_bubble
+            </span>
+            Ver chat con el propietario
+          </button>
+          <Link
+            to="/transactions?role=requester&status=pendent"
+            className="block w-full text-center rounded-full border border-app-border bg-app-card px-6 py-3 text-body-base font-bold text-app-text hover:bg-app-bg-card-secondary transition-colors"
+          >
+            Ver mis solicitudes enviadas
+          </Link>
+        </div>
       </div>
     );
   } else {
@@ -364,18 +397,38 @@ function ObjectPage() {
           <p className="text-label text-red-400 font-body">{submitError}</p>
         )}
         {submitSuccess && (
-          <p className="text-label text-vecilend-dark-secondary font-body">
-            ✓ Solicitud enviada al propietario.
-          </p>
+          <div className="space-y-2">
+            <p className="text-label text-vecilend-dark-secondary font-body">
+              ✓ Solicitud enviada al propietario.
+            </p>
+            {chatHint && (
+              <button
+                type="button"
+                onClick={() => openChatWith(chatHint?.otherUserId)}
+                className="text-app-primary font-bold hover:underline text-label"
+              >
+                Ver conversación →
+              </button>
+            )}
+          </div>
         )}
 
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={submitting || !range.start || !range.end}
-          className="w-full rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={submitting || needsDates}
+          className={
+            "w-full rounded-full px-6 py-3 text-body-base font-bold transition-transform active:scale-95 disabled:cursor-not-allowed " +
+            (needsDates
+              ? "bg-app-card border border-app-border text-app-text-secondary"
+              : "bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] text-[#003730] disabled:opacity-50")
+          }
         >
-          {submitting ? "Enviando…" : "Enviar solicitud"}
+          {submitting
+            ? "Enviando…"
+            : needsDates
+              ? "Selecciona fechas"
+              : "Enviar solicitud"}
         </button>
       </div>
     );

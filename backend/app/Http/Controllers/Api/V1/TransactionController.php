@@ -10,6 +10,9 @@ use App\Models\Solicitud;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Conversa;
+use App\Models\Missatge;
+use App\Models\Notificacio;
 
 class TransactionController extends Controller
 {
@@ -138,7 +141,7 @@ class TransactionController extends Controller
 
         // ── Crear la sol·licitud (tipus derivat de l'objecte) ──
         $solicitud = DB::transaction(function () use ($validated, $user, $objecte) {
-            return Solicitud::create([
+            $solicitud = Solicitud::create([
                 'solicitant_id' => $user->id,
                 'objecte_id'    => $objecte->id,
                 'data_inici'    => $validated['data_inici'],
@@ -147,6 +150,35 @@ class TransactionController extends Controller
                 'missatge'      => $validated['missatge'] ?? null,
                 'estat'         => 'pendent',
             ]);
+
+            // ── Notificació al propietari ──
+            Notificacio::create([
+                'user_id'                 => $objecte->user_id,
+                'tipus'                   => Notificacio::TIPUS_SOLICITUD_REBUDA,
+                'titol'                   => 'Nueva solicitud',
+                'missatge'                => "{$user->nom} ha solicitado tu objeto «{$objecte->nom}».",
+                'entitat_referenciada'    => 'solicitud',
+                'id_entitat_referenciada' => $solicitud->id,
+            ]);
+
+            // ── Si hi ha missatge → crear/recuperar conversa i afegir-l'hi ──
+            if (!empty($solicitud->missatge)) {
+                $conversa = Conversa::firstOrCreateForPair(
+                    $user->id,
+                    $objecte->user_id,
+                    $objecte->id
+                );
+
+                Missatge::create([
+                    'conversa_id' => $conversa->id,
+                    'emissor_id'  => $user->id,
+                    'contingut'   => $solicitud->missatge,
+                ]);
+
+                $conversa->touch();
+            }
+
+            return $solicitud;
         });
 
         $solicitud->load(['objecte.user', 'solicitant', 'transaccio']);
@@ -211,6 +243,16 @@ class TransactionController extends Controller
 
             // 3. Marcar l'objecte com no_disponible
             $solicitud->objecte()->update(['estat' => 'no_disponible']);
+
+            // 4. Notificació al sol·licitant
+            Notificacio::create([
+                'user_id'                 => $solicitud->solicitant_id,
+                'tipus'                   => Notificacio::TIPUS_SOLICITUD_ACCEPTADA,
+                'titol'                   => 'Solicitud aceptada',
+                'missatge'                => "Tu solicitud para «{$solicitud->objecte->nom}» ha sido aceptada.",
+                'entitat_referenciada'    => 'solicitud',
+                'id_entitat_referenciada' => $solicitud->id,
+            ]);
         });
 
         // Recarregar amb relacions actualitzades
@@ -245,6 +287,15 @@ class TransactionController extends Controller
         }
 
         $solicitud->update(['estat' => 'rebutjat']);
+
+        Notificacio::create([
+            'user_id'                 => $solicitud->solicitant_id,
+            'tipus'                   => Notificacio::TIPUS_SOLICITUD_REBUTJADA,
+            'titol'                   => 'Solicitud rechazada',
+            'missatge'                => "Tu solicitud para «{$solicitud->objecte->nom}» ha sido rechazada.",
+            'entitat_referenciada'    => 'solicitud',
+            'id_entitat_referenciada' => $solicitud->id,
+        ]);
 
         $solicitud->refresh()->load(['objecte.user', 'solicitant', 'transaccio']);
 

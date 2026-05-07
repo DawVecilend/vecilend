@@ -7,9 +7,12 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import SearchModal from "../../search/SearchModal";
+import UnreadBadge from "../../elementos/UnreadBadge";
+import { useUnreadCounts } from "../../../contexts/UnreadCountsContext";
 
 function HeaderMobile() {
   const auth = useContext(AuthContext);
+  const { counts } = useUnreadCounts();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -51,11 +54,12 @@ function HeaderMobile() {
           <Link
             to={user ? "/notifications" : "/login"}
             aria-label="Notificaciones"
-            className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-app-card border border-app-border text-app-text"
+            className="relative shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-app-card border border-app-border text-app-text"
           >
             <span className="material-symbols-outlined text-[20px]">
               notifications
             </span>
+            {user && <UnreadBadge count={counts.notifications} />}
           </Link>
 
           {/* Input búsqueda */}
@@ -152,7 +156,7 @@ function HeaderMobile() {
           {/* Chats */}
           <Link
             to={user ? "/chats" : "/login"}
-            className="flex flex-col items-center justify-center text-white"
+            className="relative flex flex-col items-center justify-center text-white"
           >
             <span className="material-symbols-outlined text-[22px] text-white">
               chat_bubble
@@ -160,6 +164,9 @@ function HeaderMobile() {
             <span className="mt-1 text-center font-body text-caption leading-caption text-white">
               Chats
             </span>
+            {user && (
+              <UnreadBadge count={counts.chats} className="!top-0 !right-2" />
+            )}
           </Link>
 
           {/* Perfil */}

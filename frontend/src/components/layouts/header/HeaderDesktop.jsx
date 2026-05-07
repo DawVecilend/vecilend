@@ -4,9 +4,12 @@ import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import SearchBar from "../../elementos/SearchBar";
 import ThemeToggle from "../../elementos/ThemeToggle";
+import UnreadBadge from "../../elementos/UnreadBadge";
+import { useUnreadCounts } from "../../../contexts/UnreadCountsContext";
 
 function HeaderDesktop() {
   const auth = useContext(AuthContext);
+  const { counts } = useUnreadCounts();
   const location = useLocation();
 
   const [open, setOpen] = useState(false);
@@ -32,7 +35,10 @@ function HeaderDesktop() {
   if (loading) return null;
 
   const getNavClass = (path) => {
-    const isActive = location.pathname === path || (path === "/how-it-works/renters" && location.pathname.startsWith("/how-it-works"));
+    const isActive =
+      location.pathname === path ||
+      (path === "/how-it-works/renters" &&
+        location.pathname.startsWith("/how-it-works"));
     return isActive
       ? "text-[#4fdbc8] border-b-2 border-[#4fdbc8] font-bold p-1 text-sm tracking-tight"
       : "text-[#aebdb9] font-medium hover:text-[#4fdbc8] transition-colors p-1 text-sm tracking-tight";
@@ -51,7 +57,10 @@ function HeaderDesktop() {
             <Link to="/objects" className={getNavClass("/objects")}>
               Objetos
             </Link>
-            <Link to="/how-it-works/renters" className={getNavClass("/how-it-works/renters")}>
+            <Link
+              to="/how-it-works/renters"
+              className={getNavClass("/how-it-works/renters")}
+            >
               ¿Cómo funciona?
             </Link>
             <Link to="/about" className={getNavClass("/about")}>
@@ -71,24 +80,26 @@ function HeaderDesktop() {
               <div className="flex items-center gap-2">
                 <Link
                   to="/chats"
-                  className="flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#333b39] cursor-pointer"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#333b39] cursor-pointer"
                 >
                   <img
                     src="/assets/icons/chats-no-fill-icon.svg"
                     alt="Chats"
                     className="h-6 w-6 opacity-80 transition-opacity duration-300 hover:opacity-100"
                   />
+                  <UnreadBadge count={counts.chats} />
                 </Link>
 
                 <Link
                   to="/notifications"
-                  className="flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#333b39] cursor-pointer"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#333b39] cursor-pointer"
                 >
                   <img
                     src="/assets/icons/notifications-icon.svg"
                     alt="Notificaciones"
                     className="h-6 w-6 opacity-80 transition-opacity duration-300 hover:opacity-100"
                   />
+                  <UnreadBadge count={counts.notifications} />
                 </Link>
               </div>
 

@@ -78,7 +78,7 @@ function RatingEvolutionChart({ data = [], title, color = "#4fdbc8" }) {
               allowDecimals={false}
               tick={{ fill: "#859490", fontSize: 12 }}
               label={{
-                value: "Nº valoración",
+                value: "Nº valoraciones",
                 position: "insideBottom",
                 offset: -15,
                 fill: "#859490",
