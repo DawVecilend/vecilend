@@ -35,6 +35,7 @@ function ProfileProductCard({
   status,
   isOwnProfile = false,
   initialIsFavorite = false,
+  onFavoriteAdded,
   onFavoriteRemoved,
   onToggleVisibility,
   onDeleteProduct,
@@ -132,6 +133,7 @@ function ProfileProductCard({
               <FavoriteButton
                 objectId={id}
                 initialIsFavorite={initialIsFavorite}
+                onAdded={onFavoriteAdded}
                 onRemoved={onFavoriteRemoved}
                 className="absolute right-4 top-4"
               />
@@ -163,7 +165,7 @@ function ProfileProductCard({
                     >
                       star
                     </span>
-                    {rating}
+                    {Number(rating).toFixed(1)}
                   </>
                 ) : (
                   <span className="font-normal text-[#bbcac6]">Nuevo</span>

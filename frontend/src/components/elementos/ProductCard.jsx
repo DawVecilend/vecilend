@@ -34,6 +34,7 @@ function ProductCard({
   status,
   searchParamsString = "",
   initialIsFavorite = false,
+  onFavoriteAdded,
   onFavoriteRemoved,
 }) {
   const navigate = useNavigate();
@@ -67,6 +68,7 @@ function ProductCard({
           <FavoriteButton
             objectId={id}
             initialIsFavorite={initialIsFavorite}
+            onAdded={onFavoriteAdded}
             onRemoved={onFavoriteRemoved}
             className="absolute right-4 top-4"
           />
@@ -119,7 +121,7 @@ function ProductCard({
                   >
                     star
                   </span>
-                  {rating}
+                  {Number(rating).toFixed(1)}
                 </>
               ) : (
                 <span className="font-normal text-app-text-secondary">

@@ -23,7 +23,7 @@ function FavoritesPage() {
 
       const favoritesWithState = response.favorites.map((product) => ({
         ...product,
-        is_favorite: true,
+        favorit: true,
       }));
 
       setFavorites(favoritesWithState);
