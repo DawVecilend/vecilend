@@ -16,6 +16,8 @@ import StatusPage from "./pages/main/StatusPage";
 import NotFoundPage from "./pages/main/NotFoundPage";
 import HowItWorksRentersPage from "./pages/main/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/main/HowItWorksLendersPage";
+
+// CHATS PAGES
 import ChatsListPage from "./pages/chats/ChatsListPage";
 import ChatPage from "./pages/chats/ChatPage";
 
