@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
+import PasswordInput from "../components/elementos/PasswordInput";
 
 function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -83,8 +84,7 @@ function ResetPasswordPage() {
               <label className="block text-sm font-semibold text-app-text-secondary">
                 Nueva contraseña
               </label>
-              <input
-                type="password"
+              <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -99,8 +99,7 @@ function ResetPasswordPage() {
               <label className="block text-sm font-semibold text-app-text-secondary">
                 Confirmar contraseña
               </label>
-              <input
-                type="password"
+              <PasswordInput
                 value={passwordConfirmation}
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
                 required

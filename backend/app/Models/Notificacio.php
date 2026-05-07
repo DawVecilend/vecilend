@@ -34,10 +34,14 @@ class Notificacio extends Model
     ];
 
     // Tipus suportats (mantenir sincronitzat amb el frontend)
-    public const TIPUS_SOLICITUD_REBUDA    = 'solicitud_rebuda';
-    public const TIPUS_SOLICITUD_ACCEPTADA = 'solicitud_acceptada';
-    public const TIPUS_SOLICITUD_REBUTJADA = 'solicitud_rebutjada';
-    public const TIPUS_VALORACIO_REBUDA    = 'valoracio_rebuda';
+    public const TIPUS_SOLICITUD_REBUDA            = 'solicitud_rebuda';
+    public const TIPUS_SOLICITUD_ACCEPTADA         = 'solicitud_acceptada';
+    public const TIPUS_SOLICITUD_REBUTJADA         = 'solicitud_rebutjada';
+    public const TIPUS_SOLICITUD_CANCELLADA        = 'solicitud_cancellada';
+    public const TIPUS_TRANSACCIO_PAGAMENT_PENDENT = 'transaccio_pagament_pendent';
+    public const TIPUS_TRANSACCIO_CANCELLADA       = 'transaccio_cancellada';
+    public const TIPUS_TRANSACCIO_RECORDATORI_DEVOLUCIO = 'transaccio_recordatori_devolucio';
+    public const TIPUS_VALORACIO_REBUDA            = 'valoracio_rebuda';
 
     public function user(): BelongsTo
     {

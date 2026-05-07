@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Pagament;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionResource extends JsonResource
 {
@@ -12,13 +14,14 @@ class TransactionResource extends JsonResource
     {
         /** @var \App\Models\Solicitud $this */
 
-        // Assumim que el controller sempre carrega ->load('transaccio') abans
-        // de retornar el Resource. Si no està carregada, retornem null sense
-        // disparar query lazy.
         $transaccio = $this->relationLoaded('transaccio') ? $this->transaccio : null;
 
         $diesPrestec = (int) abs($this->data_inici->diffInDays($this->data_fi)) + 1;
         $preuTotal   = $this->calcularPreuTotal($diesPrestec);
+
+        $paid       = $transaccio ? $this->teePagamentCompletat($transaccio) : false;
+        $canCancel  = $this->canCancel($transaccio, $paid);
+        $canPay     = $this->canPay($transaccio, $paid);
 
         return [
             'id'              => $this->id,
@@ -36,14 +39,29 @@ class TransactionResource extends JsonResource
             'missatge'        => $this->missatge,
             'preu_total'      => $preuTotal,
 
-            'objecte'         => $this->whenLoaded('objecte', fn() => [
-                'id'         => $this->objecte->id,
-                'nom'        => $this->objecte->nom,
-                'slug'       => $this->objecte->slug,
-                'tipus'      => $this->objecte->tipus,
-                'preu_diari' => $this->objecte->preu_diari ? (float) $this->objecte->preu_diari : null,
-                'estat'      => $this->objecte->estat,
-            ]),
+            'paid'            => $paid,
+            'can_cancel'      => $canCancel,
+            'can_pay'         => $canPay,
+
+            'objecte'         => $this->whenLoaded('objecte', function () {
+                $imatges = $this->objecte->relationLoaded('imatges')
+                    ? $this->objecte->imatges->map(fn($img) => [
+                        'id'    => $img->id,
+                        'url'   => $img->url_cloudinary,
+                        'ordre' => $img->ordre,
+                    ])
+                    : [];
+
+                return [
+                    'id'         => $this->objecte->id,
+                    'nom'        => $this->objecte->nom,
+                    'slug'       => $this->objecte->slug,
+                    'tipus'      => $this->objecte->tipus,
+                    'preu_diari' => $this->objecte->preu_diari ? (float) $this->objecte->preu_diari : null,
+                    'estat'      => $this->objecte->estat,
+                    'imatges'    => $imatges,
+                ];
+            }),
 
             'requester'       => $this->whenLoaded('solicitant', fn() => [
                 'id'         => $this->solicitant->id,
@@ -55,7 +73,6 @@ class TransactionResource extends JsonResource
 
             'owner'           => $this->whenLoaded('objecte', function () {
                 $owner = $this->objecte->relationLoaded('user') ? $this->objecte->user : null;
-
                 return $owner ? [
                     'id'         => $owner->id,
                     'username'   => $owner->username,
@@ -77,19 +94,58 @@ class TransactionResource extends JsonResource
         ];
     }
 
-    /**
-     * Calcula el preu total del lloguer. Per a préstecs retorna 0.
-     */
     private function calcularPreuTotal(int $dies): ?float
     {
         if ($this->tipus !== 'lloguer') {
             return 0.0;
         }
-
         if (!$this->relationLoaded('objecte') || !$this->objecte->preu_diari) {
             return null;
         }
-
         return round($dies * (float) $this->objecte->preu_diari, 2);
+    }
+
+    private function teePagamentCompletat($transaccio): bool
+    {
+        if (!$transaccio || !$transaccio->relationLoaded('pagaments')) {
+            return false;
+        }
+        return $transaccio->pagaments
+            ->contains(fn($p) => $p->estat === Pagament::ESTAT_COMPLETAT);
+    }
+
+    private function canCancel($transaccio, bool $paid): bool
+    {
+        $userId = Auth::id();
+        if (!$userId) {
+            return false;
+        }
+
+        // Solicitud pendent → solicitant pot cancel·lar
+        if ($this->estat === 'pendent') {
+            return $userId === $this->solicitant_id;
+        }
+
+        // Transacció en curs sense pagament i abans de data_inici → ambdues parts
+        if ($transaccio && $transaccio->estat === 'en_curs' && !$paid) {
+            $ownerId = $this->relationLoaded('objecte') ? $this->objecte->user_id : null;
+            $esPart  = $userId === $this->solicitant_id || $userId === $ownerId;
+            if ($esPart && Carbon::today()->lt($this->data_inici)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function canPay($transaccio, bool $paid): bool
+    {
+        if ($this->tipus !== 'lloguer' || $paid) {
+            return false;
+        }
+        if (!$transaccio || $transaccio->estat !== 'en_curs') {
+            return false;
+        }
+        return Auth::id() === $this->solicitant_id;
     }
 }

@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { updatePassword } from "../services/profile";
+import PasswordInput from "../components/elementos/PasswordInput";
 
 function SecuritySettingsPage() {
   const { user } = useContext(AuthContext);
@@ -156,13 +157,12 @@ function SecuritySettingsPage() {
                   <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                     Contraseña Actual
                   </label>
-                  <input
+                  <PasswordInput
                     name="current_password"
                     value={passwords.current_password}
                     onChange={handlePasswordChange}
                     className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
                     placeholder="••••••••••••"
-                    type="password"
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -170,24 +170,22 @@ function SecuritySettingsPage() {
                     <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Nueva Contraseña
                     </label>
-                    <input
+                    <PasswordInput
                       name="password"
                       value={passwords.password}
                       onChange={handlePasswordChange}
                       className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
-                      type="password"
                     />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Confirmar Contraseña
                     </label>
-                    <input
+                    <PasswordInput
                       name="password_confirmation"
                       value={passwords.password_confirmation}
                       onChange={handlePasswordChange}
                       className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
-                      type="password"
                     />
                   </div>
                 </div>

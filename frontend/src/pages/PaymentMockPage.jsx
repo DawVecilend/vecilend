@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getTransactions } from "../services/transactions";
+import { getTransactions, payTransaction } from "../services/transactions";
 import { useAuth } from "../contexts/AuthContext";
-import { isPaid, markAsPaid } from "../utils/paymentMock";
+import { useUnreadCounts } from "../contexts/UnreadCountsContext";
 import BtnBack from "../components/elementos/BtnBack";
 
 function PaymentMockPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const { refresh } = useUnreadCounts();
 
   const [tx, setTx] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ function PaymentMockPage() {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
-  // Camps simulats — no es validen ni s'envien enlloc
+  // Camps simulats — no es validen ni s'envien
   const [card, setCard] = useState({ number: "", name: "", exp: "", cvv: "" });
 
   useEffect(() => {
@@ -26,20 +27,20 @@ function PaymentMockPage() {
     }
     let cancelled = false;
     setLoading(true);
-    getTransactions({ role: "requester" })
-      .then((all) => {
+    // Busquem la transacció dins la pestanya 'transactions'
+    getTransactions({ view: "transactions" })
+      .then(({ data }) => {
         if (cancelled) return;
-        const found = all.find((t) => String(t.id) === String(id));
+        const found = data.find((t) => String(t.id) === String(id));
         if (!found) {
           setError("Transacción no encontrada.");
-        } else if (found.estat !== "acceptat") {
-          setError("Solo se puede pagar una transacción aceptada.");
-        } else if (found.tipus !== "lloguer") {
-          setError(
-            "Esta transacción no requiere pago (es un préstamo gratuito).",
-          );
-        } else if (isPaid(found.id)) {
-          setError("Esta transacción ya estaba pagada.");
+        } else if (!found.can_pay) {
+          if (found.paid) setError("Esta transacción ya está pagada.");
+          else if (found.tipus !== "lloguer")
+            setError(
+              "Esta transacción no requiere pago (es un préstamo gratuito).",
+            );
+          else setError("Esta transacción no puede pagarse en este momento.");
         } else {
           setTx(found);
         }
@@ -56,16 +57,24 @@ function PaymentMockPage() {
     };
   }, [id, user, authLoading, navigate]);
 
-  const handleConfirm = (e) => {
+  const handleConfirm = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    // Simulació: 1.5s d'espera, després marcar com pagat
-    setTimeout(() => {
-      markAsPaid(tx.id);
+    try {
+      // Petita pausa estètica per simular passarel·la
+      await new Promise((r) => setTimeout(r, 1200));
+      await payTransaction(tx.id);
       setDone(true);
+      refresh(); // Actualitza badges
+      setTimeout(() => navigate("/orders?tab=transactions"), 2500);
+    } catch (err) {
+      console.error(err);
+      setError(
+        err?.response?.data?.message || "No se ha podido procesar el pago.",
+      );
+    } finally {
       setSubmitting(false);
-      setTimeout(() => navigate("/transactions?role=requester"), 3000);
-    }, 1500);
+    }
   };
 
   if (loading || authLoading) {
@@ -106,7 +115,6 @@ function PaymentMockPage() {
           </div>
         </div>
 
-        {/* Resum de la transacció */}
         <div className="rounded-xl bg-vecilend-dark-neutral border border-app-border p-4 mb-6">
           <p className="text-caption text-app-text-secondary mb-1">
             Vas a pagar
@@ -131,7 +139,7 @@ function PaymentMockPage() {
               ¡Pago efectuado!
             </p>
             <p className="text-app-text-secondary text-label">
-              Te redirigimos a tus transacciones…
+              Te redirigimos a tus pedidos…
             </p>
           </div>
         ) : (
@@ -149,7 +157,6 @@ function PaymentMockPage() {
                 className="mt-1 w-full bg-vecilend-dark-neutral border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
               />
             </label>
-
             <label className="block">
               <span className="text-label text-app-text-secondary font-body">
                 Titular
@@ -164,7 +171,6 @@ function PaymentMockPage() {
                 className="mt-1 w-full bg-vecilend-dark-neutral border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
               />
             </label>
-
             <div className="grid grid-cols-2 gap-3">
               <label className="block">
                 <span className="text-label text-app-text-secondary font-body">

@@ -12,23 +12,46 @@ const TIPUS_META = {
   solicitud_rebuda: {
     icon: "inbox",
     color: "text-app-primary",
-    link: () => "/transactions?role=owner",
+    link: () => "/orders?tab=requests_received",
   },
   solicitud_acceptada: {
     icon: "check_circle",
     color: "text-green-400",
-    link: () => "/transactions?role=requester",
+    link: () => "/orders?tab=requests_sent",
   },
   solicitud_rebutjada: {
     icon: "cancel",
     color: "text-red-400",
-    link: () => "/transactions?role=requester",
+    link: () => "/orders?tab=requests_sent",
+  },
+  solicitud_cancellada: {
+    icon: "block",
+    color: "text-zinc-400",
+    link: () => "/orders?tab=requests_sent",
+  },
+  transaccio_pagament_pendent: {
+    icon: "payments",
+    color: "text-vecilend-dark-primary",
+    link: (n) =>
+      n.id_entitat_referenciada
+        ? `/transactions/${n.id_entitat_referenciada}/payment`
+        : "/orders?tab=transactions",
+  },
+  transaccio_cancellada: {
+    icon: "block",
+    color: "text-red-400",
+    link: () => "/orders?tab=transactions",
+  },
+  transaccio_recordatori_devolucio: {
+    icon: "schedule",
+    color: "text-amber-400",
+    link: () => "/orders?tab=transactions",
   },
   valoracio_rebuda: {
     icon: "star",
     color: "text-yellow-400",
     link: (n, user) =>
-      user?.username ? `/profile/${user.username}` : "/transactions",
+      user?.username ? `/profile/${user.username}` : "/orders",
   },
 };
 

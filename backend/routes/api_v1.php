@@ -55,14 +55,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/objects/{id}', [ObjecteController::class, 'destroy'])->where('id', '[0-9]+');
     Route::get('/transactions',  [TransactionController::class, 'index']);
     Route::post('/transactions', [TransactionController::class, 'store']);
-    Route::put('/transactions/{id}/accept', [TransactionController::class, 'accept'])
-        ->where('id', '[0-9]+');
-    Route::put('/transactions/{id}/reject', [TransactionController::class, 'reject'])
-        ->where('id', '[0-9]+');
-    Route::put('/transactions/{id}/return', [TransactionController::class, 'returnObject'])
-        ->where('id', '[0-9]+');
-    Route::post('/transactions/{id}/review', [ValoracioController::class, 'store'])
-        ->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/accept',  [TransactionController::class, 'accept'])->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/reject',  [TransactionController::class, 'reject'])->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/return',  [TransactionController::class, 'returnObject'])->where('id', '[0-9]+');
+    Route::put('/transactions/{id}/cancel',  [TransactionController::class, 'cancel'])->where('id', '[0-9]+');
+    Route::post('/transactions/{id}/payment', [TransactionController::class, 'pay'])->where('id', '[0-9]+');
+    Route::post('/transactions/{id}/review', [ValoracioController::class, 'store'])->where('id', '[0-9]+');
     Route::post('/objects/{id}/favorite', [FavoriteController::class, 'store'])->where('id', '[0-9]+');
     Route::delete('/objects/{id}/favorite', [FavoriteController::class, 'destroy'])->where('id', '[0-9]+');
     Route::get('/favorites', [FavoriteController::class, 'index']);
@@ -96,10 +94,33 @@ Route::middleware('auth:sanctum')->group(function () {
             ->where('llegida', false)
             ->count();
 
+        // Solicituds pendents enviades per mi
+        $requestsSentPending = \App\Models\Solicitud::where('solicitant_id', $userId)
+            ->where('estat', 'pendent')
+            ->count();
+
+        // Solicituds pendents rebudes (sobre objectes meus)
+        $requestsReceivedPending = \App\Models\Solicitud::whereHas('objecte', fn($q) => $q->where('user_id', $userId))
+            ->where('estat', 'pendent')
+            ->count();
+
+        // Transaccions en curs de lloguer sense pagament completat (com a solicitant)
+        $transactionsPaymentDue = \App\Models\Solicitud::where('solicitant_id', $userId)
+            ->where('estat', 'acceptat')
+            ->where('tipus', 'lloguer')
+            ->whereHas('transaccio', fn($q) => $q->where('estat', 'en_curs'))
+            ->whereDoesntHave('transaccio.pagaments', fn($q) => $q->where('estat', 'completat'))
+            ->count();
+
         return response()->json([
             'data' => [
                 'chats'         => $chats,
                 'notifications' => $notifications,
+                'orders'        => [
+                    'requests_sent_pending'     => $requestsSentPending,
+                    'requests_received_pending' => $requestsReceivedPending,
+                    'transactions_payment_due'  => $transactionsPaymentDue,
+                ],
             ],
         ]);
     });

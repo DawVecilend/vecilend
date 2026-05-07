@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import PasswordInput from "../components/elementos/PasswordInput";
 
 function LoginPage() {
   const { login } = useAuth();
@@ -23,7 +24,8 @@ function LoginPage() {
       navigate("/");
     } catch (err) {
       if (err.response?.status === 401) setError("Credenciales incorrectas");
-      else if (err.response?.status === 403) setError(err.response.data.message || "Acceso denegado");
+      else if (err.response?.status === 403)
+        setError(err.response.data.message || "Acceso denegado");
       else if (err.response?.status === 422)
         setError(Object.values(err.response.data.errors).flat()[0]);
       else setError("Error de conexión");
@@ -158,14 +160,13 @@ function LoginPage() {
                     ¿Olvidaste tu contraseña?
                   </Link>
                 </div>
-                <input
+                <PasswordInput
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
                   className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
                   placeholder="••••••••"
-                  type="password"
                   required
                 />
               </div>

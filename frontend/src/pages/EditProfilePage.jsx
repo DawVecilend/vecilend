@@ -28,7 +28,6 @@ function EditProfilePage() {
     telefon: "",
     direccio: "",
     biography: "",
-    radi_proximitat: 10,
     avatar: null,
     ubicacio: null,
   });
@@ -45,7 +44,6 @@ function EditProfilePage() {
           telefon: user.telefon || "",
           direccio: user.direccio || "",
           biography: user.biography || user.descripcio || "",
-          radi_proximitat: user.radi_proximitat || 10,
           avatar: null,
         });
       } catch (error) {
@@ -103,7 +101,6 @@ function EditProfilePage() {
         telefon: profile.telefon || "",
         direccio: profile.direccio || "",
         biography: profile.biography || profile.descripcio || "",
-        radi_proximitat: profile.radi_proximitat || 10,
         avatar: null,
       });
       setPreviewImage(null);
@@ -288,24 +285,6 @@ function EditProfilePage() {
                 >
                   Cambiar foto
                 </button>
-              </div>
-
-              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-6 border border-app-border/20 shadow-xl">
-                <label className="text-xs font-bold text-app-text-secondary uppercase block mb-4">
-                  Radio de Proximidad ({formData.radi_proximitat} km)
-                </label>
-                <input
-                  type="range"
-                  name="radi_proximitat"
-                  min="1"
-                  max="100"
-                  value={formData.radi_proximitat}
-                  onChange={handleChange}
-                  className="w-full h-2 bg-app-bg-card rounded-lg appearance-none cursor-pointer accent-[#4fdbc8]"
-                />
-                <p className="text-[10px] text-[#859490] mt-2 italic">
-                  Define la distancia máxima para buscar y prestar objetos.
-                </p>
               </div>
             </div>
 
