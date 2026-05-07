@@ -18,6 +18,10 @@ use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Middleware\EnsureAdminRole;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Api\V1\ValoracioController;
+use App\Http\Controllers\Api\V1\ChatController;
+use App\Http\Controllers\Api\V1\NotificacioController;
+use App\Models\Conversa;
+use App\Models\Notificacio;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
@@ -60,6 +64,43 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/objects/{id}/favorite', [FavoriteController::class, 'store'])->where('id', '[0-9]+');
     Route::delete('/objects/{id}/favorite', [FavoriteController::class, 'destroy'])->where('id', '[0-9]+');
     Route::get('/favorites', [FavoriteController::class, 'index']);
+
+    // ── Xats ──
+    Route::get('/chats',                      [ChatController::class, 'index']);
+    Route::post('/chats',                     [ChatController::class, 'store']);
+    Route::get('/chats/{id}',                 [ChatController::class, 'show'])->where('id', '[0-9]+');
+    Route::get('/chats/{id}/messages',        [ChatController::class, 'messages'])->where('id', '[0-9]+');
+    Route::post('/chats/{id}/messages',       [ChatController::class, 'sendMessage'])->where('id', '[0-9]+');
+    Route::put('/chats/{id}/read',            [ChatController::class, 'markAsRead'])->where('id', '[0-9]+');
+
+    // ── Notificacions ──
+    Route::get('/notifications',              [NotificacioController::class, 'index']);
+    Route::put('/notifications/read-all',     [NotificacioController::class, 'markAllAsRead']);
+    Route::put('/notifications/{id}/read',    [NotificacioController::class, 'markAsRead'])->where('id', '[0-9]+');
+    Route::delete('/notifications/{id}',      [NotificacioController::class, 'destroy'])->where('id', '[0-9]+');
+
+    // ── Comptadors no llegits (per a les bombolles) ──
+    Route::get('/me/unread-counts', function (Request $request) {
+        $userId = $request->user()->id;
+
+        $chats = Conversa::query()
+            ->deUsuari($userId)
+            ->whereHas('missatges', function ($q) use ($userId) {
+                $q->where('emissor_id', '!=', $userId)->whereNull('llegit_at');
+            })
+            ->count();
+
+        $notifications = Notificacio::where('user_id', $userId)
+            ->where('llegida', false)
+            ->count();
+
+        return response()->json([
+            'data' => [
+                'chats'         => $chats,
+                'notifications' => $notifications,
+            ],
+        ]);
+    });
 
     Route::prefix('admin')->middleware(EnsureAdminRole::class)->group(function () {
         Route::get('/users', [AdminUserController::class, 'index']);

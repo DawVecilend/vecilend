@@ -10,6 +10,7 @@ use App\Models\Valoracio;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Notificacio;
 
 class ValoracioController extends Controller
 {
@@ -71,7 +72,7 @@ class ValoracioController extends Controller
 
         // ── Crear ──
         $valoracio = DB::transaction(function () use ($request, $transaccio, $user, $valoratId, $solicitud) {
-            return Valoracio::create([
+            $v = Valoracio::create([
                 'transaccio_id' => $transaccio->id,
                 'autor_id'      => $user->id,
                 'valorat_id'    => $valoratId,
@@ -80,6 +81,17 @@ class ValoracioController extends Controller
                 'comentari'     => $request->validated('comentari'),
                 'created_at'    => now(),
             ]);
+
+            Notificacio::create([
+                'user_id'                 => $valoratId,
+                'tipus'                   => Notificacio::TIPUS_VALORACIO_REBUDA,
+                'titol'                   => 'Nueva valoración',
+                'missatge'                => "{$user->nom} te ha dejado una valoración de {$v->puntuacio}/5.",
+                'entitat_referenciada'    => 'valoracio',
+                'id_entitat_referenciada' => $v->id,
+            ]);
+
+            return $v;
         });
 
         return response()->json([

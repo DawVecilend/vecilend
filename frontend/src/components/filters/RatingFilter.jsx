@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 
 const OPTIONS = [
   { value: 0, label: "Sin filtro" },
-  { value: 4, label: "4 ★ o más" },
-  { value: 5, label: "5 ★" },
+  { value: 4, label: "4 estrellas o más" },
+  { value: 5, label: "5 estrellas" },
 ];
 
 /**
  * Filtre de valoració mínima del propietari.
- * Limitat a 4 i 5 estrelles (decisió de producte: la mitjana del propietari
- * ja és exigent, no té sentit filtrar per <4 perquè perd valor).
+ * Limitat a 4 i 5 estrelles.
  *
  * @param {Object} value             {minRating}
  * @param {Function} onChange        (newValue) => void
@@ -58,7 +57,9 @@ function RatingFilter({ value = {}, onChange }) {
       <p className="text-caption text-app-text-secondary font-body italic">
         {rating === 0
           ? "No se aplicará filtro de valoración."
-          : `Solo verás objetos con propietarios de ${rating}★ o más (excluye los que no tengan valoraciones).`}
+          : rating === 5
+            ? "Solo verás objetos con propietarios de 5★."
+            : `Solo verás objetos con propietarios de ${rating}★ o más.`}
       </p>
     </div>
   );
