@@ -7,7 +7,7 @@ import { getCategories } from "../../services/categories";
 import { getObjects } from "../../services/objects";
 import { mapCategories } from "../../mappers/categoryMapper";
 import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleton";
-import NotFoundPage from "../NotFoundPage";
+import NotFoundPage from "../main/NotFoundPage";
 
 function CategoryPage() {
   const { slug } = useParams();

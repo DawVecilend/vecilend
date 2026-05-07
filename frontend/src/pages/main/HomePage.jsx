@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import HeroSection from "../components/home/HeroSection";
-import CategoriesSection from "../components/home/categories/CategoriesSection";
-import ProductsSection from "../components/home/ProductsSection";
-import BenefitsSection from "../components/home/BenefitsSection";
-import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
-import { getObjects } from "../services/objects";
-import { getCategories } from "../services/categories";
-import { mapCategories } from "../mappers/categoryMapper";
-import CTASection from "../components/home/CTASection";
+import { useEffect, useState, useMemo } from "react";
+import HeroSection from "../../components/home/HeroSection";
+import CategoriesSection from "../../components/home/categories/CategoriesSection";
+import ProductsSection from "../../components/home/ProductsSection";
+import BenefitsSection from "../../components/home/BenefitsSection";
+import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleton";
+import { getObjects } from "../../services/objects";
+import { getCategories } from "../../services/categories";
+import { mapCategories } from "../../mappers/categoryMapper";
+import CTASection from "../../components/home/CTASection";
 
 function HomePage() {
   const [recentProducts, setRecentProducts] = useState([]);

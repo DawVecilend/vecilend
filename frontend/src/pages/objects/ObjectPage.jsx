@@ -18,6 +18,7 @@ import UserCard from "../../components/elementos/UserCard";
 import DateRangeCalendar from "../../components/calendar/DateRangeCalendar";
 import ObjectMiniMap from "../../components/map/ObjectMiniMap";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
+import NotFoundPage from "../main/NotFoundPage";
 import NavCategori from "../../components/elementos/NavCategori";
 import DetailsPriceCardProduct from "../../components/elementos/DetailsPriceCard";
 import ObjectReviewsSection from "../../components/elementos/ObjectReviewsSection";
