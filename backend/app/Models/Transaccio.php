@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Transaccio extends Model
 {
@@ -32,19 +32,38 @@ class Transaccio extends Model
         return $this->belongsTo(Solicitud::class, 'solicitud_id');
     }
 
+    public function pagaments(): HasMany
+    {
+        return $this->hasMany(Pagament::class, 'transaccio_id');
+    }
+
     /**
-     * Accés directe a l'objecte via la sol·licitud (per a queries còmodes
-     * com $transaccio->objecte sense haver d'encadenar ->solicitud->objecte).
+     * Accés directe a l'objecte via la sol·licitud.
      */
     public function objecte(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
     {
         return $this->hasOneThrough(
             Objecte::class,
             Solicitud::class,
-            'id',          // FK a solicituds (pk)
-            'id',          // FK a objectes (pk)
-            'solicitud_id', // FK local a transaccions
-            'objecte_id'   // FK a solicituds que apunta a objectes
+            'id',
+            'id',
+            'solicitud_id',
+            'objecte_id'
         );
+    }
+
+    // ── Helpers ──
+
+    /**
+     * True si la transacció té un pagament en estat 'completat'.
+     * Requereix que la relació pagaments estigui carregada per evitar N+1.
+     */
+    public function estaPagada(): bool
+    {
+        if (!$this->relationLoaded('pagaments')) {
+            return $this->pagaments()->where('estat', Pagament::ESTAT_COMPLETAT)->exists();
+        }
+
+        return $this->pagaments->contains(fn($p) => $p->estat === Pagament::ESTAT_COMPLETAT);
     }
 }
