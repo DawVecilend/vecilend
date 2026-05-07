@@ -10,10 +10,11 @@ use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
-use App\Http\Controllers\Api\V1\AdminCategoriaController;
-use App\Http\Controllers\Api\V1\AdminLogController;
-use App\Http\Controllers\Api\V1\AdminSubcategoriaController;
-use App\Http\Controllers\Api\V1\AdminUserController;
+use App\Http\Controllers\Api\V1\Admin\AdminCategoriaController;
+use App\Http\Controllers\Api\V1\Admin\AdminLogController;
+use App\Http\Controllers\Api\V1\Admin\AdminStatsController;
+use App\Http\Controllers\Api\V1\Admin\AdminSubcategoriaController;
+use App\Http\Controllers\Api\V1\Admin\AdminUserController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Middleware\EnsureAdminRole;
@@ -104,6 +105,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('admin')->middleware(EnsureAdminRole::class)->group(function () {
+        Route::get('/stats', [AdminStatsController::class, 'index']);
+
         Route::get('/users', [AdminUserController::class, 'index']);
         Route::put('/users/{id}/block', [AdminUserController::class, 'block'])->where('id', '[0-9]+');
         Route::put('/users/{id}/unblock', [AdminUserController::class, 'unblock'])->where('id', '[0-9]+');
@@ -122,5 +125,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/subcategories/{id}', [AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
 
         Route::get('/logs', [AdminLogController::class, 'index']);
+
+        Route::get('/stats', [AdminStatsController::class, 'index']);
+        Route::get('/stats/trends/weekly', [AdminStatsController::class, 'weeklyTrends']);
+        Route::get('/stats/trends/monthly', [AdminStatsController::class, 'monthlyTrends']);
+        Route::get('/stats/popular-categories', [AdminStatsController::class, 'popularCategories']);
     });
 });

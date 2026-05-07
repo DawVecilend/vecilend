@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdminLogResource;
@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class AdminLogController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $logs = DB::table('logs')
             ->leftJoin('users', 'logs.user_id', '=', 'users.id')
             ->where('logs.tipus', 'admin')
