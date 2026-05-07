@@ -12,7 +12,7 @@ import { useUnreadCounts } from "../../../contexts/UnreadCountsContext";
 
 function HeaderMobile() {
   const auth = useContext(AuthContext);
-  const { counts } = useUnreadCounts();
+  const { counts, ordersTotalBadge } = useUnreadCounts();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -140,17 +140,23 @@ function HeaderMobile() {
             </span>
           </Link>
 
-          {/* Transacciones */}
+          {/* Pedidos */}
           <Link
-            to={user ? "/transactions" : "/login"}
-            className="flex flex-col items-center justify-center text-white"
+            to={user ? "/orders" : "/login"}
+            className="relative flex flex-col items-center justify-center text-white"
           >
             <span className="material-symbols-outlined text-[22px] text-white">
-              swap_horiz
+              receipt_long
             </span>
             <span className="mt-1 text-center font-body text-caption leading-caption text-white">
-              Transacciones
+              Pedidos
             </span>
+            {user && (
+              <UnreadBadge
+                count={ordersTotalBadge}
+                className="!top-0 !right-2"
+              />
+            )}
           </Link>
 
           {/* Chats */}

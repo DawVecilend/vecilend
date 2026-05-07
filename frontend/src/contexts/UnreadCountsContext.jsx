@@ -13,14 +13,24 @@ const UnreadCountsContext = createContext(null);
 
 const POLL_MS = 30000;
 
+const EMPTY_COUNTS = {
+  chats: 0,
+  notifications: 0,
+  orders: {
+    requests_sent_pending: 0,
+    requests_received_pending: 0,
+    transactions_payment_due: 0,
+  },
+};
+
 export function UnreadCountsProvider({ children }) {
   const { isAuthenticated } = useAuth();
-  const [counts, setCounts] = useState({ chats: 0, notifications: 0 });
+  const [counts, setCounts] = useState(EMPTY_COUNTS);
   const intervalRef = useRef(null);
 
   const refresh = useCallback(async () => {
     if (!isAuthenticated) {
-      setCounts({ chats: 0, notifications: 0 });
+      setCounts(EMPTY_COUNTS);
       return;
     }
     try {
@@ -28,30 +38,36 @@ export function UnreadCountsProvider({ children }) {
       setCounts({
         chats: Number(data?.chats ?? 0),
         notifications: Number(data?.notifications ?? 0),
+        orders: {
+          requests_sent_pending: Number(
+            data?.orders?.requests_sent_pending ?? 0,
+          ),
+          requests_received_pending: Number(
+            data?.orders?.requests_received_pending ?? 0,
+          ),
+          transactions_payment_due: Number(
+            data?.orders?.transactions_payment_due ?? 0,
+          ),
+        },
       });
     } catch {
-      // Silenci — no volem que el polling provoqui errors visibles
+      // silenci
     }
   }, [isAuthenticated]);
 
-  // Refrescar quan l'usuari es loga / deslloga
   useEffect(() => {
     refresh();
   }, [refresh]);
 
-  // Polling periòdic
   useEffect(() => {
     if (!isAuthenticated) {
       if (intervalRef.current) clearInterval(intervalRef.current);
       return;
     }
     intervalRef.current = setInterval(refresh, POLL_MS);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
+    return () => intervalRef.current && clearInterval(intervalRef.current);
   }, [isAuthenticated, refresh]);
 
-  // Refresc quan torna el focus a la finestra
   useEffect(() => {
     const onFocus = () => refresh();
     const onVisibility = () => {
@@ -65,8 +81,6 @@ export function UnreadCountsProvider({ children }) {
     };
   }, [refresh]);
 
-  // Helpers per actualitzar localment quan sabem que ha canviat
-  // (ex.: després de marcar un xat com a llegit). Estalvia esperar al pròxim poll.
   const decrementChats = useCallback((amount = 1) => {
     setCounts((c) => ({ ...c, chats: Math.max(0, c.chats - amount) }));
   }, []);
@@ -78,9 +92,21 @@ export function UnreadCountsProvider({ children }) {
     }));
   }, []);
 
+  // Total per al badge del bottom-nav
+  const ordersTotalBadge =
+    counts.orders.requests_sent_pending +
+    counts.orders.requests_received_pending +
+    counts.orders.transactions_payment_due;
+
   return (
     <UnreadCountsContext.Provider
-      value={{ counts, refresh, decrementChats, decrementNotifications }}
+      value={{
+        counts,
+        refresh,
+        decrementChats,
+        decrementNotifications,
+        ordersTotalBadge,
+      }}
     >
       {children}
     </UnreadCountsContext.Provider>
@@ -89,10 +115,9 @@ export function UnreadCountsProvider({ children }) {
 
 export function useUnreadCounts() {
   const ctx = useContext(UnreadCountsContext);
-  if (!ctx) {
+  if (!ctx)
     throw new Error(
       "useUnreadCounts ha de ser usat dins un UnreadCountsProvider",
     );
-  }
   return ctx;
 }

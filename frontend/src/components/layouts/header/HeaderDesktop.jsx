@@ -146,10 +146,10 @@ function HeaderDesktop() {
                         )}
 
                         <Link
-                          to="/transactions"
+                          to="/orders"
                           className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
                         >
-                          Mis transacciones
+                          Mis pedidos
                         </Link>
 
                         <Link

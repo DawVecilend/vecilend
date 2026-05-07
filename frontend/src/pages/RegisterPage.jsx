@@ -4,6 +4,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import api from "../services/api";
 import municipalitiesData from "../data/municipios.json";
 import { normalizeString } from "../utils/string";
+import PasswordInput from "../components/elementos/PasswordInput";
 
 function RegisterPage() {
   const { register } = useContext(AuthContext);
@@ -34,7 +35,6 @@ function RegisterPage() {
     biography: "",
     avatar: null,
     accepta_termes: true,
-    radi_proximitat: 10,
     ubicacio: {
       lat: 0,
       lng: 0,
@@ -646,14 +646,13 @@ function RegisterPage() {
                             lock
                           </span>
 
-                          <input
+                          <PasswordInput
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
                             placeholder="••••••••"
-                            type="password"
                           />
                         </div>
                       </div>
@@ -668,14 +667,13 @@ function RegisterPage() {
                             lock_reset
                           </span>
 
-                          <input
+                          <PasswordInput
                             name="password_confirmation"
                             value={formData.password_confirmation}
                             onChange={handleChange}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
                             placeholder="••••••••"
-                            type="password"
                           />
                         </div>
                       </div>

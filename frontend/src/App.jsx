@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import StatusPage from "./pages/StatusPage";
 import LoginPage from "./pages/LoginPage";
@@ -24,7 +24,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EditObjectPage from "./pages/EditObjectPage";
 import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
-import TransactionsPage from "./pages/TransactionsPage";
+import MyOrdersPage from "./pages/MyOrdersPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import PaymentMockPage from "./pages/PaymentMockPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -103,7 +103,11 @@ function App() {
                 element={<SettingsPage />}
               />
 
-              <Route path="/transactions" element={<TransactionsPage />} />
+              <Route path="/orders" element={<MyOrdersPage />} />
+              <Route
+                path="/transactions"
+                element={<Navigate to="/orders" replace />}
+              />
 
               <Route
                 path="/transactions/:id/payment"

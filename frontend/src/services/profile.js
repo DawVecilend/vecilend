@@ -3,7 +3,7 @@ import api from "./api";
 export const getProfile = async (username) => {
   const response = await api.get(`/profile/${username}`);
   return {
-    user:           response.data.data,
+    user: response.data.data,
     latest_objects: response.data.latest_objects || [],
   };
 };
@@ -17,7 +17,6 @@ export const updateProfile = async (username, data) => {
   if (data.telefon) formData.append("telefon", data.telefon);
   if (data.direccio) formData.append("direccio", data.direccio);
   if (data.biography) formData.append("biography", data.biography);
-  if (data.radi_proximitat) formData.append("radi_proximitat", data.radi_proximitat);
   if (data.avatar) formData.append("avatar", data.avatar);
 
   if (data.ubicacio?.lat != null && data.ubicacio?.lng != null) {
