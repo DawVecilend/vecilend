@@ -6,19 +6,19 @@ import {
   useLocation,
   useSearchParams,
 } from "react-router-dom";
-import { getProduct, deleteObject } from "../services/objects";
-import { createTransaction, getTransactions } from "../services/transactions";
-import { createChat } from "../services/chats";
-import { useAuth } from "../contexts/AuthContext";
-import BtnBack from "../components/elementos/BtnBack";
-import UserCard from "../components/elementos/UserCard";
-import DateRangeCalendar from "../components/calendar/DateRangeCalendar";
-import ObjectMiniMap from "../components/map/ObjectMiniMap";
-import { cldTransform } from "../utils/cloudinary";
-import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
-import NotFoundPage from "./NotFoundPage";
-import NavCategori from "../components/elementos/NavCategori";
-import DetailsPriceCardProduct from "../components/elementos/DetailsPriceCard";
+import { getProduct, deleteObject } from "../../services/objects";
+import { createTransaction, getTransactions } from "../../services/transactions";
+import { createChat } from "../../services/chats";
+import { useAuth } from "../../contexts/AuthContext";
+import BtnBack from "../../components/elementos/BtnBack";
+import UserCard from "../../components/elementos/UserCard";
+import DateRangeCalendar from "../../components/calendar/DateRangeCalendar";
+import ObjectMiniMap from "../../components/map/ObjectMiniMap";
+import { cldTransform } from "../../utils/cloudinary";
+import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
+import NotFoundPage from "../NotFoundPage";
+import NavCategori from "../../components/elementos/NavCategori";
+import DetailsPriceCardProduct from "../../components/elementos/DetailsPriceCard";
 
 
 function ObjectPage() {

@@ -1,17 +1,17 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getProfile, getUserObjects } from "../services/profile";
-import { deleteObject, updateObjectStatus } from "../services/objects";
-import { AuthContext } from "../contexts/AuthContext";
-import ProductsSection from "../components/home/ProductsSection";
-import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
-import NotFoundPage from "./NotFoundPage";
-import RatingCard from "../components/profile/RatingCard";
-import RatingEvolutionChart from "../components/profile/RatingEvolutionChart";
-import UserReviewsList from "../components/profile/UserReviewsList";
-import { getReviewsEvolution } from "../services/reviews";
-import { createChat } from "../services/chats";
+import { getProfile, getUserObjects } from "../../services/profile";
+import { deleteObject, updateObjectStatus } from "../../services/objects";
+import { AuthContext } from "../../contexts/AuthContext";
+import ProductsSection from "../../components/home/ProductsSection";
+import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
+import NotFoundPage from "../NotFoundPage";
+import RatingCard from "../../components/profile/RatingCard";
+import RatingEvolutionChart from "../../components/profile/RatingEvolutionChart";
+import UserReviewsList from "../../components/profile/UserReviewsList";
+import { getReviewsEvolution } from "../../services/reviews";
+import { createChat } from "../../services/chats";
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);

@@ -5,10 +5,10 @@ import {
   getChatMessages,
   sendChatMessage,
   markChatAsRead,
-} from "../services/chats";
-import { AuthContext } from "../contexts/AuthContext";
-import { useUnreadCounts } from "../contexts/UnreadCountsContext";
-import BtnBack from "../components/elementos/BtnBack";
+} from "../../services/chats";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useUnreadCounts } from "../../contexts/UnreadCountsContext";
+import BtnBack from "../../components/elementos/BtnBack";
 
 const POLL_MS = 7000;
 

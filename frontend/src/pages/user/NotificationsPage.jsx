@@ -5,8 +5,8 @@ import {
   markNotificationAsRead,
   markAllNotificationsAsRead,
   deleteNotification,
-} from "../services/notifications";
-import { useUnreadCounts } from "../contexts/UnreadCountsContext";
+} from "../../services/notifications";
+import { useUnreadCounts } from "../../contexts/UnreadCountsContext";
 
 const TIPUS_META = {
   solicitud_rebuda: {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { getProfile, updateProfile } from "../services/profile";
-import { AuthContext } from "../contexts/AuthContext";
-import municipalitiesData from "../data/municipios.json";
-import HeaderDesktop from "../components/layouts/header/HeaderDesktop";
-import { normalizeString } from "../utils/string";
+import { getProfile, updateProfile } from "../../services/profile";
+import { AuthContext } from "../../contexts/AuthContext";
+import municipalitiesData from "../../data/municipios.json";
+import HeaderDesktop from "../../components/layouts/header/HeaderDesktop";
+import { normalizeString } from "../../utils/string";
 
 function EditProfilePage() {
   const { username } = useParams();

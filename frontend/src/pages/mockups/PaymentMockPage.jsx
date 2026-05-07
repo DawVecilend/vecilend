@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getTransactions } from "../services/transactions";
-import { useAuth } from "../contexts/AuthContext";
-import { isPaid, markAsPaid } from "../utils/paymentMock";
-import BtnBack from "../components/elementos/BtnBack";
+import { getTransactions } from "../../services/transactions";
+import { useAuth } from "../../contexts/AuthContext";
+import { isPaid, markAsPaid } from "../../utils/paymentMock";
+import BtnBack from "../../components/elementos/BtnBack";
 
 function PaymentMockPage() {
   const { id } = useParams();

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
-import { updatePassword } from "../services/profile";
+import { updatePassword } from "../../services/profile";
 
 function SecuritySettingsPage() {
   const { user } = useContext(AuthContext);

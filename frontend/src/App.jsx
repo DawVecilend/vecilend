@@ -1,36 +1,50 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import StatusPage from "./pages/StatusPage";
-import LoginPage from "./pages/LoginPage";
-import CategoryPage from "./pages/CategoryPage";
-import ObjectsPage from "./pages/ObjectsPage";
-import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
-import CreateObjectPage from "./pages/CreateObjectPage";
-import EditProfilePage from "./pages/EditProfilePage";
+
+// COMPONENTES
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
-import ObjectPage from "./pages/ObjectPage";
+import { UnreadCountsProvider } from "./contexts/UnreadCountsContext";
+import ScrollToTop from "./components/ScrollToTop";
 import HeaderDesktop from "./components/layouts/header/HeaderDesktop";
 import HeaderMobile from "./components/layouts/header/HeaderMobile";
 import Footer from "./components/layouts/footer/Footer";
 import FloatingAddObjectButton from "./components/elementos/FloatingAddObjectButton";
-import SettingsPage from "./pages/SettingsPage";
-import SecuritySettingsPage from "./pages/SecuritySettingsPage";
-import UserObjectsPage from "./pages/UserObjectsPage";
-import ScrollToTop from "./components/ScrollToTop";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import EditObjectPage from "./pages/EditObjectPage";
+
+// MAIN PAGES
+import HomePage from "./pages/HomePage";
+import StatusPage from "./pages/StatusPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
-import TransactionsPage from "./pages/TransactionsPage";
-import PaymentMockPage from "./pages/PaymentMockPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import ChatsListPage from "./pages/ChatsListPage";
-import ChatPage from "./pages/ChatPage";
-import NotificationsPage from "./pages/NotificationsPage";
-import { UnreadCountsProvider } from "./contexts/UnreadCountsContext";
+import ChatsListPage from "./pages/chats/ChatsListPage";
+import ChatPage from "./pages/chats/ChatPage";
+
+// AUTH PAGES
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+
+// USER PAGES
+import ProfilePage from "./pages/user/ProfilePage";
+import EditProfilePage from "./pages/user/EditProfilePage";
+import SecuritySettingsPage from "./pages/user/SecuritySettingsPage";
+import SettingsPage from "./pages/user/SettingsPage";
+import TransactionsPage from "./pages/user/TransactionsPage";
+import NotificationsPage from "./pages/user/NotificationsPage";
+import ForgotPasswordPage from "./pages/user/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/user/ResetPasswordPage";
+
+// OBJECTS PAGES
+import ObjectPage from "./pages/objects/ObjectPage";
+import ObjectsPage from "./pages/objects/ObjectsPage";
+import CreateObjectPage from "./pages/objects/CreateObjectPage";
+import UserObjectsPage from "./pages/objects/UserObjectsPage";
+import EditObjectPage from "./pages/objects/EditObjectPage";
+
+// CATEGORIES PAGES
+import CategoryPage from "./pages/categories/CategoryPage";
+
+// FUNCTIONALITS PAGES
+import PaymentMockPage from "./pages/mockups/PaymentMockPage";
 
 function App() {
   return (

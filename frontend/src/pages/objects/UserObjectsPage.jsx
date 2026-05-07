@@ -1,11 +1,11 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
-import { getUserObjects } from "../services/profile";
-import ProductsSection from "../components/home/ProductsSection";
-import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
-import BtnOrder from "../components/elementos/BtnOrder";
-import BtnBack from "../components/elementos/BtnBack";
+import { AuthContext } from "../../contexts/AuthContext";
+import { getUserObjects } from "../../services/profile";
+import ProductsSection from "../../components/home/ProductsSection";
+import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleton";
+import BtnOrder from "../../components/elementos/BtnOrder";
+import BtnBack from "../../components/elementos/BtnBack";
 
 function UserObjectsPage() {
   const { user } = useContext(AuthContext);

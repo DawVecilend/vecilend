@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import ProductsSection from "../components/home/ProductsSection";
-import BtnBack from "../components/elementos/BtnBack";
-import BtnOrder from "../components/elementos/BtnOrder";
-import { getCategories } from "../services/categories";
-import { getObjects } from "../services/objects";
-import { mapCategories } from "../mappers/categoryMapper";
-import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
-import NotFoundPage from "./NotFoundPage";
+import ProductsSection from "../../components/home/ProductsSection";
+import BtnBack from "../../components/elementos/BtnBack";
+import BtnOrder from "../../components/elementos/BtnOrder";
+import { getCategories } from "../../services/categories";
+import { getObjects } from "../../services/objects";
+import { mapCategories } from "../../mappers/categoryMapper";
+import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleton";
+import NotFoundPage from "../NotFoundPage";
 
 function CategoryPage() {
   const { slug } = useParams();

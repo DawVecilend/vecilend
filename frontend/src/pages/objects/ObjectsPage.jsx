@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import ProductsSection from "../components/home/ProductsSection";
-import BtnOrder from "../components/elementos/BtnOrder";
-import BtnBack from "../components/elementos/BtnBack";
-import InlineFilterChip from "../components/filters/InlineFilterChip";
-import ChangeLocationModal from "../components/search/modals/ChangeLocationModal";
-import ChangeDatesModal from "../components/search/modals/ChangeDatesModal";
-import ChangePriceModal from "../components/search/modals/ChangePriceModal";
-import ChangeRatingModal from "../components/search/modals/ChangeRatingModal";
-import { getObjects, getNearbyObjects } from "../services/objects";
-import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
+import ProductsSection from "../../components/home/ProductsSection";
+import BtnOrder from "../../components/elementos/BtnOrder";
+import BtnBack from "../../components/elementos/BtnBack";
+import InlineFilterChip from "../../components/filters/InlineFilterChip";
+import ChangeLocationModal from "../../components/search/modals/ChangeLocationModal";
+import ChangeDatesModal from "../../components/search/modals/ChangeDatesModal";
+import ChangePriceModal from "../../components/search/modals/ChangePriceModal";
+import ChangeRatingModal from "../../components/search/modals/ChangeRatingModal";
+import { getObjects, getNearbyObjects } from "../../services/objects";
+import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleton";
 
 function ObjectsPage() {
   const [products, setProducts] = useState([]);

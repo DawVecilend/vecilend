@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import {
   getTransactions,
   acceptTransaction,
   rejectTransaction,
   returnTransaction,
-} from "../services/transactions";
-import { isPaid } from "../utils/paymentMock";
-import { cldTransform } from "../utils/cloudinary";
-import BtnBack from "../components/elementos/BtnBack";
-import ReviewModal from "../components/transactions/ReviewModal";
+} from "../../services/transactions";
+import { isPaid } from "../../utils/paymentMock";
+import { cldTransform } from "../../utils/cloudinary";
+import BtnBack from "../../components/elementos/BtnBack";
+import ReviewModal from "../../components/transactions/ReviewModal";
 
 const STATUS_LABELS = {
   pendent: {

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { getChats } from "../services/chats";
+import { getChats } from "../../services/chats";
 
 function formatHora(iso) {
   if (!iso) return "";

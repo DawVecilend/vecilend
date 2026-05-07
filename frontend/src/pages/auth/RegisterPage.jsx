@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
-import api from "../services/api";
-import municipalitiesData from "../data/municipios.json";
-import { normalizeString } from "../utils/string";
+import { AuthContext } from "../../contexts/AuthContext";
+import api from "../../services/api";
+import municipalitiesData from "../../data/municipios.json";
+import { normalizeString } from "../../utils/string";
 
 function RegisterPage() {
   const { register } = useContext(AuthContext);
