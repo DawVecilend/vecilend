@@ -6,7 +6,7 @@ import { deleteObject, updateObjectStatus } from "../../services/objects";
 import { AuthContext } from "../../contexts/AuthContext";
 import ProductsSection from "../../components/home/ProductsSection";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
-import NotFoundPage from "../NotFoundPage";
+import NotFoundPage from "../main/NotFoundPage";
 import RatingCard from "../../components/profile/RatingCard";
 import RatingEvolutionChart from "../../components/profile/RatingEvolutionChart";
 import UserReviewsList from "../../components/profile/UserReviewsList";

@@ -11,11 +11,11 @@ import Footer from "./components/layouts/footer/Footer";
 import FloatingAddObjectButton from "./components/elementos/FloatingAddObjectButton";
 
 // MAIN PAGES
-import HomePage from "./pages/HomePage";
-import StatusPage from "./pages/StatusPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
-import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
+import HomePage from "./pages/main/HomePage";
+import StatusPage from "./pages/main/StatusPage";
+import NotFoundPage from "./pages/main/NotFoundPage";
+import HowItWorksRentersPage from "./pages/main/HowItWorksRentersPage";
+import HowItWorksLendersPage from "./pages/main/HowItWorksLendersPage";
 import ChatsListPage from "./pages/chats/ChatsListPage";
 import ChatPage from "./pages/chats/ChatPage";
 

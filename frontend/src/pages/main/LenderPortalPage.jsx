@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import HeaderDesktop from '../components/layouts/header/HeaderDesktop';
+import HeaderDesktop from '../../components/layouts/header/HeaderDesktop';
 
 function LenderPortalPage() {
     return (
