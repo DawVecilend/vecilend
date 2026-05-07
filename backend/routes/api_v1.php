@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Auth\PasswordController;
 use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
 use App\Http\Controllers\Api\V1\AdminCategoriaController;
+use App\Http\Controllers\Api\V1\AdminLogController;
 use App\Http\Controllers\Api\V1\AdminSubcategoriaController;
 use App\Http\Controllers\Api\V1\AdminUserController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
@@ -119,5 +120,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/subcategories', [AdminSubcategoriaController::class, 'store']);
         Route::put('/subcategories/{id}', [AdminSubcategoriaController::class, 'update'])->where('id', '[0-9]+');
         Route::delete('/subcategories/{id}', [AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
+
+        Route::get('/logs', [AdminLogController::class, 'index']);
     });
 });
