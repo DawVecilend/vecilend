@@ -132,8 +132,6 @@ function ObjectPage() {
 
   const needsDates = !range.start || !range.end;
 
-  const needsDates = !range.start || !range.end;
-
   const isOwnObject = !!(user && product?.propietari?.id === user.id);
   const isUnavailable = product?.estat === "no_disponible";
 
