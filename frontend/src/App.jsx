@@ -1,42 +1,60 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import StatusPage from "./pages/StatusPage";
-import LoginPage from "./pages/LoginPage";
-import ObjectsPage from "./pages/ObjectsPage";
-import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
-import CreateObjectPage from "./pages/CreateObjectPage";
-import EditProfilePage from "./pages/EditProfilePage";
+
+// COMPONENTES
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import { BackofficeAuthProvider } from "./contexts/BackofficeAuthContext";
-import ObjectPage from "./pages/ObjectPage";
+import { UnreadCountsProvider } from "./contexts/UnreadCountsContext";
+import { ToastProvider } from "./contexts/ToastContext";
+import ScrollToTop from "./components/ScrollToTop";
+
 import HeaderDesktop from "./components/layouts/header/HeaderDesktop";
 import HeaderMobile from "./components/layouts/header/HeaderMobile";
 import Footer from "./components/layouts/footer/Footer";
 import FloatingAddObjectButton from "./components/elementos/FloatingAddObjectButton";
-import SettingsPage from "./pages/SettingsPage";
-import SecuritySettingsPage from "./pages/SecuritySettingsPage";
-import UserObjectsPage from "./pages/UserObjectsPage";
-import ScrollToTop from "./components/ScrollToTop";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import EditObjectPage from "./pages/EditObjectPage";
-import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
-import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
-import MyOrdersPage from "./pages/MyOrdersPage";
-import FavoritesPage from "./pages/FavoritesPage";
-import PaymentMockPage from "./pages/PaymentMockPage";
+
+// MAIN PAGES
+import HomePage from "./pages/HomePage";
+import StatusPage from "./pages/StatusPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ForbiddenPage from "./pages/ForbiddenPage";
+import HowItWorksRentersPage from "./pages/HowItWorksRentersPage";
+import HowItWorksLendersPage from "./pages/HowItWorksLendersPage";
+
+// AUTH PAGES
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+
+// USER PAGES
+import ProfilePage from "./pages/user/ProfilePage";
+import EditProfilePage from "./pages/user/EditProfilePage";
+import SecuritySettingsPage from "./pages/user/SecuritySettingsPage";
+import SettingsPage from "./pages/user/SettingsPage";
+import NotificationsPage from "./pages/user/NotificationsPage";
+import ForgotPasswordPage from "./pages/user/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/user/ResetPasswordPage";
+import MyOrdersPage from "./pages/user/MyOrdersPage";
+import FavoritesPage from "./pages/user/FavoritesPage";
+
+// OBJECTS PAGES
+import ObjectPage from "./pages/objects/ObjectPage";
+import ObjectsPage from "./pages/objects/ObjectsPage";
+import CreateObjectPage from "./pages/objects/CreateObjectPage";
+import UserObjectsPage from "./pages/objects/UserObjectsPage";
+import EditObjectPage from "./pages/objects/EditObjectPage";
+
+// CATEGORIES PAGES
+import CategoryPage from "./pages/categories/CategoryPage";
+
+// CHATS PAGES
 import ChatsLayout from "./components/chats/ChatsLayout";
-import ChatPage from "./pages/ChatPage";
-import NotificationsPage from "./pages/NotificationsPage";
-import { UnreadCountsProvider } from "./contexts/UnreadCountsContext";
-import { ToastProvider } from "./contexts/ToastContext";
+import ChatPage from "./pages/chats/ChatPage";
+
+// FUNCTIONALITS PAGES
+import PaymentMockPage from "./pages/mockups/PaymentMockPage";
+
+// ADMIN PAGES
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
-import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
-import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminEmpleatsPage from "./pages/admin/AdminEmpleatsPage";
@@ -46,11 +64,15 @@ import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 import AdminLogsPage from "./pages/admin/AdminLogsPage";
 import AdminCreateCategoryPage from "./pages/admin/AdminCreateCategoryPage";
 
+// ADMIN COMPONENTS
+import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
+import AdminLayout from "./components/admin/AdminLayout";
+
 function App() {
   return (
     <ToastProvider>
       <Routes>
-        {/* ─── Backoffice (auth y contexto independientes) ─── */}
+        {/* ─── Backoffice ─── */}
         <Route
           path="/backoffice/*"
           element={
@@ -105,13 +127,19 @@ function App() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
+
                     <Route path="/how-it-works/renters" element={<HowItWorksRentersPage />} />
                     <Route path="/how-it-works/lenders" element={<HowItWorksLendersPage />} />
+
                     <Route path="/status" element={<StatusPage />} />
                     <Route path="/objects" element={<ObjectsPage />} />
                     <Route path="/objects/:id" element={<ObjectPage />} />
+
+                    <Route path="/categories/:slug" element={<CategoryPage />} />
+
                     <Route path="/profile/:username" element={<ProfilePage />} />
                     <Route path="/profile/:username/objects" element={<UserObjectsPage />} />
+
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
                     <Route path="/forbidden" element={<ForbiddenPage />} />
@@ -119,18 +147,23 @@ function App() {
                     <Route element={<ProtectedRoute />}>
                       <Route path="/objects/create" element={<CreateObjectPage />} />
                       <Route path="/objects/:id/edit" element={<EditObjectPage />} />
+
                       <Route path="/settings/profile/:username" element={<SettingsPage />} />
                       <Route path="/settings/profile/:username/editing" element={<EditProfilePage />} />
                       <Route path="/settings/profile/:username/security" element={<SecuritySettingsPage />} />
                       <Route path="/settings/profile/:username/notifications" element={<SettingsPage />} />
+
                       <Route path="/orders" element={<MyOrdersPage />} />
                       <Route path="/transactions" element={<Navigate to="/orders" replace />} />
                       <Route path="/transactions/:id/payment" element={<PaymentMockPage />} />
+
                       <Route path="/favorites" element={<FavoritesPage />} />
+
                       <Route path="/chats" element={<ChatsLayout />}>
                         <Route index element={null} />
                         <Route path=":id" element={<ChatPage />} />
                       </Route>
+
                       <Route path="/notifications" element={<NotificationsPage />} />
                     </Route>
 

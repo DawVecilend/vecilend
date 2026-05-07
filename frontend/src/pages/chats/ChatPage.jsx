@@ -6,15 +6,16 @@ import {
   sendChatMessage,
   markChatAsRead,
 } from "../services/chats";
-import { AuthContext } from "../contexts/AuthContext";
-import { useUnreadCounts } from "../contexts/UnreadCountsContext";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useUnreadCounts } from "../../contexts/UnreadCountsContext";
 import { formatDateTimeSmart } from "../utils/datetime";
 import { cldTransform } from "../utils/cloudinary";
-import BtnBack from "../components/elementos/BtnBack";
+import BtnBack from "../../components/elementos/BtnBack";
 import ReportModal from "../components/elementos/ReportModal";
 import { calcPriceBreakdown } from "../utils/pricing";
 import { acceptTransaction, rejectTransaction } from "../services/transactions";
 import { useToast } from "../contexts/ToastContext";
+
 
 const POLL_MS = 7000;
 

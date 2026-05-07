@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
-import { updatePassword, deleteAccount } from "../services/profile";
+import { AuthContext } from "../../contexts/AuthContext";
+import { Link } from "react-router-dom";
+import { updatePassword } from "../../services/profile";
 import PasswordInput from "../components/elementos/PasswordInput";
 import {
   Dialog,
@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import PasswordRequirements from "../components/elementos/PasswordRequirements";
 import { deactivateAccount } from "../services/profile";
+
 
 function SecuritySettingsPage() {
   const { user } = useContext(AuthContext);

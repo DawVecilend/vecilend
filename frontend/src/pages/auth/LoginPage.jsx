@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import PasswordInput from "../components/elementos/PasswordInput";
+import { useAuth } from "../../contexts/AuthContext";
 
 function LoginPage() {
   const { login } = useAuth();

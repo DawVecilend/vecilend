@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getTransactions, payTransaction } from "../services/transactions";
-import { useAuth } from "../contexts/AuthContext";
+import { getTransactions } from "../../services/transactions";
+import { useAuth } from "../../contexts/AuthContext";
 import { useUnreadCounts } from "../contexts/UnreadCountsContext";
-import BtnBack from "../components/elementos/BtnBack";
+import BtnBack from "../../components/elementos/BtnBack";
+import { isPaid, markAsPaid } from "../../utils/paymentMock";
 
 const onlyDigits = (s) => s.replace(/\D/g, "");
 

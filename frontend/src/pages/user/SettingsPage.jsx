@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import HeaderDesktop from "../components/layouts/header/HeaderDesktop";
+import { useAuth } from "../../contexts/AuthContext";
+import HeaderDesktop from "../../components/layouts/header/HeaderDesktop";
 
 function SettingsPage() {
   const { user } = useAuth();

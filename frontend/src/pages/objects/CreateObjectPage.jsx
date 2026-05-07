@@ -1,18 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import BtnBack from "../components/elementos/BtnBack";
-import { getCategories } from "../services/categories";
-import { getProduct, updateObject, deleteObject } from "../services/objects";
-import { mapCategories } from "../mappers/categoryMapper";
-import { cldTransform } from "../utils/cloudinary";
-import ObjectLocationPicker from "../components/map/ObjectLocationPicker";
-import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
-import { setMainImage as setMainImageApi } from "../services/objects";
+import { useNavigate } from "react-router-dom";
+import BtnBack from "../../components/elementos/BtnBack";
+import { getCategories } from "../../services/categories";
+import { createObject } from "../../services/objects";
+import { mapCategories } from "../../mappers/categoryMapper";
+import ObjectLocationPicker from "../../components/map/ObjectLocationPicker";
+import { useAuth } from "../../contexts/AuthContext";
 
-function EditObjectPage() {
-  const { id } = useParams();
+function CreateObjectPage() {
   const navigate = useNavigate();
-
+  const { user } = useAuth();
   const categoryDropdownRef = useRef(null);
   const subcategoryDropdownRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -23,31 +20,20 @@ function EditObjectPage() {
     description: "",
     category: "",
     subcategory: "",
-    status: "disponible",
     tipus: "lloguer",
   });
 
+  // Ubicació seleccionada per l'objecte: { lat, lng } o null
   const [location, setLocation] = useState(null);
 
-  const [existingImages, setExistingImages] = useState([]);
-  const [imagesToDelete, setImagesToDelete] = useState([]);
-  const [newImages, setNewImages] = useState([]);
-
+  const [images, setImages] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [loadingPage, setLoadingPage] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-
   const [openCategories, setOpenCategories] = useState(false);
   const [openSubcategories, setOpenSubcategories] = useState(false);
-
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState(null);
-
   const [fieldErrors, setFieldErrors] = useState({
     name: "",
     pricePerDay: "",
@@ -59,53 +45,20 @@ function EditObjectPage() {
   });
 
   useEffect(() => {
-    async function loadData() {
-      setLoadingPage(true);
+    async function loadCategories() {
       setLoadingCategories(true);
-
       try {
-        const [product, rawCategories] = await Promise.all([
-          getProduct(id),
-          getCategories(),
-        ]);
-
-        const mappedCategories = mapCategories(rawCategories);
-        setCategories(mappedCategories);
-
-        setForm({
-          name: product.nom || "",
-          pricePerDay:
-            product.preu_diari !== null && product.preu_diari !== undefined
-              ? String(product.preu_diari)
-              : "",
-          description: product.descripcio || "",
-          category: product.categoria?.id ? String(product.categoria.id) : "",
-          subcategory: product.subcategoria?.id
-            ? String(product.subcategoria.id)
-            : "",
-          status: product.estat || "disponible",
-          tipus: product.tipus || "lloguer",
-        });
-
-        if (product.ubicacio?.lat != null && product.ubicacio?.lng != null) {
-          setLocation({
-            lat: Number(product.ubicacio.lat),
-            lng: Number(product.ubicacio.lng),
-          });
-        }
-
-        setExistingImages(product.imatges || []);
+        const rawCategories = await getCategories();
+        setCategories(mapCategories(rawCategories));
       } catch (error) {
-        console.error("Error cargando producto:", error);
-        setErrorMessage("No se ha podido cargar el producto");
+        console.error("Error cargando categorías:", error);
+        setCategories([]);
       } finally {
-        setLoadingPage(false);
         setLoadingCategories(false);
       }
     }
-
-    loadData();
-  }, [id]);
+    loadCategories();
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -115,7 +68,6 @@ function EditObjectPage() {
       ) {
         setOpenCategories(false);
       }
-
       if (
         subcategoryDropdownRef.current &&
         !subcategoryDropdownRef.current.contains(event.target)
@@ -123,12 +75,8 @@ function EditObjectPage() {
         setOpenSubcategories(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const selectedCategory =
@@ -136,31 +84,22 @@ function EditObjectPage() {
       (category) => String(category.id) === String(form.category),
     ) || null;
 
-  const availableSubcategories = selectedCategory?.subcategories || [];
-
   const selectedSubcategory =
-    availableSubcategories.find(
+    selectedCategory?.subcategories.find(
       (subcategory) => String(subcategory.id) === String(form.subcategory),
     ) || null;
-
-  const activeExistingImages = existingImages.filter(
-    (image) => !imagesToDelete.includes(image.id),
-  );
-
-  const totalImages = activeExistingImages.length + newImages.length;
 
   const validateField = (
     name,
     value,
-    currentTotalImages = totalImages,
+    currentImages = images,
     currentLocation = location,
   ) => {
     switch (name) {
       case "name":
         if (!value.trim()) return "El nombre es obligatorio";
-        if (value.trim().length < 3) {
+        if (value.trim().length < 3)
           return "El nombre debe tener al menos 3 caracteres";
-        }
         return "";
 
       case "pricePerDay":
@@ -172,9 +111,8 @@ function EditObjectPage() {
 
       case "description":
         if (!value.trim()) return "La descripción es obligatoria";
-        if (value.trim().length < 10) {
+        if (value.trim().length < 10)
           return "La descripción debe tener al menos 10 caracteres";
-        }
         return "";
 
       case "category":
@@ -186,15 +124,12 @@ function EditObjectPage() {
         return "";
 
       case "images":
-        if (currentTotalImages <= 0) {
-          return "El producto debe tener al menos una imagen";
-        }
+        if (!currentImages.length) return "Debes subir al menos una imagen";
         return "";
 
       case "location":
-        if (!currentLocation) {
+        if (!currentLocation)
           return "Debes seleccionar la ubicación del objeto";
-        }
         return "";
 
       default:
@@ -212,99 +147,36 @@ function EditObjectPage() {
       description: validateField("description", form.description),
       category: validateField("category", form.category),
       subcategory: validateField("subcategory", form.subcategory),
-      images: validateField("images", "", totalImages),
-      location: validateField("location", "", totalImages, location),
+      images: validateField("images", "", images),
+      location: validateField("location", "", images, location),
     };
-
     setFieldErrors(newErrors);
-
     return Object.values(newErrors).every((error) => !error);
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
+    setForm((prev) => ({ ...prev, [name]: value }));
     setFieldErrors((prev) => ({
       ...prev,
       [name]: validateField(name, value),
     }));
-
     setErrorMessage("");
   };
 
   const handleLocationChange = (newLocation) => {
     setLocation(newLocation);
-
     setFieldErrors((prev) => ({
       ...prev,
-      location: validateField("location", "", totalImages, newLocation),
+      location: validateField("location", "", images, newLocation),
     }));
-
     setErrorMessage("");
   };
 
-  const handleSelectCategory = (categoryId) => {
-    const categoryValue = String(categoryId);
-
-    setForm((prev) => ({
-      ...prev,
-      category: categoryValue,
-      subcategory: "",
-    }));
-
-    setFieldErrors((prev) => ({
-      ...prev,
-      category: validateField("category", categoryValue),
-      subcategory: "Debes seleccionar una subcategoría",
-    }));
-
-    setErrorMessage("");
-    setOpenCategories(false);
-  };
-
-  const handleSelectSubcategory = (subcategoryId) => {
-    const subcategoryValue = String(subcategoryId);
-
-    setForm((prev) => ({
-      ...prev,
-      subcategory: subcategoryValue,
-    }));
-
-    setFieldErrors((prev) => ({
-      ...prev,
-      subcategory: validateField("subcategory", subcategoryValue),
-    }));
-
-    setErrorMessage("");
-    setOpenSubcategories(false);
-  };
-
-  const handleSetMainImage = async (imageId) => {
-    try {
-      const updatedProduct = await setMainImageApi(id, imageId);
-      setExistingImages(
-        (updatedProduct.imatges || []).sort((a, b) => a.ordre - b.ordre),
-      );
-    } catch (err) {
-      console.error("Error marcant imatge principal:", err);
-      alert(
-        err.response?.data?.message ||
-          "No se ha podido cambiar la imagen principal.",
-      );
-    }
-  };
-
-  const handleNewImagesChange = (event) => {
+  const handleImagesChange = (event) => {
     const files = Array.from(event.target.files || []);
-
-    setNewImages((prevImages) => {
+    setImages((prevImages) => {
       const mergedImages = [...prevImages, ...files];
-
       const uniqueImages = mergedImages.filter((image, index, array) => {
         return (
           index ===
@@ -316,23 +188,18 @@ function EditObjectPage() {
           )
         );
       });
-
-      const nextTotalImages = activeExistingImages.length + uniqueImages.length;
-
       setFieldErrors((prev) => ({
         ...prev,
-        images: validateField("images", "", nextTotalImages),
+        images: validateField("images", "", uniqueImages),
       }));
-
       return uniqueImages;
     });
-
     setErrorMessage("");
     event.target.value = "";
   };
 
-  const handleRemoveNewImage = (imageToRemove) => {
-    setNewImages((prevImages) => {
+  const handleRemoveImage = (imageToRemove) => {
+    setImages((prevImages) => {
       const updatedImages = prevImages.filter(
         (image) =>
           !(
@@ -341,76 +208,50 @@ function EditObjectPage() {
             image.lastModified === imageToRemove.lastModified
           ),
       );
-
-      const nextTotalImages =
-        activeExistingImages.length + updatedImages.length;
-
       setFieldErrors((prev) => ({
         ...prev,
-        images: validateField("images", "", nextTotalImages),
+        images: validateField("images", "", updatedImages),
       }));
-
       return updatedImages;
     });
-
     setErrorMessage("");
   };
 
-  const handleRemoveExistingImage = (imageId) => {
-    setImagesToDelete((prev) => {
-      const updatedImagesToDelete = prev.includes(imageId)
-        ? prev
-        : [...prev, imageId];
-
-      const nextExistingImages = existingImages.filter(
-        (image) => !updatedImagesToDelete.includes(image.id),
-      );
-
-      const nextTotalImages = nextExistingImages.length + newImages.length;
-
-      setFieldErrors((prevErrors) => ({
-        ...prevErrors,
-        images: validateField("images", "", nextTotalImages),
-      }));
-
-      return updatedImagesToDelete;
-    });
-
+  const handleSelectCategory = (categoryId) => {
+    const categoryValue = String(categoryId);
+    setForm((prev) => ({
+      ...prev,
+      category: categoryValue,
+      // En canviar de categoria, reset de subcategoria
+      subcategory: "",
+    }));
+    setFieldErrors((prev) => ({
+      ...prev,
+      category: validateField("category", categoryValue),
+      subcategory: "",
+    }));
     setErrorMessage("");
+    setOpenCategories(false);
   };
 
-  const getExistingImageUrl = (image) => {
-    const imageUrl = image.url || image.url_cloudinary || image.imatge || "";
-
-    return cldTransform(imageUrl, "card") || imageUrl;
-  };
-
-  const handleConfirmDelete = async () => {
-    setDeleting(true);
-    setDeleteError(null);
-
-    try {
-      await deleteObject(id);
-      navigate("/objects");
-    } catch (error) {
-      const message =
-        error.response?.data?.message ||
-        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
-
-      setDeleteError(message);
-    } finally {
-      setDeleting(false);
-    }
+  const handleSelectSubcategory = (subcategoryId) => {
+    const subcategoryValue = String(subcategoryId);
+    setForm((prev) => ({ ...prev, subcategory: subcategoryValue }));
+    setFieldErrors((prev) => ({
+      ...prev,
+      subcategory: validateField("subcategory", subcategoryValue),
+    }));
+    setErrorMessage("");
+    setOpenSubcategories(false);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     setSuccessMessage("");
     setErrorMessage("");
 
     if (!validateForm()) {
-      setErrorMessage("Revisa los campos marcados antes de guardar");
+      setErrorMessage("Revisa los campos marcados antes de publicar");
       return;
     }
 
@@ -418,52 +259,37 @@ function EditObjectPage() {
 
     try {
       const formData = new FormData();
-
       formData.append("nom", form.name);
       formData.append("descripcio", form.description);
       formData.append("categoria_id", form.category);
       formData.append("subcategoria_id", form.subcategory);
       formData.append("tipus", form.tipus);
-      formData.append("estat", form.status);
 
       if (form.tipus === "lloguer") {
         formData.append("preu_diari", form.pricePerDay);
-      } else {
-        formData.append("preu_diari", "");
       }
 
-      if (location) {
-        formData.append("lat", String(location.lat));
-        formData.append("lng", String(location.lng));
-      }
+      formData.append("lat", String(location.lat));
+      formData.append("lng", String(location.lng));
 
-      imagesToDelete.forEach((imageId) => {
-        formData.append("imatges_eliminar[]", imageId);
+      images.forEach((image) => {
+        formData.append("imatges[]", image);
       });
 
-      newImages.forEach((image) => {
-        formData.append("imatges_noves[]", image);
-      });
+      await createObject(formData);
 
-      await updateObject(id, formData);
-
-      setSuccessMessage("Producto actualizado correctamente");
+      setSuccessMessage("¡Producto publicado correctamente!");
       setErrorMessage("");
-
-      setTimeout(() => {
-        navigate(`/objects/${id}`);
-      }, 1000);
+      setTimeout(() => navigate("/objects"), 1200);
     } catch (error) {
-      console.error("Error actualizando producto:", error);
-
+      console.error("Error creando producto:", error);
       if (error.response?.status === 422 && error.response.data?.errors) {
         const validationErrors = error.response.data.errors;
         const firstErrorKey = Object.keys(validationErrors)[0];
         setErrorMessage(validationErrors[firstErrorKey][0]);
       } else {
         setErrorMessage(
-          error.response?.data?.message ||
-            "No se ha podido actualizar el producto",
+          error.response?.data?.message || "No se ha podido crear el producto",
         );
       }
     } finally {
@@ -471,90 +297,28 @@ function EditObjectPage() {
     }
   };
 
-  if (loadingPage) {
-    return (
-      <>
-        <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
-          <BtnBack />
-
-          <h1 className="font-heading text-[28px] font-semibold text-[#F2F4F8] md:text-[32px]">
-            Editar producto
-          </h1>
-
-          <div className="w-[90px]" />
-        </div>
-
-        <section className="min-h-screen bg-[#0A0A0B] px-4 pb-16 pt-6 text-[#F2F4F8] md:px-6">
-          <div className="mx-auto w-full max-w-4xl rounded-[24px] border border-[#1D222A] bg-[#101217] p-8">
-            <p className="text-[#B6BCC8]">Cargando producto...</p>
-          </div>
-        </section>
-      </>
-    );
-  }
-
   return (
     <>
       <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
         <BtnBack />
-
         <h1 className="font-heading text-[28px] font-semibold text-[#F2F4F8] md:text-[32px]">
-          Editar producto
+          Subir producto
         </h1>
-
         <div className="w-[90px]" />
       </div>
 
       <section className="min-h-screen bg-[#0A0A0B] px-4 pb-16 pt-6 text-[#F2F4F8] md:px-6">
         <div className="mx-auto w-full max-w-4xl">
           <form onSubmit={handleSubmit} className="space-y-10">
+            {/* ── Imatges ── */}
             <div className="rounded-[24px] border border-dashed border-[#1D222A] bg-[#050608] px-6 py-10 md:px-10 md:py-12">
               <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-6 font-body text-[16px] text-[#F2F4F8]">
-                  Imágenes del producto
+                  Sube una o más imágenes
                 </p>
 
                 <div className="flex w-full flex-wrap items-center justify-center gap-4">
-                  {activeExistingImages.map((image) => (
-                    <div key={image.id} className="relative group">
-                      <img
-                        src={getExistingImageUrl(image)}
-                        alt={form.name}
-                        className="h-[132px] w-[132px] rounded-[20px] object-cover"
-                      />
-
-                      {/* Indicador "Principal" */}
-                      {image.ordre === 0 && (
-                        <span className="absolute top-2 left-2 z-10 bg-[#14B8A6] text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow pointer-events-none">
-                          Principal
-                        </span>
-                      )}
-
-                      {/* Botón eliminar (siempre visible) */}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveExistingImage(image.id)}
-                        className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#121214] text-white shadow-md transition hover:bg-red-500"
-                      >
-                        ×
-                      </button>
-
-                      {/* Botón "Hacer principal" (solo en hover, solo si no es ya principal) */}
-                      {image.ordre !== 0 && (
-                        <div className="absolute inset-x-0 bottom-0 flex justify-center pb-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button
-                            type="button"
-                            onClick={() => handleSetMainImage(image.id)}
-                            className="text-[10px] font-bold rounded-full bg-[#14B8A6] text-white px-3 py-1 hover:bg-[#0F766E] active:scale-95 transition shadow"
-                          >
-                            Hacer principal
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-
-                  {newImages.map((image, index) => (
+                  {images.map((image, index) => (
                     <div
                       key={`${image.name}-${image.size}-${image.lastModified}-${index}`}
                       className="relative"
@@ -564,10 +328,9 @@ function EditObjectPage() {
                         alt={image.name}
                         className="h-[132px] w-[132px] rounded-[20px] object-cover"
                       />
-
                       <button
                         type="button"
-                        onClick={() => handleRemoveNewImage(image)}
+                        onClick={() => handleRemoveImage(image)}
                         className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#121214] text-white shadow-md transition hover:bg-red-500"
                       >
                         ×
@@ -598,7 +361,7 @@ function EditObjectPage() {
                     alt=""
                     className="h-5 w-5"
                   />
-                  Añadir imagen
+                  Subir imagen
                 </button>
 
                 <input
@@ -607,14 +370,16 @@ function EditObjectPage() {
                   type="file"
                   multiple
                   accept="image/*"
-                  onChange={handleNewImagesChange}
+                  onChange={handleImagesChange}
                   className="hidden"
                 />
 
-                <p className="mt-4 text-sm text-[#B6BCC8]">
-                  {totalImages} imagen
-                  {totalImages !== 1 ? "es actuales" : " actual"}
-                </p>
+                {images.length > 0 && (
+                  <p className="mt-4 text-sm text-[#B6BCC8]">
+                    {images.length} {images.length > 1 ? "imágenes" : "imagen"}{" "}
+                    seleccionada{images.length > 1 ? "s" : ""}
+                  </p>
+                )}
 
                 {fieldErrors.images && (
                   <p className="mt-3 text-sm text-[#ef4444]">
@@ -624,21 +389,16 @@ function EditObjectPage() {
               </div>
             </div>
 
+            {/* ── Tipus: préstec o lloguer ── */}
             <div>
               <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                 Tipo de publicación
               </label>
-
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() =>
-                    setForm((prev) => ({
-                      ...prev,
-                      tipus: "lloguer",
-                    }))
-                  }
-                  className={`flex h-[56px] items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  onClick={() => setForm((p) => ({ ...p, tipus: "lloguer" }))}
+                  className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "lloguer"
                       ? "bg-[#14B8A6] text-white"
                       : "bg-[#101217] text-[#F2F4F8] hover:bg-[#161a21]"
@@ -647,17 +407,16 @@ function EditObjectPage() {
                   <span className="material-symbols-outlined">payments</span>
                   Alquiler
                 </button>
-
                 <button
                   type="button"
                   onClick={() =>
-                    setForm((prev) => ({
-                      ...prev,
+                    setForm((p) => ({
+                      ...p,
                       tipus: "prestec",
                       pricePerDay: "",
                     }))
                   }
-                  className={`flex h-[56px] items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "prestec"
                       ? "bg-[#14B8A6] text-white"
                       : "bg-[#101217] text-[#F2F4F8] hover:bg-[#161a21]"
@@ -669,7 +428,6 @@ function EditObjectPage() {
                   Préstamo gratuito
                 </button>
               </div>
-
               <p className="mt-2 text-xs text-[#6E7480]">
                 {form.tipus === "lloguer"
                   ? "Cobrarás un precio por día por el uso del objeto."
@@ -677,6 +435,7 @@ function EditObjectPage() {
               </p>
             </div>
 
+            {/* ── Nombre ── */}
             <div>
               <label
                 htmlFor="name"
@@ -684,7 +443,6 @@ function EditObjectPage() {
               >
                 Nombre del producto
               </label>
-
               <div
                 className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
                   fieldErrors.name ? "border border-[#ef4444]" : ""
@@ -695,7 +453,6 @@ function EditObjectPage() {
                   alt=""
                   className="h-5 w-5 opacity-60"
                 />
-
                 <input
                   id="name"
                   name="name"
@@ -706,7 +463,6 @@ function EditObjectPage() {
                   className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none"
                 />
               </div>
-
               {fieldErrors.name && (
                 <p className="mt-2 text-sm text-[#ef4444]">
                   {fieldErrors.name}
@@ -714,6 +470,7 @@ function EditObjectPage() {
               )}
             </div>
 
+            {/* ── Precio (només lloguer) ── */}
             {form.tipus === "lloguer" && (
               <div>
                 <label
@@ -722,7 +479,6 @@ function EditObjectPage() {
                 >
                   Precio (por día)
                 </label>
-
                 <div
                   className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
                     fieldErrors.pricePerDay ? "border border-[#ef4444]" : ""
@@ -731,7 +487,6 @@ function EditObjectPage() {
                   <span className="text-[28px] leading-none text-[#6E7480]">
                     €
                   </span>
-
                   <input
                     id="pricePerDay"
                     name="pricePerDay"
@@ -744,7 +499,6 @@ function EditObjectPage() {
                     className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none"
                   />
                 </div>
-
                 {fieldErrors.pricePerDay && (
                   <p className="mt-2 text-sm text-[#ef4444]">
                     {fieldErrors.pricePerDay}
@@ -753,6 +507,7 @@ function EditObjectPage() {
               </div>
             )}
 
+            {/* ── Descripción ── */}
             <div>
               <label
                 htmlFor="description"
@@ -760,7 +515,6 @@ function EditObjectPage() {
               >
                 Descripción
               </label>
-
               <textarea
                 id="description"
                 name="description"
@@ -772,7 +526,6 @@ function EditObjectPage() {
                   fieldErrors.description ? "border border-[#ef4444]" : ""
                 }`}
               />
-
               {fieldErrors.description && (
                 <p className="mt-2 text-sm text-[#ef4444]">
                   {fieldErrors.description}
@@ -780,12 +533,12 @@ function EditObjectPage() {
               )}
             </div>
 
-            <div className="flex flex-col gap-6 md:flex-row">
+            {/* ── Categoria + Subcategoria ── */}
+            <div className="flex flex-col md:flex-row gap-6">
               <div className="flex-1">
                 <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                   Categoría
                 </label>
-
                 <div ref={categoryDropdownRef} className="relative">
                   <button
                     type="button"
@@ -797,7 +550,7 @@ function EditObjectPage() {
                   >
                     {loadingCategories ? (
                       <span className="inline-flex items-center gap-2 text-[#6E7480]">
-                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#6E7480] border-t-transparent" />
+                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
                         Cargando categorías…
                       </span>
                     ) : (
@@ -811,7 +564,6 @@ function EditObjectPage() {
                           : "Seleccione una categoría"}
                       </span>
                     )}
-
                     <svg
                       className={`transition-transform duration-300 ${
                         openCategories ? "rotate-180" : ""
@@ -831,13 +583,11 @@ function EditObjectPage() {
                       />
                     </svg>
                   </button>
-
                   {openCategories && !loadingCategories && (
                     <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
                       {categories.map((category) => {
                         const isActive =
                           String(category.id) === String(form.category);
-
                         return (
                           <button
                             key={category.id}
@@ -856,7 +606,6 @@ function EditObjectPage() {
                     </div>
                   )}
                 </div>
-
                 {fieldErrors.category && (
                   <p className="mt-2 text-sm text-[#ef4444]">
                     {fieldErrors.category}
@@ -868,7 +617,6 @@ function EditObjectPage() {
                 <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                   Subcategoría
                 </label>
-
                 <div ref={subcategoryDropdownRef} className="relative">
                   <button
                     type="button"
@@ -880,7 +628,7 @@ function EditObjectPage() {
                   >
                     {loadingCategories ? (
                       <span className="inline-flex items-center gap-2 text-[#6E7480]">
-                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#6E7480] border-t-transparent" />
+                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
                         Cargando subcategorías…
                       </span>
                     ) : (
@@ -896,7 +644,6 @@ function EditObjectPage() {
                             : "Selecciona antes una categoría"}
                       </span>
                     )}
-
                     <svg
                       className={`transition-transform duration-300 ${
                         openSubcategories ? "rotate-180" : ""
@@ -916,14 +663,12 @@ function EditObjectPage() {
                       />
                     </svg>
                   </button>
-
                   {openSubcategories && !loadingCategories && (
                     <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
-                      {availableSubcategories.length > 0 ? (
-                        availableSubcategories.map((subcategory) => {
+                      {(selectedCategory?.subcategories || []).map(
+                        (subcategory) => {
                           const isActive =
                             String(subcategory.id) === String(form.subcategory);
-
                           return (
                             <button
                               key={subcategory.id}
@@ -940,16 +685,11 @@ function EditObjectPage() {
                               {subcategory.name}
                             </button>
                           );
-                        })
-                      ) : (
-                        <p className="px-4 py-3 text-left font-body text-[15px] text-[#6E7480]">
-                          Esta categoría no tiene subcategorías
-                        </p>
+                        },
                       )}
                     </div>
                   )}
                 </div>
-
                 {fieldErrors.subcategory && (
                   <p className="mt-2 text-sm text-[#ef4444]">
                     {fieldErrors.subcategory}
@@ -958,41 +698,19 @@ function EditObjectPage() {
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="status"
-                className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
-              >
-                Estado
-              </label>
-
-              <select
-                id="status"
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-                className="h-[56px] w-full rounded-[16px] bg-[#101217] px-4 font-body text-[16px] text-white focus:outline-none"
-              >
-                <option value="disponible">Disponible</option>
-                <option value="no_disponible">No disponible</option>
-              </select>
-            </div>
-
+            {/* ── Ubicación ── */}
             <div>
               <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
                 Ubicación del objeto
               </label>
-
               <p className="mb-3 text-xs text-[#6E7480]">
-                Puedes ajustar la ubicación pulsando en el mapa o arrastrando el
-                marcador.
+                Por defecto se usa tu ubicación, pero puedes ajustarla en el
+                mapa.
               </p>
-
               <ObjectLocationPicker
                 value={location}
                 onChange={handleLocationChange}
               />
-
               {fieldErrors.location && (
                 <p className="mt-2 text-sm text-[#ef4444]">
                   {fieldErrors.location}
@@ -1000,24 +718,15 @@ function EditObjectPage() {
               )}
             </div>
 
-            <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => navigate(`/objects/${id}`)}
-                  className="rounded-[14px] border border-[#2A2B31] px-8 py-3 font-body text-[15px] font-semibold text-[#F2F4F8] transition-all hover:bg-[#16181C]"
-                >
-                  Cancelar
-                </button>
-
-                <button
-                  type="submit"
-                  disabled={loadingSubmit}
-                  className="rounded-[14px] bg-[#14B8A6] px-8 py-3 font-body text-[15px] font-semibold text-white transition-all hover:bg-[#0F766E] disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {loadingSubmit ? "Guardando..." : "Guardar cambios"}
-                </button>
-              </div>
+            {/* ── Submit + alertes ── */}
+            <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+              <button
+                type="submit"
+                disabled={loadingSubmit}
+                className="rounded-[14px] bg-[#14B8A6] px-8 py-3 font-body text-[15px] font-semibold text-white transition-all hover:bg-[#0F766E] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {loadingSubmit ? "Publicando..." : "Publicar producto"}
+              </button>
 
               <div className="flex items-center">
                 {successMessage && (
@@ -1025,7 +734,6 @@ function EditObjectPage() {
                     <span className="material-symbols-outlined text-sm">
                       check_circle
                     </span>
-
                     <p className="text-xs font-semibold uppercase tracking-wide">
                       {successMessage}
                     </p>
@@ -1037,7 +745,6 @@ function EditObjectPage() {
                     <span className="material-symbols-outlined text-sm">
                       error
                     </span>
-
                     <p className="text-xs font-semibold uppercase tracking-wide">
                       {errorMessage}
                     </p>
@@ -1046,49 +753,10 @@ function EditObjectPage() {
               </div>
             </div>
           </form>
-
-          <div className="mt-12 rounded-[16px] border border-[#ef4444]/30 bg-[#ef4444]/5 p-6">
-            <h2 className="mb-1 font-heading text-[18px] font-semibold text-[#ef4444]">
-              Zona de peligro
-            </h2>
-
-            <p className="mb-4 font-body text-sm text-[#B6BCC8]">
-              Una vez eliminado, no podrás recuperar este producto ni sus
-              imágenes.
-            </p>
-
-            <button
-              type="button"
-              onClick={() => {
-                setDeleteError(null);
-                setConfirmDeleteOpen(true);
-              }}
-              className="inline-flex items-center gap-2 rounded-[14px] border border-[#ef4444] px-6 py-3 font-body text-[15px] font-semibold text-[#ef4444] transition-all hover:bg-[#ef4444]/10"
-            >
-              <span className="material-symbols-outlined text-base">
-                delete
-              </span>
-              Eliminar producto
-            </button>
-          </div>
         </div>
       </section>
-
-      <ConfirmDeleteModal
-        open={confirmDeleteOpen}
-        onClose={() => {
-          if (!deleting) setConfirmDeleteOpen(false);
-        }}
-        onConfirm={handleConfirmDelete}
-        title="¿Eliminar producto?"
-        message={`Vas a eliminar "${form.name}".`}
-        description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
-        confirmLabel="Sí, eliminar"
-        busy={deleting}
-        errorMessage={deleteError}
-      />
     </>
   );
 }
 
-export default EditObjectPage;
+export default CreateObjectPage;

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
-import api from "../services/api";
-import municipalitiesData from "../data/municipios.json";
 import { normalizeString } from "../utils/string";
 import PasswordInput from "../components/elementos/PasswordInput";
 import PasswordRequirements from "../components/elementos/PasswordRequirements";
+import { AuthContext } from "../../contexts/AuthContext";
+import api from "../../services/api";
+import municipalitiesData from "../../data/municipios.json";
+import { normalizeString } from "../../utils/string";
 
 function FieldError({ messages }) {
   if (!messages || messages.length === 0) return null;
@@ -15,6 +16,7 @@ function FieldError({ messages }) {
     </p>
   );
 }
+
 
 function RegisterPage() {
   const { register } = useContext(AuthContext);
