@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 function DetailsPriceCardProduct({ product, diasSelected, onTotalChange }) {
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const porcentaje = 0.15
     const subtotal = parseFloat((product.preu_diari * diasSelected).toFixed(2))
     const gastos_servicio = parseFloat((subtotal * porcentaje).toFixed(2))
