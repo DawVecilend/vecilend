@@ -21,7 +21,6 @@ class UserResource extends JsonResource
             'direccio' => $this->direccio,
             'avatar_url' => $this->avatar_url,
             'ubicacio' => $this->ubicacio ? $this->coordenades() : null,
-            'radi_proximitat' => $this->radi_proximitat,
             'rol' => $this->rol,
             'actiu' => $this->actiu,
             'email_verified_at' => $this->email_verified_at?->toISOString(),

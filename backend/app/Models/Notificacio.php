@@ -24,13 +24,15 @@ class Notificacio extends Model
         'missatge',
         'entitat_referenciada',
         'id_entitat_referenciada',
+        'dades_extra',
         'llegida',
         'created_at',
     ];
 
     protected $casts = [
-        'llegida'    => 'boolean',
-        'created_at' => 'datetime',
+        'llegida'     => 'boolean',
+        'created_at'  => 'datetime',
+        'dades_extra' => 'array', // JSON ↔ array PHP automàtic
     ];
 
     // Tipus suportats (mantenir sincronitzat amb el frontend)

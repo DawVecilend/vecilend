@@ -29,7 +29,6 @@ class User extends Authenticatable
         'avatar_public_id',
         'google_id',
         'ubicacio',
-        'radi_proximitat',
         'rol',
         'actiu',
     ];
@@ -42,7 +41,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
             'actiu'             => 'boolean',
-            'radi_proximitat'   => 'integer',
         ];
     }
 

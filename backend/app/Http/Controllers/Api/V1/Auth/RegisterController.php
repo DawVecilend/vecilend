@@ -53,7 +53,6 @@ class RegisterController extends Controller
                     'direccio'         => $validated['direccio'] ?? null,
                     'avatar_url'       => $avatarUrl,
                     'avatar_public_id' => $avatarPublicId,
-                    'radi_proximitat'  => $validated['radi_proximitat'] ?? 5,
                     'rol'              => 'usuari',
                     'actiu'            => true,
                     'email_verified_at' => now(),

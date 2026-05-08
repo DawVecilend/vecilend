@@ -46,7 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
         return new UserResource($request->user());
     });
 
-    Route::put('/user/proximity-radius', [UserController::class, 'updateProximityRadius']);
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);
     Route::post('/logout', [LoginController::class, 'logout']);
