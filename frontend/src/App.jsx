@@ -28,7 +28,7 @@ import MyOrdersPage from "./pages/MyOrdersPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import PaymentMockPage from "./pages/PaymentMockPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import ChatsListPage from "./pages/ChatsListPage";
+import ChatsLayout from "./components/chats/ChatsLayout";
 import ChatPage from "./pages/ChatPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import { UnreadCountsProvider } from "./contexts/UnreadCountsContext";
@@ -115,8 +115,10 @@ function App() {
               />
 
               <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/chats" element={<ChatsListPage />} />
-              <Route path="/chats/:id" element={<ChatPage />} />
+              <Route path="/chats" element={<ChatsLayout />}>
+                <Route index element={null} />
+                <Route path=":id" element={<ChatPage />} />
+              </Route>
               <Route path="/notifications" element={<NotificationsPage />} />
             </Route>
 

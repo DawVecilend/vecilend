@@ -20,7 +20,6 @@ import NotFoundPage from "./NotFoundPage";
 import NavCategori from "../components/elementos/NavCategori";
 import DetailsPriceCardProduct from "../components/elementos/DetailsPriceCard";
 
-
 function ObjectPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -125,10 +124,11 @@ function ObjectPage() {
     if (!range.start || !range.end) return 0;
     return range.end.diff(range.start, "day") + 1;
   }, [range]);
-  
+
   const [total, setTotal] = useState(0);
 
-  const preuTotal = product?.preu_diari && product.tipus === "lloguer" ? total : 0;
+  const preuTotal =
+    product?.preu_diari && product.tipus === "lloguer" ? total : 0;
 
   const needsDates = !range.start || !range.end;
 
@@ -189,6 +189,30 @@ function ObjectPage() {
       navigate(`/chats/${chat.id}`);
     } catch (err) {
       console.error("Error abriendo chat:", err);
+      alert(
+        err.response?.data?.message ||
+          "No se ha podido abrir la conversación. Inténtalo de nuevo.",
+      );
+    }
+  }
+
+  async function openChatAboutObject() {
+    if (!isAuthenticated) {
+      navigate("/login", {
+        state: { from: location.pathname + location.search },
+      });
+      return;
+    }
+    if (!product?.propietari?.id) return;
+
+    try {
+      const chat = await createChat({
+        user_id: product.propietari.id,
+        objecte_id: product.id,
+      });
+      navigate(`/chats/${chat.id}`);
+    } catch (err) {
+      console.error("Error abriendo chat sobre objeto:", err);
       alert(
         err.response?.data?.message ||
           "No se ha podido abrir la conversación. Inténtalo de nuevo.",
@@ -316,7 +340,7 @@ function ObjectPage() {
             Ver chat con el propietario
           </button>
           <Link
-            to="/transactions?role=requester&status=pendent"
+            to="/orders?tab=requests_sent&status=pendent"
             className="block w-full text-center rounded-full border border-app-border bg-app-card px-6 py-3 text-body-base font-bold text-app-text hover:bg-app-bg-card-secondary transition-colors"
           >
             Ver mis solicitudes enviadas
@@ -341,7 +365,6 @@ function ObjectPage() {
                 onTotalChange={setTotal}
               />
             </div>
-            
           ) : (
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-vecilend-dark-secondary">
@@ -466,15 +489,27 @@ function ObjectPage() {
             )}
           </div>
 
-          {propietari && propietari.username && (
-            <Link
-              to={`/profile/${propietari.username}`}
-              className="block hover:opacity-90 transition"
-            >
-              <UserCard user={propietari} />
-            </Link>
+          {propietari && (
+            <UserCard
+              user={propietari}
+              action={
+                !isOwnObject && (
+                  <button
+                    type="button"
+                    onClick={() => openChatAboutObject()}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-vecilend-dark-primary/15 hover:bg-vecilend-dark-primary/25 border border-vecilend-dark-primary/40 px-3 py-2 text-label font-bold text-vecilend-dark-primary active:scale-95 transition"
+                    title="Consultar al propietario sobre este objeto"
+                  >
+                    <span className="material-symbols-outlined text-base leading-none">
+                      chat_bubble
+                    </span>
+                    <span>Consultar sobre el objeto</span>
+                  </button>
+                )
+              }
+            />
           )}
-          {propietari && !propietari.username && <UserCard user={propietari} />}
+
           {product.ubicacio && (
             <div>
               <h2 className="text-app-text text-h3-desktop font-heading mb-3">
@@ -493,7 +528,10 @@ function ObjectPage() {
         </div>
         <div className="flex flex-col gap-6">
           {(product.categoria || product.subcategoria) && (
-            <NavCategori mainCategory={product.categoria} subCategory={product.subcategoria}/>
+            <NavCategori
+              mainCategory={product.categoria}
+              subCategory={product.subcategoria}
+            />
           )}
 
           {/* Títol */}
@@ -534,14 +572,14 @@ function ObjectPage() {
             <p className="text-app-text-secondary text-body-base font-body whitespace-pre-line">
               {product.descripcio}
             </p>
-              <div className="flex items-baseline gap-2">
-                <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
-                  {Number(product.preu_diari).toFixed(2)}€
-                </span>
-                <span className="text-app-text-secondary text-body-base">
-                  / día
-                </span>
-              </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
+                {Number(product.preu_diari).toFixed(2)}€
+              </span>
+              <span className="text-app-text-secondary text-body-base">
+                / día
+              </span>
+            </div>
           </div>
 
           {actionBox}

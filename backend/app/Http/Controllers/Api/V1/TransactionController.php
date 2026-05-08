@@ -221,7 +221,10 @@ class TransactionController extends Controller
                 Missatge::create([
                     'conversa_id' => $conversa->id,
                     'emissor_id'  => $user->id,
+                    'objecte_id'  => $objecte->id,
+                    'solicitud_id' => $solicitud->id,
                     'contingut'   => $solicitud->missatge,
+                    'created_at'  => now(),
                 ]);
                 $conversa->touch();
             }

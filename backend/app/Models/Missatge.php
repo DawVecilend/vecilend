@@ -22,6 +22,7 @@ class Missatge extends Model
         'emissor_id',
         'objecte_id',
         'respon_a_id',
+        'solicitud_id',
         'contingut',
         'llegit_at',
         'created_at',
@@ -58,5 +59,14 @@ class Missatge extends Model
     public function responA(): BelongsTo
     {
         return $this->belongsTo(Missatge::class, 'respon_a_id');
+    }
+
+    /**
+     * Sol·licitud que va originar aquest missatge (nullable).
+     * Permet mostrar la targeta "Solicitud del objeto" amb preu i dies.
+     */
+    public function solicitud(): BelongsTo
+    {
+        return $this->belongsTo(Solicitud::class, 'solicitud_id');
     }
 }
