@@ -23,7 +23,6 @@ class UserSeeder extends Seeder
             'direccio' => 'Esplugues de Llobregat',
             'avatar_url' => null,
             'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint(2.0872, 41.3831), 4326)::geography"),
-            'radi_proximitat' => 10,
             'rol' => 'admin',
             'actiu' => true,
             'email_verified_at' => $now,
@@ -32,10 +31,10 @@ class UserSeeder extends Seeder
         ]);
 
         $usuaris = [
-            ['username' => 'maria', 'nom' => 'Maria', 'cognoms' => 'Garcia López', 'genere'   => 'dona', 'email' => 'maria@example.com', 'lng' => 2.0950, 'lat' => 41.3850, 'radi' => 5, 'biography' => 'Usuaria de prova.', 'telefon' => '666666667', 'direccio' => 'Barcelona'],
-            ['username' => 'pere', 'nom' => 'Pere', 'cognoms' => 'Martínez Soler', 'genere'   => 'home', 'email' => 'pere@example.com', 'lng' => 2.0780, 'lat' => 41.3790, 'radi' => 3, 'biography' => 'Usuari de prova.', 'telefon' => '666666668', 'direccio' => 'Gava'],
-            ['username' => 'laura', 'nom' => 'Laura', 'cognoms' => 'Fernández Roca', 'genere'   => 'dona', 'email' => 'laura@example.com', 'lng' => 2.1000, 'lat' => 41.3900, 'radi' => 8, 'biography' => 'Usuaria de prova.', 'telefon' => '666666669', 'direccio' => 'Viladecans'],
-            ['username' => 'joan', 'nom' => 'Joan', 'cognoms' => 'Puig Vidal', 'genere'   => 'home', 'email' => 'joan@example.com', 'lng' => 2.0830, 'lat' => 41.3770, 'radi' => 5, 'biography' => 'Usuari de prova.', 'telefon' => '666666670', 'direccio' => 'Castelldefels'],
+            ['username' => 'maria', 'nom' => 'Maria', 'cognoms' => 'Garcia López', 'genere' => 'dona', 'email' => 'maria@example.com', 'lng' => 2.0950, 'lat' => 41.3850, 'biography' => 'Usuaria de prova.', 'telefon' => '666666667', 'direccio' => 'Barcelona'],
+            ['username' => 'pere', 'nom' => 'Pere', 'cognoms' => 'Martínez Soler', 'genere' => 'home', 'email' => 'pere@example.com', 'lng' => 2.0780, 'lat' => 41.3790, 'biography' => 'Usuari de prova.', 'telefon' => '666666668', 'direccio' => 'Gava'],
+            ['username' => 'laura', 'nom' => 'Laura', 'cognoms' => 'Fernández Roca', 'genere' => 'dona', 'email' => 'laura@example.com', 'lng' => 2.1000, 'lat' => 41.3900, 'biography' => 'Usuaria de prova.', 'telefon' => '666666669', 'direccio' => 'Viladecans'],
+            ['username' => 'joan', 'nom' => 'Joan', 'cognoms' => 'Puig Vidal', 'genere' => 'home', 'email' => 'joan@example.com', 'lng' => 2.0830, 'lat' => 41.3770, 'biography' => 'Usuari de prova.', 'telefon' => '666666670', 'direccio' => 'Castelldefels'],
         ];
 
         foreach ($usuaris as $u) {
@@ -52,7 +51,6 @@ class UserSeeder extends Seeder
                     . ($u['genere'] === 'home' ? 'men' : 'women')
                     . '/' . (crc32($u['username']) % 100) . '.jpg',
                 'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint({$u['lng']}, {$u['lat']}), 4326)::geography"),
-                'radi_proximitat' => $u['radi'],
                 'rol' => 'usuari',
                 'actiu' => true,
                 'email_verified_at' => $now,

@@ -48,7 +48,6 @@ class RegisterRequest extends FormRequest
                 'numeric',
                 'between:-180,180'
             ],
-            'radi_proximitat' => ['nullable', 'integer', 'between:1,50'],
             'accepta_termes' => ['required', 'accepted']
         ];
     }

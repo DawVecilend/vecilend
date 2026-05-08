@@ -32,7 +32,6 @@ class UserFactory extends Factory
                 fake()->longitude(1.95, 2.25),
                 fake()->latitude(41.30, 41.50)
             )),
-            'radi_proximitat' => fake()->numberBetween(1, 15),
             'rol' => 'usuari',
             'actiu' => true,
             'email_verified_at' => now(),

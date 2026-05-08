@@ -319,18 +319,12 @@ class ObjecteController extends Controller
      *
      * Ordre de prioritat:
      *   1. Paràmetre radius enviat pel client (en metres).
-     *   2. radi_proximitat del User autenticat (en km --> metres).
-     *   3. Default públic: 5000 m.
+     *   2. Default públic: 5000 m.
      */
     private function resolveNearbyRadius(Request $request, array $validated): int
     {
         if (isset($validated['radius'])) {
             return (int) $validated['radius'];
-        }
-
-        $user = $request->user();
-        if ($user && $user->radi_proximitat) {
-            return ((int) $user->radi_proximitat) * 1000;
         }
 
         return 5000;
