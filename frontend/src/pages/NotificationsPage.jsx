@@ -7,115 +7,189 @@ import {
   deleteNotification,
 } from "../services/notifications";
 import { useUnreadCounts } from "../contexts/UnreadCountsContext";
+import { formatDateTimeSmart } from "../utils/datetime";
 
-const TIPUS_META = {
-  solicitud_rebuda: {
-    icon: "inbox",
-    color: "text-app-primary",
-    link: () => "/orders?tab=requests_received",
-  },
-  solicitud_acceptada: {
-    icon: "check_circle",
-    color: "text-green-400",
-    link: () => "/orders?tab=requests_sent",
-  },
-  solicitud_rebutjada: {
-    icon: "cancel",
-    color: "text-red-400",
-    link: () => "/orders?tab=requests_sent",
-  },
-  solicitud_cancellada: {
-    icon: "block",
-    color: "text-zinc-400",
-    link: () => "/orders?tab=requests_sent",
-  },
-  transaccio_pagament_pendent: {
-    icon: "payments",
-    color: "text-vecilend-dark-primary",
-    link: (n) =>
-      n.id_entitat_referenciada
-        ? `/transactions/${n.id_entitat_referenciada}/payment`
-        : "/orders?tab=transactions",
-  },
-  transaccio_cancellada: {
-    icon: "block",
-    color: "text-red-400",
-    link: () => "/orders?tab=transactions",
-  },
-  transaccio_recordatori_devolucio: {
-    icon: "schedule",
-    color: "text-amber-400",
-    link: () => "/orders?tab=transactions",
-  },
-  valoracio_rebuda: {
-    icon: "star",
-    color: "text-yellow-400",
-    link: (n, user) =>
-      user?.username ? `/profile/${user.username}` : "/orders",
-  },
-};
+/**
+ * Genera el contingut visual de cada notificació a partir del seu tipus
+ * + dades_extra. Els fallbacks (titol/missatge guardats a la BD) es
+ * mantenen si dades_extra encara no està poblada (notificacions antigues).
+ */
+function buildNotificationContent(notif) {
+  const d = notif.dades_extra || {};
 
-function formatRelative(iso) {
-  if (!iso) return "";
-  const date = new Date(iso);
-  const now = new Date();
-  const diffSec = Math.floor((now - date) / 1000);
+  // Helper: link a l'objecte
+  const objectLink = d.objecte_id ? `/objects/${d.objecte_id}` : null;
+  const objectName = d.objecte_nom || "este objeto";
+  const author = d.autor_nom || "Alguien";
 
-  if (diffSec < 60) return "ahora";
-  if (diffSec < 3600) return `hace ${Math.floor(diffSec / 60)} min`;
-  if (diffSec < 86400) return `hace ${Math.floor(diffSec / 3600)} h`;
-  if (diffSec < 604800) return `hace ${Math.floor(diffSec / 86400)} d`;
-  return date.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit" });
+  switch (notif.tipus) {
+    case "solicitud_rebuda":
+      return {
+        icon: "inbox",
+        color: "text-app-primary",
+        title: "Nueva solicitud",
+        message: d.objecte_nom
+          ? `${author} ha solicitado «${d.objecte_nom}»` +
+            (d.dies ? ` (${d.dies} día${d.dies === 1 ? "" : "s"}).` : ".")
+          : notif.missatge,
+        link: "/orders?tab=requests_received",
+      };
+
+    case "solicitud_acceptada":
+      return {
+        icon: "check_circle",
+        color: "text-green-400",
+        title: "Solicitud aceptada",
+        message: d.objecte_nom
+          ? `${author} ha aceptado tu solicitud sobre «${d.objecte_nom}».`
+          : notif.missatge,
+        link: "/orders?tab=requests_sent",
+      };
+
+    case "solicitud_rebutjada":
+      return {
+        icon: "cancel",
+        color: "text-red-400",
+        title: "Solicitud rechazada",
+        message: d.objecte_nom
+          ? `${author} ha rechazado tu solicitud sobre «${d.objecte_nom}».`
+          : notif.missatge,
+        link: "/orders?tab=requests_sent",
+      };
+
+    case "solicitud_cancellada":
+      return {
+        icon: "block",
+        color: "text-zinc-400",
+        title: "Solicitud cancelada",
+        message: d.objecte_nom
+          ? `${author} ha cancelado su solicitud sobre «${d.objecte_nom}».`
+          : notif.missatge,
+        link: "/orders?tab=requests_received",
+      };
+
+    case "transaccio_pagament_pendent":
+      return {
+        icon: "payments",
+        color: "text-vecilend-dark-primary",
+        title: "Pago pendiente",
+        message: d.objecte_nom
+          ? `Tu reserva de «${d.objecte_nom}» requiere pago para confirmarse.`
+          : notif.missatge,
+        link: notif.id_entitat_referenciada
+          ? `/transactions/${notif.id_entitat_referenciada}/payment`
+          : "/orders?tab=transactions",
+      };
+
+    case "transaccio_cancellada":
+      return {
+        icon: "block",
+        color: "text-red-400",
+        title: "Transacción cancelada",
+        message: d.objecte_nom
+          ? `${author} ha cancelado la transacción de «${d.objecte_nom}».`
+          : notif.missatge,
+        link: "/orders?tab=transactions",
+      };
+
+    case "transaccio_recordatori_devolucio":
+      return {
+        icon: "schedule",
+        color: "text-amber-400",
+        title: "Recordatorio de devolución",
+        message: d.objecte_nom
+          ? `Recuerda devolver «${d.objecte_nom}».`
+          : notif.missatge,
+        link: "/orders?tab=transactions",
+      };
+
+    case "valoracio_rebuda": {
+      const score = d.puntuacio ? `${d.puntuacio}/5 ⭐` : "";
+      return {
+        icon: "star",
+        color: "text-yellow-400",
+        title: "Nueva valoración",
+        message:
+          d.objecte_nom && d.puntuacio
+            ? `${author} te ha valorado con ${score} sobre «${d.objecte_nom}».`
+            : notif.missatge || `${author} te ha valorado.`,
+        link: objectLink || "/orders",
+      };
+    }
+
+    default:
+      return {
+        icon: "notifications",
+        color: "text-app-text-secondary",
+        title: notif.titol,
+        message: notif.missatge,
+        link: "/",
+      };
+  }
 }
 
-function NotificationRow({ notif, onRead, onDelete, currentUser }) {
-  const meta = TIPUS_META[notif.tipus] || {
-    icon: "notifications",
-    color: "text-app-text-secondary",
-    link: () => "/",
-  };
-
-  const linkTo = meta.link(notif, currentUser);
+function NotificationRow({ notif, onRead, onDelete }) {
+  const content = buildNotificationContent(notif);
+  const unread = !notif.llegida;
 
   return (
     <div
       className={
-        "flex items-start gap-3 p-4 rounded-xl border transition-colors " +
-        (notif.llegida
-          ? "border-app-border bg-app-bg-card"
-          : "border-app-primary/40 bg-app-bg-card-secondary")
+        "relative flex items-stretch gap-0 rounded-xl border overflow-hidden transition-colors " +
+        (unread
+          ? "border-app-primary/40 bg-app-bg-secondary"
+          : "border-app-border bg-app-bg-card")
       }
     >
+      {/* Banda lateral gruixuda per no-llegides */}
       <div
-        className={`shrink-0 flex items-center justify-center h-10 w-10 rounded-full bg-app-bg-card border border-app-border ${meta.color}`}
-      >
-        <span className="material-symbols-outlined">{meta.icon}</span>
-      </div>
+        className={
+          "shrink-0 w-1.5 " + (unread ? "bg-app-primary" : "bg-transparent")
+        }
+        aria-hidden="true"
+      />
 
-      <Link
-        to={linkTo}
-        onClick={() => !notif.llegida && onRead(notif.id)}
-        className="flex-1 min-w-0"
-      >
-        <div className="flex items-center justify-between gap-2">
-          <p className="font-bold text-app-text truncate">{notif.titol}</p>
-          <span className="text-caption text-app-text-secondary shrink-0">
-            {formatRelative(notif.created_at)}
-          </span>
+      <div className="flex items-start gap-3 p-4 flex-1 min-w-0">
+        <div
+          className={`shrink-0 flex items-center justify-center h-10 w-10 rounded-full bg-app-bg-card border border-app-border ${content.color}`}
+        >
+          <span className="material-symbols-outlined">{content.icon}</span>
         </div>
-        <p className="text-label text-app-text-secondary line-clamp-2">
-          {notif.missatge}
-        </p>
-      </Link>
 
-      <button
-        type="button"
-        onClick={() => onDelete(notif.id)}
-        className="shrink-0 text-app-text-secondary hover:text-red-400 transition-colors"
-        aria-label="Eliminar notificación"
-      >
-        <span className="material-symbols-outlined text-[20px]">close</span>
-      </button>
+        <Link
+          to={content.link}
+          onClick={() => unread && onRead(notif.id)}
+          className="flex-1 min-w-0 group"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <p
+              className={
+                "truncate " +
+                (unread
+                  ? "font-bold text-app-text"
+                  : "font-semibold text-app-text-secondary")
+              }
+            >
+              {content.title}
+            </p>
+            <span className="text-caption text-app-text-secondary shrink-0">
+              {formatDateTimeSmart(notif.created_at)}
+            </span>
+          </div>
+          <p className="text-label text-app-text-secondary line-clamp-2 group-hover:text-app-text transition-colors">
+            {content.message}
+          </p>
+        </Link>
+
+        <button
+          type="button"
+          onClick={() => onDelete(notif.id)}
+          className="shrink-0 text-app-text-secondary hover:text-red-400 transition-colors"
+          aria-label="Eliminar notificación"
+        >
+          <span className="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
     </div>
   );
 }
@@ -211,7 +285,6 @@ function NotificationsPage() {
               notif={n}
               onRead={handleRead}
               onDelete={handleDelete}
-              currentUser={null}
             />
           ))}
         </div>

@@ -16,6 +16,7 @@ class NotificacioResource extends JsonResource
             'missatge'                 => $this->missatge,
             'entitat_referenciada'     => $this->entitat_referenciada,
             'id_entitat_referenciada'  => $this->id_entitat_referenciada,
+            'dades_extra'              => $this->dades_extra ?? null,
             'llegida'                  => (bool) $this->llegida,
             'created_at'               => $this->created_at?->toIso8601String(),
         ];
