@@ -1,5 +1,6 @@
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
+import { useEffect } from "react";
 import "../../utils/leafletIconFix";
 
 const objectPin = L.divIcon({
@@ -25,31 +26,54 @@ const searchCenterIcon = L.divIcon({
 });
 
 /**
- * Mini-mapa al detall.
- *
- * @param {Object} ubicacio          {lat, lng} de l'objecte (obligatori)
- * @param {string} nom
- * @param {?Object} searchCenter     {lat, lng} (opcional)
- * @param {?number} searchRadiusKm   (opcional)
+ * Component intern: ajusta automàticament el zoom per encabir tots els punts
+ * (objecte + opcionalment centre de cerca + cercle del radi).
  */
+function FitToBounds({ ubicacio, searchCenter, searchRadiusKm }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || !ubicacio) return;
+
+    if (searchCenter && searchRadiusKm) {
+      // Bounds = objecte + caixa que envolta el cercle de cerca
+      const radDeg = searchRadiusKm / 111; // 1° latitud ≈ 111 km
+      const bounds = L.latLngBounds([
+        [ubicacio.lat, ubicacio.lng],
+        [searchCenter.lat - radDeg, searchCenter.lng - radDeg],
+        [searchCenter.lat + radDeg, searchCenter.lng + radDeg],
+      ]);
+      map.fitBounds(bounds, { padding: [30, 30], maxZoom: 14 });
+    } else {
+      // Sense context: centra a l'objecte amb un zoom raonable
+      map.setView([ubicacio.lat, ubicacio.lng], 14);
+    }
+
+    // Després d'un canvi de filtre, Leaflet pot quedar amb mida de container
+    // antiga si la pàgina ha canviat. Forcem un invalidate.
+    setTimeout(() => map.invalidateSize(), 100);
+  }, [
+    map,
+    ubicacio?.lat,
+    ubicacio?.lng,
+    searchCenter?.lat,
+    searchCenter?.lng,
+    searchRadiusKm,
+  ]);
+
+  return null;
+}
+
 function ObjectMiniMap({ ubicacio, nom, searchCenter, searchRadiusKm }) {
   if (!ubicacio?.lat || !ubicacio?.lng) return null;
 
   const showSearchContext = !!(searchCenter && searchRadiusKm);
 
-  // Centre = punt mig si hi ha context, altrament l'objecte
-  const center = showSearchContext
-    ? {
-        lat: (ubicacio.lat + searchCenter.lat) / 2,
-        lng: (ubicacio.lng + searchCenter.lng) / 2,
-      }
-    : ubicacio;
-
   return (
     <div className="h-[220px] w-full rounded-2xl overflow-hidden border border-app-border">
       <MapContainer
-        center={[center.lat, center.lng]}
-        zoom={showSearchContext ? 12 : 14}
+        center={[ubicacio.lat, ubicacio.lng]}
+        zoom={14}
         scrollWheelZoom={false}
         dragging={false}
         zoomControl={false}
@@ -88,6 +112,12 @@ function ObjectMiniMap({ ubicacio, nom, searchCenter, searchRadiusKm }) {
           position={[ubicacio.lat, ubicacio.lng]}
           icon={objectPin}
           title={nom}
+        />
+
+        <FitToBounds
+          ubicacio={ubicacio}
+          searchCenter={searchCenter}
+          searchRadiusKm={searchRadiusKm}
         />
       </MapContainer>
     </div>

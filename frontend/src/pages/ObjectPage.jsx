@@ -19,6 +19,7 @@ import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
 import NotFoundPage from "./NotFoundPage";
 import NavCategori from "../components/elementos/NavCategori";
 import DetailsPriceCardProduct from "../components/elementos/DetailsPriceCard";
+import ObjectReviewsSection from "../components/elementos/ObjectReviewsSection";
 
 function ObjectPage() {
   const { id } = useParams();
@@ -351,29 +352,20 @@ function ObjectPage() {
   } else {
     actionBox = (
       <div className="rounded-2xl bg-app-card border border-app-border p-6 flex flex-col gap-4">
-        <div className="pb-4">
-          {product.tipus === "lloguer" && product.preu_diari ? (
-            <div className="flex flex-col">
-              <DateRangeCalendar
-                datesOcupades={product.dates_ocupades || []}
-                initialRange={initialRange}
-                onRangeChange={setRange}
-              />
-              <DetailsPriceCardProduct
-                product={product}
-                diasSelected={dies}
-                onTotalChange={setTotal}
-              />
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-vecilend-dark-secondary">
-                volunteer_activism
-              </span>
-              <span className="text-h3-desktop font-bold text-vecilend-dark-secondary font-heading">
-                Préstamo gratuito
-              </span>
-            </div>
+        <div className="pb-4 flex flex-col gap-3">
+          <DateRangeCalendar
+            datesOcupades={product.dates_ocupades || []}
+            initialRange={initialRange}
+            onRangeChange={setRange}
+          />
+
+          {/* Resum de preu només si és lloguer i té preu */}
+          {product.tipus === "lloguer" && product.preu_diari && (
+            <DetailsPriceCardProduct
+              product={product}
+              diasSelected={dies}
+              onTotalChange={setTotal}
+            />
           )}
         </div>
 
@@ -398,14 +390,16 @@ function ObjectPage() {
           </div>
         )}
 
-        <textarea
-          value={missatge}
-          onChange={(e) => setMissatge(e.target.value)}
-          placeholder="Mensaje al propietario (opcional)"
-          rows={4}
-          maxLength={1000}
-          className="w-full rounded-xl bg-vecilend-dark-neutral border border-app-border p-3 text-body-base text-app-text font-body focus:outline-none focus:ring-2 focus:ring-vecilend-dark-primary"
-        />
+        {!needsDates && (
+          <textarea
+            value={missatge}
+            onChange={(e) => setMissatge(e.target.value)}
+            placeholder="Mensaje acerca de la solicitud (opcional)"
+            rows={4}
+            maxLength={1000}
+            className="w-full rounded-xl bg-vecilend-dark-neutral border border-app-border p-3 text-body-base text-app-text font-body focus:outline-none focus:ring-2 focus:ring-vecilend-dark-primary"
+          />
+        )}
 
         {submitError && (
           <p className="text-label text-red-400 font-body">{submitError}</p>
@@ -432,13 +426,11 @@ function ObjectPage() {
           onClick={handleSubmit}
           disabled={submitting || needsDates}
           className={
-            "w-full rounded-full px-6 py-3 text-body-base font-bold transition-transform active:scale-95 disabled:cursor-not-allowed " +
+            "w-full rounded-full px-6 py-3 text-body-base font-bold transition-transform active:scale-95 disabled:cursor-not-allowed cursor-pointer " +
             (needsDates
-              ? "bg-app-card border border-app-border text-app-text-secondary"
+              ? "bg-app-card border border-app-border text-app-text-secondary disabled:opacity-100"
               : "bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] text-[#003730] disabled:opacity-50")
           }
-          disabled={submitting || !range.start || !range.end}
-          className="w-full rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95 disabled:opacity-50  cursor-pointer"
         >
           {submitting
             ? "Enviando…"
@@ -572,19 +564,32 @@ function ObjectPage() {
             <p className="text-app-text-secondary text-body-base font-body whitespace-pre-line">
               {product.descripcio}
             </p>
-            <div className="flex items-baseline gap-2">
-              <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
-                {Number(product.preu_diari).toFixed(2)}€
-              </span>
-              <span className="text-app-text-secondary text-body-base">
-                / día
-              </span>
-            </div>
+
+            {product.tipus === "lloguer" && product.preu_diari ? (
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
+                  {Number(product.preu_diari).toFixed(2)}€
+                </span>
+                <span className="text-app-text-secondary text-body-base">
+                  / día
+                </span>
+              </div>
+            ) : (
+              <div className="mt-3 flex items-center gap-2">
+                <span className="material-symbols-outlined text-vecilend-dark-secondary">
+                  volunteer_activism
+                </span>
+                <span className="text-h2-desktop font-bold text-vecilend-dark-secondary font-heading">
+                  Préstamo gratuito
+                </span>
+              </div>
+            )}
           </div>
 
           {actionBox}
         </div>
       </div>
+      <ObjectReviewsSection valoracions={product.valoracions || []} />
       <ConfirmDeleteModal
         open={confirmDeleteOpen}
         onClose={() => {
