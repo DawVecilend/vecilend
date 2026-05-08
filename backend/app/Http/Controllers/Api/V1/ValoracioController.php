@@ -7,6 +7,7 @@ use App\Http\Requests\Api\V1\StoreValoracioRequest;
 use App\Models\Solicitud;
 use App\Models\User;
 use App\Models\Valoracio;
+use App\Models\Objecte;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -82,13 +83,24 @@ class ValoracioController extends Controller
                 'created_at'    => now(),
             ]);
 
+            $objecte = $v->objecte ?? Objecte::find($v->objecte_id);
+
             Notificacio::create([
                 'user_id'                 => $valoratId,
                 'tipus'                   => Notificacio::TIPUS_VALORACIO_REBUDA,
                 'titol'                   => 'Nueva valoración',
-                'missatge'                => "{$user->nom} te ha dejado una valoración de {$v->puntuacio}/5.",
+                'missatge'                => "{$user->nom} te ha valorado.",
                 'entitat_referenciada'    => 'valoracio',
                 'id_entitat_referenciada' => $v->id,
+                'dades_extra'             => [
+                    'autor_id'        => $user->id,
+                    'autor_nom'       => $user->nom,
+                    'autor_username'  => $user->username,
+                    'puntuacio'       => (int) $v->puntuacio,
+                    'objecte_id'      => $objecte?->id,
+                    'objecte_nom'     => $objecte?->nom,
+                ],
+                'created_at'              => now(),
             ]);
 
             return $v;

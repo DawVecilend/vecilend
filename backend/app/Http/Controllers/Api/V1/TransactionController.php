@@ -207,6 +207,11 @@ class TransactionController extends Controller
                 'estat'         => 'pendent',
             ]);
 
+            $dies = (int) abs(
+                \Carbon\Carbon::parse($validated['data_inici'])
+                    ->diffInDays(\Carbon\Carbon::parse($validated['data_fi']))
+            ) + 1;
+
             Notificacio::create([
                 'user_id'                 => $objecte->user_id,
                 'tipus'                   => Notificacio::TIPUS_SOLICITUD_REBUDA,
@@ -214,6 +219,17 @@ class TransactionController extends Controller
                 'missatge'                => "{$user->nom} ha solicitado tu objeto «{$objecte->nom}».",
                 'entitat_referenciada'    => 'solicitud',
                 'id_entitat_referenciada' => $solicitud->id,
+                'dades_extra'             => [
+                    'autor_id'        => $user->id,
+                    'autor_nom'       => $user->nom,
+                    'autor_username'  => $user->username,
+                    'objecte_id'      => $objecte->id,
+                    'objecte_nom'     => $objecte->nom,
+                    'data_inici'      => $validated['data_inici'],
+                    'data_fi'         => $validated['data_fi'],
+                    'dies'            => $dies,
+                ],
+                'created_at'              => now(),
             ]);
 
             if (!empty($solicitud->missatge)) {
@@ -279,6 +295,8 @@ class TransactionController extends Controller
             $solicitud->objecte()->update(['estat' => 'no_disponible']);
 
             // Notificació d'acceptació
+            $propietari = $solicitud->objecte->user;
+
             Notificacio::create([
                 'user_id'                 => $solicitud->solicitant_id,
                 'tipus'                   => Notificacio::TIPUS_SOLICITUD_ACCEPTADA,
@@ -286,6 +304,14 @@ class TransactionController extends Controller
                 'missatge'                => "Tu solicitud para «{$solicitud->objecte->nom}» ha sido aceptada.",
                 'entitat_referenciada'    => 'solicitud',
                 'id_entitat_referenciada' => $solicitud->id,
+                'dades_extra'             => [
+                    'autor_id'        => $propietari?->id,
+                    'autor_nom'       => $propietari?->nom,
+                    'autor_username'  => $propietari?->username,
+                    'objecte_id'      => $solicitud->objecte_id,
+                    'objecte_nom'     => $solicitud->objecte->nom,
+                ],
+                'created_at'              => now(),
             ]);
 
             // Si és lloguer, avis al solicitant que s'ha de pagar
@@ -297,6 +323,11 @@ class TransactionController extends Controller
                     'missatge'                => "Tu reserva de «{$solicitud->objecte->nom}» requiere el pago para confirmarse.",
                     'entitat_referenciada'    => 'solicitud',
                     'id_entitat_referenciada' => $solicitud->id,
+                    'dades_extra'             => [
+                        'objecte_id'  => $solicitud->objecte_id,
+                        'objecte_nom' => $solicitud->objecte->nom,
+                    ],
+                    'created_at'              => now(),
                 ]);
             }
         });
@@ -328,6 +359,8 @@ class TransactionController extends Controller
 
         $solicitud->update(['estat' => 'rebutjat']);
 
+        $propietari = $solicitud->objecte->user;
+
         Notificacio::create([
             'user_id'                 => $solicitud->solicitant_id,
             'tipus'                   => Notificacio::TIPUS_SOLICITUD_REBUTJADA,
@@ -335,6 +368,14 @@ class TransactionController extends Controller
             'missatge'                => "Tu solicitud para «{$solicitud->objecte->nom}» ha sido rechazada.",
             'entitat_referenciada'    => 'solicitud',
             'id_entitat_referenciada' => $solicitud->id,
+            'dades_extra'             => [
+                'autor_id'        => $propietari?->id,
+                'autor_nom'       => $propietari?->nom,
+                'autor_username'  => $propietari?->username,
+                'objecte_id'      => $solicitud->objecte_id,
+                'objecte_nom'     => $solicitud->objecte->nom,
+            ],
+            'created_at'              => now(),
         ]);
 
         $solicitud->refresh()->load(['objecte.user', 'objecte.imatges', 'solicitant', 'transaccio.pagaments']);
@@ -373,6 +414,14 @@ class TransactionController extends Controller
                     'missatge'                => "{$user->nom} ha cancelado su solicitud sobre «{$solicitud->objecte->nom}».",
                     'entitat_referenciada'    => 'solicitud',
                     'id_entitat_referenciada' => $solicitud->id,
+                    'dades_extra'             => [
+                        'autor_id'        => $user->id,
+                        'autor_nom'       => $user->nom,
+                        'autor_username'  => $user->username,
+                        'objecte_id'      => $solicitud->objecte_id,
+                        'objecte_nom'     => $solicitud->objecte->nom,
+                    ],
+                    'created_at'              => now(),
                 ]);
             });
 
@@ -411,6 +460,14 @@ class TransactionController extends Controller
                 'missatge'                => "{$user->nom} ha cancelado la transacción de «{$solicitud->objecte->nom}».",
                 'entitat_referenciada'    => 'solicitud',
                 'id_entitat_referenciada' => $solicitud->id,
+                'dades_extra'             => [
+                    'autor_id'        => $user->id,
+                    'autor_nom'       => $user->nom,
+                    'autor_username'  => $user->username,
+                    'objecte_id'      => $solicitud->objecte_id,
+                    'objecte_nom'     => $solicitud->objecte->nom,
+                ],
+                'created_at'              => now(),
             ]);
         });
 
