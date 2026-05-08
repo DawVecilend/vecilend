@@ -12,6 +12,7 @@ import {
 import { cldTransform } from "../utils/cloudinary";
 import BtnBack from "../components/elementos/BtnBack";
 import ReviewModal from "../components/transactions/ReviewModal";
+import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
 
 // ── Configuració de pestanyes i filtres ──────────────────────────────────────
 
@@ -330,6 +331,10 @@ function MyOrdersPage() {
   const [busyId, setBusyId] = useState(null);
   const [reviewModalTx, setReviewModalTx] = useState(null);
 
+  const [cancelTarget, setCancelTarget] = useState(null); // { id, label }
+  const [cancelBusy, setCancelBusy] = useState(false);
+  const [cancelError, setCancelError] = useState(null);
+
   const filters =
     tab.view === "transactions" ? TRANSACTION_FILTERS : REQUEST_FILTERS;
 
@@ -416,15 +421,21 @@ function MyOrdersPage() {
       setReviewModalTx(tx);
       return;
     }
+
     if (action === "cancel") {
-      if (!window.confirm("¿Seguro que quieres cancelar este pedido?")) return;
+      setCancelTarget({
+        id,
+        label: tx?.objecte?.nom ?? "este pedido",
+      });
+      setCancelError(null);
+      return;
     }
+
     setBusyId(id);
     try {
       if (action === "accept") await acceptTransaction(id);
       else if (action === "reject") await rejectTransaction(id);
       else if (action === "return") await returnTransaction(id);
-      else if (action === "cancel") await cancelTransaction(id);
       await load();
       refreshBadges();
     } catch (err) {
@@ -435,6 +446,25 @@ function MyOrdersPage() {
       );
     } finally {
       setBusyId(null);
+    }
+  };
+
+  const confirmCancel = async () => {
+    if (!cancelTarget) return;
+    setCancelBusy(true);
+    setCancelError(null);
+    try {
+      await cancelTransaction(cancelTarget.id);
+      setCancelTarget(null);
+      await load();
+      refreshBadges();
+    } catch (err) {
+      setCancelError(
+        err?.response?.data?.message ||
+          "No se ha podido cancelar. Inténtalo de nuevo.",
+      );
+    } finally {
+      setCancelBusy(false);
     }
   };
 
@@ -571,6 +601,20 @@ function MyOrdersPage() {
           )}
         </>
       )}
+
+      <ConfirmDeleteModal
+        open={!!cancelTarget}
+        onClose={() => {
+          if (!cancelBusy) setCancelTarget(null);
+        }}
+        onConfirm={confirmCancel}
+        title="¿Cancelar este pedido?"
+        message={`Vas a cancelar "${cancelTarget?.label ?? ""}".`}
+        description="Esta acción no se puede deshacer. Si el otro vecino ya ha aceptado, ten en cuenta que perderás esta reserva."
+        confirmLabel="Sí, cancelar"
+        busy={cancelBusy}
+        errorMessage={cancelError}
+      />
 
       <ReviewModal
         open={!!reviewModalTx}

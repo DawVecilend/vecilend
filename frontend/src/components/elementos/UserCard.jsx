@@ -1,7 +1,11 @@
 import React from "react";
 import { Rating } from "@mui/material";
 
-function UserCard({ user }) {
+/**
+ * @param {Object} user
+ * @param {?React.ReactNode} action  Botó addicional renderitzat a la dreta
+ */
+function UserCard({ user, action = null }) {
   const avg = user?.valoracio_propietari_avg;
   const total = user?.valoracio_propietari_total ?? 0;
   const hasRating = avg != null && total > 0;
@@ -50,6 +54,8 @@ function UserCard({ user }) {
           </p>
         )}
       </div>
+
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }

@@ -74,11 +74,24 @@ class ChatController extends Controller
                 $validated['objecte_id'] ?? null
             );
 
+            // Si la conversa ja existia i ens passen un objecte_id diferent,
+            // actualitzem la capçalera perquè la tarjeta "Sobre <objecte>" sigui
+            // la que toca. Els missatges antics mantenen el seu objecte_id propi.
+            if (
+                !empty($validated['objecte_id'])
+                && (int) $conversa->objecte_id !== (int) $validated['objecte_id']
+            ) {
+                $conversa->objecte_id = (int) $validated['objecte_id'];
+                $conversa->save();
+            }
+
             if (!empty($validated['missatge'])) {
                 Missatge::create([
                     'conversa_id' => $conversa->id,
                     'emissor_id'  => $userId,
+                    'objecte_id'  => $validated['objecte_id'] ?? null,
                     'contingut'   => $validated['missatge'],
+                    'created_at'  => now(),
                 ]);
                 $conversa->touch();
             }
@@ -141,6 +154,13 @@ class ChatController extends Controller
         $perPage = min((int) $request->input('per_page', 50), 100);
 
         $paginator = $conversa->missatges()
+            ->with([
+                'objecte:id,nom,slug,preu_diari,tipus',
+                'objecte.imatges',
+                'responA:id,contingut,emissor_id',
+                'responA.emissor:id,nom',
+                'solicitud:id,data_inici,data_fi',
+            ])
             ->orderByDesc('created_at')
             ->paginate($perPage);
 
@@ -176,11 +196,22 @@ class ChatController extends Controller
             $m = Missatge::create([
                 'conversa_id' => $conversa->id,
                 'emissor_id'  => $userId,
+                'objecte_id'  => $request->validated('objecte_id'),
+                'respon_a_id' => $request->validated('respon_a_id'),
                 'contingut'   => $request->validated('contingut'),
+                'created_at'  => now(),
             ]);
             $conversa->touch();
             return $m;
         });
+
+        $missatge->load([
+            'objecte:id,nom,slug,preu_diari,tipus',
+            'objecte.imatges',
+            'responA:id,contingut,emissor_id',
+            'responA.emissor:id,nom',
+            'solicitud:id,data_inici,data_fi',
+        ]);
 
         return (new MissatgeResource($missatge))
             ->response()

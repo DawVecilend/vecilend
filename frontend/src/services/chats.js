@@ -2,7 +2,6 @@ import api from "./api";
 
 /**
  * GET /api/v1/chats — Llista totes les converses on participa l'usuari.
- * Retorna un array de converses amb últim missatge i comptador no llegits.
  */
 export async function getChats() {
   const response = await api.get("/chats");
@@ -27,7 +26,7 @@ export async function createChat({
 }
 
 /**
- * GET /api/v1/chats/{id} — Detall d'una conversa (sense missatges).
+ * GET /api/v1/chats/{id}
  */
 export async function getChat(id) {
   const response = await api.get(`/chats/${id}`);
@@ -49,9 +48,17 @@ export async function getChatMessages(id, { page = 1, per_page = 50 } = {}) {
 
 /**
  * POST /api/v1/chats/{id}/messages — Envia un missatge.
+ *
+ * @param {Object} payload
+ * @param {string} payload.contingut    Text del missatge (obligatori)
+ * @param {?number} payload.objecte_id  Objecte associat (opcional)
+ * @param {?number} payload.respon_a_id Missatge citat (opcional)
  */
-export async function sendChatMessage(id, contingut) {
-  const response = await api.post(`/chats/${id}/messages`, { contingut });
+export async function sendChatMessage(id, payload) {
+  // Acceptem string per compatibilitat amb cridants antics
+  const body = typeof payload === "string" ? { contingut: payload } : payload;
+
+  const response = await api.post(`/chats/${id}/messages`, body);
   return response.data.data;
 }
 
@@ -64,7 +71,7 @@ export async function markChatAsRead(id) {
 }
 
 /**
- * GET /api/v1/me/unread-counts — Comptadors per a les bombolles.
+ * GET /api/v1/me/unread-counts
  */
 export async function getUnreadCounts() {
   const response = await api.get("/me/unread-counts");
