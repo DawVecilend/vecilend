@@ -48,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);
+    Route::delete('/account', [UserController::class, 'destroyAccount']);
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::post('/objects', [ObjecteController::class, 'store']);
     Route::put('/objects/{id}', [ObjecteController::class, 'update'])->where('id', '[0-9]+');

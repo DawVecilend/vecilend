@@ -189,6 +189,9 @@ class ValoracioController extends Controller
                     'nom'  => $v->objecte->nom,
                     'slug' => $v->objecte->slug,
                 ] : null,
+                'rol' => $v->objecte
+                    ? ($v->valorat_id === $v->objecte->user_id ? 'propietari' : 'solicitant')
+                    : null,
             ])->values(),
             'meta' => [
                 'current_page' => $paginator->currentPage(),
