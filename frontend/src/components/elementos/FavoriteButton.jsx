@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { addFavorite, removeFavorite } from "../../services/favorites";
+import { useToast } from "../../contexts/ToastContext";
 
 function FavoriteButton({
   objectId,
@@ -17,6 +18,8 @@ function FavoriteButton({
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [busy, setBusy] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const { showToast } = useToast();
 
   useEffect(() => {
     setIsFavorite(initialIsFavorite);
@@ -56,36 +59,29 @@ function FavoriteButton({
     try {
       if (isFavorite) {
         await removeFavorite(objectId);
-
         setIsFavorite(false);
         notifyFavoriteChanged(false);
-
-        if (onRemoved) {
-          onRemoved(objectId);
-        }
+        showToast("Objeto eliminado de favoritos");
+        if (onRemoved) onRemoved(objectId);
       } else {
         await addFavorite(objectId);
-
         setIsFavorite(true);
         notifyFavoriteChanged(true);
-
-        if (onAdded) {
-          onAdded(objectId);
-        }
+        showToast("Objeto añadido a favoritos");
+        if (onAdded) onAdded(objectId);
       }
     } catch (error) {
       console.error("Error cambiando favorito:", error);
-
       if (error.response?.status === 409) {
-        setErrorMessage("Este objeto ya estaba en favoritos. Recarga la página.");
+        setErrorMessage(
+          "Este objeto ya estaba en favoritos. Recarga la página.",
+        );
         return;
       }
-
       if (error.response?.status === 404) {
         setErrorMessage("Este favorito ya no existe. Recarga la página.");
         return;
       }
-
       setErrorMessage("No se ha podido actualizar el favorito.");
     } finally {
       setBusy(false);

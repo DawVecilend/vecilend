@@ -9,11 +9,38 @@ use Illuminate\Support\Facades\Auth;
 class FavoriteController extends Controller
 {
     /**
+     * Obtenir tots els favorits de l'usuari autenticat.
+     * GET /api/v1/favorites
+     */
+    public function index(): JsonResponse
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Carreguem TOTS els favorits per saber quants n'hi ha d'inactius (UI ho informa)
+        $allFavorites = $user->favorits()
+            ->with(['categoria', 'subcategoria', 'imatges', 'user:id,username,avatar_url'])
+            ->get();
+
+        // Però només mostrem els actualment disponibles. Els no_disponible
+        // queden ocults sense esborrar-los de la BD: el dia que tornin a
+        // estar disponibles, reapareixeran sols.
+        $visible = $allFavorites->where('estat', 'disponible')->values();
+
+        return response()->json([
+            'favorites'      => $visible,
+            'total'          => $visible->count(),
+            'total_inactius' => $allFavorites->count() - $visible->count(),
+        ], 200);
+    }
+
+    /**
      * Marcar un objecte com a favorit.
      * POST /api/v1/objects/{id}/favorite
      */
     public function store(int $id): JsonResponse
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $object = Objecte::find($id);
 
@@ -40,6 +67,7 @@ class FavoriteController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         if (!$user->favorits()->where('objecte_id', $id)->exists()) {
@@ -51,23 +79,6 @@ class FavoriteController extends Controller
         return response()->json([
             'message' => 'Eliminat dels favorits',
             'object_id' => $id,
-        ], 200);
-    }
-
-    /**
-     * Obtenir tots els favorits de l'usuari autenticat.
-     * GET /api/v1/favorites
-     */
-    public function index(): JsonResponse
-    {
-        $user = Auth::user();
-        $favorites = $user->favorits()
-            ->with(['categoria', 'subcategoria', 'imatges', 'user:id,username,avatar_url'])
-            ->get();
-
-        return response()->json([
-            'favorites' => $favorites,
-            'total' => $favorites->count(),
         ], 200);
     }
 }
