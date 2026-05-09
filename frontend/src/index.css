@@ -107,12 +107,17 @@ textarea {
   resize: none;
 }
 
-/* Aplica transicions globals als canvis de color */
+/* ─── Aplica transicions globals als canvis de color ─── */
 * {
   transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 
 /* ─── Leaflet dark theme overrides ─── */
+.leaflet-container {
+  background: var(--color-vecilend-dark-neutral);
+  font-family: 'Inter', sans-serif;
+}
+
 .leaflet-popup-content-wrapper {
   background: var(--color-vecilend-dark-card) !important;
   color: var(--color-vecilend-dark-text) !important;
@@ -152,10 +157,15 @@ textarea {
   border-color: var(--color-vecilend-dark-border) !important;
 }
 
-.leaflet-container {
-  background: var(--color-vecilend-dark-neutral);
-  font-family: 'Inter', sans-serif;
-}
+/* ─── Leaflet z-index (< 50 perquè no superin el header) ─── */
+.leaflet-container,
+.leaflet-top,
+.leaflet-bottom    { z-index: 1 !important; }
+.leaflet-pane      { z-index: 2 !important; }
+.leaflet-overlay-pane { z-index: 3 !important; }
+.leaflet-marker-pane  { z-index: 4 !important; }
+.leaflet-popup-pane   { z-index: 5 !important; }
+.leaflet-control      { z-index: 6 !important; }
 
 .vecilend-picker-pin,
 .vecilend-object-pin,

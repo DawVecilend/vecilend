@@ -12,6 +12,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Api\V1\DeleteAccountRequest;
+use App\Models\Solicitud;
 
 class UserController extends Controller
 {
@@ -126,6 +129,81 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Contraseña actualizada correctamente.'
+        ], 200);
+    }
+
+    /**
+     * DELETE /api/v1/account
+     *
+     * Elimina la pròpia compte de l'usuari autenticat.
+     *
+     * Comprovacions:
+     *   1. La contrasenya s'ha verificat al FormRequest.
+     *   2. L'usuari no pot tenir transaccions actives (estat 'en_curs') ni
+     *      com a solicitant ni com a propietari, per evitar deixar trànsits
+     *      a mitges.
+     *
+     * Cascada:
+     *   - users → cascadeOnDelete a objectes, solicituds, missatges, favorits,
+     *     notificacions, valoracions (segons les FK existents).
+     *   - Pagaments queden lligats a la transacció orfe; com que la transacció
+     *     mateixa s'esborra (FK cascade des de solicituds), els pagaments també.
+     *   - Cloudinary: borrem avatar abans, i les imatges d'objectes les netegem
+     *     seguint la mateixa lògica que a `ObjecteController::destroy`.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroyAccount(DeleteAccountRequest $request)
+    {
+        $user = $request->user();
+
+        // ── 1. Bloquejos: transaccions en curs ───────────────────────────
+        $teTransaccionsActives = Solicitud::query()
+            ->whereHas('transaccio', fn($q) => $q->where('estat', 'en_curs'))
+            ->where(function ($q) use ($user) {
+                $q->where('solicitant_id', $user->id)
+                    ->orWhereHas('objecte', fn($oq) => $oq->where('user_id', $user->id));
+            })
+            ->exists();
+
+        if ($teTransaccionsActives) {
+            return response()->json([
+                'message' => 'No puedes eliminar la cuenta mientras tengas transacciones en curso. Resuélvelas primero (cancelar o devolver el objeto).',
+            ], 422);
+        }
+
+        // ── 2. Cloudinary cleanup ──────────────────────────────────────
+        try {
+            if ($user->avatar_public_id) {
+                $this->cloudinaryService->delete($user->avatar_public_id);
+            }
+            // Esborrar imatges Cloudinary de cada objecte propi
+            $publicIds = DB::table('imatges_objecte')
+                ->join('objectes', 'objectes.id', '=', 'imatges_objecte.objecte_id')
+                ->where('objectes.user_id', $user->id)
+                ->pluck('imatges_objecte.public_id_cloudinary')
+                ->all();
+
+            foreach ($publicIds as $pid) {
+                try {
+                    $this->cloudinaryService->delete($pid);
+                } catch (\Throwable $e) {
+                    Log::warning("No s'ha pogut esborrar imatge Cloudinary: {$pid} ({$e->getMessage()})");
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning("Error netejant Cloudinary durant DELETE account: {$e->getMessage()}");
+            // No bloquegem el delete per culpa de Cloudinary
+        }
+
+        // ── 3. Tokens de Sanctum: revoquem els actius ──────────────────
+        $user->tokens()->delete();
+
+        // ── 4. Delete (cascada s'encarrega de la resta) ────────────────
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Cuenta eliminada correctamente.',
         ], 200);
     }
 }

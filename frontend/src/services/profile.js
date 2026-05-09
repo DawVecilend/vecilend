@@ -44,3 +44,14 @@ export const updatePassword = async (username, passwordData) => {
   const response = await api.put(`/profile/${username}/password`, passwordData);
   return response.data;
 };
+
+/**
+ * DELETE /api/v1/account
+ *
+ * Elimina la pròpia compte. Cal enviar la contrasenya per confirmar.
+ */
+export async function deleteAccount(password) {
+  // Axios DELETE accepta body via `data`
+  const response = await api.delete("/account", { data: { password } });
+  return response.data;
+}

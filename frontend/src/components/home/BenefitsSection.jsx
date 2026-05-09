@@ -21,7 +21,7 @@ function BenefitsSection() {
       id: 3,
       icon: "local_activity",
       title: "Disfrutar del Artículo",
-      text: "Usa el equipo para tu proyecto, viaje o evento. ¡Es tuyo por la reserva!",
+      text: "Usa el objeto para tu proyecto, viaje o evento. ¡Es tuyo por la reserva!",
     },
     {
       id: 4,

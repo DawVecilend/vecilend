@@ -280,9 +280,8 @@ function OrderCard({ tx, tab, onAction, busyId }) {
                 </button>
               ) : (
                 <p className="w-full text-caption text-app-text-secondary italic mt-2">
-                  Esta transacción ya está efectuada (pago realizado o dentro
-                  del rango de fechas pactadas). Para cancelarla, contacta
-                  directamente con el otro vecino.
+                  Esta transacción no puede cancelarse porque el pago ya ha sido
+                  realizado o se encuentra dentro de las fechas pactadas.
                 </p>
               )}
             </>

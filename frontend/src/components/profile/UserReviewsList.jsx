@@ -16,9 +16,17 @@ function UserReviewsList({ username }) {
   const [loadingMore, setLoadingMore] = useState(false);
 
   // Càrrega inicial / quan canvia el rol
+  const [transitioning, setTransitioning] = useState(false);
+
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+
+    if (reviews.length > 0) {
+      setTransitioning(true);
+    } else {
+      setLoading(true);
+    }
+
     getUserReviews(username, { role, page: 1, per_page: PER_PAGE })
       .then((res) => {
         if (cancelled) return;
@@ -30,8 +38,11 @@ function UserReviewsList({ username }) {
         if (!cancelled) setReviews([]);
       })
       .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (cancelled) return;
+        setLoading(false);
+        setTransitioning(false);
       });
+
     return () => {
       cancelled = true;
     };
@@ -101,13 +112,18 @@ function UserReviewsList({ username }) {
       {!loading && reviews.length === 0 && (
         <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
           <p className="text-[#bbcac6]">
-            Aún no hay reseñas {role !== "qualsevol" ? "para este rol" : ""}.
+            Aún no hay reseñas{role !== "qualsevol" ? " para este rol" : ""}.
           </p>
         </div>
       )}
 
       {!loading && reviews.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          className={
+            "grid grid-cols-1 md:grid-cols-2 gap-6 transition-opacity duration-300 " +
+            (transitioning ? "opacity-50" : "opacity-100")
+          }
+        >
           {reviews.map((rev) => (
             <article
               key={rev.id}
@@ -151,6 +167,15 @@ function UserReviewsList({ username }) {
                     }}
                   />
                 </div>
+                {rev.created_at && (
+                  <span className="text-xs text-[#859490] shrink-0">
+                    {new Date(rev.created_at).toLocaleDateString("es-ES", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
+                )}
               </div>
 
               {rev.comentari && (
@@ -167,6 +192,16 @@ function UserReviewsList({ username }) {
                     {rev.objecte.nom}
                   </Link>
                 </p>
+              )}
+
+              {rev.rol && role === "qualsevol" && (
+                <div className="flex justify-end">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider bg-[#14b8a6]/20 text-[#4fdbc8] border border-[#4fdbc8]/30">
+                    {rev.rol === "propietari"
+                      ? "Como propietario"
+                      : "Como solicitante"}
+                  </span>
+                </div>
               )}
             </article>
           ))}

@@ -23,11 +23,12 @@ function HeaderDesktop() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   if (!auth) return null;
 
@@ -103,26 +104,28 @@ function HeaderDesktop() {
                 </Link>
               </div>
 
-              <div onClick={() => setOpen(!open)} className="cursor-pointer">
-                {user.avatar_url ? (
-                  <img
-                    src={user.avatar_url}
-                    alt="Avatar usuario"
-                    className="h-[48px] w-[48px] rounded-full object-cover"
-                  />
-                ) : (
-                  <img
-                    src="/assets/icons/empty-user-icon.svg"
-                    alt=""
-                    className="h-[48px]"
-                  />
-                )}
-              </div>
-
               <div ref={menuRef} className="relative">
+                <div
+                  onClick={() => setOpen((o) => !o)}
+                  className="cursor-pointer"
+                >
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt="Avatar usuario"
+                      className="h-[48px] w-[48px] rounded-full object-cover"
+                    />
+                  ) : (
+                    <img
+                      src="/assets/icons/empty-user-icon.svg"
+                      alt=""
+                      className="h-[48px]"
+                    />
+                  )}
+                </div>
                 {open && (
-                  <div className="absolute top-10 right-2 z-20 w-56">
-                    <div className="overflow-hidden border border-white/5 bg-[#0f1715]/70 shadow-lg backdrop-blur-[20px]">
+                  <div className="absolute top-12 right-0 z-20 w-56">
+                    <div className="overflow-hidden border border-white/5 bg-[#0f1715]/70 shadow-lg backdrop-blur-[20px] rounded-lg">
                       <div className="flex flex-col divide-y divide-[#14B8A6]/10">
                         {user.rol === "admin" ? (
                           <Link
@@ -144,28 +147,24 @@ function HeaderDesktop() {
                             Ver Perfil
                           </Link>
                         )}
-
                         <Link
                           to="/orders"
                           className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
                         >
                           Mis pedidos
                         </Link>
-
                         <Link
                           to="/favorites"
                           className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
                         >
                           Mis favoritos
                         </Link>
-
                         <Link
                           to={`/settings/profile/${user?.username}`}
                           className="flex gap-2 px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
                         >
                           Ajustes
                         </Link>
-
                         <button
                           onClick={logout}
                           className="w-full cursor-pointer px-4 py-3 text-left text-sm text-[#14B8A6] transition-colors hover:bg-red-500/10 hover:text-red-400"

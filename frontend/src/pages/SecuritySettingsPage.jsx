@@ -1,8 +1,17 @@
 import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
-import { updatePassword } from "../services/profile";
+import { updatePassword, deleteAccount } from "../services/profile";
 import PasswordInput from "../components/elementos/PasswordInput";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
+import PasswordRequirements from "../components/elementos/PasswordRequirements";
 
 function SecuritySettingsPage() {
   const { user } = useContext(AuthContext);
@@ -17,6 +26,16 @@ function SecuritySettingsPage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width:768px)");
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteBusy, setDeleteBusy] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+  const [deleteShowPassword, setDeleteShowPassword] = useState(false);
 
   const handlePasswordChange = (e) => {
     setPasswords((prev) => ({
@@ -66,6 +85,30 @@ function SecuritySettingsPage() {
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    setDeleteError(null);
+    if (!deletePassword) {
+      setDeleteError("Introduce tu contraseña para confirmar.");
+      return;
+    }
+
+    setDeleteBusy(true);
+    try {
+      await deleteAccount(deletePassword);
+      // Tanquem sessió en local i redirigim a home amb missatge
+      auth.logout?.();
+      navigate("/", { replace: true });
+    } catch (err) {
+      setDeleteError(
+        err?.response?.data?.errors?.password?.[0] ||
+          err?.response?.data?.message ||
+          "No se ha podido eliminar la cuenta. Inténtalo de nuevo.",
+      );
+    } finally {
+      setDeleteBusy(false);
     }
   };
 
@@ -176,6 +219,7 @@ function SecuritySettingsPage() {
                       onChange={handlePasswordChange}
                       className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
                     />
+                    <PasswordRequirements password={passwords.password} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
@@ -259,13 +303,136 @@ function SecuritySettingsPage() {
                   favor, asegúrate de que esto es lo que quieres hacer.
                 </p>
               </div>
-              <button className="whitespace-nowrap w-full md:w-auto px-8 py-3 rounded-lg border border-[#ffb4ab] text-[#ffb4ab] font-bold hover:bg-[#ffb4ab] hover:text-[#690005] transition-all active:scale-95">
+              <button
+                type="button"
+                onClick={() => {
+                  setDeletePassword("");
+                  setDeleteError(null);
+                  setDeleteOpen(true);
+                }}
+                className="whitespace-nowrap w-full md:w-auto px-8 py-3 rounded-lg border border-[#ffb4ab] text-[#ffb4ab] font-bold hover:bg-[#ffb4ab] hover:text-[#690005] transition-all active:scale-95"
+              >
                 Eliminar Cuenta
               </button>
             </section>
           </div>
         </main>
       </div>
+      <Dialog
+        open={deleteOpen}
+        onClose={deleteBusy ? undefined : () => setDeleteOpen(false)}
+        fullScreen={isMobile}
+        fullWidth
+        maxWidth="xs"
+        PaperProps={{
+          sx: {
+            backgroundColor: "#0A0A0B",
+            color: "#F2F4F8",
+            borderRadius: isMobile ? 0 : 4,
+            border: "1px solid #2A2B31",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            fontFamily: "Montserrat",
+            fontWeight: 700,
+            color: "#F2F4F8",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #2A2B31",
+          }}
+        >
+          <span className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#ef4444]">
+              warning
+            </span>
+            Eliminar tu cuenta
+          </span>
+          <IconButton
+            onClick={() => setDeleteOpen(false)}
+            disabled={deleteBusy}
+            sx={{ color: "#B6BCC8" }}
+          >
+            <span className="material-symbols-outlined">close</span>
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: 3 }}>
+          <p className="text-body-base text-app-text font-body">
+            Vas a eliminar tu cuenta de Vecilend de forma permanente.
+          </p>
+          <p className="mt-3 text-label text-app-text-secondary font-body">
+            Se borrarán tus objetos, solicitudes, mensajes, favoritos y
+            valoraciones. Esta acción no se puede deshacer. Si tienes alguna
+            transacción en curso, primero deberás resolverla.
+          </p>
+
+          <label className="block mt-5">
+            <span className="text-label text-app-text-secondary font-body">
+              Confirma tu contraseña
+            </span>
+            <div className="mt-2 relative">
+              <input
+                type={deleteShowPassword ? "text" : "password"}
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                placeholder="Tu contraseña"
+                autoFocus
+                disabled={deleteBusy}
+                className="w-full bg-[#16181C] border border-app-border rounded-lg px-4 py-3 pr-11 text-app-text focus:ring-2 focus:ring-[#ef4444] outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setDeleteShowPassword((s) => !s)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center text-app-text-secondary hover:text-app-text"
+                aria-label={
+                  deleteShowPassword
+                    ? "Ocultar contraseña"
+                    : "Mostrar contraseña"
+                }
+              >
+                <span className="material-symbols-outlined text-base">
+                  {deleteShowPassword ? "visibility_off" : "visibility"}
+                </span>
+              </button>
+            </div>
+          </label>
+
+          {deleteError && (
+            <div className="mt-3 flex items-start gap-2 rounded-lg border border-[#ef4444]/50 bg-[#ef4444]/10 px-3 py-2">
+              <span className="material-symbols-outlined text-sm text-[#ef4444] mt-0.5">
+                error
+              </span>
+              <p className="text-xs text-[#ef4444] font-body leading-relaxed">
+                {deleteError}
+              </p>
+            </div>
+          )}
+        </DialogContent>
+
+        <DialogActions
+          sx={{ borderTop: "1px solid #2A2B31", px: 3, py: 2, gap: 1 }}
+        >
+          <button
+            type="button"
+            onClick={() => setDeleteOpen(false)}
+            disabled={deleteBusy}
+            className="rounded-full border border-[#2A2B31] px-5 py-2 text-label font-body text-app-text hover:bg-[#16181C] disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={handleConfirmDelete}
+            disabled={deleteBusy || !deletePassword}
+            className="rounded-full bg-[#ef4444] hover:bg-[#dc2626] px-5 py-2 text-label font-bold text-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {deleteBusy ? "Eliminando…" : "Sí, eliminar mi cuenta"}
+          </button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

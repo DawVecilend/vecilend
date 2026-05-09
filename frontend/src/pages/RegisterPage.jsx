@@ -5,6 +5,16 @@ import api from "../services/api";
 import municipalitiesData from "../data/municipios.json";
 import { normalizeString } from "../utils/string";
 import PasswordInput from "../components/elementos/PasswordInput";
+import PasswordRequirements from "../components/elementos/PasswordRequirements";
+
+function FieldError({ messages }) {
+  if (!messages || messages.length === 0) return null;
+  return (
+    <p className="text-xs text-[#ffb4ab] mt-1 ml-1 font-body">
+      {Array.isArray(messages) ? messages[0] : messages}
+    </p>
+  );
+}
 
 function RegisterPage() {
   const { register } = useContext(AuthContext);
@@ -12,6 +22,7 @@ function RegisterPage() {
 
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
@@ -46,7 +57,6 @@ function RegisterPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -55,7 +65,6 @@ function RegisterPage() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-
     if (file) {
       setFormData((prev) => ({ ...prev, avatar: file }));
     }
@@ -135,11 +144,15 @@ function RegisterPage() {
       }
     } catch (error) {
       console.error("Error backend:", error.response?.data);
-
-      if (error.response?.data?.message) {
-        setError(error.response.data.message);
+      if (error.response?.status === 422 && error.response.data?.errors) {
+        setFieldErrors(error.response.data.errors);
+        setError("");
       } else {
-        setError("Error al conectar con el servidor. Inténtalo más tarde.");
+        setError(
+          error.response?.data?.message ||
+            "Error al conectar con el servidor. Inténtalo más tarde.",
+        );
+        setFieldErrors({});
       }
     } finally {
       setIsLoading(false);
@@ -247,10 +260,16 @@ function RegisterPage() {
       await register(data);
       navigate("/");
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Error al registrar. Inténtalo de nuevo.",
-      );
+      if (err.response?.status === 422 && err.response.data?.errors) {
+        setFieldErrors(err.response.data.errors);
+        setError("");
+      } else {
+        setError(
+          err.response?.data?.message ||
+            "Error al registrar. Inténtalo de nuevo.",
+        );
+        setFieldErrors({});
+      }
     } finally {
       setIsLoading(false);
     }
@@ -285,10 +304,10 @@ function RegisterPage() {
                 </div>
 
                 <p className="text-xl font-medium leading-relaxed italic text-app-text mb-6">
-                  “Vecilend me ha ayudado a encontrar justo lo que necesitaba
+                  "Vecilend me ha ayudado a encontrar justo lo que necesitaba
                   sin tener que comprarlo. Es fácil de usar, cercano y da mucha
                   confianza saber que los productos están compartidos por
-                  vecinos de mi zona.”
+                  vecinos de mi zona."
                 </p>
 
                 <div className="flex items-center gap-4">
@@ -374,12 +393,19 @@ function RegisterPage() {
                   <input
                     name="username"
                     value={formData.username}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setFieldErrors((prev) => ({
+                        ...prev,
+                        username: undefined,
+                      }));
+                    }}
                     className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
                     placeholder="Nombre de usuario"
                     type="text"
                     required
                   />
+                  <FieldError messages={fieldErrors.username} />
                 </div>
 
                 <div className="space-y-1.5">
@@ -390,12 +416,16 @@ function RegisterPage() {
                   <input
                     name="email"
                     value={formData.email}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
                     className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
                     placeholder="correo@ejemplo.com"
                     type="email"
                     required
                   />
+                  <FieldError messages={fieldErrors.email} />
                 </div>
 
                 {error && (
@@ -558,7 +588,7 @@ function RegisterPage() {
             <div className="w-full md:w-2/3 flex flex-col justify-center h-full relative">
               <div
                 id="final-form-card"
-                className="w-full h-full bg-[#1a211f] border border-app-border/30 rounded-xl p-6 lg:px-10 lg:py-7 shadow-2xl relative overflow-hidden flex flex-col"
+                className="w-full max-h-[85vh] bg-[#1a211f] border border-app-border/30 rounded-xl p-6 lg:px-10 lg:py-7 shadow-2xl relative flex flex-col overflow-y-auto custom-scrollbar"
               >
                 <div className="absolute top-0 left-0 w-full h-1 bg-[#2f3634]">
                   <div className="h-full bg-[#4fdbc8] w-full shadow-[0_0_10px_rgba(79,219,200,0.5)] transition-all duration-500"></div>
@@ -605,13 +635,20 @@ function RegisterPage() {
                           <input
                             name="nom"
                             value={formData.nom}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              handleChange(e);
+                              setFieldErrors((prev) => ({
+                                ...prev,
+                                nom: undefined,
+                              }));
+                            }}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
                             placeholder="Iván"
                             type="text"
                           />
                         </div>
+                        <FieldError messages={fieldErrors.nom} />
                       </div>
 
                       <div className="space-y-1">
@@ -627,13 +664,20 @@ function RegisterPage() {
                           <input
                             name="cognoms"
                             value={formData.cognoms}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              handleChange(e);
+                              setFieldErrors((prev) => ({
+                                ...prev,
+                                cognoms: undefined,
+                              }));
+                            }}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
                             placeholder="Carrasco"
                             type="text"
                           />
                         </div>
+                        <FieldError messages={fieldErrors.cognoms} />
                       </div>
 
                       <div className="space-y-1">
@@ -649,13 +693,22 @@ function RegisterPage() {
                           <PasswordInput
                             name="password"
                             value={formData.password}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              handleChange(e);
+                              setFieldErrors((prev) => ({
+                                ...prev,
+                                password: undefined,
+                              }));
+                            }}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
                             placeholder="••••••••"
                           />
                         </div>
+                        <FieldError messages={fieldErrors.password} />
                       </div>
+
+                      <PasswordRequirements password={formData.password} />
 
                       <div className="space-y-1">
                         <label className="block text-xs font-medium text-app-text-secondary ml-1">
@@ -670,13 +723,30 @@ function RegisterPage() {
                           <PasswordInput
                             name="password_confirmation"
                             value={formData.password_confirmation}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              handleChange(e);
+                              setFieldErrors((prev) => ({
+                                ...prev,
+                                password_confirmation: undefined,
+                              }));
+                            }}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
                             placeholder="••••••••"
                           />
                         </div>
+                        <FieldError
+                          messages={fieldErrors.password_confirmation}
+                        />
                       </div>
+
+                      {formData.password_confirmation &&
+                        formData.password !==
+                          formData.password_confirmation && (
+                          <p className="text-xs text-[#ffb4ab] mt-1 ml-1 font-body">
+                            Las contraseñas no coinciden.
+                          </p>
+                        )}
 
                       <div className="space-y-1 relative">
                         <label className="block text-xs font-medium text-app-text-secondary ml-1">
@@ -691,7 +761,13 @@ function RegisterPage() {
                           <input
                             name="direccio"
                             value={formData.direccio}
-                            onChange={handleDireccioChange}
+                            onChange={(e) => {
+                              handleDireccioChange(e);
+                              setFieldErrors((prev) => ({
+                                ...prev,
+                                direccio: undefined,
+                              }));
+                            }}
                             onFocus={() => {
                               if (suggestions.length > 0)
                                 setShowSuggestions(true);
@@ -727,6 +803,7 @@ function RegisterPage() {
                             </ul>
                           )}
                         </div>
+                        <FieldError messages={fieldErrors.direccio} />
                       </div>
 
                       <div className="space-y-1">
@@ -742,12 +819,19 @@ function RegisterPage() {
                           <input
                             name="telefon"
                             value={formData.telefon}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              handleChange(e);
+                              setFieldErrors((prev) => ({
+                                ...prev,
+                                telefon: undefined,
+                              }));
+                            }}
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
                             placeholder="+34 600 000 000"
                             type="tel"
                           />
                         </div>
+                        <FieldError messages={fieldErrors.telefon} />
                       </div>
 
                       <div className="md:col-span-2 flex items-end">
