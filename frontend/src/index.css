@@ -163,3 +163,11 @@ textarea {
   background: transparent !important;
   border: none !important;
 }
+
+/* Carrusel de categories: amaga la scrollbar però manté el scroll funcional */
+.vecilend-carousel {
+  scrollbar-width: none;
+}
+.vecilend-carousel::-webkit-scrollbar {
+  display: none;
+}

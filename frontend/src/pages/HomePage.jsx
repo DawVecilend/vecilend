@@ -20,7 +20,7 @@ function HomePage() {
     Promise.all([
       // Només 10 objectes a la home (5 per secció)
       getObjects({ per_page: 10, sort: "recent" }).then((r) => r.data),
-      getCategories(6),
+      getCategories(),
     ])
       .then(([rawObjects, rawCategories]) => {
         if (cancelled) return;

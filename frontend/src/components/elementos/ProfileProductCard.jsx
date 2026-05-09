@@ -151,45 +151,47 @@ function ProfileProductCard({
           </div>
 
           <div className="flex flex-1 flex-col p-6">
-            <div className="mb-2 flex items-start justify-between gap-3">
-              <h3 className="min-h-[56px] text-lg font-bold text-[#dde4e1] line-clamp-2 transition-colors group-hover:text-[#4fdbc8]">
-                {title}
-              </h3>
-
-              <div className="flex shrink-0 items-center text-sm font-bold text-[#f38764]">
-                {rating != null ? (
-                  <>
-                    <span
-                      className="material-symbols-outlined mr-0.5 text-xs"
-                      style={{ fontVariationSettings: "'FILL' 1" }}
-                    >
-                      star
-                    </span>
-                    {Number(rating).toFixed(1)}
-                  </>
-                ) : (
-                  <span className="font-normal text-[#bbcac6]">Nuevo</span>
-                )}
-              </div>
-            </div>
+            <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-[#4fdbc8]">
+              {title}
+            </h3>
 
             <p className="mb-4 min-h-[42px] text-sm text-[#bbcac6] line-clamp-2">
               {description}
             </p>
 
-            <div className="mt-auto flex items-center justify-between border-t border-[#3c4947] pt-4">
+            <div className="mt-auto flex items-center justify-between gap-2 border-t border-app-border pt-4">
               <div>
                 {priceDay > 0 ? (
                   <>
-                    <span className="text-xl font-black text-[#dde4e1]">
+                    <span className="text-xl font-black text-app-text">
                       {priceDay}€
                     </span>
-
-                    <span className="text-sm text-[#bbcac6]"> / día</span>
+                    <span className="text-sm text-app-text-secondary">
+                      {" "}
+                      / día
+                    </span>
                   </>
                 ) : (
-                  <span className="text-xl font-black text-[#dde4e1]">
+                  <span className="text-xl font-black text-app-text">
                     Gratuito
+                  </span>
+                )}
+              </div>
+
+              <div className="flex shrink-0 items-center gap-0.5 text-sm font-bold text-[#facc15]">
+                {rating != null ? (
+                  <>
+                    <span
+                      className="material-symbols-outlined text-base"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      star
+                    </span>
+                    <span>{Number(rating).toFixed(1)}</span>
+                  </>
+                ) : (
+                  <span className="font-normal text-app-text-secondary">
+                    Nuevo
                   </span>
                 )}
               </div>

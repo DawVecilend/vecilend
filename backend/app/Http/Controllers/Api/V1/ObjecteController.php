@@ -696,4 +696,47 @@ class ObjecteController extends Controller
             'message' => 'Objecte eliminat correctament.',
         ], 200);
     }
+
+    /**
+     * PUT /api/v1/objects/{id}/main-image/{imageId}
+     *
+     * Marca la imagen dada como principal (ordre = 0) y desplaza el resto
+     * manteniendo su orden relativo.
+     */
+    public function setMainImage(Request $request, int $id, int $imageId)
+    {
+        $objecte = Objecte::findOrFail($id);
+
+        if ($request->user()->id !== $objecte->user_id) {
+            return response()->json([
+                'message' => 'No tens permís per modificar aquest objecte.',
+            ], 403);
+        }
+
+        $imatge = ImatgeObjecte::where('objecte_id', $objecte->id)
+            ->where('id', $imageId)
+            ->first();
+
+        if (!$imatge) {
+            return response()->json(['message' => 'Imatge no trobada.'], 404);
+        }
+
+        DB::transaction(function () use ($objecte, $imatge) {
+            // Empenyem totes les altres una posició cap avall
+            ImatgeObjecte::where('objecte_id', $objecte->id)
+                ->where('id', '!=', $imatge->id)
+                ->orderBy('ordre')
+                ->get()
+                ->each(function ($img, $idx) {
+                    $img->update(['ordre' => $idx + 1]);
+                });
+
+            // I posem la triada al cap
+            $imatge->update(['ordre' => 0]);
+        });
+
+        $objecte->load(['user', 'categoria', 'subcategoria', 'imatges']);
+
+        return new ObjecteDetailResource($objecte);
+    }
 }

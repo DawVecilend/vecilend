@@ -76,7 +76,8 @@ function ObjectsPage() {
   // Càrrega inicial / quan canvien filtres o sort
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+    setProducts([]);
+    setMeta(null);
 
     const fetcher = hasLocation ? getNearbyObjects : getObjects;
 

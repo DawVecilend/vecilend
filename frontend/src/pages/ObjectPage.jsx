@@ -20,6 +20,7 @@ import NotFoundPage from "./NotFoundPage";
 import NavCategori from "../components/elementos/NavCategori";
 import DetailsPriceCardProduct from "../components/elementos/DetailsPriceCard";
 import ObjectReviewsSection from "../components/elementos/ObjectReviewsSection";
+import { useToast } from "../contexts/ToastContext";
 
 function ObjectPage() {
   const { id } = useParams();
@@ -43,6 +44,8 @@ function ObjectPage() {
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+
+  const { showToast } = useToast();
 
   const searchContext = useMemo(
     () => ({
@@ -160,6 +163,7 @@ function ObjectPage() {
         data_fi: range.end.format("YYYY-MM-DD"),
         missatge: missatge.trim() || null,
       });
+      showToast("Solicitud enviada al propietario");
       setSubmitSuccess(true);
       if (missatge.trim() && product.propietari?.id) {
         setChatHint({ otherUserId: product.propietari.id });
@@ -404,21 +408,14 @@ function ObjectPage() {
         {submitError && (
           <p className="text-label text-red-400 font-body">{submitError}</p>
         )}
-        {submitSuccess && (
-          <div className="space-y-2">
-            <p className="text-label text-vecilend-dark-secondary font-body">
-              ✓ Solicitud enviada al propietario.
-            </p>
-            {chatHint && (
-              <button
-                type="button"
-                onClick={() => openChatWith(chatHint?.otherUserId)}
-                className="text-app-primary font-bold hover:underline text-label"
-              >
-                Ver conversación →
-              </button>
-            )}
-          </div>
+        {submitSuccess && chatHint && (
+          <button
+            type="button"
+            onClick={() => openChatWith(chatHint?.otherUserId)}
+            className="text-app-primary font-bold hover:underline text-label"
+          >
+            Ver conversación →
+          </button>
         )}
 
         <button
@@ -537,12 +534,12 @@ function ObjectPage() {
             product.valoracio_objecte?.total > 0 ? (
               <div className="flex items-center gap-2">
                 <span
-                  className="material-symbols-outlined text-[#f38764] text-base"
+                  className="material-symbols-outlined text-[#facc15] text-base"
                   style={{ fontVariationSettings: "'FILL' 1" }}
                 >
                   star
                 </span>
-                <span className="text-[#f38764] font-bold">
+                <span className="text-[#facc15] font-bold">
                   {Number(product.valoracio_objecte.avg).toFixed(1)}
                 </span>
                 <span className="text-app-text-secondary text-label">

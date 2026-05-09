@@ -7,6 +7,7 @@ import { mapCategories } from "../mappers/categoryMapper";
 import { cldTransform } from "../utils/cloudinary";
 import ObjectLocationPicker from "../components/map/ObjectLocationPicker";
 import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
+import { setMainImage as setMainImageApi } from "../services/objects";
 
 function EditObjectPage() {
   const { id } = useParams();
@@ -283,6 +284,21 @@ function EditObjectPage() {
     setOpenSubcategories(false);
   };
 
+  const handleSetMainImage = async (imageId) => {
+    try {
+      const updatedProduct = await setMainImageApi(id, imageId);
+      setExistingImages(
+        (updatedProduct.imatges || []).sort((a, b) => a.ordre - b.ordre),
+      );
+    } catch (err) {
+      console.error("Error marcant imatge principal:", err);
+      alert(
+        err.response?.data?.message ||
+          "No se ha podido cambiar la imagen principal.",
+      );
+    }
+  };
+
   const handleNewImagesChange = (event) => {
     const files = Array.from(event.target.files || []);
 
@@ -500,13 +516,21 @@ function EditObjectPage() {
 
                 <div className="flex w-full flex-wrap items-center justify-center gap-4">
                   {activeExistingImages.map((image) => (
-                    <div key={image.id} className="relative">
+                    <div key={image.id} className="relative group">
                       <img
                         src={getExistingImageUrl(image)}
                         alt={form.name}
                         className="h-[132px] w-[132px] rounded-[20px] object-cover"
                       />
 
+                      {/* Indicador "Principal" */}
+                      {image.ordre === 0 && (
+                        <span className="absolute top-2 left-2 z-10 bg-[#14B8A6] text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow pointer-events-none">
+                          Principal
+                        </span>
+                      )}
+
+                      {/* Botón eliminar (siempre visible) */}
                       <button
                         type="button"
                         onClick={() => handleRemoveExistingImage(image.id)}
@@ -514,6 +538,19 @@ function EditObjectPage() {
                       >
                         ×
                       </button>
+
+                      {/* Botón "Hacer principal" (solo en hover, solo si no es ya principal) */}
+                      {image.ordre !== 0 && (
+                        <div className="absolute inset-x-0 bottom-0 flex justify-center pb-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            type="button"
+                            onClick={() => handleSetMainImage(image.id)}
+                            className="text-[10px] font-bold rounded-full bg-[#14B8A6] text-white px-3 py-1 hover:bg-[#0F766E] active:scale-95 transition shadow"
+                          >
+                            Hacer principal
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))}
 
@@ -885,8 +922,7 @@ function EditObjectPage() {
                       {availableSubcategories.length > 0 ? (
                         availableSubcategories.map((subcategory) => {
                           const isActive =
-                            String(subcategory.id) ===
-                            String(form.subcategory);
+                            String(subcategory.id) === String(form.subcategory);
 
                           return (
                             <button

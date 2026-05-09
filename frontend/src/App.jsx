@@ -32,103 +32,106 @@ import ChatsLayout from "./components/chats/ChatsLayout";
 import ChatPage from "./pages/ChatPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import { UnreadCountsProvider } from "./contexts/UnreadCountsContext";
+import { ToastProvider } from "./contexts/ToastContext";
 
 function App() {
   return (
     <AuthProvider>
-      <UnreadCountsProvider>
-        <ScrollToTop />
+      <ToastProvider>
+        <UnreadCountsProvider>
+          <ScrollToTop />
 
-        <div className="hidden md:block">
-          <HeaderDesktop />
-        </div>
+          <div className="hidden md:block">
+            <HeaderDesktop />
+          </div>
 
-        <div className="md:hidden">
-          <HeaderMobile />
-        </div>
+          <div className="md:hidden">
+            <HeaderMobile />
+          </div>
 
-        <main className="md:pt-[80px]">
-          <Routes>
-            {/* Rutas Públicas */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-
-            <Route
-              path="/how-it-works/renters"
-              element={<HowItWorksRentersPage />}
-            />
-
-            <Route
-              path="/how-it-works/lenders"
-              element={<HowItWorksLendersPage />}
-            />
-
-            <Route path="/status" element={<StatusPage />} />
-            <Route path="/objects" element={<ObjectsPage />} />
-            <Route path="/objects/:id" element={<ObjectPage />} />
-            <Route path="/categorias/:slug" element={<CategoryPage />} />
-            <Route path="/profile/:username" element={<ProfilePage />} />
-
-            <Route
-              path="/profile/:username/objects"
-              element={<UserObjectsPage />}
-            />
-
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-
-            {/* Rutas Protegidas */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/objects/create" element={<CreateObjectPage />} />
-              <Route path="/objects/:id/edit" element={<EditObjectPage />} />
+          <main className="md:pt-[80px]">
+            <Routes>
+              {/* Rutas Públicas */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
               <Route
-                path="/settings/profile/:username"
-                element={<SettingsPage />}
+                path="/how-it-works/renters"
+                element={<HowItWorksRentersPage />}
               />
 
               <Route
-                path="/settings/profile/:username/editing"
-                element={<EditProfilePage />}
+                path="/how-it-works/lenders"
+                element={<HowItWorksLendersPage />}
               />
+
+              <Route path="/status" element={<StatusPage />} />
+              <Route path="/objects" element={<ObjectsPage />} />
+              <Route path="/objects/:id" element={<ObjectPage />} />
+              <Route path="/categorias/:slug" element={<CategoryPage />} />
+              <Route path="/profile/:username" element={<ProfilePage />} />
 
               <Route
-                path="/settings/profile/:username/security"
-                element={<SecuritySettingsPage />}
+                path="/profile/:username/objects"
+                element={<UserObjectsPage />}
               />
 
-              <Route
-                path="/settings/profile/:username/notifications"
-                element={<SettingsPage />}
-              />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-              <Route path="/orders" element={<MyOrdersPage />} />
-              <Route
-                path="/transactions"
-                element={<Navigate to="/orders" replace />}
-              />
+              {/* Rutas Protegidas */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/objects/create" element={<CreateObjectPage />} />
+                <Route path="/objects/:id/edit" element={<EditObjectPage />} />
 
-              <Route
-                path="/transactions/:id/payment"
-                element={<PaymentMockPage />}
-              />
+                <Route
+                  path="/settings/profile/:username"
+                  element={<SettingsPage />}
+                />
 
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/chats" element={<ChatsLayout />}>
-                <Route index element={null} />
-                <Route path=":id" element={<ChatPage />} />
+                <Route
+                  path="/settings/profile/:username/editing"
+                  element={<EditProfilePage />}
+                />
+
+                <Route
+                  path="/settings/profile/:username/security"
+                  element={<SecuritySettingsPage />}
+                />
+
+                <Route
+                  path="/settings/profile/:username/notifications"
+                  element={<SettingsPage />}
+                />
+
+                <Route path="/orders" element={<MyOrdersPage />} />
+                <Route
+                  path="/transactions"
+                  element={<Navigate to="/orders" replace />}
+                />
+
+                <Route
+                  path="/transactions/:id/payment"
+                  element={<PaymentMockPage />}
+                />
+
+                <Route path="/favorites" element={<FavoritesPage />} />
+                <Route path="/chats" element={<ChatsLayout />}>
+                  <Route index element={null} />
+                  <Route path=":id" element={<ChatPage />} />
+                </Route>
+                <Route path="/notifications" element={<NotificationsPage />} />
               </Route>
-              <Route path="/notifications" element={<NotificationsPage />} />
-            </Route>
 
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </main>
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </main>
 
-        <FloatingAddObjectButton />
-        <Footer />
-      </UnreadCountsProvider>
+          <FloatingAddObjectButton />
+          <Footer />
+        </UnreadCountsProvider>
+      </ToastProvider>
     </AuthProvider>
   );
 }
