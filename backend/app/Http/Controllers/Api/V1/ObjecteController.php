@@ -132,14 +132,9 @@ class ObjecteController extends Controller
                 break;
             case 'popular':
                 $query
-                    ->leftJoin('solicituds', 'solicituds.objecte_id', '=', 'objectes.id')
-                    ->leftJoin('transaccions', function ($join) {
-                        $join->on('transaccions.solicitud_id', '=', 'solicituds.id')
-                            ->where('transaccions.estat', '=', 'finalitzat');
-                    })
-                    ->select('objectes.*')
-                    ->selectRaw('COUNT(transaccions.id) AS finalitzades_count')
-                    ->groupBy('objectes.id')
+                    ->withCount(['transaccions as finalitzades_count' => function ($q) {
+                        $q->where('transaccions.estat', 'finalitzat');
+                    }])
                     ->orderByDesc('finalitzades_count')
                     ->orderByDesc('objectes.created_at');
                 break;
@@ -175,7 +170,7 @@ class ObjecteController extends Controller
     {
         $objecte = Objecte::query()
             ->with([
-                'user:id,username,nom,cognoms,avatar_url,created_at',
+                'user:id,username,nom,cognoms,avatar_url,actiu,created_at',
                 'categoria:id,nom,slug,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',

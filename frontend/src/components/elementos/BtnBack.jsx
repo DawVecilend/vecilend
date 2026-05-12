@@ -16,10 +16,15 @@ function BtnBack() {
     <button
       type="button"
       onClick={handleBack}
-      className="inline-flex items-center gap-2 cursor-pointer"
+      aria-label="Volver"
+      title="Volver"
+      className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-app-bg-card transition-colors cursor-pointer"
     >
-      <img src="/assets/icons/arrow-back-white-icon.svg" alt="Icono volver" />
-      <span className="text-label text-app-text">Volver</span>
+      <img
+        src="/assets/icons/arrow-back-white-icon.svg"
+        alt=""
+        className="h-5 w-5"
+      />
     </button>
   );
 }

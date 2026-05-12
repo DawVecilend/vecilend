@@ -18,24 +18,35 @@ function HomePage() {
   useEffect(() => {
     let cancelled = false;
 
-    Promise.all([
-      // Mejores productos: ordre per nº de transaccions finalitzades (backend Tasca 2)
+    Promise.allSettled([
       getObjects({ per_page: 5, sort: "popular" }).then((r) => r.data),
-      // Publicaciones recientes
       getObjects({ per_page: 5, sort: "recent" }).then((r) => r.data),
       getCategories(),
     ])
-      .then(([rawTop, rawRecent, rawCategories]) => {
+      .then(([topResult, recentResult, categoriesResult]) => {
         if (cancelled) return;
-        setTopProducts(rawTop || []);
-        setRecentProducts(rawRecent || []);
-        setCategories(mapCategories(rawCategories));
-      })
-      .catch((err) => {
-        console.error("Error cargando home:", err);
-        if (!cancelled) {
-          setRecentProducts([]);
+
+        if (topResult.status === "fulfilled") {
+          setTopProducts(topResult.value || []);
+        } else {
+          console.error("Error cargando más populares:", topResult.reason);
           setTopProducts([]);
+        }
+
+        if (recentResult.status === "fulfilled") {
+          setRecentProducts(recentResult.value || []);
+        } else {
+          console.error(
+            "Error cargando productos recientes:",
+            recentResult.reason,
+          );
+          setRecentProducts([]);
+        }
+
+        if (categoriesResult.status === "fulfilled") {
+          setCategories(mapCategories(categoriesResult.value));
+        } else {
+          console.error("Error cargando categorías:", categoriesResult.reason);
           setCategories([]);
         }
       })
@@ -55,7 +66,7 @@ function HomePage() {
       {loading ? (
         <>
           <div className="py-8 text-center">
-            <div className="mx-auto max-w-[1380px] px-4 md:px-10">
+            <div className="mx-auto max-w-[1380px] px-4 md:px-8">
               <div className="h-8 w-48 mx-auto mb-6 bg-app-bg-card rounded animate-pulse" />
               <div className="flex flex-wrap justify-center gap-3">
                 {Array.from({ length: 6 }).map((_, i) => (
@@ -67,12 +78,14 @@ function HomePage() {
               </div>
             </div>
           </div>
-          <ProductsGridSkeleton count={5} />
+          <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8">
+            <ProductsGridSkeleton count={5} />
+          </div>
         </>
       ) : (
         <>
           <CategoriesSection categories={categories} />
-          <ProductsSection title="Mejores Productos" products={topProducts} />
+          <ProductsSection title="Más Populares" products={topProducts} />
           <ProductsSection
             title="Publicaciones Recientes"
             products={recentProducts}

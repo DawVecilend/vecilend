@@ -1,20 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getCategories } from "../../services/categories";
-import { mapCategories } from "../../mappers/categoryMapper";
 
-/**
- * Sidebar esquerra a /objects amb:
- *  - Llista de categories amb dropdown de subcategories.
- *  - Botons per obrir els modals de filtres (ubicació, dates, preu, valoració).
- *  - Indicador visual dels filtres actius.
- *
- * Props:
- *  - filters: { lat, lng, radius, data_inici, data_fi, min_price, max_price, min_user_rating, category, subcategory }
- *  - onOpenLocation / onOpenDates / onOpenPrice / onOpenRating: handlers per als modals
- *  - applyFilterPatch: callback per actualitzar params URL ({ category: id } o { subcategory: id })
- */
 function CategorySidebar({
+  categories = [],
   filters,
   onOpenLocation,
   onOpenDates,
@@ -22,17 +9,8 @@ function CategorySidebar({
   onOpenRating,
   applyFilterPatch,
 }) {
-  const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
   const [expandedId, setExpandedId] = useState(null);
 
-  useEffect(() => {
-    getCategories()
-      .then((raw) => setCategories(mapCategories(raw)))
-      .catch((err) => console.error("Error categorías sidebar:", err));
-  }, []);
-
-  // Auto-expandir la categoria activa
   useEffect(() => {
     if (!filters.category) return;
     setExpandedId(Number(filters.category));
@@ -47,9 +25,8 @@ function CategorySidebar({
     setExpandedId((current) => (current === catId ? null : catId));
 
   return (
-    <aside className="hidden lg:block w-72 shrink-0 border-r border-app-border bg-app-bg pr-4">
-      {/* ── Filtres ──────────────────────────────────────── */}
-      <div className="py-6">
+    <aside className="hidden lg:block w-64 shrink-0 pr-4">
+      <div className="py-2">
         <h3 className="text-app-text-secondary text-caption font-bold uppercase tracking-widest mb-3 px-2">
           Filtros
         </h3>
@@ -97,8 +74,7 @@ function CategorySidebar({
         </div>
       </div>
 
-      {/* ── Categories amb subcategories desplegables ───── */}
-      <div className="py-4 border-t border-app-border">
+      <div className="py-4 mt-4 border-t border-app-border">
         <h3 className="text-app-text-secondary text-caption font-bold uppercase tracking-widest mb-3 px-2">
           Categorías
         </h3>

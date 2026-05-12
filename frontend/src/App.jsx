@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import StatusPage from "./pages/StatusPage";
 import LoginPage from "./pages/LoginPage";
-import CategoryPage from "./pages/CategoryPage";
 import ObjectsPage from "./pages/ObjectsPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -97,7 +96,6 @@ function App() {
                       <Route path="/status" element={<StatusPage />} />
                       <Route path="/objects" element={<ObjectsPage />} />
                       <Route path="/objects/:id" element={<ObjectPage />} />
-                      <Route path="/categorias/:slug" element={<CategoryPage />} />
                       <Route path="/profile/:username" element={<ProfilePage />} />
 
                       <Route

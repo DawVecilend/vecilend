@@ -58,6 +58,13 @@ class UserController extends Controller
         }
 
         $latestObjects = $latestObjectsQuery->get();
+        $objecteIds = $latestObjects->pluck('id')->all();
+        $statsPerObjecte = \App\Models\Valoracio::statsPropietariPerObjectesBulk($objecteIds);
+        foreach ($latestObjects as $objecte) {
+            $stats = $statsPerObjecte[$objecte->id] ?? ['avg' => null, 'total' => 0];
+            $objecte->valoracions_objecte_avg   = $stats['avg'];
+            $objecte->valoracions_objecte_total = $stats['total'];
+        }
 
         // Stats com a propietari + sol·licitant (mitjana ponderada per temps)
         $statsPropietari = User::statsComPropietari($user->id);

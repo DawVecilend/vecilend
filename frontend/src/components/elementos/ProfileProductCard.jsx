@@ -110,9 +110,9 @@ function ProfileProductCard({
   }
 
   return (
-    <div className="relative w-[255px]">
-      <Link to={`/objects/${id}`} className="block w-[255px]">
-        <div className="group flex h-full w-[255px] flex-col overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
+    <div className="relative w-full">
+      <Link to={`/objects/${id}`} className="block w-full">
+        <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
           <div className="relative aspect-4/3 overflow-hidden">
             <img
               alt={title}

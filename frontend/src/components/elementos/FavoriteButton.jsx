@@ -21,13 +21,13 @@ function FavoriteButton({
   const [errorMessage, setErrorMessage] = useState("");
   const { showToast } = useToast();
 
-  if (user && ownerId && user.id === ownerId) {
-    return null;
-  }
-
   useEffect(() => {
     setIsFavorite(initialIsFavorite);
   }, [initialIsFavorite]);
+
+  if (user && ownerId && user.id === ownerId) {
+    return null;
+  }
 
   function notifyFavoriteChanged(nextValue) {
     window.dispatchEvent(

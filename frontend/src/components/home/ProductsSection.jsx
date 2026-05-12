@@ -61,6 +61,8 @@ function ProductsSection({
   profile = false,
   preserveSearchParams = false,
   isOwnProfile = false,
+  containerless = false,
+  maxCols = 5,
   onFavoriteAdded,
   onFavoriteRemoved,
   onToggleVisibility,
@@ -137,15 +139,27 @@ function ProductsSection({
   }
 
   return (
-    <section className="w-full py-8">
-      <div className="mx-auto w-full">
+    <section className={containerless ? "w-full" : "w-full py-8"}>
+      <div
+        className={
+          containerless
+            ? "w-full"
+            : "mx-auto w-full max-w-[1380px] px-4 md:px-8"
+        }
+      >
         {title && (
           <h2 className="mb-8 text-center font-heading text-h2-desktop font-bold leading-h2 text-vecilend-dark-text">
             {title}
           </h2>
         )}
 
-        <div className="flex flex-wrap justify-center gap-4">
+        <div
+          className={
+            maxCols === 4
+              ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+              : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+          }
+        >
           {profile
             ? products.map((product) => (
                 <ProfileProductCard
@@ -179,6 +193,7 @@ function ProductsSection({
                   title={product.nom || "Producto"}
                   userName={getUserName(product)}
                   userAvatar={getUserAvatar(product)}
+                  ownerId={product.user?.id || product.propietari?.id}
                   rating={getRating(product)}
                   priceDay={product.preu_diari ? Number(product.preu_diari) : 0}
                   status={product.estat}

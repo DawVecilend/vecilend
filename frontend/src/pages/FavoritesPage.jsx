@@ -69,11 +69,14 @@ function FavoritesPage() {
             <ProductsGridSkeleton count={6} />
           </div>
         ) : favorites.length > 0 ? (
-          <ProductsSection
-            title=""
-            products={favorites}
-            onFavoriteRemoved={handleFavoriteRemoved}
-          />
+          <div className="mt-6">
+            <ProductsSection
+              title=""
+              products={favorites}
+              onFavoriteRemoved={handleFavoriteRemoved}
+              containerless
+            />
+          </div>
         ) : (
           <section className="mt-8 rounded-[24px] border border-app-border bg-app-bg-card px-6 py-14 text-center md:px-10">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-app-bg">
