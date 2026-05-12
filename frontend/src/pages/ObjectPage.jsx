@@ -21,6 +21,7 @@ import NavCategori from "../components/elementos/NavCategori";
 import DetailsPriceCardProduct from "../components/elementos/DetailsPriceCard";
 import ObjectReviewsSection from "../components/elementos/ObjectReviewsSection";
 import { useToast } from "../contexts/ToastContext";
+import dayjs from "dayjs";
 
 function ObjectPage() {
   const { id } = useParams();
@@ -33,7 +34,14 @@ function ObjectPage() {
   const [mainImage, setMainImage] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [range, setRange] = useState({ start: null, end: null });
+  const [range, setRange] = useState(() => {
+    const di = searchParams.get("data_inici");
+    const df = searchParams.get("data_fi");
+    if (di && df) {
+      return { start: dayjs(di), end: dayjs(df) };
+    }
+    return { start: null, end: null };
+  });
   const [missatge, setMissatge] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
