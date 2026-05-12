@@ -13,8 +13,9 @@ import { cldTransform } from "../utils/cloudinary";
 import BtnBack from "../components/elementos/BtnBack";
 import ReviewModal from "../components/transactions/ReviewModal";
 import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
+import { useToast } from "../contexts/ToastContext";
 
-// ── Configuració de pestanyes i filtres ──────────────────────────────────────
+// ── Configuració de pestanyes i filtres ──
 
 const TABS = [
   {
@@ -334,6 +335,8 @@ function MyOrdersPage() {
   const [cancelBusy, setCancelBusy] = useState(false);
   const [cancelError, setCancelError] = useState(null);
 
+  const { showToast } = useToast();
+
   const filters =
     tab.view === "transactions" ? TRANSACTION_FILTERS : REQUEST_FILTERS;
 
@@ -432,9 +435,18 @@ function MyOrdersPage() {
 
     setBusyId(id);
     try {
-      if (action === "accept") await acceptTransaction(id);
-      else if (action === "reject") await rejectTransaction(id);
-      else if (action === "return") await returnTransaction(id);
+      if (action === "accept") {
+        await acceptTransaction(id);
+        showToast(
+          "Solicitud aceptada. Se ha creado una transacción en la pestaña «Transacciones».",
+        );
+      } else if (action === "reject") {
+        await rejectTransaction(id);
+        showToast("Solicitud rechazada");
+      } else if (action === "return") {
+        await returnTransaction(id);
+        showToast("Devolución confirmada");
+      }
       await load();
       refreshBadges();
     } catch (err) {

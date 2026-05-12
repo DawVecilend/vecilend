@@ -35,7 +35,7 @@ class ObjecteController extends Controller
             'search'           => 'nullable|string|max:100',
             'category'         => 'nullable|integer|exists:categories,id',
             'subcategory'      => 'nullable|integer|exists:subcategories,id',
-            'sort'             => 'nullable|string|in:recent,oldest,price_asc,price_desc,rating',
+            'sort'             => 'nullable|string|in:recent,oldest,price_asc,price_desc,rating,popular',
             'page'             => 'nullable|integer|min:1',
             'per_page'         => 'nullable|integer|min:1|max:50',
             'lat'              => 'nullable|numeric|between:-90,90',
@@ -62,6 +62,8 @@ class ObjecteController extends Controller
                 'subcategoria:id,nom,slug',
                 'imatges',
             ]);
+
+        $query->whereHas('user', fn($q) => $q->where('actiu', true));
 
         if ($request->filled('search')) {
             $query->cerca($request->input('search'));
@@ -128,7 +130,14 @@ class ObjecteController extends Controller
                     ->orderByRaw("{$sub} DESC NULLS LAST")
                     ->orderByDesc('objectes.created_at');
                 break;
-
+            case 'popular':
+                $query
+                    ->withCount(['transaccions as finalitzades_count' => function ($q) {
+                        $q->where('transaccions.estat', 'finalitzat');
+                    }])
+                    ->orderByDesc('finalitzades_count')
+                    ->orderByDesc('objectes.created_at');
+                break;
             case 'recent':
             default:
                 $query->orderByDesc('created_at');
@@ -161,12 +170,16 @@ class ObjecteController extends Controller
     {
         $objecte = Objecte::query()
             ->with([
-                'user:id,username,nom,cognoms,avatar_url,created_at',
+                'user:id,username,nom,cognoms,avatar_url,actiu,created_at',
                 'categoria:id,nom,slug,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',
             ])
             ->findOrFail($id);
+
+        if (!$objecte->user || !$objecte->user->actiu) {
+            abort(404);
+        }
 
         // ── Stats: dues mitjanes diferents ──
         //   1. La GENERAL del propietari (al UserCard del detall)
@@ -271,6 +284,8 @@ class ObjecteController extends Controller
             ])
             ->aProximitat($lat, $lng, $radius)
             ->ordreProximitat();
+
+        $query->whereHas('user', fn($q) => $q->where('actiu', true));
 
         if (!empty($validated['category'])) {
             $query->perCategoria((int) $validated['category']);

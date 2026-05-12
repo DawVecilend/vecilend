@@ -21,23 +21,26 @@ class MissatgeResource extends JsonResource
             'llegit_at'   => $this->llegit_at?->toIso8601String(),
             'created_at'  => $this->created_at?->toIso8601String(),
 
-            // ── Objecte associat (per mostrar tarjeta "Sobre el objeto") ──
-            'objecte'     => $this->whenLoaded('objecte', fn() => $this->objecte ? [
+            // ── Objecte associat ──
+            'objecte' => $this->whenLoaded('objecte', fn() => $this->objecte ? [
                 'id'              => $this->objecte->id,
-                'nom'              => $this->objecte->nom,
-                'slug'             => $this->objecte->slug,
-                'preu_diari'       => $this->objecte->preu_diari ? (float) $this->objecte->preu_diari : null,
-                'tipus'            => $this->objecte->tipus,
+                'nom'             => $this->objecte->nom,
+                'slug'            => $this->objecte->slug,
+                'preu_diari'      => $this->objecte->preu_diari ? (float) $this->objecte->preu_diari : null,
+                'tipus'           => $this->objecte->tipus,
+                'owner_id'        => $this->objecte->user_id,   // ← nou
                 'imatge_principal' => $this->objecte->relationLoaded('imatges')
                     ? optional($this->objecte->imatges->first())->url_cloudinary
                     : null,
             ] : null),
 
-            // ── Sol·licitud associada (per mostrar "Solicitud del objeto" amb dies i preu) ──
+            // ── Sol·licitud associada ──
             'solicitud' => $this->whenLoaded('solicitud', fn() => $this->solicitud ? [
-                'id'         => $this->solicitud->id,
-                'data_inici' => $this->solicitud->data_inici,
-                'data_fi'    => $this->solicitud->data_fi,
+                'id'            => $this->solicitud->id,
+                'data_inici'    => $this->solicitud->data_inici,
+                'data_fi'       => $this->solicitud->data_fi,
+                'estat'         => $this->solicitud->estat,         // ← nou
+                'solicitant_id' => $this->solicitud->solicitant_id, // ← nou
             ] : null),
 
             // ── Missatge citat (per al "Responder") ──

@@ -6,10 +6,12 @@ import ProductsSection from "../components/home/ProductsSection";
 import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
 import BtnOrder from "../components/elementos/BtnOrder";
 import BtnBack from "../components/elementos/BtnBack";
+import { getProfile } from "../services/profile";
 
 function UserObjectsPage() {
   const { user } = useContext(AuthContext);
   const { username } = useParams();
+  const [userNom, setUserNom] = useState(null);
 
   const [objects, setObjects] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -22,8 +24,13 @@ function UserObjectsPage() {
       setLoadingProducts(true);
 
       try {
-        const response = await getUserObjects(username);
-        setObjects(response);
+        const [{ user }, objs] = await Promise.all([
+          getProfile(username),
+          getUserObjects(username),
+        ]);
+
+        setUserNom(user?.nom);
+        setObjects(objs);
       } catch (error) {
         console.error("Error cargando objetos:", error);
         setObjects([]);
@@ -49,7 +56,7 @@ function UserObjectsPage() {
           title={
             isOwnProfile
               ? "Mis objetos publicados"
-              : `Todos los productos de ${username}`
+              : `Todos los productos de ${userNom || username}`
           }
           products={objects}
           profile={true}

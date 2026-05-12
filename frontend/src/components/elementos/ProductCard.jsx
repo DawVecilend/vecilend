@@ -29,6 +29,7 @@ function ProductCard({
   title,
   userName,
   userAvatar,
+  ownerId,
   rating,
   priceDay,
   status,
@@ -56,8 +57,8 @@ function ProductCard({
   }
 
   return (
-    <Link to={detailLink} className="w-63.75">
-      <div className="group flex h-full w-[255px] flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
+    <Link to={detailLink} className="block w-full">
+      <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
         <div className="relative aspect-4/3 overflow-hidden">
           <img
             alt={title}
@@ -67,6 +68,7 @@ function ProductCard({
 
           <FavoriteButton
             objectId={id}
+            ownerId={ownerId}
             initialIsFavorite={initialIsFavorite}
             onAdded={onFavoriteAdded}
             onRemoved={onFavoriteRemoved}

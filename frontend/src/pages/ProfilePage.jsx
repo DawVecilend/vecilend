@@ -17,7 +17,6 @@ function ProfilePage() {
   const [profile, setProfile] = useState(null);
   const [latestObjects, setLatestObjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visibleObjectsCount, setVisibleObjectsCount] = useState(15);
 
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
@@ -36,15 +35,7 @@ function ProfilePage() {
 
   const isOwnProfile = currentUser && currentUser.username === username;
 
-  const visibleObjects = isOwnProfile
-    ? latestObjects.slice(0, visibleObjectsCount)
-    : latestObjects;
-
-  const hasMoreOwnObjects =
-    isOwnProfile && visibleObjectsCount < latestObjects.length;
-
-  const remainingObjects = latestObjects.length - visibleObjectsCount;
-  const nextObjectsCount = remainingObjects >= 15 ? 15 : remainingObjects;
+  const visibleObjects = latestObjects;
 
   const [notFound, setNotFound] = useState(false);
 
@@ -52,20 +43,11 @@ function ProfilePage() {
     async function loadProfile() {
       setLoading(true);
       setNotFound(false);
-      setVisibleObjectsCount(15);
 
       try {
         const { user, latest_objects } = await getProfile(username);
         setProfile(user);
-
-        const ownProfile = currentUser && currentUser.username === username;
-
-        if (ownProfile) {
-          const allUserObjects = await getUserObjects(username);
-          setLatestObjects(allUserObjects || []);
-        } else {
-          setLatestObjects(latest_objects || []);
-        }
+        setLatestObjects(latest_objects || []);
       } catch (error) {
         console.error("Error cargando perfil:", error);
         if (error.response?.status === 404) {
@@ -234,7 +216,14 @@ function ProfilePage() {
                     value={profile?.total_transaccions ?? 0}
                     label="Transacciones"
                   />
-                  <RatingCard value="100%" label="Respuesta" />
+                  <RatingCard
+                    value={
+                      profile?.resposta_rate != null
+                        ? `${profile.resposta_rate}%`
+                        : "-"
+                    }
+                    label="Respuesta"
+                  />
                   <RatingCard
                     value={profile?.valoracio_propietari_avg ?? null}
                     label={`Como propietario${
@@ -311,13 +300,12 @@ function ProfilePage() {
                 : `Objetos de ${profile?.nom}`}
             </h2>
 
-            {latestObjects.length > 0 && !isOwnProfile && (
+            {latestObjects.length > 0 && (
               <Link
                 to={`/profile/${username}/objects`}
                 className="text-[#4fdbc8] font-bold hover:underline flex items-center gap-1"
               >
                 Ver todos
-                <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
             )}
           </div>
@@ -350,23 +338,10 @@ function ProfilePage() {
                 products={visibleObjects}
                 profile={true}
                 isOwnProfile={isOwnProfile}
+                containerless
                 onToggleVisibility={handleToggleVisibility}
                 onDeleteProduct={handleDeleteProduct}
               />
-
-              {hasMoreOwnObjects && (
-                <div className="flex justify-center">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setVisibleObjectsCount((current) => current + 15)
-                    }
-                    className="rounded-full bg-[#4fdbc8] px-8 py-3 font-bold text-[#003731] transition-colors hover:bg-[#14b8a6] active:scale-95"
-                  >
-                    Ver más {nextObjectsCount > 0 && `(${nextObjectsCount})`}
-                  </button>
-                </div>
-              )}
             </>
           )}
         </section>

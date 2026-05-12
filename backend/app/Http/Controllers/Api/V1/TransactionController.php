@@ -538,8 +538,11 @@ class TransactionController extends Controller
         $this->authorize('pay', $solicitud);
 
         $transaccio = $solicitud->transaccio;
-        $dies   = (int) abs($solicitud->data_inici->diffInDays($solicitud->data_fi)) + 1;
-        $import = round($dies * (float) $solicitud->objecte->preu_diari, 2);
+        $dies      = (int) abs($solicitud->data_inici->diffInDays($solicitud->data_fi)) + 1;
+        $subtotal  = $dies * (float) $solicitud->objecte->preu_diari;
+        $comissio  = $subtotal * \App\Http\Resources\TransactionResource::COMISSIO_PCT;
+        $garantia  = $subtotal * \App\Http\Resources\TransactionResource::GARANTIA_PCT;
+        $import    = round($subtotal + $comissio + $garantia, 2);
 
         DB::transaction(function () use ($transaccio, $request, $import) {
             Pagament::create([

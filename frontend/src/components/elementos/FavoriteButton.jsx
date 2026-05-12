@@ -6,6 +6,7 @@ import { useToast } from "../../contexts/ToastContext";
 
 function FavoriteButton({
   objectId,
+  ownerId,
   initialIsFavorite = false,
   onAdded,
   onRemoved,
@@ -13,17 +14,20 @@ function FavoriteButton({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [busy, setBusy] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
   const { showToast } = useToast();
 
   useEffect(() => {
     setIsFavorite(initialIsFavorite);
   }, [initialIsFavorite]);
+
+  if (user && ownerId && user.id === ownerId) {
+    return null;
+  }
 
   function notifyFavoriteChanged(nextValue) {
     window.dispatchEvent(

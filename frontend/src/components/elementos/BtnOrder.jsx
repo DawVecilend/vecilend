@@ -47,7 +47,7 @@ function BtnOrder({ value = "recent", onChange }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-20 mt-2 w-full overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card shadow-lg">
+        <div className="absolute right-0 z-40 mt-2 w-full overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card shadow-lg">
           {options.map((option) => {
             const isActive = option.value === value;
 

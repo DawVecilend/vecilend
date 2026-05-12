@@ -29,6 +29,7 @@ class UserResource extends JsonResource
             'valoracio_solicitant_avg'   => $this->valoracio_solicitant_avg   ?? null,
             'valoracio_solicitant_total' => $this->valoracio_solicitant_total ?? 0,
             'total_transaccions'         => $this->total_transaccions         ?? 0,
+            'resposta_rate'              => $this->resposta_rate,
             'created_at' => $this->created_at?->toISOString(),
         ];
     }

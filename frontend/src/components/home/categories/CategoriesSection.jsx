@@ -119,8 +119,8 @@ function CategoriesSection({ categories = [] }) {
                 className="shrink-0 w-[calc(50%-0.5rem)] md:w-[calc(25%-0.75rem)] lg:w-[calc(16.6667%-0.84rem)]"
               >
                 <CategoryPill
+                  id={category.id}
                   name={category.name}
-                  slug={category.slug}
                   icon={category.icon || "category"}
                 />
               </div>

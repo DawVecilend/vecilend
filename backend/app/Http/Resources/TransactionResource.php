@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionResource extends JsonResource
 {
+    // ── Percentatges aplicats sobre el subtotal (preu_diari × dies) ──
+    public const COMISSIO_PCT = 0.05;   // 5% comissió per transacció
+    public const GARANTIA_PCT = 0.05;   // 5% garantia de seguretat
+
     public function toArray(Request $request): array
     {
         /** @var \App\Models\Solicitud $this */
@@ -17,9 +21,9 @@ class TransactionResource extends JsonResource
         $transaccio = $this->relationLoaded('transaccio') ? $this->transaccio : null;
 
         $diesPrestec = (int) abs($this->data_inici->diffInDays($this->data_fi)) + 1;
-        $preuTotal   = $this->calcularPreuTotal($diesPrestec);
+        $preuDetall  = $this->calcularPreuDetall($diesPrestec);
 
-        $paid       = $transaccio ? $this->teePagamentCompletat($transaccio) : false;
+        $paid       = $transaccio ? $this->tePagamentCompletat($transaccio) : false;
         $canCancel  = $this->canCancel($transaccio, $paid);
         $canPay     = $this->canPay($transaccio, $paid);
 
@@ -37,7 +41,12 @@ class TransactionResource extends JsonResource
             'estat'           => $this->estat,
 
             'missatge'        => $this->missatge,
-            'preu_total'      => $preuTotal,
+
+            // ── Detall del preu (per al frontend) ──
+            'preu_subtotal'   => $preuDetall['subtotal'] ?? null,
+            'preu_comissio'   => $preuDetall['comissio'] ?? null,
+            'preu_garantia'   => $preuDetall['garantia'] ?? null,
+            'preu_total'      => $preuDetall['total']    ?? null,
 
             'paid'            => $paid,
             'can_cancel'      => $canCancel,
@@ -94,18 +103,36 @@ class TransactionResource extends JsonResource
         ];
     }
 
-    private function calcularPreuTotal(int $dies): ?float
+    /**
+     * Retorna el detall complet del preu: subtotal, comissió, garantia, total.
+     * - `lloguer` sense preu_diari → tots null.
+     * - `prestec` → tot a 0.0.
+     */
+    private function calcularPreuDetall(int $dies): array
     {
         if ($this->tipus !== 'lloguer') {
-            return 0.0;
+            return ['subtotal' => 0.0, 'comissio' => 0.0, 'garantia' => 0.0, 'total' => 0.0];
         }
+
         if (!$this->relationLoaded('objecte') || !$this->objecte->preu_diari) {
-            return null;
+            return ['subtotal' => null, 'comissio' => null, 'garantia' => null, 'total' => null];
         }
-        return round($dies * (float) $this->objecte->preu_diari, 2);
+
+        $preuDiari = (float) $this->objecte->preu_diari;
+        $subtotal  = $preuDiari * $dies;
+        $comissio  = $subtotal * self::COMISSIO_PCT;
+        $garantia  = $subtotal * self::GARANTIA_PCT;
+        $total     = $subtotal + $comissio + $garantia;
+
+        return [
+            'subtotal' => round($subtotal, 2),
+            'comissio' => round($comissio, 2),
+            'garantia' => round($garantia, 2),
+            'total'    => round($total, 2),
+        ];
     }
 
-    private function teePagamentCompletat($transaccio): bool
+    private function tePagamentCompletat($transaccio): bool
     {
         if (!$transaccio || !$transaccio->relationLoaded('pagaments')) {
             return false;
@@ -121,12 +148,10 @@ class TransactionResource extends JsonResource
             return false;
         }
 
-        // Solicitud pendent → solicitant pot cancel·lar
         if ($this->estat === 'pendent') {
             return $userId === $this->solicitant_id;
         }
 
-        // Transacció en curs sense pagament i abans de data_inici → ambdues parts
         if ($transaccio && $transaccio->estat === 'en_curs' && !$paid) {
             $ownerId = $this->relationLoaded('objecte') ? $this->objecte->user_id : null;
             $esPart  = $userId === $this->solicitant_id || $userId === $ownerId;

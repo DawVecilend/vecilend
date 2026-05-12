@@ -55,3 +55,14 @@ export async function deleteAccount(password) {
   const response = await api.delete("/account", { data: { password } });
   return response.data;
 }
+
+/**
+ * PUT /api/v1/account/deactivate
+ *
+ * Desactiva el compte (actiu = false). No esborra dades.
+ * Tanca sessió al backend i retorna el missatge.
+ */
+export async function deactivateAccount() {
+  const response = await api.put("/account/deactivate");
+  return response.data;
+}
