@@ -57,10 +57,10 @@ class TransactionPolicy
             return false;
         }
 
-        $teePagament = $transaccio->pagaments()
+        $tePagament = $transaccio->pagaments()
             ->where('estat', Pagament::ESTAT_COMPLETAT)
             ->exists();
-        if ($teePagament) {
+        if ($tePagament) {
             return false;
         }
 

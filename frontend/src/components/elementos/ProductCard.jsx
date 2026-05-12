@@ -29,6 +29,7 @@ function ProductCard({
   title,
   userName,
   userAvatar,
+  ownerId,
   rating,
   priceDay,
   status,
@@ -67,6 +68,7 @@ function ProductCard({
 
           <FavoriteButton
             objectId={id}
+            ownerId={ownerId}
             initialIsFavorite={initialIsFavorite}
             onAdded={onFavoriteAdded}
             onRemoved={onFavoriteRemoved}

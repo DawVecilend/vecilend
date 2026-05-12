@@ -29,13 +29,15 @@ class UserController extends Controller
     {
         $user = User::where('username', $username)->first();
         if (!$user) {
-            return response()->json([
-                'message' => 'Usuari no trobat.',
-            ], 404);
+            return response()->json(['message' => 'Usuari no trobat.'], 404);
         }
 
         $authUser = $request->user();
-        $isOwn = $authUser && $authUser->id === $user->id;
+        $isOwn    = $authUser && $authUser->id === $user->id;
+
+        if (!$user->actiu && !$isOwn) {
+            return response()->json(['message' => 'Usuari no trobat.'], 404);
+        }
 
         // Query base dels objectes del usuari
         $latestObjectsQuery = \App\Models\Objecte::query()
@@ -67,6 +69,7 @@ class UserController extends Controller
         $user->valoracio_solicitant_total = $statsSolicitant['total'];
 
         $user->total_transaccions = User::totalTransaccions($user->id);
+        $user->resposta_rate      = User::calcularRespostaRate($user->id);
 
         // Triem el resource segons si és el propietari
         $resourceClass = $isOwn
@@ -204,6 +207,41 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Cuenta eliminada correctamente.',
+        ], 200);
+    }
+
+    /**
+     * PUT /api/v1/account/deactivate
+     *
+     * Marca el compte com a inactiu. A diferència de destroyAccount,
+     * NO esborra dades: només posa actiu=false i revoca els tokens.
+     * L'usuari pot reactivar contactant amb suport (o, si ho volem
+     * més endavant, fent login que canvii actiu=true automàticament).
+     */
+    public function deactivateAccount(Request $request)
+    {
+        $user = $request->user();
+
+        // Si té transaccions en curs no permetem desactivar (igual que destroyAccount)
+        $teTransaccionsActives = Solicitud::query()
+            ->whereHas('transaccio', fn($q) => $q->where('estat', 'en_curs'))
+            ->where(function ($q) use ($user) {
+                $q->where('solicitant_id', $user->id)
+                    ->orWhereHas('objecte', fn($oq) => $oq->where('user_id', $user->id));
+            })
+            ->exists();
+
+        if ($teTransaccionsActives) {
+            return response()->json([
+                'message' => 'No puedes desactivar la cuenta mientras tengas transacciones en curso. Resuélvelas primero.',
+            ], 422);
+        }
+
+        $user->update(['actiu' => false]);
+        $user->tokens()->delete();
+
+        return response()->json([
+            'message' => 'Cuenta desactivada correctamente.',
         ], 200);
     }
 }

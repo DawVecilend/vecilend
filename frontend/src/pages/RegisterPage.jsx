@@ -28,6 +28,8 @@ function RegisterPage() {
   const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
   const [resendCooldown, setResendCooldown] = useState(0);
 
+  const [otpVerified, setOtpVerified] = useState(false);
+
   useEffect(() => {
     if (resendCooldown <= 0) return;
     const t = setTimeout(() => setResendCooldown((c) => c - 1), 1000);
@@ -178,7 +180,11 @@ function RegisterPage() {
         code,
       });
 
-      setStep(3);
+      setOtpVerified(true);
+      setTimeout(() => {
+        setOtpVerified(false);
+        setStep(3);
+      }, 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Código incorrecto o caducado.");
     } finally {
@@ -226,6 +232,22 @@ function RegisterPage() {
       const prev = document.getElementById(`otp-${idx - 1}`);
       prev?.focus();
     }
+  };
+
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pasted = (e.clipboardData?.getData("text") || "")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+    if (!pasted) return;
+
+    const next = ["", "", "", "", "", ""];
+    for (let i = 0; i < pasted.length; i++) next[i] = pasted[i];
+    setOtpDigits(next);
+
+    // Focus al següent camp buit (o al darrer si està complet)
+    const targetIdx = Math.min(pasted.length, 5);
+    document.getElementById(`otp-${targetIdx}`)?.focus();
   };
 
   const handleRegister = async (e) => {
@@ -532,35 +554,52 @@ function RegisterPage() {
                 </div>
 
                 <form className="space-y-4" onSubmit={handleVerifyOTP}>
-                  <div className="flex justify-between gap-2">
-                    {otpDigits.map((digit, i) => (
-                      <input
-                        key={i}
-                        id={`otp-${i}`}
-                        value={digit}
-                        onChange={(e) => handleOtpChange(i, e.target.value)}
-                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                        inputMode="numeric"
-                        autoComplete="one-time-code"
-                        className="w-12 h-14 bg-[#252b2a] border-2 border-app-border rounded-lg text-center text-xl font-bold text-[#4fdbc8] focus:border-[#4fdbc8] focus:ring-0 outline-none transition-colors"
-                        maxLength="1"
-                        type="text"
-                      />
-                    ))}
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={`w-full bg-[#4fdbc8] text-[#003731] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-[#4fdbc8]/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#14b8a6]"}`}
-                  >
-                    {isLoading ? "Verificando..." : "Verificar código"}
-                  </button>
-
-                  {error && (
-                    <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-2 rounded-lg text-sm font-medium text-center">
-                      {error}
+                  {otpVerified ? (
+                    <div className="flex flex-col items-center py-8 animate-fade-in">
+                      <span className="material-symbols-outlined text-emerald-400 text-6xl mb-3">
+                        check_circle
+                      </span>
+                      <p className="text-h3-desktop text-emerald-400 font-bold">
+                        ¡Código confirmado!
+                      </p>
+                      <p className="text-app-text-secondary text-label mt-1">
+                        Continuamos en un momento…
+                      </p>
                     </div>
+                  ) : (
+                    <>
+                      <div className="flex justify-between gap-2">
+                        {otpDigits.map((digit, i) => (
+                          <input
+                            key={i}
+                            id={`otp-${i}`}
+                            value={digit}
+                            onChange={(e) => handleOtpChange(i, e.target.value)}
+                            onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                            onPaste={handleOtpPaste}
+                            inputMode="numeric"
+                            autoComplete="one-time-code"
+                            className="w-12 h-14 bg-[#252b2a] border-2 border-app-border rounded-lg text-center text-xl font-bold text-[#4fdbc8] focus:border-[#4fdbc8] focus:ring-0 outline-none transition-colors"
+                            maxLength="1"
+                            type="text"
+                          />
+                        ))}
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isLoading}
+                        className={`w-full bg-[#4fdbc8] text-[#003731] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-[#4fdbc8]/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#14b8a6]"}`}
+                      >
+                        {isLoading ? "Verificando..." : "Verificar código"}
+                      </button>
+
+                      {error && (
+                        <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-2 rounded-lg text-sm font-medium text-center">
+                          {error}
+                        </div>
+                      )}
+                    </>
                   )}
                 </form>
 

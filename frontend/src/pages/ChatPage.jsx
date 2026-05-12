@@ -11,6 +11,9 @@ import { useUnreadCounts } from "../contexts/UnreadCountsContext";
 import { formatDateTimeSmart } from "../utils/datetime";
 import { cldTransform } from "../utils/cloudinary";
 import BtnBack from "../components/elementos/BtnBack";
+import { calcPriceBreakdown } from "../utils/pricing";
+import { acceptTransaction, rejectTransaction } from "../services/transactions";
+import { useToast } from "../contexts/ToastContext";
 
 const POLL_MS = 7000;
 
@@ -62,58 +65,109 @@ function ObjectContextCard({ objecte }) {
  * Targeta "Solicitud del objeto" — apareix inline quan el missatge
  * té solicitud_id (creat per TransactionController).
  */
-function SolicitudContextCard({ objecte, solicitud }) {
+function SolicitudContextCard({
+  objecte,
+  solicitud,
+  currentUserId,
+  onAction,
+  busy,
+}) {
   if (!objecte) return null;
 
   const img = objecte.imatge_principal
     ? cldTransform(objecte.imatge_principal, "thumb")
     : "/assets/icons/empty-object-icon.svg";
 
+  // Dies (inclusius)
   let dies = null;
   if (solicitud?.data_inici && solicitud?.data_fi) {
     const inici = new Date(solicitud.data_inici);
     const fi = new Date(solicitud.data_fi);
-    dies = Math.round((fi - inici) / (1000 * 60 * 60 * 24));
+    dies = Math.round((fi - inici) / (1000 * 60 * 60 * 24)) + 1;
   }
 
-  const preuTotal =
+  // Preu coherent amb el backend (10% extra)
+  const total =
     dies > 0 && objecte.preu_diari
-      ? (Number(objecte.preu_diari) * dies).toFixed(2)
+      ? calcPriceBreakdown(objecte.preu_diari, dies).total
       : null;
+
+  // ── Pot acceptar/rebutjar? Només si soc el propietari i està pendent ──
+  const sccPendent = solicitud?.estat === "pendent";
+  const sccSoylOwner = currentUserId && objecte.owner_id === currentUserId;
+  const canAct = sccPendent && sccSoylOwner;
+
+  // Etiquetes d'estat (només si NO és pendent o no soc owner)
+  const estatLabels = {
+    pendent: { label: "Pendiente", classes: "text-amber-400" },
+    acceptat: { label: "Aceptada", classes: "text-emerald-400" },
+    rebutjat: { label: "Rechazada", classes: "text-red-400" },
+    cancellat: { label: "Cancelada", classes: "text-zinc-400" },
+  };
+  const estatLabel = solicitud?.estat ? estatLabels[solicitud.estat] : null;
 
   return (
     <div className="my-2 flex justify-center">
-      <Link
-        to={`/objects/${objecte.id}`}
-        className="flex items-center gap-3 rounded-xl border border-app-border bg-app-bg-card-secondary hover:bg-app-bg-card transition-colors px-4 py-3 w-full max-w-[360px]"
-      >
-        <img
-          src={img}
-          alt={objecte.nom}
-          className="h-12 w-12 rounded-lg object-cover shrink-0"
-        />
-        <div className="flex-1 min-w-0">
-          <p className="text-caption text-app-text-secondary leading-none mb-0.5">
-            Solicitud del objeto
+      <div className="flex flex-col gap-3 rounded-xl border border-app-border bg-app-bg-card-secondary px-4 py-3 w-full max-w-[360px]">
+        <Link
+          to={`/objects/${objecte.id}`}
+          className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+        >
+          <img
+            src={img}
+            alt={objecte.nom}
+            className="h-12 w-12 rounded-lg object-cover shrink-0"
+          />
+          <div className="flex-1 min-w-0">
+            <p className="text-caption text-app-text-secondary leading-none mb-0.5">
+              Solicitud del objeto
+            </p>
+            <p className="text-label font-bold text-app-text truncate">
+              {objecte.nom}
+            </p>
+            {total != null ? (
+              <p className="text-caption text-vecilend-dark-primary font-bold">
+                {total.toFixed(2)}€ total · {dies} día{dies === 1 ? "" : "s"}
+              </p>
+            ) : dies > 0 ? (
+              <p className="text-caption text-vecilend-dark-secondary font-bold">
+                Préstamo gratuito · {dies} día{dies === 1 ? "" : "s"}
+              </p>
+            ) : (
+              <p className="text-caption text-vecilend-dark-secondary font-bold">
+                Préstamo gratuito
+              </p>
+            )}
+          </div>
+        </Link>
+
+        {canAct && (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => onAction("accept", solicitud.id)}
+              className="flex-1 rounded-full bg-emerald-500 hover:bg-emerald-600 px-3 py-2 text-caption font-bold text-white disabled:opacity-50"
+            >
+              {busy ? "…" : "Aceptar"}
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => onAction("reject", solicitud.id)}
+              className="flex-1 rounded-full bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 px-3 py-2 text-caption font-bold text-red-400 disabled:opacity-50"
+            >
+              Rechazar
+            </button>
+          </div>
+        )}
+
+        {!canAct && estatLabel && (
+          <p className={`text-caption font-bold ${estatLabel.classes}`}>
+            Estado: {estatLabel.label}
           </p>
-          <p className="text-label font-bold text-app-text truncate">
-            {objecte.nom}
-          </p>
-          {preuTotal ? (
-            <p className="text-caption text-vecilend-dark-primary font-bold">
-              {preuTotal}€ total · {dies} día{dies === 1 ? "" : "s"}
-            </p>
-          ) : dies > 0 ? (
-            <p className="text-caption text-vecilend-dark-secondary font-bold">
-              Préstamo gratuito · {dies} día{dies === 1 ? "" : "s"}
-            </p>
-          ) : (
-            <p className="text-caption text-vecilend-dark-secondary font-bold">
-              Préstamo gratuito
-            </p>
-          )}
-        </div>
-      </Link>
+        )}
+      </div>
     </div>
   );
 }
@@ -199,6 +253,9 @@ function ChatPage() {
   const [error, setError] = useState(null);
   const [draft, setDraft] = useState("");
   const [replyTo, setReplyTo] = useState(null); // missatge citat (objecte)
+
+  const [solicitudBusyId, setSolicitudBusyId] = useState(null);
+  const { showToast } = useToast();
 
   const scrollRef = useRef(null);
   const pollRef = useRef(null);
@@ -314,6 +371,33 @@ function ChatPage() {
     }
   }
 
+  const handleSolicitudAction = async (action, solicitudId) => {
+    setSolicitudBusyId(solicitudId);
+    try {
+      if (action === "accept") {
+        await acceptTransaction(solicitudId);
+        showToast(
+          "Solicitud aceptada. Se ha creado una transacción en la pestaña «Transacciones».",
+        );
+      } else if (action === "reject") {
+        await rejectTransaction(solicitudId);
+        showToast("Solicitud rechazada");
+      }
+
+      // Recarrega els missatges per refrescar l'estat de la sol·licitud
+      const msgsData = await getChatMessages(id, { per_page: 100 });
+      setMessages(msgsData.data || []);
+    } catch (e) {
+      console.error("Error en acción de solicitud:", e);
+      alert(
+        e.response?.data?.message ||
+          "No se ha podido procesar la acción. Inténtalo de nuevo.",
+      );
+    } finally {
+      setSolicitudBusyId(null);
+    }
+  };
+
   function handleKeyDown(e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -407,10 +491,16 @@ function ChatPage() {
         ) : (
           messages.map((m, idx) => {
             const prev = idx > 0 ? messages[idx - 1] : null;
-            const objecteCanviat =
-              m.objecte && (prev?.objecte?.id ?? null) !== m.objecte.id;
-            const showSolicitudCard = objecteCanviat && !!m.solicitud;
-            const showObjectCard = objecteCanviat && !m.solicitud;
+
+            const currentKey = `${m.objecte?.id ?? "null"}:${m.solicitud?.id ?? "null"}`;
+            const prevKey = prev
+              ? `${prev.objecte?.id ?? "null"}:${prev.solicitud?.id ?? "null"}`
+              : null;
+            const contextCanviat = currentKey !== prevKey;
+
+            const showSolicitudCard = contextCanviat && !!m.solicitud;
+            const showObjectCard =
+              contextCanviat && !!m.objecte && !m.solicitud;
 
             return (
               <div key={m.id} className="flex flex-col">
@@ -418,6 +508,9 @@ function ChatPage() {
                   <SolicitudContextCard
                     objecte={m.objecte}
                     solicitud={m.solicitud}
+                    currentUserId={user?.id}
+                    onAction={handleSolicitudAction}
+                    busy={solicitudBusyId === m.solicitud.id}
                   />
                 )}
                 {showObjectCard && <ObjectContextCard objecte={m.objecte} />}

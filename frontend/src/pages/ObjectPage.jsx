@@ -479,24 +479,34 @@ function ObjectPage() {
           </div>
 
           {propietari && (
-            <UserCard
-              user={propietari}
-              action={
-                !isOwnObject && (
-                  <button
-                    type="button"
-                    onClick={() => openChatAboutObject()}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-vecilend-dark-primary/15 hover:bg-vecilend-dark-primary/25 border border-vecilend-dark-primary/40 px-3 py-2 text-label font-bold text-vecilend-dark-primary active:scale-95 transition"
-                    title="Consultar al propietario sobre este objeto"
-                  >
-                    <span className="material-symbols-outlined text-base leading-none">
-                      chat_bubble
-                    </span>
-                    <span>Consultar sobre el objeto</span>
-                  </button>
-                )
-              }
-            />
+            <Link
+              to={`/profile/${propietari.username}`}
+              className="block hover:opacity-90 transition-opacity"
+              aria-label={`Ver perfil de ${propietari.nom}`}
+            >
+              <UserCard
+                user={propietari}
+                action={
+                  !isOwnObject && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openChatAboutObject();
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-vecilend-dark-primary/15 hover:bg-vecilend-dark-primary/25 border border-vecilend-dark-primary/40 px-3 py-2 text-label font-bold text-vecilend-dark-primary active:scale-95 transition"
+                      title="Consultar al propietario sobre este objeto"
+                    >
+                      <span className="material-symbols-outlined text-base leading-none">
+                        chat_bubble
+                      </span>
+                      <span>Consultar sobre el objeto</span>
+                    </button>
+                  )
+                }
+              />
+            </Link>
           )}
 
           {product.ubicacio && (

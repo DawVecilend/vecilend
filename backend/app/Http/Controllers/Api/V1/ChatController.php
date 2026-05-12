@@ -155,11 +155,11 @@ class ChatController extends Controller
 
         $paginator = $conversa->missatges()
             ->with([
-                'objecte:id,nom,slug,preu_diari,tipus',
+                'objecte:id,nom,slug,preu_diari,tipus,user_id',
                 'objecte.imatges',
                 'responA:id,contingut,emissor_id',
                 'responA.emissor:id,nom',
-                'solicitud:id,data_inici,data_fi',
+                'solicitud:id,data_inici,data_fi,estat,solicitant_id',
             ])
             ->orderByDesc('created_at')
             ->paginate($perPage);
@@ -206,11 +206,11 @@ class ChatController extends Controller
         });
 
         $missatge->load([
-            'objecte:id,nom,slug,preu_diari,tipus',
+            'objecte:id,nom,slug,preu_diari,tipus,user_id',
             'objecte.imatges',
             'responA:id,contingut,emissor_id',
             'responA.emissor:id,nom',
-            'solicitud:id,data_inici,data_fi',
+            'solicitud:id,data_inici,data_fi,estat,solicitant_id',
         ]);
 
         return (new MissatgeResource($missatge))

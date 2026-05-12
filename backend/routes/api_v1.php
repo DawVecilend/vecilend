@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);
     Route::delete('/account', [UserController::class, 'destroyAccount']);
+    Route::put('/account/deactivate', [UserController::class, 'deactivateAccount']);
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::post('/objects', [ObjecteController::class, 'store']);
     Route::put('/objects/{id}', [ObjecteController::class, 'update'])->where('id', '[0-9]+');
@@ -94,6 +95,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
         $notifications = Notificacio::where('user_id', $userId)
             ->where('llegida', false)
+            ->where(function ($q) use ($userId) {
+                $q->where('tipus', '!=', \App\Models\Notificacio::TIPUS_VALORACIO_REBUDA)
+                    ->orWhere(function ($qq) use ($userId) {
+                        $qq->where('tipus', \App\Models\Notificacio::TIPUS_VALORACIO_REBUDA)
+                            ->where(function ($qqq) use ($userId) {
+                                $qqq->whereNull('dades_extra')
+                                    ->orWhereRaw("(dades_extra->>'autor_id')::int != ?", [$userId]);
+                            });
+                    });
+            })
             ->count();
 
         // Solicituds pendents enviades per mi

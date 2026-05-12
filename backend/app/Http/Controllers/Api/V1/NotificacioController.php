@@ -21,6 +21,16 @@ class NotificacioController extends Controller
         $perPage = min((int) $request->input('per_page', 20), 50);
 
         $paginator = Notificacio::where('user_id', $userId)
+            ->where(function ($q) use ($userId) {
+                $q->where('tipus', '!=', Notificacio::TIPUS_VALORACIO_REBUDA)
+                    ->orWhere(function ($qq) use ($userId) {
+                        $qq->where('tipus', Notificacio::TIPUS_VALORACIO_REBUDA)
+                            ->where(function ($qqq) use ($userId) {
+                                $qqq->whereNull('dades_extra')
+                                    ->orWhereRaw("(dades_extra->>'autor_id')::int != ?", [$userId]);
+                            });
+                    });
+            })
             ->orderByDesc('created_at')
             ->paginate($perPage);
 

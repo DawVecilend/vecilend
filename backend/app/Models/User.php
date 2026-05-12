@@ -206,4 +206,36 @@ class User extends Authenticatable
             'objecte_id'
         )->withPivot('created_at');
     }
+
+    /**
+     * Calcula el % de resposta de l'usuari basat en xats rebuts.
+     *
+     * Definició: de totes les converses on l'altre usuari m'ha enviat algun
+     * missatge (és a dir, on jo he "rebut" un xat), en quin % he respost
+     * amb almenys un missatge meu?
+     *
+     * Retorna null si encara no ha rebut cap missatge (no té dades suficients).
+     */
+    public static function calcularRespostaRate(int $userId): ?int
+    {
+        // Converses on l'altre ha enviat almenys 1 missatge
+        $rebudes = \App\Models\Conversa::query()
+            ->where(function ($q) use ($userId) {
+                $q->where('usuari_1_id', $userId)->orWhere('usuari_2_id', $userId);
+            })
+            ->whereHas('missatges', fn($q) => $q->where('emissor_id', '!=', $userId))
+            ->pluck('id');
+
+        if ($rebudes->isEmpty()) {
+            return null;
+        }
+
+        // Quantes d'aquestes tenen almenys un missatge meu
+        $respostes = \App\Models\Conversa::query()
+            ->whereIn('id', $rebudes)
+            ->whereHas('missatges', fn($q) => $q->where('emissor_id', $userId))
+            ->count();
+
+        return (int) round(($respostes / $rebudes->count()) * 100);
+    }
 }

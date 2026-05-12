@@ -234,7 +234,14 @@ function ProfilePage() {
                     value={profile?.total_transaccions ?? 0}
                     label="Transacciones"
                   />
-                  <RatingCard value="100%" label="Respuesta" />
+                  <RatingCard
+                    value={
+                      profile?.resposta_rate != null
+                        ? `${profile.resposta_rate}%`
+                        : "-"
+                    }
+                    label="Respuesta"
+                  />
                   <RatingCard
                     value={profile?.valoracio_propietari_avg ?? null}
                     label={`Como propietario${

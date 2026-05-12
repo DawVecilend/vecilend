@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "../components/home/HeroSection";
 import CategoriesSection from "../components/home/categories/CategoriesSection";
 import ProductsSection from "../components/home/ProductsSection";
@@ -10,7 +10,8 @@ import { mapCategories } from "../mappers/categoryMapper";
 import CTASection from "../components/home/CTASection";
 
 function HomePage() {
-  const [products, setProducts] = useState([]);
+  const [recentProducts, setRecentProducts] = useState([]);
+  const [topProducts, setTopProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,19 +19,23 @@ function HomePage() {
     let cancelled = false;
 
     Promise.all([
-      // Només 10 objectes a la home (5 per secció)
-      getObjects({ per_page: 10, sort: "recent" }).then((r) => r.data),
+      // Mejores productos: ordre per nº de transaccions finalitzades (backend Tasca 2)
+      getObjects({ per_page: 5, sort: "popular" }).then((r) => r.data),
+      // Publicaciones recientes
+      getObjects({ per_page: 5, sort: "recent" }).then((r) => r.data),
       getCategories(),
     ])
-      .then(([rawObjects, rawCategories]) => {
+      .then(([rawTop, rawRecent, rawCategories]) => {
         if (cancelled) return;
-        setProducts(rawObjects);
+        setTopProducts(rawTop || []);
+        setRecentProducts(rawRecent || []);
         setCategories(mapCategories(rawCategories));
       })
       .catch((err) => {
         console.error("Error cargando home:", err);
         if (!cancelled) {
-          setProducts([]);
+          setRecentProducts([]);
+          setTopProducts([]);
           setCategories([]);
         }
       })
@@ -43,28 +48,12 @@ function HomePage() {
     };
   }, []);
 
-  // Memoritzem els slices per evitar recalcular en cada render
-  const recentProducts = useMemo(
-    () =>
-      [...products]
-        .sort(
-          (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0),
-        )
-        .slice(0, 5),
-    [products],
-  );
-
-  // TODO: quan funcioni `sort=rating` amb valoracions reals, fer una segona crida
-  // a getObjects({ per_page: 5, sort: 'rating' }) per separar els "top" dels "recents".
-  const topProducts = recentProducts;
-
   return (
     <>
       <HeroSection />
 
       {loading ? (
         <>
-          {/* Placeholder de categories (alçada similar a CategoriesSection) */}
           <div className="py-8 text-center">
             <div className="mx-auto max-w-[1380px] px-4 md:px-10">
               <div className="h-8 w-48 mx-auto mb-6 bg-app-bg-card rounded animate-pulse" />
@@ -78,7 +67,6 @@ function HomePage() {
               </div>
             </div>
           </div>
-          {/* Skeleton dels productes */}
           <ProductsGridSkeleton count={5} />
         </>
       ) : (

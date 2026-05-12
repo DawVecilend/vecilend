@@ -12,6 +12,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import PasswordRequirements from "../components/elementos/PasswordRequirements";
+import { deactivateAccount } from "../services/profile";
 
 function SecuritySettingsPage() {
   const { user } = useContext(AuthContext);
@@ -36,6 +37,27 @@ function SecuritySettingsPage() {
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
   const [deleteShowPassword, setDeleteShowPassword] = useState(false);
+
+  const [deactivateOpen, setDeactivateOpen] = useState(false);
+  const [deactivateBusy, setDeactivateBusy] = useState(false);
+  const [deactivateError, setDeactivateError] = useState(null);
+
+  const handleConfirmDeactivate = async () => {
+    setDeactivateBusy(true);
+    setDeactivateError(null);
+    try {
+      await deactivateAccount();
+      auth.logout?.();
+      navigate("/", { replace: true });
+    } catch (err) {
+      setDeactivateError(
+        err?.response?.data?.message ||
+          "No se ha podido desactivar la cuenta. Inténtalo de nuevo.",
+      );
+    } finally {
+      setDeactivateBusy(false);
+    }
+  };
 
   const handlePasswordChange = (e) => {
     setPasswords((prev) => ({
@@ -289,8 +311,8 @@ function SecuritySettingsPage() {
               </div>
             </section>
 
-            {/* Tarjeta: Zona de Peligro (Larga, ocupa 12 columnas) */}
-            <section className="lg:col-span-12 bg-[#93000a]/10 border border-[#ffb4ab]/20 rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+            {/* ── Zona de Peligro ── */}
+            <section className="lg:col-span-12 bg-[#93000a]/10 border border-[#ffb4ab]/20 rounded-xl p-6 shadow-xl flex flex-col gap-4">
               <div>
                 <h2 className="text-lg font-bold text-[#ffb4ab] mb-2 flex items-center gap-2">
                   <span className="material-symbols-outlined text-sm">
@@ -299,21 +321,59 @@ function SecuritySettingsPage() {
                   Zona de Peligro
                 </h2>
                 <p className="text-[13px] text-app-text-secondary">
-                  Una vez que elimines tu cuenta, no hay vuelta atrás. Por
-                  favor, asegúrate de que esto es lo que quieres hacer.
+                  Acciones que afectan tu cuenta de forma permanente o duradera.
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setDeletePassword("");
-                  setDeleteError(null);
-                  setDeleteOpen(true);
-                }}
-                className="whitespace-nowrap w-full md:w-auto px-8 py-3 rounded-lg border border-[#ffb4ab] text-[#ffb4ab] font-bold hover:bg-[#ffb4ab] hover:text-[#690005] transition-all active:scale-95"
-              >
-                Eliminar Cuenta
-              </button>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Desactivar — recuperable contactando suporte */}
+                <div className="rounded-lg border border-[#ffb59e]/30 bg-[#0e1513]/40 p-4 flex flex-col gap-3">
+                  <div>
+                    <h3 className="font-bold text-app-text mb-1">
+                      Desactivar cuenta
+                    </h3>
+                    <p className="text-caption text-app-text-secondary leading-relaxed">
+                      Tu perfil y tus objetos dejarán de aparecer para los
+                      demás. Tus datos no se borran. Para reactivar la cuenta,
+                      contacta con soporte.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeactivateError(null);
+                      setDeactivateOpen(true);
+                    }}
+                    className="w-full px-5 py-2.5 rounded-lg border border-[#ffb59e] text-[#ffb59e] font-bold hover:bg-[#ffb59e]/10 transition-all active:scale-95"
+                  >
+                    Desactivar cuenta
+                  </button>
+                </div>
+
+                {/* Eliminar — permanent */}
+                <div className="rounded-lg border border-[#ffb4ab]/30 bg-[#0e1513]/40 p-4 flex flex-col gap-3">
+                  <div>
+                    <h3 className="font-bold text-app-text mb-1">
+                      Eliminar cuenta
+                    </h3>
+                    <p className="text-caption text-app-text-secondary leading-relaxed">
+                      Una vez que elimines tu cuenta, no hay vuelta atrás. Se
+                      borrarán todos tus datos de forma permanente.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeletePassword("");
+                      setDeleteError(null);
+                      setDeleteOpen(true);
+                    }}
+                    className="w-full px-5 py-2.5 rounded-lg border border-[#ffb4ab] text-[#ffb4ab] font-bold hover:bg-[#ffb4ab] hover:text-[#690005] transition-all active:scale-95"
+                  >
+                    Eliminar cuenta
+                  </button>
+                </div>
+              </div>
             </section>
           </div>
         </main>
@@ -430,6 +490,93 @@ function SecuritySettingsPage() {
             className="rounded-full bg-[#ef4444] hover:bg-[#dc2626] px-5 py-2 text-label font-bold text-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {deleteBusy ? "Eliminando…" : "Sí, eliminar mi cuenta"}
+          </button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={deactivateOpen}
+        onClose={deactivateBusy ? undefined : () => setDeactivateOpen(false)}
+        fullScreen={isMobile}
+        fullWidth
+        maxWidth="xs"
+        PaperProps={{
+          sx: {
+            backgroundColor: "#0A0A0B",
+            color: "#F2F4F8",
+            borderRadius: isMobile ? 0 : 4,
+            border: "1px solid #2A2B31",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            fontFamily: "Montserrat",
+            fontWeight: 700,
+            color: "#F2F4F8",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #2A2B31",
+          }}
+        >
+          <span className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#ffb59e]">
+              warning
+            </span>
+            Desactivar tu cuenta
+          </span>
+          <IconButton
+            onClick={() => setDeactivateOpen(false)}
+            disabled={deactivateBusy}
+            sx={{ color: "#B6BCC8" }}
+          >
+            <span className="material-symbols-outlined">close</span>
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: 3 }}>
+          <p className="text-body-base text-app-text font-body">
+            Vas a desactivar tu cuenta de Vecilend.
+          </p>
+          <p className="mt-3 text-label text-app-text-secondary font-body">
+            Tu perfil, tus objetos y tu actividad dejarán de aparecer para el
+            resto de usuarios. Tus datos NO se borran. Si en el futuro quieres
+            reactivar la cuenta, contacta con el equipo de soporte.
+          </p>
+          <p className="mt-3 text-label text-app-text-secondary font-body">
+            Si tienes transacciones en curso, deberás resolverlas primero.
+          </p>
+
+          {deactivateError && (
+            <div className="mt-4 flex items-start gap-2 rounded-lg border border-[#ef4444]/50 bg-[#ef4444]/10 px-3 py-2">
+              <span className="material-symbols-outlined text-sm text-[#ef4444] mt-0.5">
+                error
+              </span>
+              <p className="text-xs text-[#ef4444] font-body leading-relaxed">
+                {deactivateError}
+              </p>
+            </div>
+          )}
+        </DialogContent>
+
+        <DialogActions
+          sx={{ borderTop: "1px solid #2A2B31", px: 3, py: 2, gap: 1 }}
+        >
+          <button
+            type="button"
+            onClick={() => setDeactivateOpen(false)}
+            disabled={deactivateBusy}
+            className="rounded-full border border-[#2A2B31] px-5 py-2 text-label font-body text-app-text hover:bg-[#16181C] disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={handleConfirmDeactivate}
+            disabled={deactivateBusy}
+            className="rounded-full bg-[#ffb59e] hover:bg-[#f38764] px-5 py-2 text-label font-bold text-[#003731] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {deactivateBusy ? "Desactivando…" : "Sí, desactivar mi cuenta"}
           </button>
         </DialogActions>
       </Dialog>

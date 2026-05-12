@@ -10,6 +10,7 @@ import ChangePriceModal from "../components/search/modals/ChangePriceModal";
 import ChangeRatingModal from "../components/search/modals/ChangeRatingModal";
 import { getObjects, getNearbyObjects } from "../services/objects";
 import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
+import CategorySidebar from "../components/filters/CategorySidebar";
 
 function ObjectsPage() {
   const [products, setProducts] = useState([]);
@@ -38,6 +39,8 @@ function ObjectsPage() {
       min_price: searchParams.get("min_price"),
       max_price: searchParams.get("max_price"),
       min_user_rating: searchParams.get("min_user_rating"),
+      category: searchParams.get("category"), // ← nou
+      subcategory: searchParams.get("subcategory"), // ← nou
     }),
     [searchParams],
   );
@@ -57,6 +60,8 @@ function ObjectsPage() {
     per_page: 12,
     sort: orderBy,
     ...(filters.search && { search: filters.search }),
+    ...(filters.category && { category: filters.category }), // ← nou
+    ...(filters.subcategory && { subcategory: filters.subcategory }), // ← nou
     ...(hasLocation && {
       lat: filters.lat,
       lng: filters.lng,
@@ -114,6 +119,8 @@ function ObjectsPage() {
     filters.min_price,
     filters.max_price,
     filters.min_user_rating,
+    filters.category,
+    filters.subcategory,
   ]);
 
   // Carregar més (paginació via botó)
@@ -151,125 +158,138 @@ function ObjectsPage() {
   const hasMore = meta && meta.current_page < meta.last_page;
 
   return (
-    <>
-      <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 pt-6">
-        <div className="flex items-center justify-between gap-4">
-          <BtnBack />
-          <BtnOrder value={orderBy} onChange={setOrderBy} />
-        </div>
+    <div className="flex">
+      {/* Sidebar (visible només lg+; en mobile els filtres queden a dalt amb chips) */}
+      <CategorySidebar
+        filters={filters}
+        onOpenLocation={() => setLocationOpen(true)}
+        onOpenDates={() => setDatesOpen(true)}
+        onOpenPrice={() => setPriceOpen(true)}
+        onOpenRating={() => setRatingOpen(true)}
+        applyFilterPatch={applyFilterPatch}
+      />
 
-        {/* Títol + comptador */}
-        <div className="mt-6">
-          {hasAnyFilter ? (
-            <>
-              <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
-                {filters.search
-                  ? `Resultados de búsqueda para "${filters.search}"`
-                  : "Resultados de búsqueda"}
-              </h1>
-              <p className="mt-2 font-body text-body text-app-text-secondary">
-                Se han encontrado {totalResults} resultado
-                {totalResults === 1 ? "" : "s"}
-              </p>
-            </>
-          ) : (
-            <>
-              <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
-                Todos los objetos
-              </h1>
-              <p className="mt-2 font-body text-body text-app-text-secondary">
-                {totalResults} objetos disponibles
-              </p>
-            </>
-          )}
-        </div>
+      <div className="flex-1 min-w-0">
+        <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 pt-6">
+          <div className="flex items-center justify-between gap-4">
+            <BtnBack />
+            <BtnOrder value={orderBy} onChange={setOrderBy} />
+          </div>
 
-        {/* ── Chips inline d'edició ràpida ── */}
-        <div className="mt-5 flex flex-wrap gap-2">
-          <InlineFilterChip
-            icon="location_on"
-            label={
-              hasLocation
-                ? `${Math.round((filters.radius || 5000) / 1000)} km · cambiar`
-                : "Añadir ubicación"
-            }
-            active={hasLocation}
-            onClick={() => setLocationOpen(true)}
-          />
-          <InlineFilterChip
-            icon="calendar_month"
-            label={
-              hasDates
-                ? `${filters.data_inici} → ${filters.data_fi}`
-                : "Añadir fechas"
-            }
-            active={hasDates}
-            onClick={() => setDatesOpen(true)}
-          />
-          <InlineFilterChip
-            icon="payments"
-            label={(() => {
-              if (!hasPrice) return "Añadir precio";
-              if (filters.min_price && !filters.max_price)
-                return `Desde ${filters.min_price}€/día`;
-              if (!filters.min_price && filters.max_price)
-                return `Hasta ${filters.max_price}€/día`;
-              return `${filters.min_price}€ – ${filters.max_price}€/día`;
-            })()}
-            active={hasPrice}
-            onClick={() => setPriceOpen(true)}
-          />
-          <InlineFilterChip
-            icon="star"
-            label={
-              hasRating
-                ? Number(filters.min_user_rating) === 5
-                  ? "5 estrellas"
-                  : `${filters.min_user_rating} estrellas o más`
-                : "Añadir valoración mínima"
-            }
-            active={hasRating}
-            onClick={() => setRatingOpen(true)}
-          />
-        </div>
-      </section>
+          <div className="mt-6">
+            {hasAnyFilter ? (
+              <>
+                <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
+                  {filters.search
+                    ? `Resultados de búsqueda para "${filters.search}"`
+                    : "Resultados de búsqueda"}
+                </h1>
+                <p className="mt-2 font-body text-body text-app-text-secondary">
+                  Se han encontrado {totalResults} resultado
+                  {totalResults === 1 ? "" : "s"}
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
+                  Todos los objetos
+                </h1>
+                <p className="mt-2 font-body text-body text-app-text-secondary">
+                  {totalResults} objetos disponibles
+                </p>
+              </>
+            )}
+          </div>
 
-      {/* Llistat */}
-      {loading ? (
-        <ProductsGridSkeleton count={6} />
-      ) : products.length > 0 ? (
-        <>
-          <ProductsSection title="" products={products} preserveSearchParams />
-          {hasMore && (
-            <div className="mx-auto w-full max-w-[1380px] px-4 md:px-10 py-6 text-center">
-              <button
-                type="button"
-                onClick={handleLoadMore}
-                disabled={loadingMore}
-                className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50"
-              >
-                {loadingMore
-                  ? "Cargando…"
-                  : `Cargar más (${meta.total - products.length} restantes)`}
-              </button>
-            </div>
-          )}
-        </>
-      ) : (
-        <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 py-12">
-          <div className="rounded-[20px] border border-app-border bg-app-bg-card p-10 text-center">
-            <h2 className="font-heading text-h3-desktop text-app-text">
-              No se han encontrado resultados
-            </h2>
-            <p className="mt-3 font-body text-body text-app-text-secondary">
-              Prueba a ampliar el radio, cambiar las fechas o quitar algún
-              filtro.
-            </p>
+          {/* Els chips inline només a mòbil/tablet (lg el sidebar els reemplaça) */}
+          <div className="mt-5 flex flex-wrap gap-2 lg:hidden">
+            <InlineFilterChip
+              icon="location_on"
+              label={
+                hasLocation
+                  ? `${Math.round((filters.radius || 5000) / 1000)} km · cambiar`
+                  : "Añadir ubicación"
+              }
+              active={hasLocation}
+              onClick={() => setLocationOpen(true)}
+            />
+            <InlineFilterChip
+              icon="calendar_month"
+              label={
+                hasDates
+                  ? `${filters.data_inici} → ${filters.data_fi}`
+                  : "Añadir fechas"
+              }
+              active={hasDates}
+              onClick={() => setDatesOpen(true)}
+            />
+            <InlineFilterChip
+              icon="payments"
+              label={(() => {
+                if (!hasPrice) return "Añadir precio";
+                if (filters.min_price && !filters.max_price)
+                  return `Desde ${filters.min_price}€/día`;
+                if (!filters.min_price && filters.max_price)
+                  return `Hasta ${filters.max_price}€/día`;
+                return `${filters.min_price}€ – ${filters.max_price}€/día`;
+              })()}
+              active={hasPrice}
+              onClick={() => setPriceOpen(true)}
+            />
+            <InlineFilterChip
+              icon="star"
+              label={
+                hasRating
+                  ? Number(filters.min_user_rating) === 5
+                    ? "5 estrellas"
+                    : `${filters.min_user_rating} estrellas o más`
+                  : "Añadir valoración mínima"
+              }
+              active={hasRating}
+              onClick={() => setRatingOpen(true)}
+            />
           </div>
         </section>
-      )}
 
-      {/* ── Modals secundaris ── */}
+        {loading ? (
+          <ProductsGridSkeleton count={6} />
+        ) : products.length > 0 ? (
+          <>
+            <ProductsSection
+              title=""
+              products={products}
+              preserveSearchParams
+            />
+            {hasMore && (
+              <div className="mx-auto w-full max-w-[1380px] px-4 md:px-10 py-6 text-center">
+                <button
+                  type="button"
+                  onClick={handleLoadMore}
+                  disabled={loadingMore}
+                  className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50"
+                >
+                  {loadingMore
+                    ? "Cargando…"
+                    : `Cargar más (${meta.total - products.length} restantes)`}
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 py-12">
+            <div className="rounded-[20px] border border-app-border bg-app-bg-card p-10 text-center">
+              <h2 className="font-heading text-h3-desktop text-app-text">
+                No se han encontrado resultados
+              </h2>
+              <p className="mt-3 font-body text-body text-app-text-secondary">
+                Prueba a ampliar el radio, cambiar las fechas o quitar algún
+                filtro.
+              </p>
+            </div>
+          </section>
+        )}
+      </div>
+
       <ChangeLocationModal
         open={locationOpen}
         onClose={() => setLocationOpen(false)}
@@ -294,7 +314,7 @@ function ObjectsPage() {
         initial={filters}
         onApply={applyFilterPatch}
       />
-    </>
+    </div>
   );
 }
 

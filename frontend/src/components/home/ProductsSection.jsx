@@ -48,10 +48,10 @@ function getRating(product) {
 function backendSaysFavorite(product) {
   return Boolean(
     product.favorit ||
-      product.is_favorite ||
-      product.is_favorited ||
-      product.isFavorite ||
-      product.favorited,
+    product.is_favorite ||
+    product.is_favorited ||
+    product.isFavorite ||
+    product.favorited,
   );
 }
 
@@ -157,6 +157,7 @@ function ProductsSection({
                   title={product.nom || "Producto"}
                   userName={getUserName(product)}
                   userAvatar={getUserAvatar(product)}
+                  ownerId={product.user?.id || product.propietari?.id}
                   rating={getRating(product)}
                   priceDay={product.preu_diari ? Number(product.preu_diari) : 0}
                   status={product.estat}
