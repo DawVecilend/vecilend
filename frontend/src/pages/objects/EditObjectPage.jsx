@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BtnBack from "../../components/elementos/BtnBack";
 import { getCategories } from "../../services/categories";
-import { getProduct, updateObject, deleteObject } from "../../services/objects";
+import { getProduct, updateObject, deleteObject, setMainImage as setMainImageApi, } from "../../services/objects";
 import { mapCategories } from "../../mappers/categoryMapper";
 import { cldTransform } from "../../utils/cloudinary";
 import ObjectLocationPicker from "../../components/map/ObjectLocationPicker";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
-import { setMainImage as setMainImageApi } from "../services/objects";
+
 
 function EditObjectPage() {
   const { id } = useParams();

@@ -7,7 +7,6 @@ import {
   rejectTransaction,
   returnTransaction,
 } from "../../services/transactions";
-import { isPaid } from "../../utils/paymentMock";
 import { cldTransform } from "../../utils/cloudinary";
 import BtnBack from "../../components/elementos/BtnBack";
 import ReviewModal from "../../components/transactions/ReviewModal";
@@ -45,25 +44,30 @@ const STATUS_FILTERS = [
 ];
 
 function StatusPill({ estat }) {
-  const s = STATUS_LABELS[estat];
-  if (!s) return null;
+  const status = STATUS_LABELS[estat];
+
+  if (!status) return null;
+
   return (
     <span
-      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${s.classes}`}
+      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${status.classes}`}
     >
-      {s.label}
+      {status.label}
     </span>
   );
 }
 
 function TransactionCard({ tx, role, onAction, busyId }) {
   const navigate = useNavigate();
+
   const otherUser = role === "requester" ? tx.owner : tx.requester;
+
   const image =
     cldTransform(tx.objecte?.imatges?.[0]?.url, "card") ||
     "/assets/product1-image.jpg";
+
   const isLloguer = tx.tipus === "lloguer";
-  const paid = isPaid(tx.id);
+  const paid = !!tx.paid;
   const busy = busyId === tx.id;
 
   return (
@@ -88,6 +92,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
             >
               {tx.objecte?.nom}
             </Link>
+
             <p className="text-caption text-app-text-secondary mt-1">
               {role === "requester" ? "Propietario" : "Solicitante"}:{" "}
               {otherUser ? (
@@ -102,6 +107,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               )}
             </p>
           </div>
+
           <StatusPill estat={tx.estat} />
         </div>
 
@@ -113,11 +119,13 @@ function TransactionCard({ tx, role, onAction, busyId }) {
             {tx.data_inici} → {tx.data_fi} · {tx.dies} día
             {tx.dies === 1 ? "" : "s"}
           </span>
+
           {isLloguer && tx.preu_total != null && (
             <span className="text-vecilend-dark-primary font-bold">
-              Total: {tx.preu_total.toFixed(2)}€
+              Total: {Number(tx.preu_total).toFixed(2)}€
             </span>
           )}
+
           {!isLloguer && (
             <span className="text-vecilend-dark-secondary font-bold">
               Préstamo gratuito
@@ -131,7 +139,6 @@ function TransactionCard({ tx, role, onAction, busyId }) {
           </p>
         )}
 
-        {/* ── Accions per rol/estat ── */}
         <div className="flex flex-wrap gap-2 mt-1 flex-col">
           {role === "requester" &&
             tx.estat === "acceptat" &&
@@ -148,6 +155,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
                 Efectuar pago
               </button>
             )}
+
           {role === "requester" &&
             tx.estat === "acceptat" &&
             isLloguer &&
@@ -159,11 +167,13 @@ function TransactionCard({ tx, role, onAction, busyId }) {
                 Pago realizado
               </span>
             )}
+
           {role === "requester" && tx.estat === "acceptat" && (
             <span className="text-caption text-app-text-secondary italic mt-3 w-full">
               Coordina la recogida con el propietario.
             </span>
           )}
+
           {role === "requester" && tx.estat === "finalitzat" && (
             <button
               type="button"
@@ -176,6 +186,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               Valorar
             </button>
           )}
+
           {role === "owner" && tx.estat === "finalitzat" && (
             <button
               type="button"
@@ -188,10 +199,9 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               Valorar
             </button>
           )}
+
           {role === "owner" && tx.estat === "pendent" && (
             <div className="flex gap-2">
-              {" "}
-              {/* Contenedor flex para los botones Aceptar y Rechazar */}
               <button
                 type="button"
                 disabled={busy}
@@ -200,6 +210,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               >
                 Aceptar
               </button>
+
               <button
                 type="button"
                 disabled={busy}
@@ -210,6 +221,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               </button>
             </div>
           )}
+
           {role === "owner" && tx.estat === "acceptat" && (
             <button
               type="button"
@@ -248,10 +260,10 @@ function TransactionsPage() {
   const [busyId, setBusyId] = useState(null);
   const [reviewModalTx, setReviewModalTx] = useState(null);
 
-  // Càrrega inicial
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
+
     try {
       const res = await getTransactions({
         role,
@@ -259,6 +271,7 @@ function TransactionsPage() {
         page: 1,
         per_page: 8,
       });
+
       setTransactions(Array.isArray(res.data) ? res.data : []);
       setMeta(res.meta);
     } catch (err) {
@@ -271,10 +284,11 @@ function TransactionsPage() {
     }
   }, [role, status]);
 
-  // Cargar més
   const handleLoadMore = useCallback(async () => {
     if (!meta || meta.current_page >= meta.last_page || loadingMore) return;
+
     setLoadingMore(true);
+
     try {
       const res = await getTransactions({
         role,
@@ -282,10 +296,12 @@ function TransactionsPage() {
         page: meta.current_page + 1,
         per_page: 8,
       });
+
       setTransactions((prev) => [
         ...prev,
         ...(Array.isArray(res.data) ? res.data : []),
       ]);
+
       setMeta(res.meta);
     } catch (err) {
       console.error("Error cargando más transacciones:", err);
@@ -296,18 +312,32 @@ function TransactionsPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate("/login", { state: { from: "/transactions" } });
+      navigate("/login", {
+        state: {
+          from: "/transactions",
+        },
+      });
+
       return;
     }
-    if (user) load();
+
+    if (user) {
+      load();
+    }
   }, [user, authLoading, load, navigate]);
 
-  // URL sincronitzada
   useEffect(() => {
     const next = new URLSearchParams();
+
     next.set("role", role);
-    if (status !== "all") next.set("status", status);
-    setSearchParams(next, { replace: true });
+
+    if (status !== "all") {
+      next.set("status", status);
+    }
+
+    setSearchParams(next, {
+      replace: true,
+    });
   }, [role, status, setSearchParams]);
 
   const handleAction = async (action, id, tx) => {
@@ -315,14 +345,22 @@ function TransactionsPage() {
       setReviewModalTx(tx);
       return;
     }
+
     setBusyId(id);
+
     try {
-      if (action === "accept") await acceptTransaction(id);
-      else if (action === "reject") await rejectTransaction(id);
-      else if (action === "return") await returnTransaction(id);
+      if (action === "accept") {
+        await acceptTransaction(id);
+      } else if (action === "reject") {
+        await rejectTransaction(id);
+      } else if (action === "return") {
+        await returnTransaction(id);
+      }
+
       await load();
     } catch (err) {
       console.error(`Error en acción ${action}:`, err);
+
       alert(
         err.response?.data?.message ||
           "No se ha podido procesar la acción. Inténtalo de nuevo.",
@@ -332,7 +370,6 @@ function TransactionsPage() {
     }
   };
 
-  // Counts es calculen sobre el total real (meta.total) no sobre la pàgina carregada
   const totalCount = meta?.total ?? transactions.length;
   const remaining = Math.max(0, totalCount - transactions.length);
 
@@ -343,45 +380,45 @@ function TransactionsPage() {
       <h1 className="font-heading text-h2-desktop text-app-text mt-6 mb-2">
         Mis transacciones
       </h1>
+
       <p className="text-app-text-secondary text-body-base mb-6">
         Gestiona las solicitudes que has enviado y las que has recibido.
       </p>
 
-      {/* Tabs de rol */}
       <div className="flex gap-2 mb-4 border-b border-app-border">
-        {ROLE_TABS.map((t) => (
+        {ROLE_TABS.map((tab) => (
           <button
-            key={t.id}
+            key={tab.id}
             type="button"
-            onClick={() => setRole(t.id)}
+            onClick={() => setRole(tab.id)}
             className={`relative px-4 py-3 font-body text-body-base font-semibold transition-colors ${
-              role === t.id
+              role === tab.id
                 ? "text-vecilend-dark-primary"
                 : "text-app-text-secondary hover:text-app-text"
             }`}
           >
-            {t.label}
-            {role === t.id && (
+            {tab.label}
+
+            {role === tab.id && (
               <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-vecilend-dark-primary" />
             )}
           </button>
         ))}
       </div>
 
-      {/* Chips d'estat */}
       <div className="flex gap-2 flex-wrap mb-6">
-        {STATUS_FILTERS.map((s) => (
+        {STATUS_FILTERS.map((filter) => (
           <button
-            key={s.id}
+            key={filter.id}
             type="button"
-            onClick={() => setStatus(s.id)}
+            onClick={() => setStatus(filter.id)}
             className={`px-4 py-2 rounded-full text-label font-body font-medium transition-all ${
-              status === s.id
+              status === filter.id
                 ? "bg-vecilend-dark-primary text-[#003730]"
                 : "bg-app-card border border-app-border text-app-text hover:border-vecilend-dark-primary"
             }`}
           >
-            {s.label}
+            {filter.label}
           </button>
         ))}
       </div>
@@ -403,11 +440,13 @@ function TransactionsPage() {
           <span className="material-symbols-outlined text-6xl text-app-text-secondary opacity-50 mb-2">
             inbox
           </span>
+
           <p className="text-app-text-secondary">
             {role === "requester"
               ? "Aún no has enviado ninguna solicitud."
               : "No has recibido ninguna solicitud todavía."}
           </p>
+
           {role === "requester" && (
             <Link
               to="/objects"
@@ -443,7 +482,9 @@ function TransactionsPage() {
               >
                 {loadingMore
                   ? "Cargando…"
-                  : `Cargar más${remaining > 0 ? ` (${remaining} restantes)` : ""}`}
+                  : `Cargar más${
+                      remaining > 0 ? ` (${remaining} restantes)` : ""
+                    }`}
               </button>
             </div>
           )}

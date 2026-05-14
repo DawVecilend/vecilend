@@ -12,8 +12,7 @@ import RatingEvolutionChart from "../../components/profile/RatingEvolutionChart"
 import UserReviewsList from "../../components/profile/UserReviewsList";
 import { getReviewsEvolution } from "../../services/reviews";
 import { createChat } from "../../services/chats";
-import ReportModal from "../components/elementos/ReportModal";
-
+import ReportModal from "../../components/elementos/ReportModal";
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);

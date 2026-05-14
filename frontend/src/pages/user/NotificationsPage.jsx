@@ -7,7 +7,7 @@ import {
   deleteNotification,
 } from "../../services/notifications";
 import { useUnreadCounts } from "../../contexts/UnreadCountsContext";
-import { formatDateTimeSmart } from "../utils/datetime";
+import { formatDateTimeSmart } from "../../utils/datetime";
 
 /**
  * Genera el contingut visual de cada notificació a partir del seu tipus
