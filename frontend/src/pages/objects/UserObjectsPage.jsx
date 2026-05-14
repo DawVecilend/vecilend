@@ -1,8 +1,7 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import { getUserObjects } from "../../services/profile";
-import { getProfile } from "../services/profile";
+import { getProfile, getUserObjects } from "../../services/profile";
 import ProductsSection from "../../components/home/ProductsSection";
 import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleton";
 import BtnOrder from "../../components/elementos/BtnOrder";

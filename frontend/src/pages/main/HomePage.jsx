@@ -16,7 +16,7 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;º
+    let cancelled = false;
 
     Promise.allSettled([
       getObjects({ per_page: 5, sort: "popular" }).then((r) => r.data),

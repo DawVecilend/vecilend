@@ -17,13 +17,9 @@ import FloatingAddObjectButton from "./components/elementos/FloatingAddObjectBut
 import HomePage from "./pages/main/HomePage";
 import StatusPage from "./pages/main/StatusPage";
 import NotFoundPage from "./pages/main/NotFoundPage";
+import ForbiddenPage from "./pages/main/ForbiddenPage";
 import HowItWorksRentersPage from "./pages/main/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/main/HowItWorksLendersPage";
-
-// CHATS PAGES
-import ChatsListPage from "./pages/chats/ChatsListPage";
-import ChatPage from "./pages/chats/ChatPage";
-import ForbiddenPage from "./pages/ForbiddenPage";
 
 // AUTH PAGES
 import LoginPage from "./pages/auth/LoginPage";
@@ -39,7 +35,6 @@ import ForgotPasswordPage from "./pages/user/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/user/ResetPasswordPage";
 import MyOrdersPage from "./pages/user/MyOrdersPage";
 import FavoritesPage from "./pages/user/FavoritesPage";
-import TransactionsPage from "./pages/user/TransactionsPage";
 
 // OBJECTS PAGES
 import ObjectPage from "./pages/objects/ObjectPage";
@@ -77,7 +72,6 @@ function App() {
   return (
     <ToastProvider>
       <Routes>
-        {/* ─── Backoffice ─── */}
         <Route
           path="/backoffice/*"
           element={
@@ -85,7 +79,6 @@ function App() {
               <Routes>
                 <Route path="/" element={<AdminLoginPage />} />
 
-                {/* Admin y suport */}
                 <Route element={<AdminProtectedRoute />}>
                   <Route element={<AdminLayout />}>
                     <Route path="/dashboard" element={<AdminDashboardPage />} />
@@ -94,13 +87,18 @@ function App() {
                   </Route>
                 </Route>
 
-                {/* Solo admin */}
                 <Route element={<AdminProtectedRoute requireRol="admin" />}>
                   <Route element={<AdminLayout />}>
                     <Route path="/empleats" element={<AdminEmpleatsPage />} />
-                    <Route path="/empleats/create" element={<AdminCreateEmpleatPage />} />
+                    <Route
+                      path="/empleats/create"
+                      element={<AdminCreateEmpleatPage />}
+                    />
                     <Route path="/categories" element={<AdminCategoriesPage />} />
-                    <Route path="/categories/create" element={<AdminCreateCategoryPage />} />
+                    <Route
+                      path="/categories/create"
+                      element={<AdminCreateCategoryPage />}
+                    />
                     <Route path="/logs" element={<AdminLogsPage />} />
                   </Route>
                 </Route>
@@ -111,7 +109,6 @@ function App() {
           }
         />
 
-        {/* ─── Resto de la app ─── */}
         <Route
           path="/*"
           element={
@@ -133,34 +130,72 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
 
-                    <Route path="/how-it-works/renters" element={<HowItWorksRentersPage />} />
-                    <Route path="/how-it-works/lenders" element={<HowItWorksLendersPage />} />
+                    <Route
+                      path="/how-it-works/renters"
+                      element={<HowItWorksRentersPage />}
+                    />
+                    <Route
+                      path="/how-it-works/lenders"
+                      element={<HowItWorksLendersPage />}
+                    />
 
                     <Route path="/status" element={<StatusPage />} />
                     <Route path="/objects" element={<ObjectsPage />} />
                     <Route path="/objects/:id" element={<ObjectPage />} />
-
                     <Route path="/categories/:slug" element={<CategoryPage />} />
 
                     <Route path="/profile/:username" element={<ProfilePage />} />
-                    <Route path="/profile/:username/objects" element={<UserObjectsPage />} />
+                    <Route
+                      path="/profile/:username/objects"
+                      element={<UserObjectsPage />}
+                    />
 
-                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPasswordPage />}
+                    />
+                    <Route
+                      path="/reset-password"
+                      element={<ResetPasswordPage />}
+                    />
                     <Route path="/forbidden" element={<ForbiddenPage />} />
 
                     <Route element={<ProtectedRoute />}>
-                      <Route path="/objects/create" element={<CreateObjectPage />} />
-                      <Route path="/objects/:id/edit" element={<EditObjectPage />} />
+                      <Route
+                        path="/objects/create"
+                        element={<CreateObjectPage />}
+                      />
+                      <Route
+                        path="/objects/:id/edit"
+                        element={<EditObjectPage />}
+                      />
 
-                      <Route path="/settings/profile/:username" element={<SettingsPage />} />
-                      <Route path="/settings/profile/:username/editing" element={<EditProfilePage />} />
-                      <Route path="/settings/profile/:username/security" element={<SecuritySettingsPage />} />
-                      <Route path="/settings/profile/:username/notifications" element={<SettingsPage />} />
+                      <Route
+                        path="/settings/profile/:username"
+                        element={<SettingsPage />}
+                      />
+                      <Route
+                        path="/settings/profile/:username/editing"
+                        element={<EditProfilePage />}
+                      />
+                      <Route
+                        path="/settings/profile/:username/security"
+                        element={<SecuritySettingsPage />}
+                      />
+                      <Route
+                        path="/settings/profile/:username/notifications"
+                        element={<SettingsPage />}
+                      />
 
                       <Route path="/orders" element={<MyOrdersPage />} />
-                      <Route path="/transactions" element={<Navigate to="/orders" replace />} />
-                      <Route path="/transactions/:id/payment" element={<PaymentMockPage />} />
+                      <Route
+                        path="/transactions"
+                        element={<Navigate to="/orders" replace />}
+                      />
+                      <Route
+                        path="/transactions/:id/payment"
+                        element={<PaymentMockPage />}
+                      />
 
                       <Route path="/favorites" element={<FavoritesPage />} />
 
@@ -169,7 +204,10 @@ function App() {
                         <Route path=":id" element={<ChatPage />} />
                       </Route>
 
-                      <Route path="/notifications" element={<NotificationsPage />} />
+                      <Route
+                        path="/notifications"
+                        element={<NotificationsPage />}
+                      />
                     </Route>
 
                     <Route path="*" element={<NotFoundPage />} />

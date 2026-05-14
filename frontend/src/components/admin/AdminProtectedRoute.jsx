@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useBackofficeAuth } from "../../contexts/BackofficeAuthContext";
-import ForbiddenPage from "../../pages/ForbiddenPage";
+import ForbiddenPage from "../../pages/main/ForbiddenPage";
 
 function AdminProtectedRoute({ requireRol = null }) {
   const { empleat, loading } = useBackofficeAuth();
