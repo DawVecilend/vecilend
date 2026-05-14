@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { normalizeString } from "../utils/string";
-import PasswordInput from "../components/elementos/PasswordInput";
-import PasswordRequirements from "../components/elementos/PasswordRequirements";
+
 import { AuthContext } from "../../contexts/AuthContext";
 import api from "../../services/api";
 import municipalitiesData from "../../data/municipios.json";
+
 import { normalizeString } from "../../utils/string";
+import PasswordInput from "../../components/elementos/PasswordInput";
+import PasswordRequirements from "../../components/elementos/PasswordRequirements";
 
 function FieldError({ messages }) {
   if (!messages || messages.length === 0) return null;
+
   return (
     <p className="text-xs text-[#ffb4ab] mt-1 ml-1 font-body">
       {Array.isArray(messages) ? messages[0] : messages}
     </p>
   );
 }
-
-
 function RegisterPage() {
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();

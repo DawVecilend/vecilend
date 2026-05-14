@@ -1,21 +1,28 @@
 import { useEffect, useRef, useState, useCallback, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+
 import {
   getChat,
   getChatMessages,
   sendChatMessage,
   markChatAsRead,
-} from "../services/chats";
+} from "../../services/chats";
+
+import {
+  acceptTransaction,
+  rejectTransaction,
+} from "../../services/transactions";
+
 import { AuthContext } from "../../contexts/AuthContext";
 import { useUnreadCounts } from "../../contexts/UnreadCountsContext";
-import { formatDateTimeSmart } from "../utils/datetime";
-import { cldTransform } from "../utils/cloudinary";
-import BtnBack from "../../components/elementos/BtnBack";
-import ReportModal from "../components/elementos/ReportModal";
-import { calcPriceBreakdown } from "../utils/pricing";
-import { acceptTransaction, rejectTransaction } from "../services/transactions";
-import { useToast } from "../contexts/ToastContext";
+import { useToast } from "../../contexts/ToastContext";
 
+import BtnBack from "../../components/elementos/BtnBack";
+import ReportModal from "../../components/elementos/ReportModal";
+
+import { formatDateTimeSmart } from "../../utils/datetime";
+import { cldTransform } from "../../utils/cloudinary";
+import { calcPriceBreakdown } from "../../utils/pricing";
 
 const POLL_MS = 7000;
 
@@ -26,9 +33,10 @@ const POLL_MS = 7000;
  */
 function ObjectContextCard({ objecte }) {
   if (!objecte) return null;
+
   const img = objecte.imatge_principal
     ? cldTransform(objecte.imatge_principal, "thumb")
-    : "/assets/icons/empty-object-icon.svg"; // ← usa la teva icona genèrica
+    : "/assets/icons/empty-object-icon.svg";
 
   return (
     <div className="my-2 flex justify-center">
@@ -41,13 +49,16 @@ function ObjectContextCard({ objecte }) {
           alt={objecte.nom}
           className="h-12 w-12 rounded-lg object-cover shrink-0"
         />
+
         <div className="flex-1 min-w-0">
           <p className="text-caption text-app-text-secondary leading-none mb-0.5">
             Sobre el objeto
           </p>
+
           <p className="text-label font-bold text-app-text truncate">
             {objecte.nom}
           </p>
+
           {objecte.preu_diari ? (
             <p className="text-caption text-vecilend-dark-primary font-bold">
               {Number(objecte.preu_diari).toFixed(2)}€ / día
@@ -80,32 +91,43 @@ function SolicitudContextCard({
     ? cldTransform(objecte.imatge_principal, "thumb")
     : "/assets/icons/empty-object-icon.svg";
 
-  // Dies (inclusius)
   let dies = null;
+
   if (solicitud?.data_inici && solicitud?.data_fi) {
     const inici = new Date(solicitud.data_inici);
     const fi = new Date(solicitud.data_fi);
+
     dies = Math.round((fi - inici) / (1000 * 60 * 60 * 24)) + 1;
   }
 
-  // Preu coherent amb el backend (10% extra)
   const total =
     dies > 0 && objecte.preu_diari
       ? calcPriceBreakdown(objecte.preu_diari, dies).total
       : null;
 
-  // ── Pot acceptar/rebutjar? Només si soc el propietari i està pendent ──
   const sccPendent = solicitud?.estat === "pendent";
   const sccSoylOwner = currentUserId && objecte.owner_id === currentUserId;
   const canAct = sccPendent && sccSoylOwner;
 
-  // Etiquetes d'estat (només si NO és pendent o no soc owner)
   const estatLabels = {
-    pendent: { label: "Pendiente", classes: "text-amber-400" },
-    acceptat: { label: "Aceptada", classes: "text-emerald-400" },
-    rebutjat: { label: "Rechazada", classes: "text-red-400" },
-    cancellat: { label: "Cancelada", classes: "text-zinc-400" },
+    pendent: {
+      label: "Pendiente",
+      classes: "text-amber-400",
+    },
+    acceptat: {
+      label: "Aceptada",
+      classes: "text-emerald-400",
+    },
+    rebutjat: {
+      label: "Rechazada",
+      classes: "text-red-400",
+    },
+    cancellat: {
+      label: "Cancelada",
+      classes: "text-zinc-400",
+    },
   };
+
   const estatLabel = solicitud?.estat ? estatLabels[solicitud.estat] : null;
 
   return (
@@ -120,13 +142,16 @@ function SolicitudContextCard({
             alt={objecte.nom}
             className="h-12 w-12 rounded-lg object-cover shrink-0"
           />
+
           <div className="flex-1 min-w-0">
             <p className="text-caption text-app-text-secondary leading-none mb-0.5">
               Solicitud del objeto
             </p>
+
             <p className="text-label font-bold text-app-text truncate">
               {objecte.nom}
             </p>
+
             {total != null ? (
               <p className="text-caption text-vecilend-dark-primary font-bold">
                 {total.toFixed(2)}€ total · {dies} día{dies === 1 ? "" : "s"}
@@ -153,6 +178,7 @@ function SolicitudContextCard({
             >
               {busy ? "…" : "Aceptar"}
             </button>
+
             <button
               type="button"
               disabled={busy}
@@ -180,6 +206,7 @@ function SolicitudContextCard({
  */
 function MessageBubble({ msg, onReply }) {
   const mine = msg.mine;
+
   return (
     <div className={`group flex ${mine ? "justify-end" : "justify-start"}`}>
       <div className="flex flex-col max-w-[75%] gap-1">
@@ -191,7 +218,6 @@ function MessageBubble({ msg, onReply }) {
               : "bg-app-bg-card border border-app-border text-app-text rounded-bl-md")
           }
         >
-          {/* Cita al missatge anterior (si n'hi ha) */}
           {msg.respon_a && (
             <div
               className={
@@ -206,6 +232,7 @@ function MessageBubble({ msg, onReply }) {
                   ? "Tú"
                   : (msg.respon_a.autor ?? "Otra persona")}
               </p>
+
               <p className="line-clamp-2 italic leading-snug">
                 {msg.respon_a.contingut}
               </p>
@@ -215,6 +242,7 @@ function MessageBubble({ msg, onReply }) {
           <p className="whitespace-pre-wrap break-words text-body-base font-body">
             {msg.contingut}
           </p>
+
           <p
             className={
               "text-[10px] mt-1 text-right " +
@@ -225,12 +253,11 @@ function MessageBubble({ msg, onReply }) {
           </p>
         </div>
 
-        {/* Botó "Responder" — només visible al hover */}
         <button
           type="button"
           onClick={() => onReply(msg)}
           className={
-            "self-end opacity-0 group-hover:opacity-100 transition-opacity text-caption text-app-text-secondary hover:text-app-primary inline-flex items-center gap-1 " +
+            "opacity-0 group-hover:opacity-100 transition-opacity text-caption text-app-text-secondary hover:text-app-primary inline-flex items-center gap-1 " +
             (mine ? "self-end" : "self-start")
           }
         >
@@ -245,8 +272,10 @@ function MessageBubble({ msg, onReply }) {
 function ChatPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const { user } = useContext(AuthContext);
   const { refresh: refreshUnread } = useUnreadCounts();
+  const { showToast } = useToast();
 
   const [chat, setChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -254,27 +283,30 @@ function ChatPage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
   const [draft, setDraft] = useState("");
-  const [replyTo, setReplyTo] = useState(null); // missatge citat (objecte)
 
+  const [replyTo, setReplyTo] = useState(null);
   const [solicitudBusyId, setSolicitudBusyId] = useState(null);
   const [reportOpen, setReportOpen] = useState(false);
-  const { showToast } = useToast();
 
   const scrollRef = useRef(null);
   const pollRef = useRef(null);
   const lastIdRef = useRef(null);
 
-  // Auto-scroll només si l'usuari ja és a baix
   const scrollToBottom = useCallback((force = false) => {
     const el = scrollRef.current;
+
     if (!el) return;
+
     const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
-    if (force || isNearBottom) el.scrollTop = el.scrollHeight;
+
+    if (force || isNearBottom) {
+      el.scrollTop = el.scrollHeight;
+    }
   }, []);
 
-  // Càrrega inicial
   useEffect(() => {
     let cancelled = false;
+
     setLoading(true);
     setMessages([]);
     setReplyTo(null);
@@ -285,10 +317,12 @@ function ChatPage() {
           getChat(id),
           getChatMessages(id, { per_page: 100 }),
         ]);
+
         if (cancelled) return;
 
         setChat(chatData);
         setMessages(msgsData.data || []);
+
         lastIdRef.current = msgsData.data?.length
           ? msgsData.data[msgsData.data.length - 1].id
           : null;
@@ -301,23 +335,28 @@ function ChatPage() {
         setTimeout(() => scrollToBottom(true), 50);
       } catch (e) {
         if (cancelled) return;
-        if (e.response?.status === 403)
+
+        if (e.response?.status === 403) {
           setError("No tienes acceso a esta conversación.");
-        else if (e.response?.status === 404)
+        } else if (e.response?.status === 404) {
           setError("Esta conversación no existe.");
-        else setError("No se ha podido cargar el chat.");
+        } else {
+          setError("No se ha podido cargar el chat.");
+        }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
     load();
+
     return () => {
       cancelled = true;
     };
   }, [id, scrollToBottom, refreshUnread]);
 
-  // Polling cada 7s
   useEffect(() => {
     if (!chat || error) return;
 
@@ -337,34 +376,42 @@ function ChatPage() {
               refreshUnread();
             } catch {}
           }
+
           setTimeout(() => scrollToBottom(false), 50);
         }
       } catch {}
     }, POLL_MS);
 
     return () => {
-      if (pollRef.current) clearInterval(pollRef.current);
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+      }
     };
   }, [id, chat, error, scrollToBottom, refreshUnread]);
 
   async function handleSend() {
     const text = draft.trim();
+
     if (!text || sending) return;
 
     setSending(true);
+
     try {
       const newMsg = await sendChatMessage(id, {
         contingut: text,
         respon_a_id: replyTo?.id ?? null,
         objecte_id: chat?.objecte?.id ?? null,
       });
+
       setMessages((prev) => [...prev, newMsg]);
       lastIdRef.current = newMsg.id;
       setDraft("");
       setReplyTo(null);
+
       setTimeout(() => scrollToBottom(true), 50);
     } catch (e) {
       console.error("Error enviando mensaje:", e);
+
       alert(
         e.response?.data?.message ||
           "No se ha podido enviar el mensaje. Inténtalo de nuevo.",
@@ -376,22 +423,25 @@ function ChatPage() {
 
   const handleSolicitudAction = async (action, solicitudId) => {
     setSolicitudBusyId(solicitudId);
+
     try {
       if (action === "accept") {
         await acceptTransaction(solicitudId);
+
         showToast(
           "Solicitud aceptada. Se ha creado una transacción en la pestaña «Transacciones».",
         );
       } else if (action === "reject") {
         await rejectTransaction(solicitudId);
+
         showToast("Solicitud rechazada");
       }
 
-      // Recarrega els missatges per refrescar l'estat de la sol·licitud
       const msgsData = await getChatMessages(id, { per_page: 100 });
       setMessages(msgsData.data || []);
     } catch (e) {
       console.error("Error en acción de solicitud:", e);
+
       alert(
         e.response?.data?.message ||
           "No se ha podido procesar la acción. Inténtalo de nuevo.",
@@ -426,8 +476,10 @@ function ChatPage() {
         <div className="md:hidden">
           <BtnBack />
         </div>
+
         <div className="mt-8 mx-auto max-w-md rounded-xl border border-app-border bg-app-bg-card p-10 text-center">
           <p className="text-app-text-secondary">{error}</p>
+
           <button
             type="button"
             onClick={() => navigate("/chats")}
@@ -442,22 +494,13 @@ function ChatPage() {
 
   const altre = chat?.altre_usuari;
 
-  // ── Detectar canvis d'objecte_id entre missatges ─────────────────
-  // Renderem una targeta entremig quan el missatge anterior tenia
-  // un objecte_id diferent (o no en tenia).
-  function shouldShowDivider(msg, prev) {
-    if (!msg.objecte) return false;
-    const prevObjId = prev?.objecte?.id ?? null;
-    return prevObjId !== msg.objecte.id;
-  }
-
   return (
     <section className="flex-1 flex flex-col h-full px-4 md:px-6 pt-6 pb-4 min-w-0">
-      {/* Capçalera */}
       <header className="flex items-center gap-3 pb-4 border-b border-app-border shrink-0">
         <div className="md:hidden">
           <BtnBack />
         </div>
+
         {altre && (
           <Link
             to={`/profile/${altre.username}`}
@@ -468,16 +511,19 @@ function ChatPage() {
               alt={altre.nom}
               className="h-10 w-10 rounded-full object-cover"
             />
+
             <div className="min-w-0">
               <p className="font-bold text-app-text truncate">
                 {altre.nom} {altre.cognoms}
               </p>
+
               <p className="text-caption text-app-text-secondary">
                 @{altre.username}
               </p>
             </div>
           </Link>
         )}
+
         {altre && (
           <button
             type="button"
@@ -491,7 +537,6 @@ function ChatPage() {
         )}
       </header>
 
-      {/* Missatges */}
       <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto py-4 pr-2 flex flex-col gap-2"
@@ -506,15 +551,20 @@ function ChatPage() {
           messages.map((m, idx) => {
             const prev = idx > 0 ? messages[idx - 1] : null;
 
-            const currentKey = `${m.objecte?.id ?? "null"}:${m.solicitud?.id ?? "null"}`;
+            const currentKey = `${m.objecte?.id ?? "null"}:${
+              m.solicitud?.id ?? "null"
+            }`;
+
             const prevKey = prev
-              ? `${prev.objecte?.id ?? "null"}:${prev.solicitud?.id ?? "null"}`
+              ? `${prev.objecte?.id ?? "null"}:${
+                  prev.solicitud?.id ?? "null"
+                }`
               : null;
+
             const contextCanviat = currentKey !== prevKey;
 
             const showSolicitudCard = contextCanviat && !!m.solicitud;
-            const showObjectCard =
-              contextCanviat && !!m.objecte && !m.solicitud;
+            const showObjectCard = contextCanviat && !!m.objecte && !m.solicitud;
 
             return (
               <div key={m.id} className="flex flex-col">
@@ -527,7 +577,9 @@ function ChatPage() {
                     busy={solicitudBusyId === m.solicitud.id}
                   />
                 )}
+
                 {showObjectCard && <ObjectContextCard objecte={m.objecte} />}
+
                 <MessageBubble msg={m} onReply={setReplyTo} />
               </div>
             );
@@ -535,20 +587,22 @@ function ChatPage() {
         )}
       </div>
 
-      {/* Banner de cita activa (si hi ha replyTo) */}
       {replyTo && (
         <div className="shrink-0 flex items-start gap-2 mb-2 px-3 py-2 rounded-lg border border-app-border bg-app-bg-card-secondary">
           <span className="material-symbols-outlined text-app-primary mt-0.5">
             reply
           </span>
+
           <div className="flex-1 min-w-0">
             <p className="text-caption font-bold text-app-text">
               Respondiendo a {replyTo.mine ? "tu mensaje" : "este mensaje"}
             </p>
+
             <p className="text-caption text-app-text-secondary truncate italic">
               {replyTo.contingut}
             </p>
           </div>
+
           <button
             type="button"
             onClick={() => setReplyTo(null)}
@@ -560,7 +614,6 @@ function ChatPage() {
         </div>
       )}
 
-      {/* Input */}
       <div className="pt-3 border-t border-app-border flex items-end gap-2 shrink-0">
         <textarea
           value={draft}
@@ -571,6 +624,7 @@ function ChatPage() {
           placeholder="Escribe un mensaje…"
           className="flex-1 resize-none rounded-2xl border border-app-border bg-app-bg-card px-4 py-2.5 text-body-base text-app-text font-body focus:outline-none focus:ring-2 focus:ring-app-primary max-h-32"
         />
+
         <button
           type="button"
           onClick={handleSend}
@@ -581,6 +635,7 @@ function ChatPage() {
           <span className="material-symbols-outlined">send</span>
         </button>
       </div>
+
       <ReportModal
         open={reportOpen}
         onClose={() => setReportOpen(false)}

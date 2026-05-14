@@ -39,6 +39,7 @@ import ForgotPasswordPage from "./pages/user/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/user/ResetPasswordPage";
 import MyOrdersPage from "./pages/user/MyOrdersPage";
 import FavoritesPage from "./pages/user/FavoritesPage";
+import TransactionsPage from "./pages/user/TransactionsPage";
 
 // OBJECTS PAGES
 import ObjectPage from "./pages/objects/ObjectPage";

@@ -10,6 +10,7 @@ import {
 import { getProduct, deleteObject } from "../../services/objects";
 import { createTransaction, getTransactions } from "../../services/transactions";
 import { createChat } from "../../services/chats";
+
 import { useAuth } from "../../contexts/AuthContext";
 import { useToast } from "../../contexts/ToastContext";
 
@@ -18,14 +19,13 @@ import UserCard from "../../components/elementos/UserCard";
 import DateRangeCalendar from "../../components/calendar/DateRangeCalendar";
 import ObjectMiniMap from "../../components/map/ObjectMiniMap";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
-import NotFoundPage from "../main/NotFoundPage";
 import NavCategori from "../../components/elementos/NavCategori";
 import DetailsPriceCardProduct from "../../components/elementos/DetailsPriceCard";
 import ObjectReviewsSection from "../../components/elementos/ObjectReviewsSection";
 import ReportModal from "../../components/elementos/ReportModal";
 
 import { cldTransform } from "../../utils/cloudinary";
-import NotFoundPage from "../NotFoundPage";
+import NotFoundPage from "../main/NotFoundPage";
 
 import dayjs from "dayjs";
 
@@ -35,6 +35,7 @@ function ObjectPage() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { user, isAuthenticated } = useAuth();
+  const { showToast } = useToast();
 
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState(null);
@@ -43,24 +44,31 @@ function ObjectPage() {
   const [range, setRange] = useState(() => {
     const di = searchParams.get("data_inici");
     const df = searchParams.get("data_fi");
+
     if (di && df) {
-      return { start: dayjs(di), end: dayjs(df) };
+      return {
+        start: dayjs(di),
+        end: dayjs(df),
+      };
     }
-    return { start: null, end: null };
+
+    return {
+      start: null,
+      end: null,
+    };
   });
+
   const [missatge, setMissatge] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [hasPendingRequest, setHasPendingRequest] = useState(false);
-  const [chatHint, setChatHint] = useState(null); // { otherUserId } | null
+  const [chatHint, setChatHint] = useState(null);
 
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
   const [reportOpen, setReportOpen] = useState(false);
-
-  const { showToast } = useToast();
 
   const searchContext = useMemo(
     () => ({
@@ -75,12 +83,18 @@ function ObjectPage() {
 
   const initialRange =
     searchContext.data_inici && searchContext.data_fi
-      ? { start: searchContext.data_inici, end: searchContext.data_fi }
+      ? {
+          start: searchContext.data_inici,
+          end: searchContext.data_fi,
+        }
       : undefined;
 
   const searchCenter =
     searchContext.lat && searchContext.lng
-      ? { lat: Number(searchContext.lat), lng: Number(searchContext.lng) }
+      ? {
+          lat: Number(searchContext.lat),
+          lng: Number(searchContext.lng),
+        }
       : null;
 
   const searchRadiusKm = searchContext.radius
@@ -89,20 +103,29 @@ function ObjectPage() {
 
   useEffect(() => {
     let cancelled = false;
+
     setLoading(true);
+
     getProduct(id)
       .then((data) => {
         if (cancelled) return;
+
         setProduct(data);
         setMainImage(data?.imatges?.[0]?.url || null);
       })
       .catch((err) => {
         console.error("Error cargando producto:", err);
-        if (!cancelled) setProduct(null);
+
+        if (!cancelled) {
+          setProduct(null);
+        }
       })
       .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       });
+
     return () => {
       cancelled = true;
     };
@@ -113,12 +136,14 @@ function ObjectPage() {
       setHasPendingRequest(false);
       return;
     }
+
     if (product.propietari?.id === user?.id) {
       setHasPendingRequest(false);
       return;
     }
 
     let cancelled = false;
+
     getTransactions({
       role: "requester",
       status: "pendent",
@@ -141,6 +166,7 @@ function ObjectPage() {
 
   const dies = useMemo(() => {
     if (!range.start || !range.end) return 0;
+
     return range.end.diff(range.start, "day") + 1;
   }, [range]);
 
@@ -160,8 +186,11 @@ function ObjectPage() {
 
     if (!isAuthenticated) {
       navigate("/login", {
-        state: { from: location.pathname + location.search },
+        state: {
+          from: location.pathname + location.search,
+        },
       });
+
       return;
     }
 
@@ -171,6 +200,7 @@ function ObjectPage() {
     }
 
     setSubmitting(true);
+
     try {
       await createTransaction({
         objecte_id: product.id,
@@ -178,13 +208,22 @@ function ObjectPage() {
         data_fi: range.end.format("YYYY-MM-DD"),
         missatge: missatge.trim() || null,
       });
+
       showToast("Solicitud enviada al propietario");
+
       setSubmitSuccess(true);
+
       if (missatge.trim() && product.propietari?.id) {
-        setChatHint({ otherUserId: product.propietari.id });
+        setChatHint({
+          otherUserId: product.propietari.id,
+        });
       }
+
       setMissatge("");
-      setRange({ start: null, end: null });
+      setRange({
+        start: null,
+        end: null,
+      });
       setHasPendingRequest(true);
     } catch (err) {
       if (
@@ -193,6 +232,7 @@ function ObjectPage() {
       ) {
         setHasPendingRequest(true);
       }
+
       setSubmitError(
         err.response?.data?.message ||
           "No se ha podido enviar la solicitud. Inténtalo de nuevo.",
@@ -204,11 +244,16 @@ function ObjectPage() {
 
   async function openChatWith(userId) {
     if (!userId) return;
+
     try {
-      const chat = await createChat({ user_id: userId });
+      const chat = await createChat({
+        user_id: userId,
+      });
+
       navigate(`/chats/${chat.id}`);
     } catch (err) {
       console.error("Error abriendo chat:", err);
+
       alert(
         err.response?.data?.message ||
           "No se ha podido abrir la conversación. Inténtalo de nuevo.",
@@ -219,10 +264,14 @@ function ObjectPage() {
   async function openChatAboutObject() {
     if (!isAuthenticated) {
       navigate("/login", {
-        state: { from: location.pathname + location.search },
+        state: {
+          from: location.pathname + location.search,
+        },
       });
+
       return;
     }
+
     if (!product?.propietari?.id) return;
 
     try {
@@ -230,9 +279,11 @@ function ObjectPage() {
         user_id: product.propietari.id,
         objecte_id: product.id,
       });
+
       navigate(`/chats/${chat.id}`);
     } catch (err) {
       console.error("Error abriendo chat sobre objeto:", err);
+
       alert(
         err.response?.data?.message ||
           "No se ha podido abrir la conversación. Inténtalo de nuevo.",
@@ -240,7 +291,6 @@ function ObjectPage() {
     }
   }
 
-  // ── Estats de càrrega / no trobat ──
   if (loading) {
     return (
       <div className="pt-24 flex justify-center">
@@ -268,6 +318,7 @@ function ObjectPage() {
   const handleConfirmDelete = async () => {
     setDeleting(true);
     setDeleteError(null);
+
     try {
       await deleteObject(product.id);
       navigate("/objects");
@@ -275,6 +326,7 @@ function ObjectPage() {
       const msg =
         err.response?.data?.message ||
         "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+
       setDeleteError(msg);
     } finally {
       setDeleting(false);
@@ -282,15 +334,18 @@ function ObjectPage() {
   };
 
   let actionBox;
+
   if (isOwnObject) {
     actionBox = (
       <div className="rounded-2xl bg-app-card border border-app-border p-6 text-center">
         <span className="material-symbols-outlined text-vecilend-dark-primary text-4xl mb-2 inline-block">
           inventory_2
         </span>
+
         <p className="text-h3-mobile text-app-text font-heading mb-1">
           Este objeto es tuyo
         </p>
+
         <p className="text-label text-app-text-secondary font-body mb-4">
           Solo tú puedes editarlo o eliminarlo.
         </p>
@@ -324,9 +379,11 @@ function ObjectPage() {
         <span className="material-symbols-outlined text-amber-400 text-4xl mb-2 inline-block">
           block
         </span>
+
         <p className="text-h3-mobile text-app-text font-heading mb-1">
           No disponible
         </p>
+
         <p className="text-label text-app-text-secondary font-body">
           Este objeto está prestado o el propietario lo ha pausado.
         </p>
@@ -339,15 +396,18 @@ function ObjectPage() {
           <span className="material-symbols-outlined text-vecilend-dark-primary text-2xl shrink-0">
             schedule
           </span>
+
           <div>
             <p className="text-h3-mobile text-app-text font-heading mb-1">
               Ya tienes una solicitud pendiente sobre este objeto
             </p>
+
             <p className="text-label text-app-text-secondary font-body">
               Espera a que el propietario responda antes de enviar otra.
             </p>
           </div>
         </div>
+
         <div className="flex flex-col gap-2">
           <button
             type="button"
@@ -359,6 +419,7 @@ function ObjectPage() {
             </span>
             Ver chat con el propietario
           </button>
+
           <Link
             to="/orders?tab=requests_sent&status=pendent"
             className="block w-full text-center rounded-full border border-app-border bg-app-card px-6 py-3 text-body-base font-bold text-app-text hover:bg-app-bg-card-secondary transition-colors"
@@ -378,7 +439,6 @@ function ObjectPage() {
             onRangeChange={setRange}
           />
 
-          {/* Resum de preu només si és lloguer i té preu */}
           {product.tipus === "lloguer" && product.preu_diari && (
             <DetailsPriceCardProduct
               product={product}
@@ -393,16 +453,19 @@ function ObjectPage() {
             <span className="text-label text-app-text-secondary font-body">
               Total ({dies} día{dies === 1 ? "" : "s"})
             </span>
+
             <span className="text-h3-desktop font-bold text-vecilend-dark-primary font-body">
               {preuTotal.toFixed(2)}€
             </span>
           </div>
         )}
+
         {dies > 0 && product.tipus === "prestec" && (
           <div className="flex items-center justify-between pt-3 border-t border-app-border">
             <span className="text-label text-app-text-secondary font-body">
               Duración: {dies} día{dies === 1 ? "" : "s"}
             </span>
+
             <span className="text-label font-bold text-vecilend-dark-secondary font-body">
               Sin coste
             </span>
@@ -423,6 +486,7 @@ function ObjectPage() {
         {submitError && (
           <p className="text-label text-red-400 font-body">{submitError}</p>
         )}
+
         {submitSuccess && chatHint && (
           <button
             type="button"
@@ -457,6 +521,7 @@ function ObjectPage() {
   return (
     <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 pt-6 pb-32">
       <BtnBack />
+
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="flex flex-col gap-6">
           <div>
@@ -468,6 +533,7 @@ function ObjectPage() {
               alt={product.nom}
               className="w-full h-[280px] md:h-[428px] object-cover rounded-2xl"
             />
+
             {images.length > 1 && (
               <div className="flex justify-center gap-2 mt-2 overflow-x-auto pb-1">
                 {images.map((img, idx) => (
@@ -542,6 +608,7 @@ function ObjectPage() {
                   ? "Ubicación y tu zona de búsqueda"
                   : "Ubicación aproximada"}
               </h2>
+
               <ObjectMiniMap
                 ubicacio={product.ubicacio}
                 nom={product.nom}
@@ -551,6 +618,7 @@ function ObjectPage() {
             </div>
           )}
         </div>
+
         <div className="flex flex-col gap-6">
           {(product.categoria || product.subcategoria) && (
             <NavCategori
@@ -559,25 +627,27 @@ function ObjectPage() {
             />
           )}
 
-          {/* Títol */}
           <div className="space-y-2">
             <h1 className="text-app-text text-h1-mobile lg:text-h1-desktop font-heading">
               {product.nom}
             </h1>
 
-            {/* Valoració específica d'aquest objecte (mitjana ponderada per temps) */}
             {product.valoracio_objecte?.avg != null &&
             product.valoracio_objecte?.total > 0 ? (
               <div className="flex items-center gap-2">
                 <span
                   className="material-symbols-outlined text-[#facc15] text-base"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
+                  style={{
+                    fontVariationSettings: "'FILL' 1",
+                  }}
                 >
                   star
                 </span>
+
                 <span className="text-[#facc15] font-bold">
                   {Number(product.valoracio_objecte.avg).toFixed(1)}
                 </span>
+
                 <span className="text-app-text-secondary text-label">
                   ({product.valoracio_objecte.total}{" "}
                   {product.valoracio_objecte.total === 1
@@ -603,6 +673,7 @@ function ObjectPage() {
                 <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
                   {Number(product.preu_diari).toFixed(2)}€
                 </span>
+
                 <span className="text-app-text-secondary text-body-base">
                   / día
                 </span>
@@ -612,6 +683,7 @@ function ObjectPage() {
                 <span className="material-symbols-outlined text-vecilend-dark-secondary">
                   volunteer_activism
                 </span>
+
                 <span className="text-h2-desktop font-bold text-vecilend-dark-secondary font-heading">
                   Préstamo gratuito
                 </span>
@@ -622,11 +694,15 @@ function ObjectPage() {
           {actionBox}
         </div>
       </div>
+
       <ObjectReviewsSection valoracions={product.valoracions || []} />
+
       <ConfirmDeleteModal
         open={confirmDeleteOpen}
         onClose={() => {
-          if (!deleting) setConfirmDeleteOpen(false);
+          if (!deleting) {
+            setConfirmDeleteOpen(false);
+          }
         }}
         onConfirm={handleConfirmDelete}
         title="¿Eliminar producto?"
@@ -636,6 +712,7 @@ function ObjectPage() {
         busy={deleting}
         errorMessage={deleteError}
       />
+
       <ReportModal
         open={reportOpen}
         onClose={() => setReportOpen(false)}

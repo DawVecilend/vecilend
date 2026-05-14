@@ -1,18 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+
 import ProductsSection from "../../components/home/ProductsSection";
 import BtnOrder from "../../components/elementos/BtnOrder";
 import BtnBack from "../../components/elementos/BtnBack";
 import InlineFilterChip from "../../components/filters/InlineFilterChip";
+import CategorySidebar from "../../components/filters/CategorySidebar";
 import ChangeLocationModal from "../../components/search/modals/ChangeLocationModal";
 import ChangeDatesModal from "../../components/search/modals/ChangeDatesModal";
 import ChangePriceModal from "../../components/search/modals/ChangePriceModal";
 import ChangeRatingModal from "../../components/search/modals/ChangeRatingModal";
-import { getObjects, getNearbyObjects } from "../../services/objects";
 import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleton";
-import { getCategories } from "../services/categories";
-import { mapCategories } from "../mappers/categoryMapper";
-import CategorySidebar from "../components/filters/CategorySidebar";
+
+import { getObjects, getNearbyObjects } from "../../services/objects";
+import { getCategories } from "../../services/categories";
+import { mapCategories } from "../../mappers/categoryMapper";
 
 function ObjectsPage() {
   const [products, setProducts] = useState([]);
@@ -20,10 +22,10 @@ function ObjectsPage() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [orderBy, setOrderBy] = useState("recent");
+  const [categories, setCategories] = useState([]);
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
-  const [categories, setCategories] = useState([]);
 
   const [locationOpen, setLocationOpen] = useState(false);
   const [datesOpen, setDatesOpen] = useState(false);
@@ -53,16 +55,23 @@ function ObjectsPage() {
   const hasRating = !!filters.min_user_rating;
   const hasCategory = !!filters.category;
   const hasSubcategory = !!filters.subcategory;
+
   const hasSearchOrModalFilter =
     filters.search || hasLocation || hasDates || hasPrice || hasRating;
 
   useEffect(() => {
     let cancelled = false;
+
     getCategories()
       .then((raw) => {
-        if (!cancelled) setCategories(mapCategories(raw));
+        if (!cancelled) {
+          setCategories(mapCategories(raw));
+        }
       })
-      .catch((err) => console.error("Error cargando categorías:", err));
+      .catch((err) => {
+        console.error("Error cargando categorías:", err);
+      });
+
     return () => {
       cancelled = true;
     };
@@ -70,11 +79,13 @@ function ObjectsPage() {
 
   const currentCategory = useMemo(() => {
     if (!hasCategory) return null;
+
     return categories.find((c) => c.id === Number(filters.category)) || null;
   }, [categories, filters.category, hasCategory]);
 
   const currentSubcategory = useMemo(() => {
     if (!currentCategory || !hasSubcategory) return null;
+
     return (
       currentCategory.subcategories.find(
         (s) => s.id === Number(filters.subcategory),
@@ -98,8 +109,12 @@ function ObjectsPage() {
       data_inici: filters.data_inici,
       data_fi: filters.data_fi,
     }),
-    ...(filters.min_price && { min_price: filters.min_price }),
-    ...(filters.max_price && { max_price: filters.max_price }),
+    ...(filters.min_price && {
+      min_price: filters.min_price,
+    }),
+    ...(filters.max_price && {
+      max_price: filters.max_price,
+    }),
     ...(filters.min_user_rating && {
       min_user_rating: filters.min_user_rating,
     }),
@@ -107,6 +122,7 @@ function ObjectsPage() {
 
   useEffect(() => {
     let cancelled = false;
+
     setLoading(true);
     setProducts([]);
     setMeta(null);
@@ -122,18 +138,22 @@ function ObjectsPage() {
       })
       .catch((err) => {
         console.error("Error cargando resultados:", err);
+
         if (!cancelled) {
           setProducts([]);
           setMeta(null);
         }
       })
       .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       });
 
     return () => {
       cancelled = true;
     };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     orderBy,
@@ -152,12 +172,16 @@ function ObjectsPage() {
 
   const handleLoadMore = async () => {
     if (!meta || meta.current_page >= meta.last_page) return;
+
     setLoadingMore(true);
+
     try {
       const fetcher = hasLocation ? getNearbyObjects : getObjects;
+
       const { data, meta: newMeta } = await fetcher(
         buildApiParams(meta.current_page + 1),
       );
+
       setProducts((prev) => [...prev, ...(Array.isArray(data) ? data : [])]);
       setMeta(newMeta);
     } catch (err) {
@@ -169,11 +193,18 @@ function ObjectsPage() {
 
   const applyFilterPatch = (patch) => {
     const next = new URLSearchParams(searchParams);
+
     Object.entries(patch).forEach(([k, v]) => {
-      if (v == null || v === "") next.delete(k);
-      else next.set(k, v);
+      if (v == null || v === "") {
+        next.delete(k);
+      } else {
+        next.set(k, v);
+      }
     });
-    navigate(`/objects?${next.toString()}`, { replace: true });
+
+    navigate(`/objects?${next.toString()}`, {
+      replace: true,
+    });
   };
 
   const totalResults = meta?.total ?? products.length;
@@ -186,6 +217,7 @@ function ObjectsPage() {
           <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
             {currentSubcategory.name}
           </h1>
+
           <p className="mt-2 font-body text-body text-app-text-secondary">
             {totalResults} {totalResults === 1 ? "objeto" : "objetos"} en esta
             subcategoría de {currentCategory.name}
@@ -193,12 +225,14 @@ function ObjectsPage() {
         </>
       );
     }
+
     if (currentCategory) {
       return (
         <>
           <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
             {currentCategory.name}
           </h1>
+
           <p className="mt-2 font-body text-body text-app-text-secondary">
             {totalResults} {totalResults === 1 ? "objeto" : "objetos"} en esta
             categoría
@@ -206,6 +240,7 @@ function ObjectsPage() {
         </>
       );
     }
+
     if (hasSearchOrModalFilter) {
       return (
         <>
@@ -214,6 +249,7 @@ function ObjectsPage() {
               ? `Resultados de búsqueda para "${filters.search}"`
               : "Resultados de búsqueda"}
           </h1>
+
           <p className="mt-2 font-body text-body text-app-text-secondary">
             Se han encontrado {totalResults} resultado
             {totalResults === 1 ? "" : "s"}
@@ -221,11 +257,13 @@ function ObjectsPage() {
         </>
       );
     }
+
     return (
       <>
         <h1 className="font-heading text-h2-mobile md:text-h2-desktop text-app-text">
           Todos los objetos
         </h1>
+
         <p className="mt-2 font-body text-body text-app-text-secondary">
           {totalResults} objetos disponibles
         </p>
@@ -265,6 +303,7 @@ function ObjectsPage() {
               active={hasLocation}
               onClick={() => setLocationOpen(true)}
             />
+
             <InlineFilterChip
               icon="calendar_month"
               label={
@@ -275,19 +314,26 @@ function ObjectsPage() {
               active={hasDates}
               onClick={() => setDatesOpen(true)}
             />
+
             <InlineFilterChip
               icon="payments"
               label={(() => {
                 if (!hasPrice) return "Añadir precio";
-                if (filters.min_price && !filters.max_price)
+
+                if (filters.min_price && !filters.max_price) {
                   return `Desde ${filters.min_price}€/día`;
-                if (!filters.min_price && filters.max_price)
+                }
+
+                if (!filters.min_price && filters.max_price) {
                   return `Hasta ${filters.max_price}€/día`;
+                }
+
                 return `${filters.min_price}€ – ${filters.max_price}€/día`;
               })()}
               active={hasPrice}
               onClick={() => setPriceOpen(true)}
             />
+
             <InlineFilterChip
               icon="star"
               label={
@@ -314,6 +360,7 @@ function ObjectsPage() {
                   containerless
                   maxCols={4}
                 />
+
                 {hasMore && (
                   <div className="py-6 text-center">
                     <button
@@ -335,6 +382,7 @@ function ObjectsPage() {
                   <h2 className="font-heading text-h3-desktop text-app-text">
                     No se han encontrado resultados
                   </h2>
+
                   <p className="mt-3 font-body text-body text-app-text-secondary">
                     Prueba a ampliar el radio, cambiar las fechas o quitar algún
                     filtro.
@@ -352,18 +400,21 @@ function ObjectsPage() {
         initial={filters}
         onApply={applyFilterPatch}
       />
+
       <ChangeDatesModal
         open={datesOpen}
         onClose={() => setDatesOpen(false)}
         initial={filters}
         onApply={applyFilterPatch}
       />
+
       <ChangePriceModal
         open={priceOpen}
         onClose={() => setPriceOpen(false)}
         initial={filters}
         onApply={applyFilterPatch}
       />
+
       <ChangeRatingModal
         open={ratingOpen}
         onClose={() => setRatingOpen(false)}

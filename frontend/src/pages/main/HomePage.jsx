@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "../../components/home/HeroSection";
 import CategoriesSection from "../../components/home/categories/CategoriesSection";
 import ProductsSection from "../../components/home/ProductsSection";
@@ -16,12 +16,12 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
+    let cancelled = false;º
 
     Promise.allSettled([
       getObjects({ per_page: 5, sort: "popular" }).then((r) => r.data),
       getObjects({ per_page: 5, sort: "recent" }).then((r) => r.data),
-      getCategories(),
+      getCategories(6),
     ])
       .then(([topResult, recentResult, categoriesResult]) => {
         if (cancelled) return;
@@ -66,8 +66,9 @@ function HomePage() {
       {loading ? (
         <>
           <div className="py-8 text-center">
-            <div className="mx-auto max-w-[1380px] px-4 md:px-8">
+            <div className="mx-auto max-w-[1380px] px-4 md:px-10">
               <div className="h-8 w-48 mx-auto mb-6 bg-app-bg-card rounded animate-pulse" />
+
               <div className="flex flex-wrap justify-center gap-3">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div
@@ -78,9 +79,8 @@ function HomePage() {
               </div>
             </div>
           </div>
-          <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8">
-            <ProductsGridSkeleton count={5} />
-          </div>
+
+          <ProductsGridSkeleton count={5} />
         </>
       ) : (
         <>
