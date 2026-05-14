@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import SearchModal from "../search/SearchModal";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const PENDING_FILTERS_KEY = "vecilend_pending_filters";
 
@@ -11,6 +12,9 @@ function SearchBar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
+
+  const auth = useContext(AuthContext);
+  const user = auth?.user;
 
   const isObjectsPage = location.pathname === "/objects";
 
@@ -111,7 +115,9 @@ function SearchBar() {
         </button>
 
         <input
-          className="w-72 bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-[#e1e3e0] placeholder:text-[#8b9390] px-3"
+          className={`${
+            user ? "w-80" : "w-56"
+          } bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-[#e1e3e0] placeholder:text-[#8b9390] px-3`}
           type="text"
           placeholder="Buscar objeto..."
           value={query}
