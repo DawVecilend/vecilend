@@ -9,6 +9,7 @@ return new class extends Migration {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('empleat_id')->nullable()->constrained('empleats')->nullOnDelete();
             $table->string('tipus', 20);
             $table->string('accio', 100);
             $table->jsonb('detall')->nullable();
@@ -18,6 +19,7 @@ return new class extends Migration {
             $table->timestamp('created_at')->useCurrent();
             $table->index('created_at');
             $table->index('user_id');
+            $table->index('empleat_id');
             $table->index('tipus');
         });
     }

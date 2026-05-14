@@ -16,7 +16,7 @@ class ValoracioSeeder extends Seeder
 {
     public function run(): void
     {
-        $solicitants = User::where('rol', '!=', 'admin')->get();
+        $solicitants = User::all();
         $objectes    = Objecte::all();
 
         if ($solicitants->count() < 2 || $objectes->isEmpty()) {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../services/api";
+import backofficeApi from "../../services/backofficeApi";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
 import { useToast } from "../../contexts/ToastContext";
 
@@ -18,7 +18,7 @@ function AdminCategoriesPage() {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
-    api.get("/admin/categories")
+    backofficeApi.get("/backoffice/categories")
       .then((res) => setCategories(Array.isArray(res.data) ? res.data : res.data.data ?? []))
       .finally(() => setLoading(false));
   }, []);
@@ -38,7 +38,7 @@ function AdminCategoriesPage() {
   const saveEdit = async (type, id, parentId = null) => {
     try {
       if (type === "category") {
-        await api.put(`/admin/categories/${id}`, {
+        await backofficeApi.put(`/backoffice/categories/${id}`, {
           nom: editingName,
           descripcio: editingDescription,
         });
@@ -48,7 +48,7 @@ function AdminCategoriesPage() {
           : c
         ));
       } else {
-        await api.put(`/admin/subcategories/${id}`, {
+        await backofficeApi.put(`/backoffice/subcategories/${id}`, {
           nom: editingName,
           descripcio: editingDescription,
           categoria_id: parentId,
@@ -78,14 +78,14 @@ function AdminCategoriesPage() {
 
     try {
       if (deleteTarget.type === "subcategory") {
-        await api.delete(`/admin/subcategories/${deleteTarget.id}`);
+        await backofficeApi.delete(`/backoffice/subcategories/${deleteTarget.id}`);
 
         setCategories((p) => p.map((c) => c.id === deleteTarget.parentId
           ? { ...c, subcategories: c.subcategories.filter((s) => s.id !== deleteTarget.id) }
           : c
         ));
       } else {
-        await api.delete(`/admin/categories/${deleteTarget.id}`);
+        await backofficeApi.delete(`/backoffice/categories/${deleteTarget.id}`);
 
         setCategories((p) => p.filter((c) => c.id !== deleteTarget.id));
       }

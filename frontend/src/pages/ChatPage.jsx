@@ -11,6 +11,7 @@ import { useUnreadCounts } from "../contexts/UnreadCountsContext";
 import { formatDateTimeSmart } from "../utils/datetime";
 import { cldTransform } from "../utils/cloudinary";
 import BtnBack from "../components/elementos/BtnBack";
+import ReportModal from "../components/elementos/ReportModal";
 import { calcPriceBreakdown } from "../utils/pricing";
 import { acceptTransaction, rejectTransaction } from "../services/transactions";
 import { useToast } from "../contexts/ToastContext";
@@ -255,6 +256,7 @@ function ChatPage() {
   const [replyTo, setReplyTo] = useState(null); // missatge citat (objecte)
 
   const [solicitudBusyId, setSolicitudBusyId] = useState(null);
+  const [reportOpen, setReportOpen] = useState(false);
   const { showToast } = useToast();
 
   const scrollRef = useRef(null);
@@ -475,6 +477,17 @@ function ChatPage() {
             </div>
           </Link>
         )}
+        {altre && (
+          <button
+            type="button"
+            onClick={() => setReportOpen(true)}
+            className="shrink-0 text-app-text-secondary hover:text-red-400 transition-colors p-2"
+            title="Reportar al usuario"
+            aria-label="Reportar al usuario"
+          >
+            <span className="material-symbols-outlined">flag</span>
+          </button>
+        )}
       </header>
 
       {/* Missatges */}
@@ -567,6 +580,14 @@ function ChatPage() {
           <span className="material-symbols-outlined">send</span>
         </button>
       </div>
+      <ReportModal
+        open={reportOpen}
+        onClose={() => setReportOpen(false)}
+        usuariReportatId={altre?.id}
+        usuariReportatNom={altre?.nom}
+        objecteId={chat?.objecte?.id ?? null}
+        objecteNom={chat?.objecte?.nom ?? null}
+      />
     </section>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../services/api";
+import backofficeApi from "../../services/backofficeApi";
 import { useToast } from "../../contexts/ToastContext";
 
 function AdminCreateCategoryPage() {
@@ -20,7 +20,7 @@ function AdminCreateCategoryPage() {
     setLoading(true);
 
     try {
-      const catRes = await api.post("/admin/categories", {
+      const catRes = await backofficeApi.post("/backoffice/categories", {
         nom,
         descripcio,
       });
@@ -36,7 +36,7 @@ function AdminCreateCategoryPage() {
 
       await Promise.all(
         subsToCreate.map((s) =>
-          api.post("/admin/subcategories", {
+          backofficeApi.post("/backoffice/subcategories", {
             nom: s.nom,
             descripcio: s.descripcio,
             categoria_id: catId,

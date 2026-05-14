@@ -24,11 +24,10 @@ class ObjectePolicy
     }
 
     /**
-     * L'administrador no pot publicar objectes: el seu rol és
-     * supervisar la plataforma, no participar com a usuari corrent.
+     * Tothom que estigui autenticat pot crear objectes.
      */
     public function create(\App\Models\User $user): bool
     {
-        return $user->rol !== 'admin';
+        return true;
     }
 }

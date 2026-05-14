@@ -38,7 +38,7 @@ class ChatSeeder extends Seeder
 
     public function run(): void
     {
-        $users = User::where('rol', '!=', 'admin')->get();
+        $users = User::all();
 
         if ($users->count() < 2) {
             $this->command->warn('Necessites com a mínim 2 usuaris no admin.');

@@ -29,8 +29,9 @@ class User extends Authenticatable
         'avatar_public_id',
         'google_id',
         'ubicacio',
-        'rol',
+
         'actiu',
+        'last_seen_at',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -39,6 +40,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_seen_at'      => 'datetime',
             'password'          => 'hashed',
             'actiu'             => 'boolean',
         ];

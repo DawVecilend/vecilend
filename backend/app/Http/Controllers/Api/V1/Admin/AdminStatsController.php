@@ -35,9 +35,14 @@ class AdminStatsController extends Controller
 
     public function totalStats() {
         return [
-            'total_users' => User::count(),
-            'total_objects' => Objecte::count(),
+            'total_users'    => User::count(),
+            'active_users'   => User::where('actiu', true)->count(),
+            'online_users'   => User::where('actiu', true)
+                ->where('last_seen_at', '>=', now()->subMinutes(5))
+                ->count(),
+            'total_objects'      => Objecte::count(),
             'total_transactions' => Transaccio::where('estat', '!=', 'cancelada')->count(),
+            'pending_reports'    => \App\Models\Report::where('estat', 'pendent')->count(),
         ];
     }
 

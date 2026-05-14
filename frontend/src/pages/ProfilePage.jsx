@@ -10,6 +10,7 @@ import NotFoundPage from "./NotFoundPage";
 import RatingCard from "../components/profile/RatingCard";
 import RatingEvolutionChart from "../components/profile/RatingEvolutionChart";
 import UserReviewsList from "../components/profile/UserReviewsList";
+import ReportModal from "../components/elementos/ReportModal";
 import { getReviewsEvolution } from "../services/reviews";
 import { createChat } from "../services/chats";
 
@@ -31,6 +32,7 @@ function ProfilePage() {
   const { username } = useParams();
   const navigate = useNavigate();
   const [contacting, setContacting] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   const { user: currentUser } = useContext(AuthContext);
 
   const isOwnProfile = currentUser && currentUser.username === username;
@@ -257,17 +259,28 @@ function ProfilePage() {
                     Editar Perfil
                   </Link>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={handleContact}
-                    disabled={contacting}
-                    className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    <span className="material-symbols-outlined !text-xl">
-                      mail
-                    </span>
-                    {contacting ? "Abriendo…" : `Contacta a ${profile?.nom}`}
-                  </button>
+                  <div className="flex gap-3 flex-wrap md:justify-end">
+                    <button
+                      type="button"
+                      onClick={handleContact}
+                      disabled={contacting}
+                      className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      <span className="material-symbols-outlined !text-xl">mail</span>
+                      {contacting ? "Abriendo…" : `Contacta a ${profile?.nom}`}
+                    </button>
+                    {currentUser && profile?.id && (
+                      <button
+                        type="button"
+                        onClick={() => setReportOpen(true)}
+                        className="text-[#bbcac6] hover:text-red-400 px-4 py-4 rounded-full font-bold transition-colors flex items-center gap-2"
+                        title="Reportar a este usuario"
+                      >
+                        <span className="material-symbols-outlined !text-xl">flag</span>
+                        Reportar
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
@@ -365,6 +378,12 @@ function ProfilePage() {
         confirmLabel="Sí, eliminar"
         busy={deleting}
         errorMessage={deleteError}
+      />
+      <ReportModal
+        open={reportOpen}
+        onClose={() => setReportOpen(false)}
+        usuariReportatId={profile?.id}
+        usuariReportatNom={profile?.nom}
       />
     </div>
   );

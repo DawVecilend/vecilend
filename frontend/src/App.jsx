@@ -9,6 +9,7 @@ import CreateObjectPage from "./pages/CreateObjectPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
+import { BackofficeAuthProvider } from "./contexts/BackofficeAuthContext";
 import ObjectPage from "./pages/ObjectPage";
 import HeaderDesktop from "./components/layouts/header/HeaderDesktop";
 import HeaderMobile from "./components/layouts/header/HeaderMobile";
@@ -27,6 +28,7 @@ import MyOrdersPage from "./pages/MyOrdersPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import PaymentMockPage from "./pages/PaymentMockPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ForbiddenPage from "./pages/ForbiddenPage";
 import ChatsLayout from "./components/chats/ChatsLayout";
 import ChatPage from "./pages/ChatPage";
 import NotificationsPage from "./pages/NotificationsPage";
@@ -37,133 +39,113 @@ import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminEmpleatsPage from "./pages/admin/AdminEmpleatsPage";
+import AdminCreateEmpleatPage from "./pages/admin/AdminCreateEmpleatPage";
+import AdminReportsPage from "./pages/admin/AdminReportsPage";
 import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
 import AdminLogsPage from "./pages/admin/AdminLogsPage";
 import AdminCreateCategoryPage from "./pages/admin/AdminCreateCategoryPage";
-import AdminCreateUserPage from "./pages/admin/AdminCreateUserPage";
 
 function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <UnreadCountsProvider>
-          <Routes>
+    <ToastProvider>
+      <Routes>
+        {/* ─── Backoffice (auth y contexto independientes) ─── */}
+        <Route
+          path="/backoffice/*"
+          element={
+            <BackofficeAuthProvider>
+              <Routes>
+                <Route path="/" element={<AdminLoginPage />} />
 
-            {/* Rutas Backoffice */}
-            <Route path="/backoffice" element={<AdminLoginPage />} />
-            <Route element={<AdminProtectedRoute />}>
-              <Route element={<AdminLayout />}>
-                <Route path="/backoffice/dashboard" element={<AdminDashboardPage />} />
-                <Route path="/backoffice/users" element={<AdminUsersPage />} />
-                <Route path="/backoffice/categories" element={<AdminCategoriesPage />} />
-                <Route path="/backoffice/logs" element={<AdminLogsPage />} />
-                <Route path="/backoffice/categories/create" element={<AdminCreateCategoryPage />} />
-                <Route path="/backoffice/users/create" element={<AdminCreateUserPage />} />
-              </Route>
-            </Route>
+                {/* Admin y suport */}
+                <Route element={<AdminProtectedRoute />}>
+                  <Route element={<AdminLayout />}>
+                    <Route path="/dashboard" element={<AdminDashboardPage />} />
+                    <Route path="/users" element={<AdminUsersPage />} />
+                    <Route path="/reports" element={<AdminReportsPage />} />
+                  </Route>
+                </Route>
 
-            <Route
-              path="/*"
-              element={
-                <>
-                  <ScrollToTop />
+                {/* Solo admin */}
+                <Route element={<AdminProtectedRoute requireRol="admin" />}>
+                  <Route element={<AdminLayout />}>
+                    <Route path="/empleats" element={<AdminEmpleatsPage />} />
+                    <Route path="/empleats/create" element={<AdminCreateEmpleatPage />} />
+                    <Route path="/categories" element={<AdminCategoriesPage />} />
+                    <Route path="/categories/create" element={<AdminCreateCategoryPage />} />
+                    <Route path="/logs" element={<AdminLogsPage />} />
+                  </Route>
+                </Route>
 
-                  <div className="hidden md:block">
-                    <HeaderDesktop />
-                  </div>
+                <Route path="*" element={<NotFoundPage backofficeMode />} />
+              </Routes>
+            </BackofficeAuthProvider>
+          }
+        />
 
-                  <div className="md:hidden">
-                    <HeaderMobile />
-                  </div>
+        {/* ─── Resto de la app ─── */}
+        <Route
+          path="/*"
+          element={
+            <AuthProvider>
+              <UnreadCountsProvider>
+                <ScrollToTop />
 
-                  <main className="md:pt-[80px]">
-                    <Routes>
-                      {/* Rutas Públicas */}
-                      <Route path="/" element={<HomePage />} />
-                      <Route path="/login" element={<LoginPage />} />
-                      <Route path="/register" element={<RegisterPage />} />
+                <div className="hidden md:block">
+                  <HeaderDesktop />
+                </div>
 
-                      <Route
-                        path="/how-it-works/renters"
-                        element={<HowItWorksRentersPage />}
-                      />
+                <div className="md:hidden">
+                  <HeaderMobile />
+                </div>
 
-                      <Route
-                        path="/how-it-works/lenders"
-                        element={<HowItWorksLendersPage />}
-                      />
+                <main className="md:pt-[80px]">
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/how-it-works/renters" element={<HowItWorksRentersPage />} />
+                    <Route path="/how-it-works/lenders" element={<HowItWorksLendersPage />} />
+                    <Route path="/status" element={<StatusPage />} />
+                    <Route path="/objects" element={<ObjectsPage />} />
+                    <Route path="/objects/:id" element={<ObjectPage />} />
+                    <Route path="/profile/:username" element={<ProfilePage />} />
+                    <Route path="/profile/:username/objects" element={<UserObjectsPage />} />
+                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route path="/forbidden" element={<ForbiddenPage />} />
 
-                      <Route path="/status" element={<StatusPage />} />
-                      <Route path="/objects" element={<ObjectsPage />} />
-                      <Route path="/objects/:id" element={<ObjectPage />} />
-                      <Route path="/profile/:username" element={<ProfilePage />} />
-
-                      <Route
-                        path="/profile/:username/objects"
-                        element={<UserObjectsPage />}
-                      />
-
-                      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                      <Route path="/reset-password" element={<ResetPasswordPage />} />
-
-                      {/* Rutas Protegidas */}
-                      <Route element={<ProtectedRoute />}>
-                        <Route path="/objects/create" element={<CreateObjectPage />} />
-                        <Route path="/objects/:id/edit" element={<EditObjectPage />} />
-
-                        <Route
-                          path="/settings/profile/:username"
-                          element={<SettingsPage />}
-                        />
-
-                        <Route
-                          path="/settings/profile/:username/editing"
-                          element={<EditProfilePage />}
-                        />
-
-                        <Route
-                          path="/settings/profile/:username/security"
-                          element={<SecuritySettingsPage />}
-                        />
-
-                        <Route
-                          path="/settings/profile/:username/notifications"
-                          element={<SettingsPage />}
-                        />
-
-                        <Route path="/orders" element={<MyOrdersPage />} />
-                        <Route
-                          path="/transactions"
-                          element={<Navigate to="/orders" replace />}
-                        />
-
-                        <Route
-                          path="/transactions/:id/payment"
-                          element={<PaymentMockPage />}
-                        />
-
-                        <Route path="/favorites" element={<FavoritesPage />} />
-                        <Route path="/chats" element={<ChatsLayout />}>
-                          <Route index element={null} />
-                          <Route path=":id" element={<ChatPage />} />
-                        </Route>
-                        <Route path="/notifications" element={<NotificationsPage />} />
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/objects/create" element={<CreateObjectPage />} />
+                      <Route path="/objects/:id/edit" element={<EditObjectPage />} />
+                      <Route path="/settings/profile/:username" element={<SettingsPage />} />
+                      <Route path="/settings/profile/:username/editing" element={<EditProfilePage />} />
+                      <Route path="/settings/profile/:username/security" element={<SecuritySettingsPage />} />
+                      <Route path="/settings/profile/:username/notifications" element={<SettingsPage />} />
+                      <Route path="/orders" element={<MyOrdersPage />} />
+                      <Route path="/transactions" element={<Navigate to="/orders" replace />} />
+                      <Route path="/transactions/:id/payment" element={<PaymentMockPage />} />
+                      <Route path="/favorites" element={<FavoritesPage />} />
+                      <Route path="/chats" element={<ChatsLayout />}>
+                        <Route index element={null} />
+                        <Route path=":id" element={<ChatPage />} />
                       </Route>
+                      <Route path="/notifications" element={<NotificationsPage />} />
+                    </Route>
 
-                      <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
-                  </main>
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Routes>
+                </main>
 
-                  <FloatingAddObjectButton />
-                  <Footer />
-                </>
-              }
-            />
-
-          </Routes>
-        </UnreadCountsProvider>
-      </ToastProvider>
-    </AuthProvider>
+                <FloatingAddObjectButton />
+                <Footer />
+              </UnreadCountsProvider>
+            </AuthProvider>
+          }
+        />
+      </Routes>
+    </ToastProvider>
   );
 }
 

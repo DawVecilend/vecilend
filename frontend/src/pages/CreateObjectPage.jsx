@@ -45,12 +45,6 @@ function CreateObjectPage() {
   });
 
   useEffect(() => {
-    if (user?.rol === "admin") {
-      navigate("/", { replace: true });
-    }
-  }, [user, navigate]);
-
-  useEffect(() => {
     async function loadCategories() {
       setLoadingCategories(true);
       try {
