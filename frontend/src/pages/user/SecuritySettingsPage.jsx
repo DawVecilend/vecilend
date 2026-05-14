@@ -1,8 +1,15 @@
 import React, { useContext, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
-import { updatePassword, deleteAccount } from "../services/profile";
-import PasswordInput from "../components/elementos/PasswordInput";
+import {
+  updatePassword,
+  deactivateAccount,
+  deleteAccount,
+} from "../../services/profile";
+
+import PasswordInput from "../../components/elementos/PasswordInput";
+import PasswordRequirements from "../../components/elementos/PasswordRequirements";
+
 import {
   Dialog,
   DialogTitle,
@@ -11,11 +18,12 @@ import {
   IconButton,
   useMediaQuery,
 } from "@mui/material";
-import PasswordRequirements from "../components/elementos/PasswordRequirements";
-import { deactivateAccount } from "../services/profile";
 
 function SecuritySettingsPage() {
   const { user } = useContext(AuthContext);
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width:768px)");
 
   const [passwords, setPasswords] = useState({
     current_password: "",
@@ -23,14 +31,9 @@ function SecuritySettingsPage() {
     password_confirmation: "",
   });
 
-  // Cambiamos la forma de guardar los mensajes
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const auth = useContext(AuthContext);
-  const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width:768px)");
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
@@ -41,23 +44,6 @@ function SecuritySettingsPage() {
   const [deactivateOpen, setDeactivateOpen] = useState(false);
   const [deactivateBusy, setDeactivateBusy] = useState(false);
   const [deactivateError, setDeactivateError] = useState(null);
-
-  const handleConfirmDeactivate = async () => {
-    setDeactivateBusy(true);
-    setDeactivateError(null);
-    try {
-      await deactivateAccount();
-      auth.logout?.();
-      navigate("/", { replace: true });
-    } catch (err) {
-      setDeactivateError(
-        err?.response?.data?.message ||
-          "No se ha podido desactivar la cuenta. Inténtalo de nuevo.",
-      );
-    } finally {
-      setDeactivateBusy(false);
-    }
-  };
 
   const handlePasswordChange = (e) => {
     setPasswords((prev) => ({
@@ -93,6 +79,7 @@ function SecuritySettingsPage() {
       setSuccessMessage(
         response.message || "Contraseña actualizada correctamente.",
       );
+
       setPasswords({
         current_password: "",
         password: "",
@@ -110,17 +97,36 @@ function SecuritySettingsPage() {
     }
   };
 
+  const handleConfirmDeactivate = async () => {
+    setDeactivateBusy(true);
+    setDeactivateError(null);
+
+    try {
+      await deactivateAccount();
+      auth.logout?.();
+      navigate("/", { replace: true });
+    } catch (err) {
+      setDeactivateError(
+        err?.response?.data?.message ||
+          "No se ha podido desactivar la cuenta. Inténtalo de nuevo.",
+      );
+    } finally {
+      setDeactivateBusy(false);
+    }
+  };
+
   const handleConfirmDelete = async () => {
     setDeleteError(null);
+
     if (!deletePassword) {
       setDeleteError("Introduce tu contraseña para confirmar.");
       return;
     }
 
     setDeleteBusy(true);
+
     try {
       await deleteAccount(deletePassword);
-      // Tanquem sessió en local i redirigim a home amb missatge
       auth.logout?.();
       navigate("/", { replace: true });
     } catch (err) {
@@ -142,6 +148,7 @@ function SecuritySettingsPage() {
             <h2 className="text-[#4fdbc8] font-bold text-lg">Configuración</h2>
             <p className="text-[#859490] text-xs">Gestiona tu cuenta</p>
           </div>
+
           <nav className="space-y-1">
             <Link
               to={`/settings/profile/${user?.username}`}
@@ -150,6 +157,7 @@ function SecuritySettingsPage() {
               <span className="material-symbols-outlined">home</span>
               <span>Página principal</span>
             </Link>
+
             <Link
               to={`/settings/profile/${user?.username}/editing`}
               className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
@@ -157,6 +165,7 @@ function SecuritySettingsPage() {
               <span className="material-symbols-outlined">person</span>
               <span>Perfil</span>
             </Link>
+
             <Link
               to={`/settings/profile/${user?.username}/security`}
               className="flex items-center gap-3 px-3 py-3 bg-[#4fdbc8]/10 text-[#4fdbc8] font-semibold border-r-4 border-[#4fdbc8] transition-all duration-150"
@@ -164,6 +173,7 @@ function SecuritySettingsPage() {
               <span className="material-symbols-outlined">security</span>
               <span>Seguridad</span>
             </Link>
+
             <Link
               to={`/settings/profile/${user?.username}/notifications`}
               className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
@@ -179,6 +189,7 @@ function SecuritySettingsPage() {
             <h1 className="text-4xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
               Seguridad de la <span className="text-[#4fdbc8]">Cuenta</span>
             </h1>
+
             <p className="text-app-text-secondary text-lg max-w-2xl leading-relaxed">
               Administra tus credenciales de acceso y protege tu información
               personal.
@@ -186,7 +197,6 @@ function SecuritySettingsPage() {
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-            {/* Tarjeta: Cambiar Contraseña */}
             <section className="lg:col-span-7 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
               <div className="flex items-center gap-3 mb-6">
                 <span className="material-symbols-outlined text-[#4fdbc8]">
@@ -195,7 +205,6 @@ function SecuritySettingsPage() {
                 <h2 className="text-xl font-bold">Cambiar Contraseña</h2>
               </div>
 
-              {/* Nuevos mensajes de éxito y error integrados */}
               {successMessage && (
                 <div className="mb-6 bg-[#4fdbc8]/10 border border-[#4fdbc8]/50 text-[#4fdbc8] px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
                   <span className="material-symbols-outlined text-base">
@@ -206,6 +215,7 @@ function SecuritySettingsPage() {
                   </p>
                 </div>
               )}
+
               {errorMessage && (
                 <div className="mb-6 bg-[#ef4444]/10 border border-[#ef4444]/50 text-[#ef4444] px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
                   <span className="material-symbols-outlined text-base">
@@ -222,6 +232,7 @@ function SecuritySettingsPage() {
                   <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                     Contraseña Actual
                   </label>
+
                   <PasswordInput
                     name="current_password"
                     value={passwords.current_password}
@@ -230,35 +241,47 @@ function SecuritySettingsPage() {
                     placeholder="••••••••••••"
                   />
                 </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Nueva Contraseña
                     </label>
+
                     <PasswordInput
                       name="password"
                       value={passwords.password}
                       onChange={handlePasswordChange}
                       className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
+                      placeholder="••••••••"
                     />
+
                     <PasswordRequirements password={passwords.password} />
                   </div>
+
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                       Confirmar Contraseña
                     </label>
+
                     <PasswordInput
                       name="password_confirmation"
                       value={passwords.password_confirmation}
                       onChange={handlePasswordChange}
                       className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
+                      placeholder="••••••••"
                     />
                   </div>
                 </div>
+
                 <div className="pt-2 flex justify-end">
                   <button
                     disabled={isLoading}
-                    className={`bg-[#4fdbc8] text-[#003731] px-10 py-3 rounded-lg font-bold shadow-lg transition-all ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#14b8a6] active:scale-95"}`}
+                    className={`bg-[#4fdbc8] text-[#003731] px-10 py-3 rounded-lg font-bold shadow-lg transition-all ${
+                      isLoading
+                        ? "opacity-70 cursor-not-allowed"
+                        : "hover:bg-[#14b8a6] active:scale-95"
+                    }`}
                     type="submit"
                   >
                     {isLoading ? "Actualizando..." : "Actualizar Contraseña"}
@@ -267,7 +290,6 @@ function SecuritySettingsPage() {
               </form>
             </section>
 
-            {/* Tarjeta: Autenticación 2FA */}
             <section className="lg:col-span-5 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-6">
@@ -277,6 +299,7 @@ function SecuritySettingsPage() {
                     </span>
                     <h2 className="text-xl font-bold">Autenticación 2FA</h2>
                   </div>
+
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
                       defaultChecked
@@ -286,11 +309,13 @@ function SecuritySettingsPage() {
                     <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#161d1b] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#bbcac6] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4fdbc8]"></div>
                   </label>
                 </div>
+
                 <p className="text-sm text-app-text-secondary mb-6 leading-relaxed">
                   Añade una capa extra de seguridad a tu cuenta usando una
                   aplicación de autenticación.
                 </p>
               </div>
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20">
                   <div className="flex items-center gap-3">
@@ -301,17 +326,18 @@ function SecuritySettingsPage() {
                       Authenticator App
                     </span>
                   </div>
+
                   <span className="text-[10px] uppercase tracking-wider font-bold bg-[#14b8a6]/20 text-[#4fdbc8] px-2 py-0.5 rounded">
                     Activo
                   </span>
                 </div>
+
                 <button className="w-full py-3 border border-[#4fdbc8]/50 text-[#4fdbc8] rounded-lg text-sm font-bold hover:bg-[#4fdbc8]/10 transition-colors mt-2">
                   Configurar métodos alternativos
                 </button>
               </div>
             </section>
 
-            {/* ── Zona de Peligro ── */}
             <section className="lg:col-span-12 bg-[#93000a]/10 border border-[#ffb4ab]/20 rounded-xl p-6 shadow-xl flex flex-col gap-4">
               <div>
                 <h2 className="text-lg font-bold text-[#ffb4ab] mb-2 flex items-center gap-2">
@@ -320,24 +346,26 @@ function SecuritySettingsPage() {
                   </span>
                   Zona de Peligro
                 </h2>
+
                 <p className="text-[13px] text-app-text-secondary">
                   Acciones que afectan tu cuenta de forma permanente o duradera.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Desactivar — recuperable contactando suporte */}
                 <div className="rounded-lg border border-[#ffb59e]/30 bg-[#0e1513]/40 p-4 flex flex-col gap-3">
                   <div>
                     <h3 className="font-bold text-app-text mb-1">
                       Desactivar cuenta
                     </h3>
+
                     <p className="text-caption text-app-text-secondary leading-relaxed">
                       Tu perfil y tus objetos dejarán de aparecer para los
                       demás. Tus datos no se borran. Para reactivar la cuenta,
                       contacta con soporte.
                     </p>
                   </div>
+
                   <button
                     type="button"
                     onClick={() => {
@@ -350,17 +378,18 @@ function SecuritySettingsPage() {
                   </button>
                 </div>
 
-                {/* Eliminar — permanent */}
                 <div className="rounded-lg border border-[#ffb4ab]/30 bg-[#0e1513]/40 p-4 flex flex-col gap-3">
                   <div>
                     <h3 className="font-bold text-app-text mb-1">
                       Eliminar cuenta
                     </h3>
+
                     <p className="text-caption text-app-text-secondary leading-relaxed">
                       Una vez que elimines tu cuenta, no hay vuelta atrás. Se
                       borrarán todos tus datos de forma permanente.
                     </p>
                   </div>
+
                   <button
                     type="button"
                     onClick={() => {
@@ -378,6 +407,7 @@ function SecuritySettingsPage() {
           </div>
         </main>
       </div>
+
       <Dialog
         open={deleteOpen}
         onClose={deleteBusy ? undefined : () => setDeleteOpen(false)}
@@ -410,6 +440,7 @@ function SecuritySettingsPage() {
             </span>
             Eliminar tu cuenta
           </span>
+
           <IconButton
             onClick={() => setDeleteOpen(false)}
             disabled={deleteBusy}
@@ -423,6 +454,7 @@ function SecuritySettingsPage() {
           <p className="text-body-base text-app-text font-body">
             Vas a eliminar tu cuenta de Vecilend de forma permanente.
           </p>
+
           <p className="mt-3 text-label text-app-text-secondary font-body">
             Se borrarán tus objetos, solicitudes, mensajes, favoritos y
             valoraciones. Esta acción no se puede deshacer. Si tienes alguna
@@ -433,6 +465,7 @@ function SecuritySettingsPage() {
             <span className="text-label text-app-text-secondary font-body">
               Confirma tu contraseña
             </span>
+
             <div className="mt-2 relative">
               <input
                 type={deleteShowPassword ? "text" : "password"}
@@ -443,6 +476,7 @@ function SecuritySettingsPage() {
                 disabled={deleteBusy}
                 className="w-full bg-[#16181C] border border-app-border rounded-lg px-4 py-3 pr-11 text-app-text focus:ring-2 focus:ring-[#ef4444] outline-none"
               />
+
               <button
                 type="button"
                 onClick={() => setDeleteShowPassword((s) => !s)}
@@ -465,6 +499,7 @@ function SecuritySettingsPage() {
               <span className="material-symbols-outlined text-sm text-[#ef4444] mt-0.5">
                 error
               </span>
+
               <p className="text-xs text-[#ef4444] font-body leading-relaxed">
                 {deleteError}
               </p>
@@ -473,7 +508,12 @@ function SecuritySettingsPage() {
         </DialogContent>
 
         <DialogActions
-          sx={{ borderTop: "1px solid #2A2B31", px: 3, py: 2, gap: 1 }}
+          sx={{
+            borderTop: "1px solid #2A2B31",
+            px: 3,
+            py: 2,
+            gap: 1,
+          }}
         >
           <button
             type="button"
@@ -483,6 +523,7 @@ function SecuritySettingsPage() {
           >
             Cancelar
           </button>
+
           <button
             type="button"
             onClick={handleConfirmDelete}
@@ -493,6 +534,7 @@ function SecuritySettingsPage() {
           </button>
         </DialogActions>
       </Dialog>
+
       <Dialog
         open={deactivateOpen}
         onClose={deactivateBusy ? undefined : () => setDeactivateOpen(false)}
@@ -525,6 +567,7 @@ function SecuritySettingsPage() {
             </span>
             Desactivar tu cuenta
           </span>
+
           <IconButton
             onClick={() => setDeactivateOpen(false)}
             disabled={deactivateBusy}
@@ -538,11 +581,13 @@ function SecuritySettingsPage() {
           <p className="text-body-base text-app-text font-body">
             Vas a desactivar tu cuenta de Vecilend.
           </p>
+
           <p className="mt-3 text-label text-app-text-secondary font-body">
             Tu perfil, tus objetos y tu actividad dejarán de aparecer para el
             resto de usuarios. Tus datos NO se borran. Si en el futuro quieres
             reactivar la cuenta, contacta con el equipo de soporte.
           </p>
+
           <p className="mt-3 text-label text-app-text-secondary font-body">
             Si tienes transacciones en curso, deberás resolverlas primero.
           </p>
@@ -552,6 +597,7 @@ function SecuritySettingsPage() {
               <span className="material-symbols-outlined text-sm text-[#ef4444] mt-0.5">
                 error
               </span>
+
               <p className="text-xs text-[#ef4444] font-body leading-relaxed">
                 {deactivateError}
               </p>
@@ -560,7 +606,12 @@ function SecuritySettingsPage() {
         </DialogContent>
 
         <DialogActions
-          sx={{ borderTop: "1px solid #2A2B31", px: 3, py: 2, gap: 1 }}
+          sx={{
+            borderTop: "1px solid #2A2B31",
+            px: 3,
+            py: 2,
+            gap: 1,
+          }}
         >
           <button
             type="button"
@@ -570,6 +621,7 @@ function SecuritySettingsPage() {
           >
             Cancelar
           </button>
+
           <button
             type="button"
             onClick={handleConfirmDeactivate}

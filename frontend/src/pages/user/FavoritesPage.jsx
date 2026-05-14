@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import BtnBack from "../components/elementos/BtnBack";
-import ProductsGridSkeleton from "../components/elementos/ProductsGridSkeleton";
-import ProductsSection from "../components/home/ProductsSection";
-import { getFavorites } from "../services/favorites";
+import BtnBack from "../../components/elementos/BtnBack";
+import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleton";
+import ProductsSection from "../../components/home/ProductsSection";
+import { getFavorites } from "../../services/favorites";
 
 function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);

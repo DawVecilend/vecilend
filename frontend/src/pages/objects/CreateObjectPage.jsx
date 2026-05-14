@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BtnBack from "../components/elementos/BtnBack";
-import { getCategories } from "../services/categories";
-import { createObject } from "../services/objects";
-import { mapCategories } from "../mappers/categoryMapper";
-import ObjectLocationPicker from "../components/map/ObjectLocationPicker";
-import { useAuth } from "../contexts/AuthContext";
+import BtnBack from "../../components/elementos/BtnBack";
+import { getCategories } from "../../services/categories";
+import { createObject } from "../../services/objects";
+import { mapCategories } from "../../mappers/categoryMapper";
+import ObjectLocationPicker from "../../components/map/ObjectLocationPicker";
+import { useAuth } from "../../contexts/AuthContext";
 
 function CreateObjectPage() {
   const navigate = useNavigate();

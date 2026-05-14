@@ -1,19 +1,19 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import { useUnreadCounts } from "../contexts/UnreadCountsContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { useUnreadCounts } from "../../contexts/UnreadCountsContext";
 import {
   getTransactions,
   acceptTransaction,
   rejectTransaction,
   returnTransaction,
   cancelTransaction,
-} from "../services/transactions";
-import { cldTransform } from "../utils/cloudinary";
-import BtnBack from "../components/elementos/BtnBack";
-import ReviewModal from "../components/transactions/ReviewModal";
-import ConfirmDeleteModal from "../components/elementos/ConfirmDeleteModal";
-import { useToast } from "../contexts/ToastContext";
+} from "../../services/transactions";
+import { cldTransform } from "../../utils/cloudinary";
+import BtnBack from "../../components/elementos/BtnBack";
+import ReviewModal from "../../components/transactions/ReviewModal";
+import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
+import { useToast } from "../../contexts/ToastContext";
 
 // ── Configuració de pestanyes i filtres ──
 
