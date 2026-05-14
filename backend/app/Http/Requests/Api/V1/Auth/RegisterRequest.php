@@ -17,7 +17,13 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required', 'string', 'max:100'],
+            'username' => [
+                'required',
+                'string',
+                'max:100',
+                'not_regex:/^(admin|vecilend)$/i',
+                'unique:users,username',
+            ],
             'nom' => ['required', 'string', 'max:100'],
             'cognoms' => ['required', 'string', 'max:150'],
             'email' => [
@@ -65,6 +71,8 @@ class RegisterRequest extends FormRequest
             'accepta_termes.required' => 'Has d\'acceptar els termes i condicions.',
             'accepta_termes.accepted' => 'Has d\'acceptar els termes i condicions.',
             'direccio.in' => 'El municipi no és vàlid.',
+            'username.unique' => 'Este nombre de usuario ya está en uso.',
+            'username.not_regex' => 'Este nombre de usuario está reservado.',
         ];
     }
 

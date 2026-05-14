@@ -1,35 +1,32 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useBackofficeAuth } from "../../contexts/BackofficeAuthContext";
 import PasswordInput from "../../components/elementos/PasswordInput";
 import Logo from "../../components/elementos/Logo";
 
 function AdminLoginPage() {
-  const { login, user, loading } = useAuth();
+  const { login, empleat, loading } = useBackofficeAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ login: "", password: "" });
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user?.rol === "admin") {
+    if (!loading && empleat) {
       navigate("/backoffice/dashboard", { replace: true });
     }
-  }, [user, loading, navigate]);
+  }, [empleat, loading, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
     try {
-      const u = await login(formData);
-      if (u.rol !== "admin") {
-        setError("Esta cuenta no tiene permisos de administrador.");
-        return;
-      }
+      await login(formData);
       navigate("/backoffice/dashboard", { replace: true });
     } catch (err) {
       if (err.response?.status === 401) setError("Credenciales incorrectas.");
+      else if (err.response?.status === 403) setError(err.response.data?.message || "Cuenta desactivada.");
       else setError("Error de conexión.");
     } finally {
       setSubmitting(false);
@@ -44,7 +41,7 @@ function AdminLoginPage() {
         <div className="mb-8 flex flex-col items-center text-center">
           <Link to="/" className="mb-4"><Logo className="h-10 w-auto" /></Link>
           <h1 className="text-2xl font-bold font-heading text-app-text">Panel de Control</h1>
-          <p className="mt-1 text-sm text-app-text-secondary">Acceso restringido a administradores</p>
+          <p className="mt-1 text-sm text-app-text-secondary">Acceso restringido al personal autorizado</p>
         </div>
 
         <div className="rounded-2xl border border-app-border bg-app-bg-card p-8">
@@ -82,7 +79,7 @@ function AdminLoginPage() {
         </div>
 
         <p className="mt-6 text-center text-xs" style={{ color: "var(--color-app-text-secondary)" }}>
-          ¿No eres admin?{" "}
+          ¿No eres personal autorizado?{" "}
           <Link to="/" className="text-[#14B8A6] hover:underline transition-colors">
             Volver a la plataforma
           </Link>
@@ -93,4 +90,3 @@ function AdminLoginPage() {
 }
 
 export default AdminLoginPage;
-

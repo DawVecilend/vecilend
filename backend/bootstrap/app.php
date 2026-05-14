@@ -24,6 +24,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->prepend(ForceJsonResponse::class);
+        $middleware->alias([
+            'empleat'         => \App\Http\Middleware\EnsureEmpleat::class,
+            'last_seen'       => \App\Http\Middleware\UpdateLastSeenAt::class,
+            'log_user_action' => \App\Http\Middleware\LogUserAction::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AuthenticationException $e, $request) {

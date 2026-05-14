@@ -7,6 +7,7 @@ use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use \App\Models\User;
 use Illuminate\Http\Request;
 
@@ -42,6 +43,18 @@ class LoginController extends Controller
         $user = Auth::guard('web')->user();
         $token = $user->createToken('api-token')->plainTextToken;
 
+        DB::table('logs')->insert([
+            'user_id'    => $user->id,
+            'empleat_id' => null,
+            'tipus'      => 'auth',
+            'accio'      => 'user_login',
+            'detall'     => null,
+            'entitat_afectada'    => null,
+            'id_entitat_afectada' => null,
+            'ip'         => $request->ip(),
+            'created_at' => now(),
+        ]);
+
         return response()->json([
             'message' => 'Login correcte.',
             'data'    => [
@@ -53,7 +66,22 @@ class LoginController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
+
+        if ($user) {
+            DB::table('logs')->insert([
+                'user_id'    => $user->id,
+                'empleat_id' => null,
+                'tipus'      => 'auth',
+                'accio'      => 'user_logout',
+                'detall'     => null,
+                'entitat_afectada'    => null,
+                'id_entitat_afectada' => null,
+                'ip'         => $request->ip(),
+                'created_at' => now(),
+            ]);
+            $user->currentAccessToken()->delete();
+        }
 
         return response()->json([
             'message' => 'Sessió tancada correctament.',

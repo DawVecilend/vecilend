@@ -17,20 +17,35 @@ class AdminLogResource extends JsonResource
             }
         }
 
+        $actor = null;
+        if ($this->empleat_id) {
+            $actor = [
+                'tipus'    => 'empleat',
+                'id'       => $this->empleat_id,
+                'username' => $this->empleat_username ?? null,
+                'email'    => $this->empleat_email ?? null,
+                'rol'      => $this->empleat_rol ?? null,
+            ];
+        } elseif ($this->user_id) {
+            $actor = [
+                'tipus'    => 'usuari',
+                'id'       => $this->user_id,
+                'username' => $this->user_username ?? null,
+                'email'    => $this->user_email ?? null,
+                'rol'      => null,
+            ];
+        }
+
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'user' => $this->user_id ? [
-                'username' => $this->user_username,
-                'email' => $this->user_email,
-            ] : null,
-            'tipus' => $this->tipus,
-            'accio' => $this->accio,
-            'detall' => $details,
-            'entitat_afectada' => $this->entitat_afectada,
+            'id'                  => $this->id,
+            'actor'               => $actor,
+            'tipus'               => $this->tipus,
+            'accio'               => $this->accio,
+            'detall'              => $details,
+            'entitat_afectada'    => $this->entitat_afectada,
             'id_entitat_afectada' => $this->id_entitat_afectada,
-            'ip' => $this->ip,
-            'created_at' => $this->created_at,
+            'ip'                  => $this->ip,
+            'created_at'          => $this->created_at,
         ];
     }
 }

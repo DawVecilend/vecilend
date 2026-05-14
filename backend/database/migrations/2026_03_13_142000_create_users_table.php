@@ -20,12 +20,13 @@ return new class extends Migration {
             $table->string('google_id', 100)->unique()->nullable();
             $table->geography('ubicacio', subtype: 'point', srid: 4326)->nullable();
             $table->integer('radi_proximitat')->default(5);
-            $table->string('rol', 20)->default('usuari');
             $table->boolean('actiu')->default(true);
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('last_seen_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->spatialIndex('ubicacio');
+            $table->index('last_seen_at');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -1,23 +1,22 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../../services/api";
+import backofficeApi from "../../services/backofficeApi";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
 import { useToast } from "../../contexts/ToastContext";
+import { useBackofficeAuth } from "../../contexts/BackofficeAuthContext";
 
 function AdminUsersPage() {
   const { showToast } = useToast();
-  const navigate = useNavigate();
+  const { isAdmin } = useBackofficeAuth();
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
-  const [filterRole, setFilterRole] = useState("all");
   const [confirm, setConfirm] = useState({ open: false, action: null, user: null });
   const [confirmBusy, setConfirmBusy] = useState(false);
 
   useEffect(() => {
-    api.get("/admin/users")
+    backofficeApi.get("/backoffice/users")
       .then((res) => setUsers(Array.isArray(res.data) ? res.data : res.data.data ?? []))
       .finally(() => setLoading(false));
   }, []);
@@ -26,8 +25,7 @@ function AdminUsersPage() {
     const q = search.toLowerCase();
     const matchSearch = !q || u.nom?.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q) || u.username?.toLowerCase().includes(q);
     const matchStatus = filterStatus === "all" || (filterStatus === "active" ? u.actiu : !u.actiu);
-    const matchRole = filterRole === "all" || u.rol === filterRole;
-    return matchSearch && matchStatus && matchRole;
+    return matchSearch && matchStatus;
   });
 
   const handleConfirm = async () => {
@@ -35,15 +33,15 @@ function AdminUsersPage() {
     try {
       const { action, user } = confirm;
       if (action === "block") {
-        await api.put(`/admin/users/${user.id}/block`);
+        await backofficeApi.put(`/backoffice/users/${user.id}/block`);
         setUsers((p) => p.map((u) => u.id === user.id ? { ...u, actiu: false } : u));
         showToast(`${user.nom} bloqueado.`);
       } else if (action === "unblock") {
-        await api.put(`/admin/users/${user.id}/unblock`);
+        await backofficeApi.put(`/backoffice/users/${user.id}/unblock`);
         setUsers((p) => p.map((u) => u.id === user.id ? { ...u, actiu: true } : u));
         showToast(`${user.nom} desbloqueado.`);
       } else if (action === "delete") {
-        await api.delete(`/admin/users/${user.id}`);
+        await backofficeApi.delete(`/backoffice/users/${user.id}`);
         setUsers((p) => p.filter((u) => u.id !== user.id));
         showToast("Usuario eliminado.");
       }
@@ -75,9 +73,6 @@ function AdminUsersPage() {
 
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold font-heading text-app-text">Usuarios</h1>
-        <button onClick={() => navigate("/backoffice/users/create")} className="px-4 py-2.5 rounded-xl text-sm font-bold bg-app-primary hover:bg-app-primary-hover text-white transition-colors">
-          + Nuevo usuario
-        </button>
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -87,11 +82,6 @@ function AdminUsersPage() {
           <option value="all">Todos los estados</option>
           <option value="active">Activos</option>
           <option value="blocked">Bloqueados</option>
-        </select>
-        <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)} className={selectClass}>
-          <option value="all">Todos los roles</option>
-          <option value="usuari">Usuarios</option>
-          <option value="admin">Administradores</option>
         </select>
         <span className="self-center text-sm text-app-text-secondary">{filtered.length} resultados</span>
       </div>
@@ -105,7 +95,7 @@ function AdminUsersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-app-neutral border-b border-app-border">
-                {["Usuario", "Email", "Rol", "Estado", "Acciones"].map((h) => (
+                {["Usuario", "Email", "Estado", "Acciones"].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-app-text-secondary">{h}</th>
                 ))}
               </tr>
@@ -119,18 +109,13 @@ function AdminUsersPage() {
                   </td>
                   <td className="px-4 py-3 text-xs text-app-text-secondary">{u.email}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded ${u.rol === "admin" ? "bg-app-primary/10 text-app-primary" : "bg-app-neutral text-app-text-secondary"}`}>
-                      {u.rol === "admin" ? "Admin" : "Usuari"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
                     <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${u.actiu ? "bg-app-secondary/10 text-app-secondary" : "bg-red-500/10 text-red-400"}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${u.actiu ? "bg-app-secondary" : "bg-red-400"}`} />
                       {u.actiu ? "Activo" : "Bloqueado"}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    {u.rol !== "admin" && (
+                    {isAdmin ? (
                       <div className="flex gap-2">
                         {u.actiu
                           ? <button onClick={() => setConfirm({ open: true, action: "block", user: u })} className="text-xs px-3 py-1 rounded-lg bg-orange-500/10 text-orange-400 hover:bg-orange-500/20">Bloquear</button>
@@ -138,6 +123,8 @@ function AdminUsersPage() {
                         }
                         <button onClick={() => setConfirm({ open: true, action: "delete", user: u })} className="text-xs px-3 py-1 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20">Eliminar</button>
                       </div>
+                    ) : (
+                      <span className="text-xs text-app-text-secondary">Solo lectura</span>
                     )}
                   </td>
                 </tr>

@@ -7,17 +7,19 @@ use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
-use App\Http\Controllers\Api\V1\Auth\PasswordController;
+use App\Http\Controllers\Api\V1\Auth\BackofficeAuthController;
 use App\Http\Controllers\Api\V1\CategoriaController;
 use App\Http\Controllers\Api\V1\ObjecteController;
+use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\Admin\AdminCategoriaController;
+use App\Http\Controllers\Api\V1\Admin\AdminEmpleatController;
 use App\Http\Controllers\Api\V1\Admin\AdminLogController;
+use App\Http\Controllers\Api\V1\Admin\AdminReportController;
 use App\Http\Controllers\Api\V1\Admin\AdminStatsController;
 use App\Http\Controllers\Api\V1\Admin\AdminSubcategoriaController;
 use App\Http\Controllers\Api\V1\Admin\AdminUserController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\TransactionController;
-use App\Http\Middleware\EnsureAdminRole;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Api\V1\ValoracioController;
 use App\Http\Controllers\Api\V1\ChatController;
@@ -25,6 +27,7 @@ use App\Http\Controllers\Api\V1\NotificacioController;
 use App\Models\Conversa;
 use App\Models\Notificacio;
 
+// ── Públiques (usuari) ──
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
 Route::post('/check-user', [RegisterController::class, 'checkUser']);
@@ -41,7 +44,11 @@ Route::get('/objects/{id}', [ObjecteController::class, 'show'])->where('id', '[0
 Route::get('/users/{username}/reviews',           [ValoracioController::class, 'userReviews']);
 Route::get('/users/{username}/reviews/evolution', [ValoracioController::class, 'evolution']);
 
-Route::middleware('auth:sanctum')->group(function () {
+// ── Login del Backoffice ──
+Route::post('/backoffice/login', [BackofficeAuthController::class, 'login'])->middleware('throttle:login');
+
+// ── Rutes autenticades com a USUARI ──
+Route::middleware(['auth:sanctum', 'last_seen', 'log_user_action'])->group(function () {
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
@@ -68,7 +75,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/objects/{id}/favorite', [FavoriteController::class, 'destroy'])->where('id', '[0-9]+');
     Route::get('/favorites', [FavoriteController::class, 'index']);
 
-    // ── Xats ──
+    Route::post('/reports', [ReportController::class, 'store']);
+
     Route::get('/chats',                      [ChatController::class, 'index']);
     Route::post('/chats',                     [ChatController::class, 'store']);
     Route::get('/chats/{id}',                 [ChatController::class, 'show'])->where('id', '[0-9]+');
@@ -76,13 +84,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/chats/{id}/messages',       [ChatController::class, 'sendMessage'])->where('id', '[0-9]+');
     Route::put('/chats/{id}/read',            [ChatController::class, 'markAsRead'])->where('id', '[0-9]+');
 
-    // ── Notificacions ──
     Route::get('/notifications',              [NotificacioController::class, 'index']);
     Route::put('/notifications/read-all',     [NotificacioController::class, 'markAllAsRead']);
     Route::put('/notifications/{id}/read',    [NotificacioController::class, 'markAsRead'])->where('id', '[0-9]+');
     Route::delete('/notifications/{id}',      [NotificacioController::class, 'destroy'])->where('id', '[0-9]+');
 
-    // ── Comptadors no llegits (per a les bombolles) ──
     Route::get('/me/unread-counts', function (Request $request) {
         $userId = $request->user()->id;
 
@@ -107,17 +113,14 @@ Route::middleware('auth:sanctum')->group(function () {
             })
             ->count();
 
-        // Solicituds pendents enviades per mi
         $requestsSentPending = \App\Models\Solicitud::where('solicitant_id', $userId)
             ->where('estat', 'pendent')
             ->count();
 
-        // Solicituds pendents rebudes (sobre objectes meus)
         $requestsReceivedPending = \App\Models\Solicitud::whereHas('objecte', fn($q) => $q->where('user_id', $userId))
             ->where('estat', 'pendent')
             ->count();
 
-        // Transaccions en curs de lloguer sense pagament completat (com a solicitant)
         $transactionsPaymentDue = \App\Models\Solicitud::where('solicitant_id', $userId)
             ->where('estat', 'acceptat')
             ->where('tipus', 'lloguer')
@@ -137,32 +140,46 @@ Route::middleware('auth:sanctum')->group(function () {
             ],
         ]);
     });
+});
 
-    Route::prefix('admin')->middleware(EnsureAdminRole::class)->group(function () {
-        Route::get('/stats', [AdminStatsController::class, 'index']);
+// ── Rutes BACKOFFICE ──
+Route::prefix('backoffice')->middleware(['auth:sanctum', 'empleat'])->group(function () {
+    Route::get('/me', [BackofficeAuthController::class, 'me']);
+    Route::post('/logout', [BackofficeAuthController::class, 'logout']);
 
-        Route::get('/users', [AdminUserController::class, 'index']);
-        Route::put('/users/{id}/block', [AdminUserController::class, 'block'])->where('id', '[0-9]+');
+    Route::get('/stats', [AdminStatsController::class, 'index']);
+    Route::get('/stats/trends/weekly',   [AdminStatsController::class, 'weeklyTrends']);
+    Route::get('/stats/trends/monthly',  [AdminStatsController::class, 'monthlyTrends']);
+    Route::get('/stats/popular-categories', [AdminStatsController::class, 'popularCategories']);
+
+    Route::get('/reports', [AdminReportController::class, 'index']);
+    Route::get('/reports/{id}', [AdminReportController::class, 'show'])->where('id', '[0-9]+');
+    Route::put('/reports/{id}/resolve', [AdminReportController::class, 'resolve'])->where('id', '[0-9]+');
+
+    Route::get('/users', [AdminUserController::class, 'index']);
+
+    Route::middleware('empleat:admin')->group(function () {
+        Route::put('/users/{id}/block',   [AdminUserController::class, 'block'])->where('id', '[0-9]+');
         Route::put('/users/{id}/unblock', [AdminUserController::class, 'unblock'])->where('id', '[0-9]+');
-        Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::delete('/users/{id}',      [AdminUserController::class, 'destroy'])->where('id', '[0-9]+');
 
-        Route::get('/categories', [AdminCategoriaController::class, 'index']);
-        Route::get('/categories/{id}', [AdminCategoriaController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('/categories', [AdminCategoriaController::class, 'store']);
-        Route::put('/categories/{id}', [AdminCategoriaController::class, 'update'])->where('id', '[0-9]+');
-        Route::delete('/categories/{id}', [AdminCategoriaController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::get('/empleats',          [AdminEmpleatController::class, 'index']);
+        Route::post('/empleats',         [AdminEmpleatController::class, 'store']);
+        Route::put('/empleats/{id}',     [AdminEmpleatController::class, 'update'])->where('id', '[0-9]+');
+        Route::delete('/empleats/{id}',  [AdminEmpleatController::class, 'destroy'])->where('id', '[0-9]+');
 
-        Route::get('/subcategories', [AdminSubcategoriaController::class, 'index']);
-        Route::get('/subcategories/{id}', [AdminSubcategoriaController::class, 'show'])->where('id', '[0-9]+');
-        Route::post('/subcategories', [AdminSubcategoriaController::class, 'store']);
-        Route::put('/subcategories/{id}', [AdminSubcategoriaController::class, 'update'])->where('id', '[0-9]+');
-        Route::delete('/subcategories/{id}', [AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::get('/categories',        [AdminCategoriaController::class, 'index']);
+        Route::get('/categories/{id}',   [AdminCategoriaController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('/categories',       [AdminCategoriaController::class, 'store']);
+        Route::put('/categories/{id}',   [AdminCategoriaController::class, 'update'])->where('id', '[0-9]+');
+        Route::delete('/categories/{id}',[AdminCategoriaController::class, 'destroy'])->where('id', '[0-9]+');
+
+        Route::get('/subcategories',     [AdminSubcategoriaController::class, 'index']);
+        Route::get('/subcategories/{id}',[AdminSubcategoriaController::class, 'show'])->where('id', '[0-9]+');
+        Route::post('/subcategories',    [AdminSubcategoriaController::class, 'store']);
+        Route::put('/subcategories/{id}',[AdminSubcategoriaController::class, 'update'])->where('id', '[0-9]+');
+        Route::delete('/subcategories/{id}',[AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
 
         Route::get('/logs', [AdminLogController::class, 'index']);
-
-        Route::get('/stats', [AdminStatsController::class, 'index']);
-        Route::get('/stats/trends/weekly', [AdminStatsController::class, 'weeklyTrends']);
-        Route::get('/stats/trends/monthly', [AdminStatsController::class, 'monthlyTrends']);
-        Route::get('/stats/popular-categories', [AdminStatsController::class, 'popularCategories']);
     });
 });

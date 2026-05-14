@@ -1,14 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useBackofficeAuth } from "../../contexts/BackofficeAuthContext";
+import ForbiddenPage from "../../pages/ForbiddenPage";
 
-/**
- * Protegeix les rutes del backoffice:
- * - Si no autenticat → /backoffice (login)
- * - Si autenticat però no és admin → / (pàgina principal)
- * - Si és admin → renderitza el contingut
- */
-function AdminProtectedRoute() {
-  const { user, loading } = useAuth();
+function AdminProtectedRoute({ requireRol = null }) {
+  const { empleat, loading } = useBackofficeAuth();
 
   if (loading) {
     return (
@@ -21,12 +16,12 @@ function AdminProtectedRoute() {
     );
   }
 
-  if (!user) {
+  if (!empleat) {
     return <Navigate to="/backoffice" replace />;
   }
 
-  if (user.rol !== "admin") {
-    return <Navigate to="/" replace />;
+  if (requireRol && empleat.rol !== requireRol) {
+    return <ForbiddenPage backofficeMode />;
   }
 
   return <Outlet />;

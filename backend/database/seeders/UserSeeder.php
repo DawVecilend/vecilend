@@ -12,23 +12,6 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $now = Carbon::now();
-        DB::table('users')->insert([
-            'username' => 'admin',
-            'nom' => 'Admin',
-            'cognoms' => 'Vecilend',
-            'email' => 'admin@vecilend.com',
-            'password' => Hash::make('Admin1234!'),
-            'biography' => 'Administrador del sistema.',
-            'telefon' => '666666666',
-            'direccio' => 'Esplugues de Llobregat',
-            'avatar_url' => null,
-            'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint(2.0872, 41.3831), 4326)::geography"),
-            'rol' => 'admin',
-            'actiu' => true,
-            'email_verified_at' => $now,
-            'created_at' => $now,
-            'updated_at' => $now
-        ]);
 
         $usuaris = [
             ['username' => 'maria', 'nom' => 'Maria', 'cognoms' => 'Garcia López', 'genere' => 'dona', 'email' => 'maria@example.com', 'lng' => 2.0950, 'lat' => 41.3850, 'biography' => 'Usuaria de prova.', 'telefon' => '666666667', 'direccio' => 'Barcelona'],
@@ -51,7 +34,6 @@ class UserSeeder extends Seeder
                     . ($u['genere'] === 'home' ? 'men' : 'women')
                     . '/' . (crc32($u['username']) % 100) . '.jpg',
                 'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint({$u['lng']}, {$u['lat']}), 4326)::geography"),
-                'rol' => 'usuari',
                 'actiu' => true,
                 'email_verified_at' => $now,
                 'created_at' => $now,

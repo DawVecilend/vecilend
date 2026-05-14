@@ -14,7 +14,7 @@ class ObjecteSeeder extends Seeder
     public function run(): void
     {
         // Admin no participa com a usuari corrent: no té objectes als mocks
-        $users = User::where('rol', '!=', 'admin')->get();
+        $users = User::all();
         $categories = Categoria::all();
         $subcategories = Subcategoria::all();
 

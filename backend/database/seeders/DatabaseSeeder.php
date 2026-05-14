@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             CategoriaSeeder::class,
             SubcategoriaSeeder::class,
             UserSeeder::class,
+            EmpleatSeeder::class,
             ObjecteSeeder::class,
             ValoracioSeeder::class,
             ChatSeeder::class,

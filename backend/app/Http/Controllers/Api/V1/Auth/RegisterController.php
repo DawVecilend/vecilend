@@ -53,7 +53,6 @@ class RegisterController extends Controller
                     'direccio'         => $validated['direccio'] ?? null,
                     'avatar_url'       => $avatarUrl,
                     'avatar_public_id' => $avatarPublicId,
-                    'rol'              => 'usuari',
                     'actiu'            => true,
                     'email_verified_at' => now(),
                 ]);
@@ -102,10 +101,12 @@ class RegisterController extends Controller
     {
         $emailExists = User::where('email', $request->email)->exists();
         $userExists = User::where('username', $request->username)->exists();
+        $userReserved = (bool) preg_match('/^(admin|vecilend)$/i', (string) $request->username);
 
         return response()->json([
-            'emailExists' => $emailExists,
-            'userExists' => $userExists,
+            'emailExists'  => $emailExists,
+            'userExists'   => $userExists,
+            'userReserved' => $userReserved,
         ]);
     }
 }

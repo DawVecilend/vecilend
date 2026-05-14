@@ -127,26 +127,17 @@ function HeaderDesktop() {
                   <div className="absolute top-12 right-0 z-20 w-56">
                     <div className="overflow-hidden border border-white/5 bg-[#0f1715]/70 shadow-lg backdrop-blur-[20px] rounded-lg">
                       <div className="flex flex-col divide-y divide-[#14B8A6]/10">
-                        {user.rol === "admin" ? (
-                          <Link
-                            to="/dashboard"
-                            className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
-                          >
-                            Dashboard
-                          </Link>
-                        ) : (
-                          <Link
-                            to={`/profile/${user?.username}`}
-                            className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
-                          >
-                            <p className="py-2 text-base text-white">
-                              <span>
-                                {user.nom} {user.cognoms}
-                              </span>
-                            </p>
-                            Ver Perfil
-                          </Link>
-                        )}
+                        <Link
+                          to={`/profile/${user?.username}`}
+                          className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
+                        >
+                          <p className="py-2 text-base text-white">
+                            <span>
+                              {user.nom} {user.cognoms}
+                            </span>
+                          </p>
+                          Ver Perfil
+                        </Link>
                         <Link
                           to="/orders"
                           className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"

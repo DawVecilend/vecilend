@@ -20,6 +20,7 @@ import NotFoundPage from "./NotFoundPage";
 import NavCategori from "../components/elementos/NavCategori";
 import DetailsPriceCardProduct from "../components/elementos/DetailsPriceCard";
 import ObjectReviewsSection from "../components/elementos/ObjectReviewsSection";
+import ReportModal from "../components/elementos/ReportModal";
 import { useToast } from "../contexts/ToastContext";
 import dayjs from "dayjs";
 
@@ -52,6 +53,7 @@ function ObjectPage() {
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const { showToast } = useToast();
 
@@ -517,6 +519,17 @@ function ObjectPage() {
             </Link>
           )}
 
+          {!isOwnObject && isAuthenticated && product?.propietari && (
+            <button
+              type="button"
+              onClick={() => setReportOpen(true)}
+              className="self-start inline-flex items-center gap-1.5 text-xs text-app-text-secondary hover:text-red-400 transition-colors"
+            >
+              <span className="material-symbols-outlined text-base">flag</span>
+              Reportar objeto o usuario
+            </button>
+          )}
+
           {product.ubicacio && (
             <div>
               <h2 className="text-app-text text-h3-desktop font-heading mb-3">
@@ -617,6 +630,14 @@ function ObjectPage() {
         confirmLabel="Sí, eliminar"
         busy={deleting}
         errorMessage={deleteError}
+      />
+      <ReportModal
+        open={reportOpen}
+        onClose={() => setReportOpen(false)}
+        usuariReportatId={product?.propietari?.id}
+        usuariReportatNom={product?.propietari?.nom}
+        objecteId={product?.id}
+        objecteNom={product?.nom}
       />
     </section>
   );

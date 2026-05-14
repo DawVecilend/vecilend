@@ -6,9 +6,6 @@ function FloatingAddObjectButton() {
   const auth = useContext(AuthContext);
   const { user, loading } = auth;
 
-  // Admin no pot publicar objectes
-  if (user && user.rol === "admin") return null;
-
   return (
     <Link
       to={loading || !user ? "/login" : "/objects/create"}

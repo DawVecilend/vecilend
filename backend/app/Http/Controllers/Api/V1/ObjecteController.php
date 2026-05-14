@@ -466,13 +466,6 @@ class ObjecteController extends Controller
         $validated = $request->validated();
         $user = $request->user();
 
-        // Admin no pot publicar objectes
-        if ($user->rol === 'admin') {
-            return response()->json([
-                'message' => 'Los administradores no pueden publicar objetos.',
-            ], 403);
-        }
-
         // ── 1. Crear l'objecte (sense ubicació encara) ──
         $objecte = Objecte::create([
             'user_id'         => $user->id,

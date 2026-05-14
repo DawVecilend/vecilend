@@ -11,96 +11,67 @@ use Illuminate\Support\Facades\DB;
 
 class AdminUserController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $users = User::orderByDesc('created_at')->get();
-
         return UserResource::collection($users);
     }
 
-    public function block(Request $request, $id) {
+    public function block(Request $request, $id)
+    {
         $user = User::find($id);
         if (!$user) {
-            return response()->json([
-                'message' => 'Usuari no trobat.',
-            ], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Usuario no encontrado.'], Response::HTTP_NOT_FOUND);
         }
-
-        if ($request->user()->id === $user->id) {
-            return response()->json([
-                'message' => 'No pots bloquejar-te a tu mateix.',
-            ], Response::HTTP_BAD_REQUEST);
+        if (!$user->actiu) {
+            return response()->json(['message' => 'El usuario ya está bloqueado.'], Response::HTTP_BAD_REQUEST);
         }
-
-        if (! $user->actiu) {
-            return response()->json([
-                'message' => 'L\'usuari ja està bloquejat.',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
         $user->update(['actiu' => false]);
         $this->logAdminAction($request, 'block', $user, ['payload' => ['actiu' => false]]);
-
         return new UserResource($user->refresh());
     }
 
-    public function unblock(Request $request, $id) {
+    public function unblock(Request $request, $id)
+    {
         $user = User::find($id);
         if (!$user) {
-            return response()->json([
-                'message' => 'Usuari no trobat.',
-            ], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Usuario no encontrado.'], Response::HTTP_NOT_FOUND);
         }
-
-        if ($request->user()->id === $user->id) {
-            return response()->json([
-                'message' => 'No pots desbloquejar-te a tu mateix.',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
         if ($user->actiu) {
-            return response()->json([
-                'message' => 'L\'usuari ja està actiu.',
-            ], Response::HTTP_BAD_REQUEST);
+            return response()->json(['message' => 'El usuario ya está activo.'], Response::HTTP_BAD_REQUEST);
         }
-
         $user->update(['actiu' => true]);
         $this->logAdminAction($request, 'unblock', $user, ['payload' => ['actiu' => true]]);
-
         return new UserResource($user->refresh());
     }
 
-    public function destroy(Request $request, $id) {
+    public function destroy(Request $request, $id)
+    {
         $user = User::find($id);
         if (!$user) {
-            return response()->json([
-                'message' => 'Usuari no trobat.',
-            ], Response::HTTP_NOT_FOUND);
+            return response()->json(['message' => 'Usuario no encontrado.'], Response::HTTP_NOT_FOUND);
         }
-
-        if ($request->user()->id === $user->id) {
-            return response()->json([
-                'message' => 'No pots eliminar-te a tu mateix.',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
+        $userData = $user->only(['id', 'username', 'email', 'nom', 'cognoms']);
         $user->delete();
-        $this->logAdminAction($request, 'delete', $user, ['payload' => $user->toArray()]);
-
+        $this->logAdminAction($request, 'delete', (object)['id' => $userData['id']], ['payload' => $userData]);
         return response()->json([
-            'message' => 'Usuari eliminat correctament.',
-            'id' => $user->id,
+            'message' => 'Usuario eliminado correctamente.',
+            'id'      => $userData['id'],
         ], Response::HTTP_OK);
     }
 
-    protected function logAdminAction(Request $request, string $action, User $user, array $details = []): void {
+    protected function logAdminAction(Request $request, string $action, $user, array $details = []): void
+    {
         DB::table('logs')->insert([
-            'user_id' => $request->user()->id,
-            'tipus' => 'admin',
-            'accio' => "user_{$action}",
-            'detall' => json_encode($details),
-            'entitat_afectada' => 'user',
+            'user_id'    => null,
+            'empleat_id' => $request->user()->id,
+            'tipus'      => 'admin',
+            'accio'      => "user_{$action}",
+            'detall'     => json_encode($details),
+            'entitat_afectada'    => 'user',
             'id_entitat_afectada' => $user->id,
-            'ip' => $request->ip(),
+            'ip'         => $request->ip(),
+            'created_at' => now(),
         ]);
     }
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../../services/api";
+import backofficeApi from "../../services/backofficeApi";
 import TrendsChart from "../../components/admin/TrendsChart";
 import CategoriesChart from "../../components/admin/CategoriesChart";
 
@@ -8,10 +8,16 @@ function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get("/admin/stats")
-      .then((res) => setStats(res.data))
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    let alive = true;
+    const fetchStats = () => {
+      backofficeApi.get("/backoffice/stats")
+        .then((res) => { if (alive) setStats(res.data); })
+        .catch(() => {})
+        .finally(() => { if (alive) setLoading(false); });
+    };
+    fetchStats();
+    const interval = setInterval(fetchStats, 30000);
+    return () => { alive = false; clearInterval(interval); };
   }, []);
 
   if (loading) return (
@@ -20,6 +26,15 @@ function AdminDashboardPage() {
     </div>
   );
 
+  const cards = [
+    { label: "Usuarios registrados", value: stats?.totals?.total_users },
+    { label: "Usuarios activos",     value: stats?.totals?.active_users },
+    { label: "En línea (últ. 5 min)", value: stats?.totals?.online_users, highlight: true },
+    { label: "Objetos publicados",   value: stats?.totals?.total_objects },
+    { label: "Transacciones",        value: stats?.totals?.total_transactions },
+    { label: "Reportes pendientes",  value: stats?.totals?.pending_reports },
+  ];
+
   return (
     <div className="p-8 flex flex-col gap-6">
       <div>
@@ -27,15 +42,13 @@ function AdminDashboardPage() {
         <p className="text-sm text-app-text-secondary mt-1">Vista general de la plataforma</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { label: "Usuarios registrados", value: stats?.totals?.total_users },
-          { label: "Objetos publicados", value: stats?.totals?.total_objects },
-          { label: "Transacciones", value: stats?.totals?.total_transactions },
-        ].map(({ label, value }) => (
-          <div key={label} className="rounded-xl border border-app-border bg-app-bg-card p-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {cards.map(({ label, value, highlight }) => (
+          <div key={label} className={`rounded-xl border p-5 ${highlight ? "border-app-secondary/40 bg-app-secondary/5" : "border-app-border bg-app-bg-card"}`}>
             <p className="text-sm text-app-text-secondary mb-1">{label}</p>
-            <p className="text-3xl font-bold text-app-text font-heading">{value ?? "—"}</p>
+            <p className={`text-3xl font-bold font-heading ${highlight ? "text-app-secondary" : "text-app-text"}`}>
+              {value ?? "—"}
+            </p>
           </div>
         ))}
       </div>

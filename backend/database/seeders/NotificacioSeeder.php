@@ -12,7 +12,7 @@ class NotificacioSeeder extends Seeder
 {
     public function run(): void
     {
-        $users   = User::where('rol', '!=', 'admin')->get();
+        $users   = User::all();
 
         if ($users->isEmpty()) {
             $this->command->warn('Necessites com a mínim un usuari no admin.');

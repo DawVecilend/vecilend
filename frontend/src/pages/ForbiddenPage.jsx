@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 
-function NotFoundPage({
-  title = "Página no encontrada",
-  message = "Lo que buscas no existe o se ha movido a otro sitio.",
+function ForbiddenPage({
+  title = "Acceso denegado",
+  message = "No tienes permisos para acceder a esta página.",
   backofficeMode = null,
 }) {
   const location = useLocation();
@@ -13,7 +13,7 @@ function NotFoundPage({
       <section className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-app-bg">
         <div className="mx-auto max-w-md">
           <p className="font-heading text-[120px] leading-none font-extrabold text-app-primary">
-            404
+            403
           </p>
           <h1 className="mt-2 font-heading text-2xl font-bold text-app-text">
             {title}
@@ -36,7 +36,7 @@ function NotFoundPage({
     <section className="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center">
       <div className="mx-auto max-w-md">
         <p className="font-heading text-[120px] leading-none font-extrabold bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] bg-clip-text text-transparent">
-          404
+          403
         </p>
         <h1 className="mt-2 font-heading text-h2-desktop text-app-text">
           {title}
@@ -49,16 +49,10 @@ function NotFoundPage({
           >
             Volver al inicio
           </Link>
-          <Link
-            to="/objects"
-            className="rounded-full border border-app-border px-6 py-3 text-body-base text-app-text hover:border-vecilend-dark-primary"
-          >
-            Explorar objetos
-          </Link>
         </div>
       </div>
     </section>
   );
 }
 
-export default NotFoundPage;
+export default ForbiddenPage;
