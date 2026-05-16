@@ -59,7 +59,7 @@ function FAQPage() {
       {
         question: "¿Cómo contacto con soporte?",
         answer:
-          "Puedes contactar con nuestro equipo de soporte a través del chat en la plataforma o por email. Disponemos de soporte 24/7 para resolver cualquier duda o problema.",
+          "Puedes contactar con nuestro equipo de soporte a través del email support@vecilend.com. Disponemos de soporte 24/7 para resolver cualquier duda o problema.",
       },
       {
         question: "¿Qué sucede si necesito cancelar una reserva?",
