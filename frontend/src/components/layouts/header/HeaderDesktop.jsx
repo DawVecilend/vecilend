@@ -64,7 +64,7 @@ function HeaderDesktop() {
             >
               ¿Cómo funciona?
             </Link>
-            <Link to="/about" className={getNavClass("/about")}>
+            <Link to="/about-us" className={getNavClass("/about-us")}>
               Sobre nosotros
             </Link>
           </nav>

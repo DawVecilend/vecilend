@@ -3,7 +3,7 @@ import BtnBack from "../../components/elementos/BtnBack";
 
 function PrivacyPolicyPage() {
   return (
-    <section className="mx-auto w-full max-w-[900px] px-4 md:px-10 pt-6 pb-20">
+    <section className="mx-auto w-full max-w-7xl px-4 md:px-10 pt-6 pb-20">
       <BtnBack />
 
       <header className="mt-6 mb-10">

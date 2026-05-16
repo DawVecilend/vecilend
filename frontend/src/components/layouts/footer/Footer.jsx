@@ -12,7 +12,7 @@ function Footer() {
 
           <div className="flex flex-wrap gap-x-6 gap-y-2 md:flex-col md:gap-x-0 md:gap-y-0">
             <Link
-              to="/sobre-nosotros"
+              to="/about-us"
               className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
             >
               Sobre nosotros

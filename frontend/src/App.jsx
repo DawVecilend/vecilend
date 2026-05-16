@@ -21,6 +21,8 @@ import HowItWorksRentersPage from "./pages/main/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/main/HowItWorksLendersPage";
 import TermsPage from "./pages/main/TermsPage";
 import PrivacyPolicyPage from "./pages/main/PrivacyPolicyPage";
+import AboutUsPage from "./pages/main/AboutUsPage";
+import FAQPage from "./pages/main/FAQPage";
 
 // AUTH PAGES
 import LoginPage from "./pages/auth/LoginPage";
@@ -143,6 +145,8 @@ function App() {
                     <Route path="/status" element={<StatusPage />} />
                     <Route path="/terminos-y-condiciones" element={<TermsPage />} />
                     <Route path="/politica-de-privacidad" element={<PrivacyPolicyPage />} />
+                    <Route path="/about-us" element={<AboutUsPage />} />
+                    <Route path="/faq" element={<FAQPage />} />
                     <Route path="/objects" element={<ObjectsPage />} />
                     <Route path="/objects/:id/:slug?" element={<ObjectPage />} />
                     <Route path="/categories/:slug" element={<CategoryPage />} />
