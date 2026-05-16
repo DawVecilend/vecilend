@@ -30,7 +30,7 @@ import NotFoundPage from "../main/NotFoundPage";
 import dayjs from "dayjs";
 
 function ObjectPage() {
-  const { id } = useParams();
+  const { id, slug: urlSlug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -131,6 +131,20 @@ function ObjectPage() {
     };
   }, [id]);
 
+  // Si el slug de la URL no coincide con el slug actual del objeto,
+  // redirigimos al slug canónico manteniendo la querystring. Esto es bueno
+  // para SEO y para que los enlaces compartidos siempre acaben mostrando
+  // el slug actual del objeto. El id sigue siendo la fuente de verdad para
+  // identificar el objeto.
+  useEffect(() => {
+    if (!product?.slug || !id) return;
+    if (urlSlug !== product.slug) {
+      const search = location.search ?? "";
+      navigate(`/objects/${id}/${product.slug}${search}`, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.slug, urlSlug, id]);
+
   useEffect(() => {
     if (!isAuthenticated || !product) {
       setHasPendingRequest(false);
@@ -212,6 +226,7 @@ function ObjectPage() {
       showToast("Solicitud enviada al propietario");
 
       setSubmitSuccess(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
       if (missatge.trim() && product.propietari?.id) {
         setChatHint({
@@ -280,7 +295,12 @@ function ObjectPage() {
         objecte_id: product.id,
       });
 
-      navigate(`/chats/${chat.id}`);
+      // Pasamos el objecte_id por state (no por URL ni backend) para que la
+      // tarjeta "Sobre el objeto" sea efímera: si no envías mensaje y cambias
+      // de página, al volver al chat ya no se asociará el mensaje al objeto.
+      navigate(`/chats/${chat.id}`, {
+        state: { aboutObjectId: product.id },
+      });
     } catch (err) {
       console.error("Error abriendo chat sobre objeto:", err);
 
@@ -560,34 +580,25 @@ function ObjectPage() {
           </div>
 
           {propietari && (
-            <Link
-              to={`/profile/${propietari.username}`}
-              className="block hover:opacity-90 transition-opacity"
-              aria-label={`Ver perfil de ${propietari.nom}`}
-            >
-              <UserCard
-                user={propietari}
-                action={
-                  !isOwnObject && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        openChatAboutObject();
-                      }}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-vecilend-dark-primary/15 hover:bg-vecilend-dark-primary/25 border border-vecilend-dark-primary/40 px-3 py-2 text-label font-bold text-vecilend-dark-primary active:scale-95 transition"
-                      title="Consultar al propietario sobre este objeto"
-                    >
-                      <span className="material-symbols-outlined text-base leading-none">
-                        chat_bubble
-                      </span>
-                      <span>Consultar sobre el objeto</span>
-                    </button>
-                  )
-                }
-              />
-            </Link>
+            <UserCard
+              user={propietari}
+              profileHref={`/profile/${propietari.username}`}
+              action={
+                !isOwnObject && (
+                  <button
+                    type="button"
+                    onClick={openChatAboutObject}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-vecilend-dark-primary/15 hover:bg-vecilend-dark-primary/25 border border-vecilend-dark-primary/40 px-3 py-2 text-label font-bold text-vecilend-dark-primary active:scale-95 transition"
+                    title="Consultar al propietario sobre este objeto"
+                  >
+                    <span className="material-symbols-outlined text-base leading-none">
+                      chat_bubble
+                    </span>
+                    <span>Consultar sobre el objeto</span>
+                  </button>
+                )
+              }
+            />
           )}
 
           {!isOwnObject && isAuthenticated && product?.propietari && (

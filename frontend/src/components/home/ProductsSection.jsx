@@ -165,6 +165,7 @@ function ProductsSection({
                 <ProfileProductCard
                   key={product.id}
                   id={product.id}
+                  slug={product.slug}
                   image={getMainImage(product)}
                   category={product.categoria?.nom || "Sin categoría"}
                   description={product.descripcio || "Sin descripción"}
@@ -187,6 +188,7 @@ function ProductsSection({
                 <ProductCard
                   key={product.id}
                   id={product.id}
+                  slug={product.slug}
                   image={getMainImage(product)}
                   category={product.categoria?.nom || "Sin categoría"}
                   description={product.descripcio || "Sin descripción"}

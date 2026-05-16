@@ -29,14 +29,6 @@ function ForgotPasswordPage() {
   return (
     <div className="bg-app-bg text-app-text min-h-screen flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
-        <Link
-          to="/login"
-          className="inline-flex items-center gap-2 text-app-text-secondary hover:text-[#4fdbc8] mb-6"
-        >
-          <span className="material-symbols-outlined">arrow_back</span>
-          Volver al inicio de sesión
-        </Link>
-
         <h1 className="text-3xl font-extrabold tracking-tight mb-2">
           ¿Olvidaste tu contraseña?
         </h1>
@@ -91,7 +83,7 @@ function ForgotPasswordPage() {
               restablecer tu contraseña.
             </p>
             <p className="text-sm text-[#859490]">
-              Revisa también la carpeta de spam. El enlace caduca en 60 minutos.
+              Revisa también la carpeta de spam. El enlace caduca en 1 hora.
             </p>
             <Link
               to="/login"

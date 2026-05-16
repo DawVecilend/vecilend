@@ -11,7 +11,6 @@ import ScrollToTop from "./components/ScrollToTop";
 import HeaderDesktop from "./components/layouts/header/HeaderDesktop";
 import HeaderMobile from "./components/layouts/header/HeaderMobile";
 import Footer from "./components/layouts/footer/Footer";
-import FloatingAddObjectButton from "./components/elementos/FloatingAddObjectButton";
 
 // MAIN PAGES
 import HomePage from "./pages/main/HomePage";
@@ -20,6 +19,8 @@ import NotFoundPage from "./pages/main/NotFoundPage";
 import ForbiddenPage from "./pages/main/ForbiddenPage";
 import HowItWorksRentersPage from "./pages/main/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/main/HowItWorksLendersPage";
+import TermsPage from "./pages/main/TermsPage";
+import PrivacyPolicyPage from "./pages/main/PrivacyPolicyPage";
 
 // AUTH PAGES
 import LoginPage from "./pages/auth/LoginPage";
@@ -140,8 +141,10 @@ function App() {
                     />
 
                     <Route path="/status" element={<StatusPage />} />
+                    <Route path="/terminos-y-condiciones" element={<TermsPage />} />
+                    <Route path="/politica-de-privacidad" element={<PrivacyPolicyPage />} />
                     <Route path="/objects" element={<ObjectsPage />} />
-                    <Route path="/objects/:id" element={<ObjectPage />} />
+                    <Route path="/objects/:id/:slug?" element={<ObjectPage />} />
                     <Route path="/categories/:slug" element={<CategoryPage />} />
 
                     <Route path="/profile/:username" element={<ProfilePage />} />
@@ -214,7 +217,6 @@ function App() {
                   </Routes>
                 </main>
 
-                <FloatingAddObjectButton />
                 <Footer />
               </UnreadCountsProvider>
             </AuthProvider>

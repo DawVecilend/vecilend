@@ -292,7 +292,9 @@ class TransactionController extends Controller
                 'estat'           => 'en_curs',
             ]);
 
-            $solicitud->objecte()->update(['estat' => 'no_disponible']);
+            // El objeto NO se marca no_disponible. El filtro por fechas
+            // (scopeDisponiblePerDates) + las fechas ocupadas mostradas
+            // en el calendario gestionan la disponibilidad por rango.
 
             // Notificació d'acceptació
             $propietari = $solicitud->objecte->user;
@@ -445,8 +447,8 @@ class TransactionController extends Controller
         DB::transaction(function () use ($solicitud, $transaccio, $user) {
             $transaccio->update(['estat' => 'cancellat', 'data_fi_real' => now()]);
 
-            // L'objecte torna a estar disponible
-            $solicitud->objecte()->update(['estat' => 'disponible']);
+            // No tocamos l'estat de l'objecte. Si el propietari l'havia pausat
+            // manualment, ha de quedar com estava.
 
             // Avisem la part contrària
             $altreId = $user->id === $solicitud->solicitant_id
@@ -512,7 +514,8 @@ class TransactionController extends Controller
                 'estat'           => 'finalitzat',
             ]);
 
-            $solicitud->objecte()->update(['estat' => 'disponible']);
+            // No forçem l'estat de l'objecte. Si el propietari l'havia pausat
+            // manualment, ha de quedar com estava.
             // Solicitud ja ha quedat 'acceptat' (no toquem). El cicle de
             // tancament el porta la transaccio a partir d'aquí.
         });

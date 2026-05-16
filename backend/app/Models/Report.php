@@ -23,6 +23,11 @@ class Report extends Model
     public const ESTAT_RESOLT     = 'resolt';
     public const ESTAT_DESCARTAT  = 'descartat';
 
+    /**
+     * Motivos disponibles para crear nuevos reportes.
+     * 'altres' se mantiene como constante para compatibilidad con
+     * reportes históricos, pero ya no se acepta como motivo nuevo.
+     */
     public static function motiusDisponibles(): array
     {
         return [
@@ -31,7 +36,6 @@ class Report extends Model
             self::MOTIU_FRAU,
             self::MOTIU_SUPLANTACIO,
             self::MOTIU_SPAM,
-            self::MOTIU_ALTRES,
         ];
     }
 

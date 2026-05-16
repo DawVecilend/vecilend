@@ -147,6 +147,7 @@ function DateRangeCalendar({
         <DateCalendar
           value={rangeStart}
           onChange={handleDateClick}
+          reduceAnimations
           slots={{ day: CustomDay }}
           slotProps={{
             day: { datesOcupades, rangeStart, rangeEnd },

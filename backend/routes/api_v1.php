@@ -158,9 +158,11 @@ Route::prefix('backoffice')->middleware(['auth:sanctum', 'empleat'])->group(func
 
     Route::get('/users', [AdminUserController::class, 'index']);
 
+    // Bloquear y desbloquear lo pueden hacer tanto admins como soporte
+    Route::put('/users/{id}/block',   [AdminUserController::class, 'block'])->where('id', '[0-9]+');
+    Route::put('/users/{id}/unblock', [AdminUserController::class, 'unblock'])->where('id', '[0-9]+');
+
     Route::middleware('empleat:admin')->group(function () {
-        Route::put('/users/{id}/block',   [AdminUserController::class, 'block'])->where('id', '[0-9]+');
-        Route::put('/users/{id}/unblock', [AdminUserController::class, 'unblock'])->where('id', '[0-9]+');
         Route::delete('/users/{id}',      [AdminUserController::class, 'destroy'])->where('id', '[0-9]+');
 
         Route::get('/empleats',          [AdminEmpleatController::class, 'index']);
@@ -180,6 +182,8 @@ Route::prefix('backoffice')->middleware(['auth:sanctum', 'empleat'])->group(func
         Route::put('/subcategories/{id}',[AdminSubcategoriaController::class, 'update'])->where('id', '[0-9]+');
         Route::delete('/subcategories/{id}',[AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
 
-        Route::get('/logs', [AdminLogController::class, 'index']);
+        Route::get('/logs',         [AdminLogController::class, 'index']);
+        Route::get('/logs/export',  [AdminLogController::class, 'export']);
+        Route::delete('/logs',      [AdminLogController::class, 'clean']);
     });
 });

@@ -84,16 +84,16 @@ function ResolveModal({ open, report, onClose, onResolved }) {
           <div>
             <label className="block text-sm font-medium text-app-text mb-1.5">Decisión</label>
             <div className="flex gap-2">
-              <button type="button" onClick={() => setEstat("resolt")} className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border ${estat === "resolt" ? "border-app-secondary bg-app-secondary/10 text-app-secondary" : "border-app-border text-app-text-secondary"}`}>
+              <button type="button" onClick={() => setEstat("resolt")} className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${estat === "resolt" ? "border-app-secondary bg-app-secondary/10 text-app-secondary" : "border-app-border text-app-text-secondary hover:border-app-secondary/40"}`}>
                 Tomar acción
               </button>
-              <button type="button" onClick={() => setEstat("descartat")} className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border ${estat === "descartat" ? "border-app-border bg-app-neutral text-app-text" : "border-app-border text-app-text-secondary"}`}>
+              <button type="button" onClick={() => setEstat("descartat")} className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${estat === "descartat" ? "border-app-secondary bg-app-secondary/10 text-app-secondary" : "border-app-border text-app-text-secondary hover:border-app-secondary/40"}`}>
                 Descartar
               </button>
             </div>
           </div>
 
-          {estat === "resolt" && isAdmin && (
+          {estat === "resolt" && (
             <div className="rounded-lg border border-app-border bg-app-neutral p-3 flex flex-col gap-2">
               <p className="text-xs text-app-text-secondary mb-1">Acciones a aplicar:</p>
               {report.usuari_reportat?.actiu !== false && (
@@ -102,20 +102,19 @@ function ResolveModal({ open, report, onClose, onResolved }) {
                   Bloquear al usuario reportado
                 </label>
               )}
-              {report.objecte && (
+              {report.objecte && (isAdmin || report.motiu === "objecte_inapropiat") && (
                 <label className="flex items-center gap-2 text-sm text-app-text cursor-pointer">
                   <input type="checkbox" checked={eliminarObjecte} onChange={(e) => setEliminarObjecte(e.target.checked)} className="cursor-pointer" />
                   Eliminar el objeto referenciado
                 </label>
               )}
+              {!isAdmin && report.objecte && report.motiu !== "objecte_inapropiat" && (
+                <p className="text-xs text-app-text-secondary italic">La eliminación del objeto en reportes que no son por objeto inapropiado debe realizarla un administrador.</p>
+              )}
               {!report.objecte && report.usuari_reportat?.actiu === false && (
                 <p className="text-xs text-app-text-secondary">No hay acciones adicionales disponibles.</p>
               )}
             </div>
-          )}
-
-          {estat === "resolt" && !isAdmin && (
-            <p className="text-xs text-app-text-secondary">Como soporte técnico, las acciones destructivas deben ser ejecutadas por un administrador. Marca el reporte como resuelto si ya se ha gestionado de otra forma.</p>
           )}
 
           <div>
@@ -273,7 +272,7 @@ function AdminReportsPage() {
                   </td>
                   <td className="px-4 py-3 text-xs">
                     {r.objecte ? (
-                      <Link to={`/objects/${r.objecte.id}`} className="text-app-primary hover:underline">
+                      <Link to={r.objecte.slug ? `/objects/${r.objecte.id}/${r.objecte.slug}` : `/objects/${r.objecte.id}`} className="text-app-primary hover:underline">
                         {r.objecte.nom}
                       </Link>
                     ) : "—"}

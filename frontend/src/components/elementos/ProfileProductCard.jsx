@@ -24,6 +24,7 @@ function getAvailabilityClasses(status) {
 
 function ProfileProductCard({
   id,
+  slug,
   image,
   category,
   description,
@@ -111,7 +112,7 @@ function ProfileProductCard({
 
   return (
     <div className="relative w-full">
-      <Link to={`/objects/${id}`} className="block w-full">
+      <Link to={slug ? `/objects/${id}/${slug}` : `/objects/${id}`} className="block w-full">
         <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
           <div className="relative aspect-4/3 overflow-hidden">
             <img
@@ -139,15 +140,17 @@ function ProfileProductCard({
               />
             )}
 
-            <div
-              className={`absolute bottom-4 left-4 flex items-center rounded-full px-3 py-1 text-xs font-bold backdrop-blur-md ${availabilityClasses.container}`}
-            >
-              <span
-                className={`mr-2 h-2 w-2 rounded-full ${availabilityClasses.dot}`}
-              ></span>
+            {isOwnProfile && (
+              <div
+                className={`absolute bottom-4 left-4 flex items-center rounded-full px-3 py-1 text-xs font-bold backdrop-blur-md ${availabilityClasses.container}`}
+              >
+                <span
+                  className={`mr-2 h-2 w-2 rounded-full ${availabilityClasses.dot}`}
+                ></span>
 
-              {availabilityLabel}
-            </div>
+                {availabilityLabel}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-1 flex-col p-6">

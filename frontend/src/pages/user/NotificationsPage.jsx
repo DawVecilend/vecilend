@@ -117,6 +117,28 @@ function buildNotificationContent(notif) {
       };
     }
 
+    case "report_descartat":
+      return {
+        icon: "fact_check",
+        color: "text-zinc-400",
+        title: notif.titol || "Tu reporte ha sido revisado",
+        message:
+          notif.missatge ||
+          "Tras revisar tu reporte, el equipo ha decidido descartarlo.",
+        link: "/",
+      };
+
+    case "report_resolt_bloqueig":
+      return {
+        icon: "shield",
+        color: "text-app-primary",
+        title: notif.titol || "Tu reporte ha sido revisado",
+        message:
+          notif.missatge ||
+          "Gracias por tu reporte. El usuario reportado ha sido bloqueado.",
+        link: "/",
+      };
+
     default:
       return {
         icon: "notifications",

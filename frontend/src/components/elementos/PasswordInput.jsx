@@ -1,20 +1,24 @@
 import { useState } from "react";
 
-/**
- * Input de password amb botó d'ull per mostrar/ocultar.
- * Drop-in replacement de <input type="password" ... />.
- *
- * Pasa qualsevol prop d'input HTML i el component s'encarrega del type.
- */
-function PasswordInput({ className = "", iconClassName = "", ...props }) {
+function PasswordInput({
+  className = "",
+  iconClassName = "",
+  leftIcon = null,
+  ...props
+}) {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative group">
+      {leftIcon && (
+        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors pointer-events-none">
+          {leftIcon}
+        </span>
+      )}
       <input
         {...props}
         type={visible ? "text" : "password"}
-        className={`pr-10 ${className}`}
+        className={`${leftIcon ? "pl-10 " : ""}pr-10 ${className}`}
       />
       <button
         type="button"

@@ -1,28 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import FavoriteButton from "./FavoriteButton";
 
-function getAvailabilityLabel(status) {
-  if (status === "disponible") return "Disponible";
-  if (status === "no_disponible") return "No disponible";
-  return "Disponible";
-}
-
-function getAvailabilityClasses(status) {
-  if (status === "no_disponible") {
-    return {
-      container: "bg-app-bg/60 text-[#ef4444]",
-      dot: "bg-[#ef4444]",
-    };
-  }
-
-  return {
-    container: "bg-app-bg/60 text-[#4fdbc8]",
-    dot: "bg-[#4fdbc8]",
-  };
-}
-
 function ProductCard({
   id,
+  slug,
   image,
   category,
   description,
@@ -40,12 +21,8 @@ function ProductCard({
 }) {
   const navigate = useNavigate();
 
-  const availabilityLabel = getAvailabilityLabel(status);
-  const availabilityClasses = getAvailabilityClasses(status);
-
-  const detailLink = searchParamsString
-    ? `/objects/${id}?${searchParamsString}`
-    : `/objects/${id}`;
+  const basePath = slug ? `/objects/${id}/${slug}` : `/objects/${id}`;
+  const detailLink = searchParamsString ? `${basePath}?${searchParamsString}` : basePath;
 
   function handleProfileClick(e) {
     e.preventDefault();
@@ -74,16 +51,6 @@ function ProductCard({
             onRemoved={onFavoriteRemoved}
             className="absolute right-4 top-4"
           />
-
-          <div
-            className={`absolute bottom-4 left-4 flex items-center rounded-full px-3 py-1 text-xs font-bold backdrop-blur-md ${availabilityClasses.container}`}
-          >
-            <span
-              className={`mr-2 h-2 w-2 rounded-full ${availabilityClasses.dot}`}
-            ></span>
-
-            {availabilityLabel}
-          </div>
         </div>
 
         <div className="flex flex-1 flex-col p-6">

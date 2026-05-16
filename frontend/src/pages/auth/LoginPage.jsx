@@ -72,8 +72,8 @@ function LoginPage() {
                   />
                 </div>
                 <div>
-                  <p className="font-bold text-app-text">Laura Martínez</p>
-                  <p className="text-sm text-[#859490]">Vecina de Barcelona</p>
+                  <p className="font-bold text-app-text">Oriol Ferrer</p>
+                  <p className="text-sm text-[#859490]">Vecino de Barcelona</p>
                 </div>
               </div>
             </div>

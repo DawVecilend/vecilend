@@ -65,7 +65,7 @@ function HeaderDesktop() {
               ¿Cómo funciona?
             </Link>
             <Link to="/about" className={getNavClass("/about")}>
-              Sobre Nosotros
+              Sobre nosotros
             </Link>
           </nav>
         </div>
@@ -136,7 +136,7 @@ function HeaderDesktop() {
                               {user.nom} {user.cognoms}
                             </span>
                           </p>
-                          Ver Perfil
+                          Ver perfil
                         </Link>
                         <Link
                           to="/orders"
@@ -174,7 +174,7 @@ function HeaderDesktop() {
                 to="/login"
                 className="hidden px-4 py-2.5 text-sm font-bold text-[#aebdb9] transition-colors hover:text-[#4fdbc8] md:block"
               >
-                Iniciar Sesión
+                Iniciar sesión
               </Link>
 
               <Link

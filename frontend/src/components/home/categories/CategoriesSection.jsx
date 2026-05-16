@@ -75,7 +75,7 @@ function CategoriesSection({ categories = [] }) {
               Descubre nuestras categorías
             </h2>
             <p className="text-[#aebdb9]">
-              Encuentra todo lo que necesitas en una sola ubicación
+              Encuentra todo lo que necesitas en un solo lugar.
             </p>
           </div>
           <Link
@@ -116,7 +116,7 @@ function CategoriesSection({ categories = [] }) {
             {categories.map((category) => (
               <div
                 key={category.id}
-                className="shrink-0 w-[calc(50%-0.5rem)] md:w-[calc(25%-0.75rem)] lg:w-[calc(16.6667%-0.84rem)]"
+                className="shrink-0 w-[calc(50%-0.5rem)] md:w-[calc(33.3333%-0.6667rem)] lg:w-[calc(20%-0.8rem)] xl:w-[calc(16.6667%-0.84rem)]"
               >
                 <CategoryPill
                   id={category.id}

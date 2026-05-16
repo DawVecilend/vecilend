@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -12,23 +13,24 @@ class SubcategoriaSeeder extends Seeder
     public function run(): void
     {
         $now = Carbon::now();
+
         $map = [
-            'Viatges' => ['Maletes', 'Motxilles', 'Accessoris de viatge'],
-            'Construcció' => ['Maquinària', 'Seguretat', 'Material d\'obra'],
-            'Eines' => ['Manuals', 'Elèctriques', 'Mesura'],
-            'Jardineria' => ['Poda', 'Reg', 'Plantació'],
-            'Electrodomèstics' => ['Cuina', 'Neteja', 'Climatització'],
-            'Mobilitat' => ['Bicicletes', 'Patinets', 'Accessoris'],
-            'Fitness' => ['Peses', 'Cardio', 'Ioga'],
-            'Surf' => ['Taules', 'Neoprens', 'Accessoris'],
-            'Trones de nadó' => ['Trones', 'Cotxets', 'Seguretat infantil'],
-            'Jocs de taula' => ['Estratègia', 'Cooperatius', 'Familiars'],
+            'Viajes'            => ['Maletas', 'Mochilas', 'Accesorios de viaje'],
+            'Construcción'      => ['Maquinaria', 'Seguridad', 'Material de obra'],
+            'Herramientas'      => ['Manuales', 'Eléctricas', 'Medición'],
+            'Jardinería'        => ['Poda', 'Riego', 'Plantación'],
+            'Electrodomésticos' => ['Cocina', 'Limpieza', 'Climatización'],
+            'Movilidad'         => ['Bicicletas', 'Patinetes', 'Accesorios'],
+            'Fitness'           => ['Pesas', 'Cardio', 'Yoga'],
+            'Surf'              => ['Tablas', 'Neoprenos', 'Accesorios'],
+            'Bebés y niños'     => ['Tronas', 'Cochecitos', 'Seguridad infantil'],
+            'Juegos de mesa'    => ['Estrategia', 'Cooperativos', 'Familiares'],
         ];
 
         foreach ($map as $nomCategoria => $subcategories) {
             $categoriaId = DB::table('categories')->where('nom', $nomCategoria)->value('id');
             if (!$categoriaId) {
-                $this->command->warn(" Categoria '{$nomCategoria}' no trobada. Executa CategoriaSeeder primer.");
+                $this->command->warn("Categoría '{$nomCategoria}' no encontrada. Ejecuta CategoriaSeeder primero.");
                 continue;
             }
 

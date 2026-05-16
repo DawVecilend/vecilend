@@ -21,7 +21,7 @@ function HomePage() {
     Promise.allSettled([
       getObjects({ per_page: 5, sort: "popular" }).then((r) => r.data),
       getObjects({ per_page: 5, sort: "recent" }).then((r) => r.data),
-      getCategories(6),
+      getCategories(),
     ])
       .then(([topResult, recentResult, categoriesResult]) => {
         if (cancelled) return;

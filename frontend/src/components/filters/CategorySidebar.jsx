@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { formatDateRangeShort } from "../../utils/datetime";
 
 function CategorySidebar({
   categories = [],
@@ -44,7 +45,7 @@ function CategorySidebar({
           <SidebarFilterButton
             icon="calendar_month"
             label={
-              hasDates ? `${filters.data_inici} → ${filters.data_fi}` : "Fechas"
+              hasDates ? formatDateRangeShort(filters.data_inici, filters.data_fi) : "Fechas"
             }
             active={hasDates}
             onClick={onOpenDates}

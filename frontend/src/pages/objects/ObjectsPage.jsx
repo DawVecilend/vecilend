@@ -15,6 +15,7 @@ import ProductsGridSkeleton from "../../components/elementos/ProductsGridSkeleto
 import { getObjects, getNearbyObjects } from "../../services/objects";
 import { getCategories } from "../../services/categories";
 import { mapCategories } from "../../mappers/categoryMapper";
+import { formatDateRangeShort } from "../../utils/datetime";
 
 function ObjectsPage() {
   const [products, setProducts] = useState([]);
@@ -308,7 +309,7 @@ function ObjectsPage() {
               icon="calendar_month"
               label={
                 hasDates
-                  ? `${filters.data_inici} → ${filters.data_fi}`
+                  ? formatDateRangeShort(filters.data_inici, filters.data_fi)
                   : "Añadir fechas"
               }
               active={hasDates}
