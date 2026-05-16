@@ -183,9 +183,11 @@ textarea {
 }
 
 /* Oculta visualmente la scrollbar del body manteniendo el scroll funcional */
+html.no-body-scrollbar,
 body.no-body-scrollbar {
   scrollbar-width: none;
 }
+html.no-body-scrollbar::-webkit-scrollbar,
 body.no-body-scrollbar::-webkit-scrollbar {
   display: none;
 }

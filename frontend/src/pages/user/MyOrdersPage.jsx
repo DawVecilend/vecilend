@@ -129,7 +129,11 @@ function OrderCard({ tx, tab, onAction, busyId }) {
   return (
     <article className="rounded-2xl border border-app-border bg-app-card overflow-hidden flex flex-col md:flex-row">
       <Link
-        to={tx.objecte?.slug ? `/objects/${tx.objecte_id}/${tx.objecte.slug}` : `/objects/${tx.objecte_id}`}
+        to={
+          tx.objecte?.slug
+            ? `/objects/${tx.objecte_id}/${tx.objecte.slug}`
+            : `/objects/${tx.objecte_id}`
+        }
         className="md:w-48 h-40 md:h-auto shrink-0 bg-vecilend-dark-neutral"
       >
         <img
@@ -143,7 +147,11 @@ function OrderCard({ tx, tab, onAction, busyId }) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <Link
-              to={tx.objecte?.slug ? `/objects/${tx.objecte_id}/${tx.objecte.slug}` : `/objects/${tx.objecte_id}`}
+              to={
+                tx.objecte?.slug
+                  ? `/objects/${tx.objecte_id}/${tx.objecte.slug}`
+                  : `/objects/${tx.objecte_id}`
+              }
               className="font-heading text-h3-mobile text-app-text hover:text-vecilend-dark-primary"
             >
               {tx.objecte?.nom}
@@ -308,7 +316,9 @@ function OrderCard({ tx, tab, onAction, busyId }) {
             tx.transaccio?.estat === "finalitzat" &&
             tx.has_own_review && (
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-400 px-4 py-1.5 text-label font-bold border border-emerald-500/40 max-w-max">
-                <span className="material-symbols-outlined text-base">check_circle</span>
+                <span className="material-symbols-outlined text-base">
+                  check_circle
+                </span>
                 Valorado
               </span>
             )}
@@ -464,7 +474,7 @@ function MyOrdersPage() {
         );
       } else if (action === "return") {
         await returnTransaction(id);
-        showToast("Devolución confirmada");
+        showToast("Recepción del objeto confirmada");
       }
       await load();
       refreshBadges();
@@ -520,7 +530,11 @@ function MyOrdersPage() {
 
   useEffect(() => {
     document.body.classList.add("no-body-scrollbar");
-    return () => document.body.classList.remove("no-body-scrollbar");
+    document.documentElement.classList.add("no-body-scrollbar");
+    return () => {
+      document.body.classList.remove("no-body-scrollbar");
+      document.documentElement.classList.remove("no-body-scrollbar");
+    };
   }, []);
 
   // Badges (bombolles vermelles) per pestanya
@@ -678,8 +692,7 @@ function MyOrdersPage() {
         }}
         onConfirm={confirmReject}
         title="¿Rechazar la solicitud?"
-        message={`Vas a rechazar la solicitud sobre "${rejectTarget?.label ?? ""}".`}
-        description="El otro vecino recibirá una notificación. Esta acción no se puede deshacer."
+        description="El otro usuario recibirá una notificación. Esta acción no se puede deshacer."
         confirmLabel="Sí, rechazar"
         busy={rejectBusy}
         errorMessage={rejectError}

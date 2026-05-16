@@ -3,7 +3,6 @@ import Logo from "../../elementos/Logo";
 import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import SearchBar from "../../elementos/SearchBar";
-import ThemeToggle from "../../elementos/ThemeToggle";
 import UnreadBadge from "../../elementos/UnreadBadge";
 import { useUnreadCounts } from "../../../contexts/UnreadCountsContext";
 
@@ -74,7 +73,18 @@ function HeaderDesktop() {
         <div className="flex items-center gap-4">
           <SearchBar />
 
-          <ThemeToggle />
+          {user && (
+            <Link
+              to="/objects/create"
+              aria-label="Publicar objeto"
+              title="Publicar objeto"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-vecilend-dark-primary text-[#003730] shadow-md transition-all hover:bg-vecilend-dark-primary-hover hover:text-white active:scale-95"
+            >
+              <span className="material-symbols-outlined text-[22px] font-bold">
+                add
+              </span>
+            </Link>
+          )}
 
           {user ? (
             <>
