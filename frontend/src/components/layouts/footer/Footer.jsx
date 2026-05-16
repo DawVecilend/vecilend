@@ -4,13 +4,13 @@ import Logo from "../../elementos/Logo";
 function Footer() {
   return (
     <footer className="bg-app-bg-secondary px-6 py-10 md:h-[226px] md:px-10 md:py-0">
-      <div className="mx-auto flex max-w-[1380px] flex-col md:h-full md:flex-row md:items-center md:justify-around md:gap-20 xl:gap-75">
-        <div className="order-1 flex flex-col">
+      <div className="mx-auto flex max-w-[1380px] flex-col items-center text-center md:h-full md:flex-row md:items-center md:justify-around md:gap-20 md:text-left xl:gap-75">
+        <div className="order-1 flex flex-col items-center md:items-start">
           <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">
             Empresa
           </h3>
 
-          <div className="flex flex-wrap gap-x-6 gap-y-2 md:flex-col md:gap-x-0 md:gap-y-0">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 md:flex-col md:items-start md:justify-start md:gap-x-0 md:gap-y-0">
             <Link
               to="/about-us"
               className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
@@ -29,12 +29,12 @@ function Footer() {
 
         <div className="order-2 my-8 h-px w-full bg-vecilend-dark-border md:hidden" />
 
-        <div className="order-3 flex flex-col">
+        <div className="order-3 flex flex-col items-center md:items-start">
           <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">
             Síguenos
           </h3>
 
-          <div className="flex flex-row items-center gap-4">
+          <div className="flex flex-row items-center justify-center gap-4 md:justify-start">
             <a
               href="https://www.instagram.com/vecilend.official"
               target="_blank"

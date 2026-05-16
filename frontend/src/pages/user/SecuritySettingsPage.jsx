@@ -9,6 +9,7 @@ import {
 
 import PasswordInput from "../../components/elementos/PasswordInput";
 import PasswordRequirements from "../../components/elementos/PasswordRequirements";
+import SettingsNav from "../../components/layouts/SettingsNav";
 
 import {
   Dialog,
@@ -143,46 +144,7 @@ function SecuritySettingsPage() {
   return (
     <div className="bg-app-bg text-app-text antialiased flex flex-col dark font-inter">
       <div className="flex min-h-[calc(100vh-80px)]">
-        <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-app-border transition-all duration-150 text-sm z-40">
-          <div className="mb-8 px-2">
-            <h2 className="text-[#4fdbc8] font-bold text-lg">Configuración</h2>
-            <p className="text-[#859490] text-xs">Gestiona tu cuenta</p>
-          </div>
-
-          <nav className="space-y-1">
-            <Link
-              to={`/settings/profile/${user?.username}`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
-            >
-              <span className="material-symbols-outlined">home</span>
-              <span>Página principal</span>
-            </Link>
-
-            <Link
-              to={`/settings/profile/${user?.username}/editing`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
-            >
-              <span className="material-symbols-outlined">person</span>
-              <span>Perfil</span>
-            </Link>
-
-            <Link
-              to={`/settings/profile/${user?.username}/security`}
-              className="flex items-center gap-3 px-3 py-3 bg-[#4fdbc8]/10 text-[#4fdbc8] font-semibold border-r-4 border-[#4fdbc8] transition-all duration-150"
-            >
-              <span className="material-symbols-outlined">security</span>
-              <span>Seguridad</span>
-            </Link>
-
-            <Link
-              to={`/settings/profile/${user?.username}/notifications`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
-            >
-              <span className="material-symbols-outlined">privacy</span>
-              <span>Privacidad</span>
-            </Link>
-          </nav>
-        </aside>
+        <SettingsNav username={user?.username} current="security" />
 
         <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg flex flex-col justify-center">
           <header className="mb-8">
@@ -300,24 +262,33 @@ function SecuritySettingsPage() {
                     <h2 className="text-xl font-bold">Autenticación 2FA</h2>
                   </div>
 
-                  <label className="relative inline-flex items-center cursor-pointer">
+                  <label className="relative inline-flex items-center cursor-not-allowed opacity-60">
                     <input
-                      defaultChecked
+                      checked={false}
+                      readOnly
+                      disabled
                       className="sr-only peer"
                       type="checkbox"
+                      onClick={(e) => e.preventDefault()}
+                      onChange={() => {}}
                     />
-                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#161d1b] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#bbcac6] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4fdbc8]"></div>
+                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#bbcac6] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5"></div>
                   </label>
                 </div>
 
-                <p className="text-sm text-app-text-secondary mb-6 leading-relaxed">
+                <p className="text-sm text-app-text-secondary mb-3 leading-relaxed">
                   Añade una capa extra de seguridad a tu cuenta usando una
                   aplicación de autenticación.
+                </p>
+
+                <p className="text-xs text-[#ffb59e] mb-6 leading-relaxed italic">
+                  Esta funcionalidad se encuentra en fase de desarrollo y
+                  todavía no ha sido implementada.
                 </p>
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20">
+                <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20 opacity-60">
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-app-text-secondary">
                       smartphone
@@ -327,12 +298,18 @@ function SecuritySettingsPage() {
                     </span>
                   </div>
 
-                  <span className="text-[10px] uppercase tracking-wider font-bold bg-[#14b8a6]/20 text-[#4fdbc8] px-2 py-0.5 rounded">
-                    Activo
+                  <span className="text-[10px] uppercase tracking-wider font-bold bg-app-bg/40 text-app-text-secondary px-2 py-0.5 rounded">
+                    Inactivo
                   </span>
                 </div>
 
-                <button className="w-full py-3 border border-[#4fdbc8]/50 text-[#4fdbc8] rounded-lg text-sm font-bold hover:bg-[#4fdbc8]/10 transition-colors mt-2">
+                <button
+                  type="button"
+                  disabled
+                  aria-disabled="true"
+                  onClick={(e) => e.preventDefault()}
+                  className="w-full py-3 border border-[#4fdbc8]/30 text-[#4fdbc8]/60 rounded-lg text-sm font-bold cursor-not-allowed mt-2"
+                >
                   Configurar métodos alternativos
                 </button>
               </div>

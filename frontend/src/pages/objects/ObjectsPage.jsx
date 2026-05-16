@@ -6,6 +6,7 @@ import BtnOrder from "../../components/elementos/BtnOrder";
 import BtnBack from "../../components/elementos/BtnBack";
 import InlineFilterChip from "../../components/filters/InlineFilterChip";
 import CategorySidebar from "../../components/filters/CategorySidebar";
+import CategoryDrawerMobile from "../../components/filters/CategoryDrawerMobile";
 import ChangeLocationModal from "../../components/search/modals/ChangeLocationModal";
 import ChangeDatesModal from "../../components/search/modals/ChangeDatesModal";
 import ChangePriceModal from "../../components/search/modals/ChangePriceModal";
@@ -32,6 +33,7 @@ function ObjectsPage() {
   const [datesOpen, setDatesOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
   const [ratingOpen, setRatingOpen] = useState(false);
+  const [categoriesDrawerOpen, setCategoriesDrawerOpen] = useState(false);
 
   const filters = useMemo(
     () => ({
@@ -295,6 +297,19 @@ function ObjectsPage() {
 
           <div className="mt-5 flex flex-wrap gap-2 lg:hidden">
             <InlineFilterChip
+              icon="category"
+              label={
+                currentSubcategory
+                  ? currentSubcategory.name
+                  : currentCategory
+                    ? currentCategory.name
+                    : "Categorías"
+              }
+              active={hasCategory}
+              onClick={() => setCategoriesDrawerOpen(true)}
+            />
+
+            <InlineFilterChip
               icon="location_on"
               label={
                 hasLocation
@@ -421,6 +436,14 @@ function ObjectsPage() {
         onClose={() => setRatingOpen(false)}
         initial={filters}
         onApply={applyFilterPatch}
+      />
+
+      <CategoryDrawerMobile
+        open={categoriesDrawerOpen}
+        onClose={() => setCategoriesDrawerOpen(false)}
+        categories={categories}
+        filters={filters}
+        applyFilterPatch={applyFilterPatch}
       />
     </div>
   );

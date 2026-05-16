@@ -4,6 +4,7 @@ import { getProfile, updateProfile } from "../../services/profile";
 import { AuthContext } from "../../contexts/AuthContext";
 import municipalitiesData from "../../data/municipios.json";
 import HeaderDesktop from "../../components/layouts/header/HeaderDesktop";
+import SettingsNav from "../../components/layouts/SettingsNav";
 import { normalizeString } from "../../utils/string";
 
 function EditProfilePage() {
@@ -144,21 +145,7 @@ function EditProfilePage() {
     return (
       <div className="bg-app-bg text-app-text antialiased flex flex-col">
         <div className="flex min-h-[calc(100vh-80px)]">
-          {/* Sidebar (no animem la nav, només els blocs interns) */}
-          <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-app-border">
-            <div className="mb-8 px-2">
-              <div className="h-5 w-32 bg-app-bg-card rounded animate-pulse" />
-              <div className="mt-2 h-3 w-40 bg-app-bg-card rounded animate-pulse" />
-            </div>
-            <div className="space-y-2">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-12 bg-app-bg-card rounded animate-pulse"
-                />
-              ))}
-            </div>
-          </aside>
+          <SettingsNav username={user?.username} current="profile" />
 
           <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg">
             <header className="mb-8">
@@ -207,42 +194,7 @@ function EditProfilePage() {
     <div className="bg-app-bg text-app-text antialiased flex flex-col dark">
       {/* Contenedor con la altura calculada exacta */}
       <div className="flex min-h-[calc(100vh-80px)]">
-        <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 border-r border-app-border transition-all duration-150 font-inter text-sm z-40">
-          <div className="mb-8 px-2">
-            <h2 className="text-[#4fdbc8] font-bold text-lg">Configuración</h2>
-            <p className="text-[#859490] text-xs">Gestiona tu cuenta</p>
-          </div>
-          <nav className="space-y-1">
-            <Link
-              to={`/settings/profile/${user?.username}`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
-            >
-              <span className="material-symbols-outlined">home</span>
-              <span>Página principal</span>
-            </Link>
-            <Link
-              to={`/settings/profile/${user?.username}/editing`}
-              className="flex items-center gap-3 px-3 py-3 bg-[#4fdbc8]/10 text-[#4fdbc8] font-semibold border-r-4 border-[#4fdbc8] transition-all duration-150"
-            >
-              <span className="material-symbols-outlined">person</span>
-              <span>Perfil</span>
-            </Link>
-            <Link
-              to={`/settings/profile/${user?.username}/security`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
-            >
-              <span className="material-symbols-outlined">security</span>
-              <span>Seguridad</span>
-            </Link>
-            <Link
-              to={`/settings/profile/${user?.username}/notifications`}
-              className="flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
-            >
-              <span className="material-symbols-outlined">privacy</span>
-              <span>Privacidad</span>
-            </Link>
-          </nav>
-        </aside>
+        <SettingsNav username={user?.username} current="profile" />
 
         <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg flex flex-col justify-center">
           <header className="mb-8">

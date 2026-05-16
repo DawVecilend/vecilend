@@ -461,7 +461,7 @@ function CreateObjectPage() {
                   value={form.name}
                   onChange={handleChange}
                   placeholder="Introducir el nombre del producto"
-                  className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none [&:-webkit-autofill]:[transition:background-color_0s_9999s] [&:-webkit-autofill]:[-webkit-text-fill-color:#fff] [&:-webkit-autofill]:[caret-color:#fff]"
+                  className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:#fff] [&:-webkit-autofill]:[caret-color:#fff] [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_#101217_inset] [&:-webkit-autofill:focus]:[box-shadow:0_0_0_1000px_#101217_inset] [&:-webkit-autofill:hover]:[box-shadow:0_0_0_1000px_#101217_inset]"
                 />
               </div>
               {fieldErrors.name && (

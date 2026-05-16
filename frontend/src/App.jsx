@@ -21,6 +21,7 @@ import HowItWorksRentersPage from "./pages/main/HowItWorksRentersPage";
 import HowItWorksLendersPage from "./pages/main/HowItWorksLendersPage";
 import TermsPage from "./pages/main/TermsPage";
 import PrivacyPolicyPage from "./pages/main/PrivacyPolicyPage";
+import FeatureComingSoonPage from "./pages/main/FeatureComingSoonPage";
 import AboutUsPage from "./pages/main/AboutUsPage";
 import FAQPage from "./pages/main/FAQPage";
 
@@ -97,7 +98,10 @@ function App() {
                       path="/empleats/create"
                       element={<AdminCreateEmpleatPage />}
                     />
-                    <Route path="/categories" element={<AdminCategoriesPage />} />
+                    <Route
+                      path="/categories"
+                      element={<AdminCategoriesPage />}
+                    />
                     <Route
                       path="/categories/create"
                       element={<AdminCreateCategoryPage />}
@@ -143,15 +147,34 @@ function App() {
                     />
 
                     <Route path="/status" element={<StatusPage />} />
-                    <Route path="/terminos-y-condiciones" element={<TermsPage />} />
-                    <Route path="/politica-de-privacidad" element={<PrivacyPolicyPage />} />
+                    <Route
+                      path="/terminos-y-condiciones"
+                      element={<TermsPage />}
+                    />
+                    <Route
+                      path="/politica-de-privacidad"
+                      element={<PrivacyPolicyPage />}
+                    />
+                    <Route
+                      path="/feature-coming-soon"
+                      element={<FeatureComingSoonPage />}
+                    />
                     <Route path="/about-us" element={<AboutUsPage />} />
                     <Route path="/faq" element={<FAQPage />} />
                     <Route path="/objects" element={<ObjectsPage />} />
-                    <Route path="/objects/:id/:slug?" element={<ObjectPage />} />
-                    <Route path="/categories/:slug" element={<CategoryPage />} />
+                    <Route
+                      path="/objects/:id/:slug?"
+                      element={<ObjectPage />}
+                    />
+                    <Route
+                      path="/categories/:slug"
+                      element={<CategoryPage />}
+                    />
 
-                    <Route path="/profile/:username" element={<ProfilePage />} />
+                    <Route
+                      path="/profile/:username"
+                      element={<ProfilePage />}
+                    />
                     <Route
                       path="/profile/:username/objects"
                       element={<UserObjectsPage />}
@@ -188,10 +211,6 @@ function App() {
                       <Route
                         path="/settings/profile/:username/security"
                         element={<SecuritySettingsPage />}
-                      />
-                      <Route
-                        path="/settings/profile/:username/notifications"
-                        element={<SettingsPage />}
                       />
 
                       <Route path="/orders" element={<MyOrdersPage />} />
