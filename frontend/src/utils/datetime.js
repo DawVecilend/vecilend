@@ -45,3 +45,31 @@ export function formatDateShort(iso) {
 
   return `${dd}/${mm}/${yy}`;
 }
+
+
+/**
+ * Formatea un rango de fechas "YYYY-MM-DD" a "10 → 12 nov 2026" en castellano.
+ * El año siempre se muestra (al final si coinciden, en cada lado si difieren).
+ */
+export function formatDateRangeShort(start, end) {
+  if (!start || !end) return "";
+  try {
+    const s = new Date(start + "T00:00:00");
+    const e = new Date(end + "T00:00:00");
+    if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime())) return `${start} → ${end}`;
+
+    const months = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+    const sDay = s.getDate(), sMonth = months[s.getMonth()], sYear = s.getFullYear();
+    const eDay = e.getDate(), eMonth = months[e.getMonth()], eYear = e.getFullYear();
+
+    if (sYear !== eYear) {
+      return `${sDay} ${sMonth} ${sYear} → ${eDay} ${eMonth} ${eYear}`;
+    }
+    if (sMonth === eMonth) {
+      return `${sDay} → ${eDay} ${eMonth} ${sYear}`;
+    }
+    return `${sDay} ${sMonth} → ${eDay} ${eMonth} ${sYear}`;
+  } catch {
+    return `${start} → ${end}`;
+  }
+}

@@ -181,3 +181,11 @@ textarea {
 .vecilend-carousel::-webkit-scrollbar {
   display: none;
 }
+
+/* Oculta visualmente la scrollbar del body manteniendo el scroll funcional */
+body.no-body-scrollbar {
+  scrollbar-width: none;
+}
+body.no-body-scrollbar::-webkit-scrollbar {
+  display: none;
+}

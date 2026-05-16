@@ -17,15 +17,15 @@ function CTASection() {
             <span className="text-[#4fdbc8]">ingresos?</span>
           </h2>
           <p className="text-[#aebdb9] text-lg mb-10 leading-relaxed">
-            Únete a la comunidad de Vecilend y comienza a generar ingresos con
-            tu objeto.
+            Únete a la comunidad de Vecilend y comienza a <br />
+            generar ingresos con tu objeto.
           </p>
           <div className="flex flex-wrap gap-6">
             <Link
               to="/objects/create"
               className="bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] text-[#003730] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-[#4fdbc8]/30 hover:scale-105 active:scale-95 transition-all"
             >
-              Comenzar a alquilar
+              Comienza a alquilar
             </Link>
             <Link
               to="/how-it-works/renters"

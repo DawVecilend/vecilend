@@ -17,5 +17,4 @@ export const REPORT_MOTIUS = [
   { value: "frau_o_estafa",           label: "Fraude o estafa" },
   { value: "suplantacio_identitat",   label: "Suplantación de identidad" },
   { value: "spam",                    label: "Spam o publicidad no deseada" },
-  { value: "altres",                  label: "Otro" },
 ];

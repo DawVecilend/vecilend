@@ -174,7 +174,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
             </span>
           )}
 
-          {role === "requester" && tx.estat === "finalitzat" && (
+          {role === "requester" && tx.estat === "finalitzat" && !tx.has_own_review && (
             <button
               type="button"
               onClick={() => onAction("review", tx.id, tx)}
@@ -187,7 +187,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
             </button>
           )}
 
-          {role === "owner" && tx.estat === "finalitzat" && (
+          {role === "owner" && tx.estat === "finalitzat" && !tx.has_own_review && (
             <button
               type="button"
               onClick={() => onAction("review", tx.id, tx)}
@@ -198,6 +198,13 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               </span>
               Valorar
             </button>
+          )}
+
+          {tx.estat === "finalitzat" && tx.has_own_review && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-400 px-4 py-1.5 text-label font-bold border border-emerald-500/40 max-w-max">
+              <span className="material-symbols-outlined text-base">check_circle</span>
+              Valorado
+            </span>
           )}
 
           {role === "owner" && tx.estat === "pendent" && (
@@ -369,6 +376,11 @@ function TransactionsPage() {
       setBusyId(null);
     }
   };
+
+  useEffect(() => {
+    document.body.classList.add("no-body-scrollbar");
+    return () => document.body.classList.remove("no-body-scrollbar");
+  }, []);
 
   const totalCount = meta?.total ?? transactions.length;
   const remaining = Math.max(0, totalCount - transactions.length);

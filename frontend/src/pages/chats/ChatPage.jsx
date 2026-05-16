@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback, useContext } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 import {
   getChat,
@@ -16,6 +16,7 @@ import {
 import { AuthContext } from "../../contexts/AuthContext";
 import { useUnreadCounts } from "../../contexts/UnreadCountsContext";
 import { useToast } from "../../contexts/ToastContext";
+import { getDraft as getStoredDraft, setDraft as setStoredDraft, clearDraft as clearStoredDraft } from "../../services/chatDrafts";
 
 import BtnBack from "../../components/elementos/BtnBack";
 import ReportModal from "../../components/elementos/ReportModal";
@@ -272,6 +273,7 @@ function MessageBubble({ msg, onReply }) {
 function ChatPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { user } = useContext(AuthContext);
   const { refresh: refreshUnread } = useUnreadCounts();
@@ -288,9 +290,34 @@ function ChatPage() {
   const [solicitudBusyId, setSolicitudBusyId] = useState(null);
   const [reportOpen, setReportOpen] = useState(false);
 
+  // ID d'objecte "pendent" provinent de navegació amb state (botó
+  // "Consultar sobre el objeto"). One-shot: s'aplica al pròxim missatge
+  // i es consumeix. Si el usuari surt del chat sense enviar, es perd.
+  const [pendingObjectId, setPendingObjectId] = useState(
+    location.state?.aboutObjectId ?? null,
+  );
+
+  // Quan canvia l'id del chat o el state de navegació, re-evaluem el
+  // pendingObjectId. També netegem el state de la URL via replace per
+  // evitar que F5 el restauri.
+  useEffect(() => {
+    const stateObjId = location.state?.aboutObjectId ?? null;
+    setPendingObjectId(stateObjId);
+    if (stateObjId) {
+      navigate(location.pathname, { replace: true, state: null });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
   const scrollRef = useRef(null);
   const pollRef = useRef(null);
   const lastIdRef = useRef(null);
+
+  // Borradores compartidos entre ChatPage y ChatsListPage vía el store.
+  // Permite escribir "hola" en un chat, cambiar a otro y volver a encontrar
+  // "hola" intacto, igual que en WhatsApp. También se ven en la lista.
+  const draftRef = useRef("");
+  useEffect(() => { draftRef.current = draft; }, [draft]);
 
   const scrollToBottom = useCallback((force = false) => {
     const el = scrollRef.current;
@@ -310,6 +337,8 @@ function ChatPage() {
     setLoading(true);
     setMessages([]);
     setReplyTo(null);
+    // Restaurar el borrador guardado para este chat (si lo hay)
+    setDraft(getStoredDraft(id));
 
     async function load() {
       try {
@@ -354,6 +383,9 @@ function ChatPage() {
 
     return () => {
       cancelled = true;
+      // Al salir del chat (cambiar a otro o desmontar), guardar el borrador actual
+      // en el store. setStoredDraft ya descarta los vacíos automáticamente.
+      setStoredDraft(id, draftRef.current);
     };
   }, [id, scrollToBottom, refreshUnread]);
 
@@ -400,13 +432,19 @@ function ChatPage() {
       const newMsg = await sendChatMessage(id, {
         contingut: text,
         respon_a_id: replyTo?.id ?? null,
-        objecte_id: chat?.objecte?.id ?? null,
+        objecte_id: pendingObjectId,
       });
 
       setMessages((prev) => [...prev, newMsg]);
       lastIdRef.current = newMsg.id;
       setDraft("");
+      clearStoredDraft(id);
       setReplyTo(null);
+      setPendingObjectId(null);
+
+      // Avisar al sidebar (ChatsLayout) que refresqui la llista de chats
+      // a l'instant, sense esperar al pol·ling.
+      window.dispatchEvent(new CustomEvent("chats:refresh"));
 
       setTimeout(() => scrollToBottom(true), 50);
     } catch (e) {

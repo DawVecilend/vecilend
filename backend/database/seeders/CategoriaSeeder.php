@@ -14,21 +14,21 @@ class CategoriaSeeder extends Seeder
         $now = Carbon::now();
 
         $categories = [
-            ['nom' => 'Viatges', 'slug' => 'viatges', 'icona' => 'trip', 'descripcio' => 'Maletes, adaptadors, accessoris de viatge i equipament per a desplaçaments'],
-            ['nom' => 'Construcció', 'slug' => 'construccio', 'icona' => 'construction', 'descripcio' => 'Eines de construcció, maquinària lleugera i material d\'obra'],
-            ['nom' => 'Eines', 'slug' => 'eines', 'icona' => 'handyman', 'descripcio' => 'Eines manuals i elèctriques per a bricolatge i reparacions'],
-            ['nom' => 'Jardineria', 'slug' => 'jardineria', 'icona' => 'grass', 'descripcio' => 'Eines de jardí, maquinària de poda i accessoris per a l\'exterior'],
-            ['nom' => 'Electrodomèstics', 'slug' => 'electrodomestics', 'icona' => 'microwave_gen', 'descripcio' => 'Electrodomèstics petits i grans per a la llar'],
-            ['nom' => 'Mobilitat', 'slug' => 'mobilitat', 'icona' => 'pedal_bike', 'descripcio' => 'Bicicletes, patinets, remolcs i accessoris de mobilitat'],
-            ['nom' => 'Fitness', 'slug' => 'fitness', 'icona' => 'cardio_load', 'descripcio' => 'Material esportiu, peses, màquines d\'exercici i accessoris'],
-            ['nom' => 'Surf', 'slug' => 'surf', 'icona' => 'waves', 'descripcio' => 'Taules de surf, neoprens, quilles i accessoris aquàtics'],
-            ['nom' => 'Trones de nadó', 'slug' => 'trones-de-nado', 'icona' => 'child_friendly', 'descripcio' => 'Trones, cotxets, cadires de passeig i material infantil'],
-            ['nom' => 'Jocs de taula', 'slug' => 'jocs-de-taula',  'icona' => 'strategy', 'descripcio' => 'Jocs de taula, jocs de cartes, puzles i entreteniment'],
+            ['nom' => 'Viajes',            'icona' => 'trip',           'descripcio' => 'Maletas, adaptadores, accesorios de viaje y equipamiento para desplazamientos'],
+            ['nom' => 'Construcción',      'icona' => 'construction',   'descripcio' => 'Herramientas de construcción, maquinaria ligera y material de obra'],
+            ['nom' => 'Herramientas',      'icona' => 'handyman',       'descripcio' => 'Herramientas manuales y eléctricas para bricolaje y reparaciones'],
+            ['nom' => 'Jardinería',        'icona' => 'grass',          'descripcio' => 'Herramientas de jardín, maquinaria de poda y accesorios para el exterior'],
+            ['nom' => 'Electrodomésticos', 'icona' => 'microwave_gen',  'descripcio' => 'Electrodomésticos pequeños y grandes para el hogar'],
+            ['nom' => 'Movilidad',         'icona' => 'pedal_bike',     'descripcio' => 'Bicicletas, patinetes, remolques y accesorios de movilidad'],
+            ['nom' => 'Fitness',           'icona' => 'cardio_load',    'descripcio' => 'Material deportivo, pesas, máquinas de ejercicio y accesorios'],
+            ['nom' => 'Surf',              'icona' => 'waves',          'descripcio' => 'Tablas de surf, neoprenos, quillas y accesorios acuáticos'],
+            ['nom' => 'Bebés y niños',     'icona' => 'child_friendly', 'descripcio' => 'Tronas, cochecitos, sillas de paseo y material infantil'],
+            ['nom' => 'Juegos de mesa',    'icona' => 'strategy',       'descripcio' => 'Juegos de mesa, juegos de cartas, puzles y entretenimiento'],
         ];
 
         foreach ($categories as $cat) {
             DB::table('categories')->updateOrInsert(
-                ['nom' => $cat['nom']],  // clau només amb nom
+                ['nom' => $cat['nom']],
                 [
                     'slug'        => Str::slug($cat['nom']),
                     'icona'       => $cat['icona'],

@@ -351,9 +351,13 @@ class ObjecteController extends Controller
     private function obtenirDatesOcupades(int $objecteId): array
     {
         return DB::table('solicituds')
-            ->join('transaccions', 'transaccions.solicitud_id', '=', 'solicituds.id')
+            ->leftJoin('transaccions', 'transaccions.solicitud_id', '=', 'solicituds.id')
             ->where('solicituds.objecte_id', $objecteId)
-            ->where('transaccions.estat', 'en_curs')
+            ->where('solicituds.estat', 'acceptat')
+            ->where(function ($q) {
+                $q->whereNull('transaccions.id')
+                  ->orWhereIn('transaccions.estat', ['en_curs']);
+            })
             ->select('solicituds.data_inici', 'solicituds.data_fi')
             ->orderBy('solicituds.data_inici')
             ->get()

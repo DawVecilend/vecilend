@@ -186,7 +186,7 @@ function UserReviewsList({ username }) {
                 <p className="text-xs text-[#859490]">
                   Sobre el objeto:{" "}
                   <Link
-                    to={`/objects/${rev.objecte.id}`}
+                    to={(rev.objecte.slug ? `/objects/${rev.objecte.id}/${rev.objecte.slug}` : `/objects/${rev.objecte.id}`)}
                     className="text-[#4fdbc8] hover:underline"
                   >
                     {rev.objecte.nom}

@@ -129,7 +129,7 @@ function OrderCard({ tx, tab, onAction, busyId }) {
   return (
     <article className="rounded-2xl border border-app-border bg-app-card overflow-hidden flex flex-col md:flex-row">
       <Link
-        to={`/objects/${tx.objecte_id}`}
+        to={tx.objecte?.slug ? `/objects/${tx.objecte_id}/${tx.objecte.slug}` : `/objects/${tx.objecte_id}`}
         className="md:w-48 h-40 md:h-auto shrink-0 bg-vecilend-dark-neutral"
       >
         <img
@@ -143,7 +143,7 @@ function OrderCard({ tx, tab, onAction, busyId }) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <Link
-              to={`/objects/${tx.objecte_id}`}
+              to={tx.objecte?.slug ? `/objects/${tx.objecte_id}/${tx.objecte.slug}` : `/objects/${tx.objecte_id}`}
               className="font-heading text-h3-mobile text-app-text hover:text-vecilend-dark-primary"
             >
               {tx.objecte?.nom}
@@ -290,7 +290,8 @@ function OrderCard({ tx, tab, onAction, busyId }) {
 
           {/* Valorar (transaccions finalitzades) */}
           {tab.id === "transactions" &&
-            tx.transaccio?.estat === "finalitzat" && (
+            tx.transaccio?.estat === "finalitzat" &&
+            !tx.has_own_review && (
               <button
                 type="button"
                 onClick={() => onAction("review", tx.id, tx)}
@@ -301,6 +302,15 @@ function OrderCard({ tx, tab, onAction, busyId }) {
                 </span>
                 Valorar
               </button>
+            )}
+
+          {tab.id === "transactions" &&
+            tx.transaccio?.estat === "finalitzat" &&
+            tx.has_own_review && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 text-emerald-400 px-4 py-1.5 text-label font-bold border border-emerald-500/40 max-w-max">
+                <span className="material-symbols-outlined text-base">check_circle</span>
+                Valorado
+              </span>
             )}
         </div>
       </div>
@@ -331,7 +341,10 @@ function MyOrdersPage() {
   const [busyId, setBusyId] = useState(null);
   const [reviewModalTx, setReviewModalTx] = useState(null);
 
-  const [cancelTarget, setCancelTarget] = useState(null); // { id, label }
+  const [cancelTarget, setCancelTarget] = useState(null);
+  const [rejectTarget, setRejectTarget] = useState(null);
+  const [rejectBusy, setRejectBusy] = useState(false);
+  const [rejectError, setRejectError] = useState(null); // { id, label }
   const [cancelBusy, setCancelBusy] = useState(false);
   const [cancelError, setCancelError] = useState(null);
 
@@ -433,6 +446,15 @@ function MyOrdersPage() {
       return;
     }
 
+    if (action === "reject") {
+      setRejectTarget({
+        id,
+        label: tx?.objecte?.nom ?? "esta solicitud",
+      });
+      setRejectError(null);
+      return;
+    }
+
     setBusyId(id);
     try {
       if (action === "accept") {
@@ -440,9 +462,6 @@ function MyOrdersPage() {
         showToast(
           "Solicitud aceptada. Se ha creado una transacción en la pestaña «Transacciones».",
         );
-      } else if (action === "reject") {
-        await rejectTransaction(id);
-        showToast("Solicitud rechazada");
       } else if (action === "return") {
         await returnTransaction(id);
         showToast("Devolución confirmada");
@@ -457,6 +476,26 @@ function MyOrdersPage() {
       );
     } finally {
       setBusyId(null);
+    }
+  };
+
+  const confirmReject = async () => {
+    if (!rejectTarget) return;
+    setRejectBusy(true);
+    setRejectError(null);
+    try {
+      await rejectTransaction(rejectTarget.id);
+      setRejectTarget(null);
+      await load();
+      refreshBadges();
+      showToast("Solicitud rechazada");
+    } catch (err) {
+      setRejectError(
+        err.response?.data?.message ||
+          "No se ha podido rechazar la solicitud. Inténtalo de nuevo.",
+      );
+    } finally {
+      setRejectBusy(false);
     }
   };
 
@@ -478,6 +517,11 @@ function MyOrdersPage() {
       setCancelBusy(false);
     }
   };
+
+  useEffect(() => {
+    document.body.classList.add("no-body-scrollbar");
+    return () => document.body.classList.remove("no-body-scrollbar");
+  }, []);
 
   // Badges (bombolles vermelles) per pestanya
   const tabBadge = {
@@ -625,6 +669,20 @@ function MyOrdersPage() {
         confirmLabel="Sí, cancelar"
         busy={cancelBusy}
         errorMessage={cancelError}
+      />
+
+      <ConfirmDeleteModal
+        open={!!rejectTarget}
+        onClose={() => {
+          if (!rejectBusy) setRejectTarget(null);
+        }}
+        onConfirm={confirmReject}
+        title="¿Rechazar la solicitud?"
+        message={`Vas a rechazar la solicitud sobre "${rejectTarget?.label ?? ""}".`}
+        description="El otro vecino recibirá una notificación. Esta acción no se puede deshacer."
+        confirmLabel="Sí, rechazar"
+        busy={rejectBusy}
+        errorMessage={rejectError}
       />
 
       <ReviewModal

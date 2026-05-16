@@ -27,23 +27,9 @@
                                 <span style="display:inline-block; padding:16px 32px;
                                              background:#14B8A6; color:#003731;
                                              font-size:32px; font-weight:bold; letter-spacing:8px;
-                                             border-radius:8px;">
-                                    {{ $code }}
-                                </span>
-                            </div>
-
-                            <div style="margin: 12px 0 24px 0; text-align:center;">
-                                <span style="display:inline-block; padding:10px 18px;
-                                             background:#1A211F; color:#4FDBC8;
-                                             font-size:14px; font-weight:600;
-                                             border:1px solid #2A2B31; border-radius:6px;
+                                             border-radius:8px;
                                              -webkit-user-select: all; user-select: all;
-                                             cursor: copy; letter-spacing:4px;">
-                                    {{ $code }}
-                                </span>
-                                <p style="font-size:12px; color:#859490; margin: 8px 0 0 0;">
-                                    Mantén pulsado sobre el código para copiarlo
-                                </p>
+                                             cursor: text;">{{ $code }}</span>
                             </div>
 
                             <p style="font-size:13px; line-height:1.5; color:#B6BCC8;">

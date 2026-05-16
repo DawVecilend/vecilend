@@ -50,12 +50,13 @@ function SettingsPage() {
         <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg flex flex-col justify-center">
           <header className="mb-8">
             <h1 className="text-4xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
-              Bienvenido,{" "}
+              Hola,{" "}
               <span className="text-[#4fdbc8]">{user?.nom || "Usuario"}</span>
             </h1>
             <p className="text-app-text-secondary text-lg max-w-2xl leading-relaxed">
               Gestiona tu experiencia en Vecilend. Aquí puedes controlar tu
-              información, la seguridad de tu cuenta y cómo tratamos tus datos.
+              información personal, la seguridad de tu cuenta, la apariencia de
+              la aplicación y cómo tratamos tus datos.
             </p>
           </header>
 

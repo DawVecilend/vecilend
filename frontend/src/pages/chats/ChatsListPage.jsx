@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { getChats } from "../../services/chats";
+import { getDraft, subscribeToDrafts } from "../../services/chatDrafts";
 
 function formatHora(iso) {
   if (!iso) return "";
@@ -27,14 +28,17 @@ function formatHora(iso) {
   });
 }
 
-function ChatRow({ chat }) {
+function ChatRow({ chat, draft }) {
   const altre = chat.altre_usuari;
   const ultim = chat.ultim_missatge;
   const noLlegits = chat.missatges_no_llegits || 0;
 
-  const preview = ultim
-    ? (ultim.mine ? "Tú: " : "") + ultim.contingut
-    : "Aún no hay mensajes";
+  const hasDraft = !!draft;
+  const preview = hasDraft
+    ? draft
+    : ultim
+      ? (ultim.mine ? "Tú: " : "") + ultim.contingut
+      : "Aún no hay mensajes";
 
   const hora = ultim?.created_at || chat.updated_at;
 
@@ -62,14 +66,21 @@ function ChatRow({ chat }) {
         <div className="flex items-center justify-between gap-2 mt-0.5">
           <p
             className={`text-label truncate ${
-              noLlegits > 0
-                ? "text-app-text font-semibold"
-                : "text-app-text-secondary"
+              hasDraft
+                ? "text-app-text-secondary italic"
+                : noLlegits > 0
+                  ? "text-app-text font-semibold"
+                  : "text-app-text-secondary"
             }`}
           >
+            {hasDraft && (
+              <span className="not-italic font-semibold text-vecilend-dark-primary mr-1">
+                Borrador:
+              </span>
+            )}
             {preview}
           </p>
-          {noLlegits > 0 && (
+          {noLlegits > 0 && !hasDraft && (
             <span className="shrink-0 flex items-center justify-center min-w-[20px] h-[20px] px-1.5 text-[11px] font-bold text-white bg-red-500 rounded-full">
               {noLlegits > 99 ? "99+" : noLlegits}
             </span>
@@ -84,6 +95,13 @@ function ChatsListPage() {
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [, setDraftsVersion] = useState(0);
+
+  // Re-renderizar cuando cambie cualquier borrador, para que la vista previa
+  // de "Borrador: ..." se actualice al instante al volver a la lista.
+  useEffect(() => {
+    return subscribeToDrafts(() => setDraftsVersion((v) => v + 1));
+  }, []);
 
   const load = useCallback(async () => {
     try {
@@ -101,6 +119,14 @@ function ChatsListPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  // Mateixa filtració que ChatsLayout: ocultem conversacions buides al destinatari.
+  // L'iniciador les segueix veient si hi té un borrador.
+  const visibleChats = chats.filter((c) => {
+    if (c.ultim_missatge) return true;
+    if (getDraft(c.id)) return true;
+    return false;
+  });
 
   return (
     <section className="mx-auto w-full max-w-2xl px-4 pt-6 pb-32">
@@ -128,7 +154,7 @@ function ChatsListPage() {
         </div>
       ) : error ? (
         <p className="text-center text-red-400 py-12">{error}</p>
-      ) : chats.length === 0 ? (
+      ) : visibleChats.length === 0 ? (
         <div className="rounded-xl border border-app-border bg-app-bg-card p-10 text-center">
           <span className="material-symbols-outlined text-5xl text-app-text-secondary">
             forum
@@ -140,8 +166,8 @@ function ChatsListPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          {chats.map((c) => (
-            <ChatRow key={c.id} chat={c} />
+          {visibleChats.map((c) => (
+            <ChatRow key={c.id} chat={c} draft={getDraft(c.id)} />
           ))}
         </div>
       )}

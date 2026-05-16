@@ -646,9 +646,12 @@ function RegisterPage() {
                     </span>
                   </div>
 
-                  <p className="text-[#859490] text-sm">
-                    Cuéntanos un poco más sobre ti para completar tu perfil.
-                  </p>
+                  <div className="text-[#859490] text-sm">
+                    <p>
+                      Cuéntanos un poco más sobre ti para completar tu perfil.
+                    </p>
+                    <p>Los campos marcados con asterisco son obligatorios.</p>
+                  </div>
                 </div>
 
                 <form
@@ -685,7 +688,7 @@ function RegisterPage() {
                             }}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
-                            placeholder="Iván"
+                            placeholder="Nombre"
                             type="text"
                           />
                         </div>
@@ -714,7 +717,7 @@ function RegisterPage() {
                             }}
                             required
                             className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
-                            placeholder="Carrasco"
+                            placeholder="Apellidos"
                             type="text"
                           />
                         </div>
@@ -726,26 +729,21 @@ function RegisterPage() {
                           Contraseña *
                         </label>
 
-                        <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
-                            lock
-                          </span>
-
-                          <PasswordInput
-                            name="password"
-                            value={formData.password}
-                            onChange={(e) => {
-                              handleChange(e);
-                              setFieldErrors((prev) => ({
-                                ...prev,
-                                password: undefined,
-                              }));
-                            }}
-                            required
-                            className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
-                            placeholder="••••••••"
-                          />
-                        </div>
+                        <PasswordInput
+                          leftIcon="lock"
+                          name="password"
+                          value={formData.password}
+                          onChange={(e) => {
+                            handleChange(e);
+                            setFieldErrors((prev) => ({
+                              ...prev,
+                              password: undefined,
+                            }));
+                          }}
+                          required
+                          className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
+                          placeholder="••••••••"
+                        />
                         <FieldError messages={fieldErrors.password} />
                       </div>
 
@@ -756,26 +754,21 @@ function RegisterPage() {
                           Confirmar contraseña *
                         </label>
 
-                        <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
-                            lock_reset
-                          </span>
-
-                          <PasswordInput
-                            name="password_confirmation"
-                            value={formData.password_confirmation}
-                            onChange={(e) => {
-                              handleChange(e);
-                              setFieldErrors((prev) => ({
-                                ...prev,
-                                password_confirmation: undefined,
-                              }));
-                            }}
-                            required
-                            className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
-                            placeholder="••••••••"
-                          />
-                        </div>
+                        <PasswordInput
+                          leftIcon="lock_reset"
+                          name="password_confirmation"
+                          value={formData.password_confirmation}
+                          onChange={(e) => {
+                            handleChange(e);
+                            setFieldErrors((prev) => ({
+                              ...prev,
+                              password_confirmation: undefined,
+                            }));
+                          }}
+                          required
+                          className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
+                          placeholder="••••••••"
+                        />
                         <FieldError
                           messages={fieldErrors.password_confirmation}
                         />
@@ -878,7 +871,7 @@ function RegisterPage() {
                       <div className="md:col-span-2 flex items-end">
                         <div className="flex-grow space-y-1">
                           <label className="block text-xs font-medium text-app-text-secondary ml-1">
-                            Foto de perfil opcional
+                            Foto de perfil
                           </label>
 
                           <div className="flex items-center gap-4">
@@ -972,19 +965,17 @@ function RegisterPage() {
 
               <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
                 <div className="w-10 h-10 rounded-lg bg-[#f38764]/20 flex items-center justify-center text-[#ffb59e] mb-4">
-                  <span className="material-symbols-outlined">
-                    visibility_off
-                  </span>
+                  <span className="material-symbols-outlined">palette</span>
                 </div>
 
                 <div>
                   <h3 className="font-semibold text-app-text mb-2">
-                    Control de privacidad
+                    Apariencia personalizada
                   </h3>
 
                   <p className="text-xs lg:text-sm text-[#859490]">
-                    Más adelante podrás controlar qué información quieres
-                    mostrar al resto de usuarios.
+                    Podrás elegir entre modo claro u oscuro para adaptar
+                    Vecilend a tu preferencia visual.
                   </p>
                 </div>
               </div>

@@ -115,17 +115,15 @@ function AdminUsersPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    {isAdmin ? (
-                      <div className="flex gap-2">
-                        {u.actiu
-                          ? <button onClick={() => setConfirm({ open: true, action: "block", user: u })} className="text-xs px-3 py-1 rounded-lg bg-orange-500/10 text-orange-400 hover:bg-orange-500/20">Bloquear</button>
-                          : <button onClick={() => setConfirm({ open: true, action: "unblock", user: u })} className="text-xs px-3 py-1 rounded-lg bg-app-primary/10 text-app-primary hover:bg-app-primary/20">Activar</button>
-                        }
+                    <div className="flex gap-2">
+                      {u.actiu
+                        ? <button onClick={() => setConfirm({ open: true, action: "block", user: u })} className="text-xs px-3 py-1 rounded-lg bg-orange-500/10 text-orange-400 hover:bg-orange-500/20">Bloquear</button>
+                        : <button onClick={() => setConfirm({ open: true, action: "unblock", user: u })} className="text-xs px-3 py-1 rounded-lg bg-app-primary/10 text-app-primary hover:bg-app-primary/20">Activar</button>
+                      }
+                      {isAdmin && (
                         <button onClick={() => setConfirm({ open: true, action: "delete", user: u })} className="text-xs px-3 py-1 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20">Eliminar</button>
-                      </div>
-                    ) : (
-                      <span className="text-xs text-app-text-secondary">Solo lectura</span>
-                    )}
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

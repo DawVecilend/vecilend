@@ -168,9 +168,16 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
         </IconButton>
       </DialogTitle>
 
-      <DialogContent sx={{ pt: 3 }}>
+      <DialogContent
+        sx={{
+          // MUI aplica un padding-top fijo a DialogContent que sobrescribe el
+          // que pongamos via shorthand. Forzamos con !important + extra margen
+          // al primer hijo para separar visualmente del DialogTitle.
+          paddingTop: "32px !important",
+        }}
+      >
         {/* Lloc */}
-        <div className="mb-6">
+        <div className="mb-6 mt-2">
           <label className="block text-label text-app-text-secondary font-body mb-2">
             ¿Dónde?
           </label>

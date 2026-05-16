@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { setCurrentUser as setDraftsUser } from "../services/chatDrafts";
 
 export const AuthContext = createContext(null);
 
@@ -20,8 +21,10 @@ export function AuthProvider({ children }) {
     try {
       const res = await api.get("/me", { skipAuthRedirect: true });
       setUser(res.data.data);
+      setDraftsUser(res.data.data?.id ?? null);
     } catch {
       setUser(null);
+      setDraftsUser(null);
       localStorage.removeItem("auth_token");
     } finally {
       setLoading(false);
@@ -56,6 +59,7 @@ export function AuthProvider({ children }) {
     const { user: userData, token } = res.data.data;
     localStorage.setItem("auth_token", token);
     setUser(userData);
+    setDraftsUser(userData?.id ?? null);
     return userData;
   };
 
@@ -65,6 +69,7 @@ export function AuthProvider({ children }) {
     const { user: userData, token } = res.data.data;
     localStorage.setItem("auth_token", token);
     setUser(userData);
+    setDraftsUser(userData?.id ?? null);
     return userData;
   };
 
@@ -75,6 +80,7 @@ export function AuthProvider({ children }) {
     } catch {}
     localStorage.removeItem("auth_token");
     setUser(null);
+    setDraftsUser(null);
     navigate("/login", { replace: true });
   };
 

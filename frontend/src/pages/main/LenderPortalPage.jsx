@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import HeaderDesktop from '../../components/layouts/header/HeaderDesktop';
+import React from "react";
+import { Link } from "react-router-dom";
+import HeaderDesktop from "../../components/layouts/header/HeaderDesktop";
 
 function LenderPortalPage() {
   return (
@@ -377,7 +377,7 @@ function LenderPortalPage() {
                 to="#"
                 className="text-[#bbcac6] hover:text-[#50dbc8] transition-all opacity-80 hover:opacity-100"
               >
-                Política de Privacidad
+                Políticas de Privacidad
               </Link>
               <Link
                 to="#"

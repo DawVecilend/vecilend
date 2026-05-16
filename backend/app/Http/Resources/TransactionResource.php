@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Pagament;
+use App\Models\Valoracio;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
@@ -51,6 +52,7 @@ class TransactionResource extends JsonResource
             'paid'            => $paid,
             'can_cancel'      => $canCancel,
             'can_pay'         => $canPay,
+            'has_own_review'  => $this->teValoracioDelUsuari($transaccio),
 
             'objecte'         => $this->whenLoaded('objecte', function () {
                 $imatges = $this->objecte->relationLoaded('imatges')
@@ -139,6 +141,20 @@ class TransactionResource extends JsonResource
         }
         return $transaccio->pagaments
             ->contains(fn($p) => $p->estat === Pagament::ESTAT_COMPLETAT);
+    }
+
+    /**
+     * Indica si l'usuari autenticat ja ha emès una valoració per aquesta transacció.
+     */
+    private function teValoracioDelUsuari($transaccio): bool
+    {
+        $userId = Auth::id();
+        if (!$userId || !$transaccio) {
+            return false;
+        }
+        return Valoracio::where('transaccio_id', $transaccio->id)
+            ->where('autor_id', $userId)
+            ->exists();
     }
 
     private function canCancel($transaccio, bool $paid): bool

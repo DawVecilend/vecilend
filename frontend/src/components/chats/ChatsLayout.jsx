@@ -2,17 +2,21 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import { getChats } from "../../services/chats";
 import { formatDateTimeSmart } from "../../utils/datetime";
+import { getDraft, subscribeToDrafts } from "../../services/chatDrafts";
 
 const POLL_MS = 7000;
 
-function ChatRow({ chat, active }) {
+function ChatRow({ chat, active, draft }) {
   const altre = chat.altre_usuari;
   const ultim = chat.ultim_missatge;
   const noLlegits = chat.missatges_no_llegits || 0;
 
-  const preview = ultim
-    ? (ultim.mine ? "Tú: " : "") + ultim.contingut
-    : "Aún no hay mensajes";
+  const hasDraft = !!draft;
+  const preview = hasDraft
+    ? draft
+    : ultim
+      ? (ultim.mine ? "Tú: " : "") + ultim.contingut
+      : "Aún no hay mensajes";
 
   const hora = ultim?.created_at || chat.updated_at;
 
@@ -46,11 +50,18 @@ function ChatRow({ chat, active }) {
           <p
             className={
               "text-label truncate " +
-              (noLlegits > 0
-                ? "text-app-text font-semibold"
-                : "text-app-text-secondary")
+              (hasDraft
+                ? "text-app-text-secondary italic"
+                : noLlegits > 0
+                  ? "text-app-text font-semibold"
+                  : "text-app-text-secondary")
             }
           >
+            {hasDraft && (
+              <span className="not-italic font-semibold text-vecilend-dark-primary mr-1">
+                Borrador:
+              </span>
+            )}
             {preview}
           </p>
           {noLlegits > 0 && (
@@ -81,6 +92,7 @@ function ChatsLayout() {
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [, setDraftsVersion] = useState(0);
   const pollRef = useRef(null);
 
   const onChatRoute = !!id;
@@ -113,6 +125,33 @@ function ChatsLayout() {
     };
   }, [load]);
 
+  // Refresc immediat quan ChatPage envia un missatge (sense esperar al pol·ling)
+  useEffect(() => {
+    const handler = () => load();
+    window.addEventListener("chats:refresh", handler);
+    return () => window.removeEventListener("chats:refresh", handler);
+  }, [load]);
+
+  // Re-render quan canvia algun borrador, perquè la vista prèvia
+  // "Borrador: ..." s'actualitzi a l'instant.
+  useEffect(() => {
+    return subscribeToDrafts(() => setDraftsVersion((v) => v + 1));
+  }, []);
+
+  // Filtra les conversacions que no tenen cap missatge enviat encara, perquè
+  // una conversa "buida" només té sentit per al qui la va iniciar (perquè
+  // potser hi té un borrador). Per al destinatari, una conversa sense cap
+  // missatge intercanviat no s'ha de mostrar fins que rebi alguna cosa.
+  //
+  // Criteri: si la conversa no té `ultim_missatge`, només la mostrem si
+  // l'usuari actual hi té un borrador o si és la conversa oberta ara mateix.
+  const visibleChats = chats.filter((c) => {
+    if (c.ultim_missatge) return true;
+    if (getDraft(c.id)) return true;
+    if (String(c.id) === String(id)) return true;
+    return false;
+  });
+
   const sidebar = (
     <aside className="flex flex-col h-full">
       <header className="px-4 pt-6 pb-4 border-b border-app-border">
@@ -132,7 +171,7 @@ function ChatsLayout() {
           </div>
         ) : error ? (
           <p className="text-center text-red-400 py-12">{error}</p>
-        ) : chats.length === 0 ? (
+        ) : visibleChats.length === 0 ? (
           <div className="rounded-xl border border-app-border bg-app-bg-card p-10 text-center">
             <span className="material-symbols-outlined text-5xl text-app-text-secondary">
               forum
@@ -144,11 +183,12 @@ function ChatsLayout() {
           </div>
         ) : (
           <div className="flex flex-col gap-2">
-            {chats.map((c) => (
+            {visibleChats.map((c) => (
               <ChatRow
                 key={c.id}
                 chat={c}
                 active={String(c.id) === String(id)}
+                draft={getDraft(c.id)}
               />
             ))}
           </div>
