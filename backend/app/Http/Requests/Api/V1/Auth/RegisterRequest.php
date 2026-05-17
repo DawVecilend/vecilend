@@ -61,16 +61,16 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'avatar.image' => 'L\'avatar ha de ser una imatge.',
-            'avatar.mimes' => 'L\'avatar ha de ser JPEG, PNG o WebP.',
-            'avatar.max'   => 'L\'avatar no pot superar els 3 MB.',
-            'username.required' => 'El camp nom d\'usuari és obligatori.',
-            'email.unique' => 'Aquest correu electrònic ja està registrat.',
-            'password.confirmed' => 'La confirmació de contrasenya no coincideix.',
-            'password_confirmation.required' => 'La confirmació de contrasenya és obligatòria.',
-            'accepta_termes.required' => 'Has d\'acceptar els termes i condicions.',
-            'accepta_termes.accepted' => 'Has d\'acceptar els termes i condicions.',
-            'direccio.in' => 'El municipi no és vàlid.',
+            'avatar.image' => 'El avatar debe ser una imagen.',
+            'avatar.mimes' => 'El avatar debe ser JPEG, PNG o WebP.',
+            'avatar.max'   => 'El avatar no puede superar los 3 MB.',
+            'username.required' => 'El nombre de usuario es obligatorio.',
+            'email.unique' => 'Este correo electrónico ya está registrado.',
+            'password.confirmed' => 'La confirmación de contraseña no coincide.',
+            'password_confirmation.required' => 'La confirmación de contraseña es obligatoria.',
+            'accepta_termes.required' => 'Debes aceptar los términos y condiciones.',
+            'accepta_termes.accepted' => 'Debes aceptar los términos y condiciones.',
+            'direccio.in' => 'El municipio no es válido.',
             'username.unique' => 'Este nombre de usuario ya está en uso.',
             'username.not_regex' => 'Este nombre de usuario está reservado.',
         ];

@@ -421,7 +421,7 @@ class ObjecteController extends Controller
 
         if (!$user) {
             return response()->json([
-                'message' => 'Usuari no trobat.',
+                'message' => 'Usuario no encontrado.',
             ], 404);
         }
 
@@ -513,7 +513,7 @@ class ObjecteController extends Controller
                 ]);
 
                 return response()->json([
-                    'message' => 'Error en pujar les imatges. Torna-ho a provar.',
+                    'message' => 'Error al subir las imágenes. Inténtalo de nuevo.',
                 ], 500);
             }
         }
@@ -637,7 +637,7 @@ class ObjecteController extends Controller
         $objecte->refresh();
         if ($objecte->imatges()->count() === 0) {
             return response()->json([
-                'message' => 'L\'objecte ha de tenir almenys una imatge.',
+                'message' => 'El objeto debe tener al menos una imagen.',
             ], 422);
         }
 
@@ -705,7 +705,7 @@ class ObjecteController extends Controller
         $objecte->delete();
 
         return response()->json([
-            'message' => 'Objecte eliminat correctament.',
+            'message' => 'Objeto eliminado correctamente.',
         ], 200);
     }
 
@@ -721,7 +721,7 @@ class ObjecteController extends Controller
 
         if ($request->user()->id !== $objecte->user_id) {
             return response()->json([
-                'message' => 'No tens permís per modificar aquest objecte.',
+                'message' => 'No tienes permiso para modificar este objeto.',
             ], 403);
         }
 
@@ -730,7 +730,7 @@ class ObjecteController extends Controller
             ->first();
 
         if (!$imatge) {
-            return response()->json(['message' => 'Imatge no trobada.'], 404);
+            return response()->json(['message' => 'Imagen no encontrada.'], 404);
         }
 
         DB::transaction(function () use ($objecte, $imatge) {

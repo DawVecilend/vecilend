@@ -39,7 +39,7 @@ class StoreObjecteRequest extends FormRequest
                         ->where('categoria_id', $this->input('categoria_id'))
                         ->exists();
                     if (!$pertany) {
-                        $fail('La subcategoria no pertany a la categoria seleccionada.');
+                        $fail('La subcategoría no pertenece a la categoría seleccionada.');
                     }
                 },
             ],
@@ -67,27 +67,27 @@ class StoreObjecteRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nom.required'             => 'El nom de l\'objecte és obligatori.',
-            'nom.max'                  => 'El nom no pot superar els 200 caràcters.',
-            'descripcio.required'      => 'La descripció és obligatòria.',
-            'descripcio.min'           => 'La descripció ha de tenir almenys 10 caràcters.',
-            'categoria_id.required'    => 'Has de seleccionar una categoria.',
-            'categoria_id.exists'      => 'La categoria seleccionada no existeix.',
-            'subcategoria_id.required' => 'Has de seleccionar una subcategoria.',
-            'subcategoria_id.exists'   => 'La subcategoria seleccionada no existeix.',
-            'tipus.required'           => 'Has d\'indicar el tipus (préstec o lloguer).',
-            'tipus.in'                 => 'El tipus ha de ser: préstec o lloguer.',
-            'preu_diari.numeric'       => 'El preu ha de ser un número.',
-            'preu_diari.min'           => 'El preu ha de ser superior a 0.',
-            'preu_diari.required_if'   => 'El preu és obligatori per als objectes en lloguer.',
-            'lat.required'             => 'La ubicació (latitud) és obligatòria.',
-            'lng.required'             => 'La ubicació (longitud) és obligatòria.',
-            'imatges.required'         => 'Has de pujar almenys una imatge.',
-            'imatges.min'              => 'Has de pujar almenys una imatge.',
-            'imatges.max'              => 'Màxim 5 imatges per objecte.',
-            'imatges.*.image'          => 'Cada fitxer ha de ser una imatge.',
-            'imatges.*.mimes'          => 'Formats acceptats: JPEG, PNG, WebP.',
-            'imatges.*.max'            => 'Cada imatge no pot superar els 5 MB.',
+            'nom.required'             => 'El nombre del objeto es obligatorio.',
+            'nom.max'                  => 'El nombre no puede superar los 200 caracteres.',
+            'descripcio.required'      => 'La descripción es obligatoria.',
+            'descripcio.min'           => 'La descripción debe tener al menos 10 caracteres.',
+            'categoria_id.required'    => 'Debes seleccionar una categoría.',
+            'categoria_id.exists'      => 'La categoría seleccionada no existe.',
+            'subcategoria_id.required' => 'Debes seleccionar una subcategoría.',
+            'subcategoria_id.exists'   => 'La subcategoría seleccionada no existe.',
+            'tipus.required'           => 'Debes indicar el tipo (préstamo o alquiler).',
+            'tipus.in'                 => 'El tipo debe ser: préstamo o alquiler.',
+            'preu_diari.numeric'       => 'El precio debe ser un número.',
+            'preu_diari.min'           => 'El precio debe ser superior a 0.',
+            'preu_diari.required_if'   => 'El precio es obligatorio para los objetos en alquiler.',
+            'lat.required'             => 'La ubicación (latitud) es obligatoria.',
+            'lng.required'             => 'La ubicación (longitud) es obligatoria.',
+            'imatges.required'         => 'Debes subir al menos una imagen.',
+            'imatges.min'              => 'Debes subir al menos una imagen.',
+            'imatges.max'              => 'Máximo 5 imágenes por objeto.',
+            'imatges.*.image'          => 'Cada archivo debe ser una imagen.',
+            'imatges.*.mimes'          => 'Formatos aceptados: JPEG, PNG, WebP.',
+            'imatges.*.max'            => 'Cada imagen no puede superar los 5 MB.',
         ];
     }
 }

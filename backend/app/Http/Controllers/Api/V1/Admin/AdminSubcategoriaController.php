@@ -27,7 +27,7 @@ class AdminSubcategoriaController extends Controller {
 
         if (!$subcategory) {
             return response()->json([
-                'message' => 'Subcategoria no trobada.',
+                'message' => 'Subcategoría no encontrada.',
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -46,7 +46,7 @@ class AdminSubcategoriaController extends Controller {
         $subcategory = Subcategoria::find($id);
         if (!$subcategory) {
             return response()->json([
-                'message' => 'Subcategoria no trobada.',
+                'message' => 'Subcategoría no encontrada.',
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -72,13 +72,13 @@ class AdminSubcategoriaController extends Controller {
         $subcategory = Subcategoria::find($id);
         if (!$subcategory) {
             return response()->json([
-                'message' => 'Subcategoria no trobada.',
+                'message' => 'Subcategoría no encontrada.',
             ], Response::HTTP_NOT_FOUND);
         }
 
         if ($subcategory->objectes()->exists()) {
             return response()->json([
-                'message' => 'No es pot eliminar aquesta subcategoria mentre tingui objectes associats.',
+                'message' => 'No se puede eliminar esta subcategoría mientras tenga objetos asociados.',
             ], Response::HTTP_BAD_REQUEST);
         }
 

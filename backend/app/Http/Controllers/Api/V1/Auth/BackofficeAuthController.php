@@ -39,7 +39,7 @@ class BackofficeAuthController extends Controller
         $this->logBackofficeAction($empleat, 'login', $request);
 
         return response()->json([
-            'message' => 'Login correcte.',
+            'message' => 'Login correcto.',
             'data'    => [
                 'empleat' => new EmpleatResource($empleat),
                 'token'   => $token,

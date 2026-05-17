@@ -24,11 +24,11 @@ class StoreChatRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required'  => "Has d'indicar amb qui vols obrir la conversa.",
-            'user_id.exists'    => "L'usuari indicat no existeix.",
-            'user_id.different' => 'No pots iniciar una conversa amb tu mateix.',
-            'objecte_id.exists' => "L'objecte indicat no existeix.",
-            'missatge.max'      => 'El missatge no pot superar els 2000 caràcters.',
+            'user_id.required'  => 'Debes indicar con quién quieres abrir la conversación.',
+            'user_id.exists'    => 'El usuario indicado no existe.',
+            'user_id.different' => 'No puedes iniciar una conversación contigo mismo.',
+            'objecte_id.exists' => 'El objeto indicado no existe.',
+            'missatge.max'      => 'El mensaje no puede superar los 2000 caracteres.',
         ];
     }
 }

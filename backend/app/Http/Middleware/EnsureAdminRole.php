@@ -14,7 +14,7 @@ class EnsureAdminRole
 
         if (!$user || $user->rol !== 'admin') {
             return response()->json([
-                'message' => 'Accés denegat.',
+                'message' => 'Acceso denegado.',
             ], Response::HTTP_FORBIDDEN);
         }
 

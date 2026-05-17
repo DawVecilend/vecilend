@@ -28,11 +28,11 @@ class StoreMessageRequest extends FormRequest
                     $conversaIdRoute = $this->route('id');
                     $missatge = \App\Models\Missatge::find($value);
                     if (!$missatge) {
-                        $fail('El missatge citat no existeix.');
+                        $fail('El mensaje citado no existe.');
                         return;
                     }
                     if ((int) $missatge->conversa_id !== (int) $conversaIdRoute) {
-                        $fail('No pots citar un missatge d\'una altra conversa.');
+                        $fail('No puedes citar un mensaje de otra conversación.');
                     }
                 },
             ],
@@ -42,8 +42,8 @@ class StoreMessageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'contingut.required' => 'El missatge no pot estar buit.',
-            'contingut.max'      => 'El missatge no pot superar els 2000 caràcters.',
+            'contingut.required' => 'El mensaje no puede estar vacío.',
+            'contingut.max'      => 'El mensaje no puede superar los 2000 caracteres.',
         ];
     }
 }

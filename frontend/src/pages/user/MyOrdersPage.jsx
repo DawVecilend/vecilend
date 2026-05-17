@@ -556,7 +556,7 @@ function MyOrdersPage() {
       </p>
 
       {/* Pestanyes */}
-      <div className="flex gap-2 mb-4 border-b border-app-border overflow-x-auto">
+      <div className="flex gap-2 mb-4 border-b border-app-border overflow-x-auto overflow-y-hidden vecilend-carousel">
         {TABS.map((t) => (
           <button
             key={t.id}

@@ -11,11 +11,11 @@ function SettingsPage() {
 
   return (
     <div className="bg-app-bg text-app-text antialiased font-inter min-h-[calc(100vh-80px)]">
-      <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8 py-6">
-        <div className="flex items-start gap-0 md:gap-6">
+      <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8 py-3 md:py-6">
+        <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
           <SettingsNav username={user?.username} current="home" />
 
-          <main className="flex-1 min-w-0 p-2 md:p-6">
+          <main className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
                 Hola,{" "}

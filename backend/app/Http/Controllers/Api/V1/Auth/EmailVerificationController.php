@@ -36,7 +36,7 @@ class EmailVerificationController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Dades invàlides.',
+                'message' => 'Datos no válidos.',
                 'errors'  => $validator->errors(),
             ], 422);
         }
@@ -68,12 +68,12 @@ class EmailVerificationController extends Controller
                 'error' => $e->getMessage(),
             ]);
             return response()->json([
-                'message' => "No s'ha pogut enviar el correu. Torna-ho a provar en uns segons.",
+                'message' => 'No se ha podido enviar el correo. Inténtalo de nuevo en unos segundos.',
             ], 500);
         }
 
         return response()->json([
-            'message'         => 'Codi enviat. Revisa el correu.',
+            'message'         => 'Código enviado. Revisa el correo.',
             'expires_minutes' => self::CODE_TTL_MINUTES,
         ], 200);
     }
@@ -94,7 +94,7 @@ class EmailVerificationController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Dades invàlides.',
+                'message' => 'Datos no válidos.',
                 'errors'  => $validator->errors(),
             ], 422);
         }
@@ -106,7 +106,7 @@ class EmailVerificationController extends Controller
 
         if (!$stored || !hash_equals((string) $stored, (string) $code)) {
             return response()->json([
-                'message' => 'Codi incorrecte o caducat.',
+                'message' => 'Código incorrecto o caducado.',
             ], 422);
         }
 
@@ -118,7 +118,7 @@ class EmailVerificationController extends Controller
         );
 
         return response()->json([
-            'message'  => 'Email verificat correctament.',
+            'message'  => 'Email verificado correctamente.',
             'verified' => true,
         ], 200);
     }

@@ -29,14 +29,14 @@ class UserController extends Controller
     {
         $user = User::where('username', $username)->first();
         if (!$user) {
-            return response()->json(['message' => 'Usuari no trobat.'], 404);
+            return response()->json(['message' => 'Usuario no encontrado.'], 404);
         }
 
         $authUser = $request->user();
         $isOwn    = $authUser && $authUser->id === $user->id;
 
         if (!$user->actiu && !$isOwn) {
-            return response()->json(['message' => 'Usuari no trobat.'], 404);
+            return response()->json(['message' => 'Usuario no encontrado.'], 404);
         }
 
         // Query base dels objectes del usuari
@@ -94,7 +94,7 @@ class UserController extends Controller
         $user = User::where('username', $username)->firstOrFail();
 
         if ($request->user()->id !== $user->id) {
-            return response()->json(['message' => 'No tens permís per editar aquest perfil.'], 403);
+            return response()->json(['message' => 'No tienes permiso para editar este perfil.'], 403);
         }
 
         $data = $request->validated();

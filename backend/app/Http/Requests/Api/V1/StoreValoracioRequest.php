@@ -23,10 +23,10 @@ class StoreValoracioRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'puntuacio.required' => 'La puntuació és obligatòria.',
-            'puntuacio.integer'  => 'La puntuació ha de ser un enter d\'1 a 5.',
-            'puntuacio.between'  => 'La puntuació ha d\'estar entre 1 i 5.',
-            'comentari.max'      => 'El comentari no pot superar els 1000 caràcters.',
+            'puntuacio.required' => 'La puntuación es obligatoria.',
+            'puntuacio.integer'  => 'La puntuación debe ser un número entero del 1 al 5.',
+            'puntuacio.between'  => 'La puntuación debe estar entre 1 y 5.',
+            'comentari.max'      => 'El comentario no puede superar los 1000 caracteres.',
         ];
     }
 }

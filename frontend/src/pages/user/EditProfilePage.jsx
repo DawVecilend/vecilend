@@ -143,15 +143,16 @@ function EditProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="bg-app-bg text-app-text antialiased flex flex-col">
-        <div className="flex min-h-[calc(100vh-80px)]">
-          <SettingsNav username={user?.username} current="profile" />
+      <div className="bg-app-bg text-app-text antialiased font-inter min-h-[calc(100vh-80px)]">
+        <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8 py-3 md:py-6">
+          <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
+            <SettingsNav username={user?.username} current="profile" />
 
-          <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg">
-            <header className="mb-8">
-              <div className="h-12 w-80 bg-[#2f3634]/40 rounded animate-pulse" />
-              <div className="mt-3 h-5 w-96 bg-[#2f3634]/40 rounded animate-pulse" />
-            </header>
+            <main className="flex-1 min-w-0 p-0 md:p-6">
+              <header className="mb-8">
+                <div className="h-10 md:h-12 w-64 md:w-80 bg-[#2f3634]/40 rounded animate-pulse" />
+                <div className="mt-3 h-5 w-72 md:w-96 bg-[#2f3634]/40 rounded animate-pulse" />
+              </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Columna esquerra: avatar + slider */}
@@ -183,28 +184,29 @@ function EditProfilePage() {
                   </div>
                 </div>
               </div>
-            </div>
-          </main>
+              </div>
+            </main>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-app-bg text-app-text antialiased flex flex-col dark">
-      {/* Contenedor con la altura calculada exacta */}
-      <div className="flex min-h-[calc(100vh-80px)]">
-        <SettingsNav username={user?.username} current="profile" />
+    <div className="bg-app-bg text-app-text antialiased font-inter min-h-[calc(100vh-80px)]">
+      <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8 py-3 md:py-6">
+        <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
+          <SettingsNav username={user?.username} current="profile" />
 
-        <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg flex flex-col justify-center">
-          <header className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
-              Perfil de <span className="text-[#4fdbc8]">Usuario</span>
-            </h1>
-            <p className="text-app-text-secondary text-lg max-w-2xl leading-relaxed">
-              Gestiona tu identidad y preferencias en Vecilend.
-            </p>
-          </header>
+          <main className="flex-1 min-w-0 p-0 md:p-6">
+            <header className="mb-8">
+              <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
+                Perfil de <span className="text-[#4fdbc8]">Usuario</span>
+              </h1>
+              <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
+                Gestiona tu identidad y preferencias en Vecilend.
+              </p>
+            </header>
 
           <form
             onSubmit={handleSubmit}
@@ -379,7 +381,8 @@ function EditProfilePage() {
               </div>
             </div>
           </form>
-        </main>
+          </main>
+        </div>
       </div>
     </div>
   );

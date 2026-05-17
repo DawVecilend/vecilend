@@ -65,7 +65,7 @@ class UpdateObjecteRequest extends FormRequest
                         ->where('categoria_id', $categoriaId)
                         ->exists();
                     if (!$pertany) {
-                        $fail('La subcategoria no pertany a la categoria seleccionada.');
+                        $fail('La subcategoría no pertenece a la categoría seleccionada.');
                     }
                 },
             ],
@@ -98,19 +98,19 @@ class UpdateObjecteRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nom.max'                   => 'El nom no pot superar els 200 caràcters.',
-            'descripcio.min'            => 'La descripció ha de tenir almenys 10 caràcters.',
-            'categoria_id.exists'       => 'La categoria seleccionada no existeix.',
-            'subcategoria_id.exists'    => 'La subcategoria seleccionada no existeix.',
-            'tipus.in'                  => 'El tipus ha de ser: prestec o lloguer.',
-            'estat.in'                  => 'L\'estat ha de ser: disponible o no_disponible.',
-            'preu_diari.required'       => 'El preu és obligatori per als objectes en lloguer.',
-            'preu_diari.min'            => 'El preu ha de ser com a mínim 1€.',
-            'preu_diari.numeric'        => 'El preu ha de ser un número.',
-            'imatges_noves.*.image'     => 'Cada fitxer ha de ser una imatge.',
-            'imatges_noves.*.mimes'     => 'Formats acceptats: JPEG, PNG, WebP.',
-            'imatges_noves.*.max'       => 'Cada imatge no pot superar els 5 MB.',
-            'imatges_eliminar.*.exists' => 'Una de les imatges a eliminar no existeix.',
+            'nom.max'                   => 'El nombre no puede superar los 200 caracteres.',
+            'descripcio.min'            => 'La descripción debe tener al menos 10 caracteres.',
+            'categoria_id.exists'       => 'La categoría seleccionada no existe.',
+            'subcategoria_id.exists'    => 'La subcategoría seleccionada no existe.',
+            'tipus.in'                  => 'El tipo debe ser: prestec o lloguer.',
+            'estat.in'                  => 'El estado debe ser: disponible o no_disponible.',
+            'preu_diari.required'       => 'El precio es obligatorio para los objetos en alquiler.',
+            'preu_diari.min'            => 'El precio debe ser como mínimo 1€.',
+            'preu_diari.numeric'        => 'El precio debe ser un número.',
+            'imatges_noves.*.image'     => 'Cada archivo debe ser una imagen.',
+            'imatges_noves.*.mimes'     => 'Formatos aceptados: JPEG, PNG, WebP.',
+            'imatges_noves.*.max'       => 'Cada imagen no puede superar los 5 MB.',
+            'imatges_eliminar.*.exists' => 'Una de las imágenes a eliminar no existe.',
         ];
     }
 }

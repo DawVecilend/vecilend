@@ -33,7 +33,7 @@ class ValoracioController extends Controller
             ->first();
 
         if (!$solicitud) {
-            return response()->json(['message' => 'Transacció no trobada.'], 404);
+            return response()->json(['message' => 'Transacción no encontrada.'], 404);
         }
 
         $transaccio = $solicitud->transaccio;
@@ -43,7 +43,7 @@ class ValoracioController extends Controller
         if ($transaccio->estat !== 'finalitzat') {
             return response()->json([
                 'message' => 'Només pots valorar després de la devolució.',
-                'errors'  => ['estat' => ["L'estat actual de la transacció és '{$transaccio->estat}'."]],
+                'errors'  => ['estat' => ["El estado actual de la transacción es '{$transaccio->estat}'."]],
             ], 422);
         }
 
@@ -53,7 +53,7 @@ class ValoracioController extends Controller
 
         if ($user->id !== $solicitantId && $user->id !== $propietariId) {
             return response()->json([
-                'message' => 'No participes en aquesta transacció.',
+                'message' => 'No participas en esta transacción.',
             ], 403);
         }
 
@@ -66,8 +66,8 @@ class ValoracioController extends Controller
 
         if ($existeix) {
             return response()->json([
-                'message' => 'Ja has valorat aquesta transacció.',
-                'errors'  => ['transaccio_id' => ['Ja existeix una valoració teva en aquesta transacció.']],
+                'message' => 'Ya has valorado esta transacción.',
+                'errors'  => ['transaccio_id' => ['Ya existe una valoración tuya en esta transacción.']],
             ], 422);
         }
 
@@ -137,7 +137,7 @@ class ValoracioController extends Controller
 
         $user = User::where('username', $username)->first();
         if (!$user) {
-            return response()->json(['message' => 'Usuari no trobat.'], 404);
+            return response()->json(['message' => 'Usuario no encontrado.'], 404);
         }
 
         $rol     = $request->input('role', 'qualsevol');
@@ -213,7 +213,7 @@ class ValoracioController extends Controller
     {
         $user = User::where('username', $username)->first();
         if (!$user) {
-            return response()->json(['message' => 'Usuari no trobat.'], 404);
+            return response()->json(['message' => 'Usuario no encontrado.'], 404);
         }
 
         $serie = function (string $rol) use ($user) {

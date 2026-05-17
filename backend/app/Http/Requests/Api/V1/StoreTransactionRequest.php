@@ -21,15 +21,15 @@ class StoreTransactionRequest extends FormRequest {
 
     public function messages(): array {
         return [
-            'objecte_id.required'      => 'Has d\'indicar l\'objecte que vols sol·licitar.',
-            'objecte_id.exists'        => 'L\'objecte indicat no existeix.',
-            'data_inici.required'      => 'La data d\'inici és obligatòria.',
-            'data_inici.after_or_equal' => 'La data d\'inici no pot ser anterior a avui.',
-            'data_fi.required'         => 'La data de fi és obligatòria.',
-            'data_fi.after_or_equal'   => 'La data de fi ha de ser posterior o igual a la data d\'inici.',
-            'tipus.required'           => 'Has d\'indicar el tipus (préstec o lloguer).',
-            'tipus.in'                 => 'El tipus ha de ser "prestec" o "lloguer".',
-            'missatge.max'             => 'El missatge no pot superar els 1000 caràcters.',
+            'objecte_id.required'      => 'Debes indicar el objeto que quieres solicitar.',
+            'objecte_id.exists'        => 'El objeto indicado no existe.',
+            'data_inici.required'      => 'La fecha de inicio es obligatoria.',
+            'data_inici.after_or_equal' => 'La fecha de inicio no puede ser anterior a hoy.',
+            'data_fi.required'         => 'La fecha de fin es obligatoria.',
+            'data_fi.after_or_equal'   => 'La fecha de fin debe ser posterior o igual a la fecha de inicio.',
+            'tipus.required'           => 'Debes indicar el tipo (préstamo o alquiler).',
+            'tipus.in'                 => 'El tipo debe ser "prestec" o "lloguer".',
+            'missatge.max'             => 'El mensaje no puede superar los 1000 caracteres.',
         ];
     }
 }

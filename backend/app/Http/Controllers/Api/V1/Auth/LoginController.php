@@ -56,7 +56,7 @@ class LoginController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Login correcte.',
+            'message' => 'Login correcto.',
             'data'    => [
                 'user'  => new UserResource($user),
                 'token' => $token,
@@ -84,7 +84,7 @@ class LoginController extends Controller
         }
 
         return response()->json([
-            'message' => 'Sessió tancada correctament.',
+            'message' => 'Sesión cerrada correctamente.',
         ], 200);
     }
 }

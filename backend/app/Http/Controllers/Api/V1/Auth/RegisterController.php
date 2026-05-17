@@ -36,7 +36,7 @@ class RegisterController extends Controller
                 $avatarUrl      = $result['url'];
                 $avatarPublicId = $result['public_id'];
             } catch (\Throwable $e) {
-                return response()->json(['message' => 'Error pujant l&apos;avatar.'], 500);
+                return response()->json(['message' => 'Error subiendo el avatar.'], 500);
             }
         }
 
@@ -80,7 +80,7 @@ class RegisterController extends Controller
                     ]);
                 }
             }
-            return response()->json(['message' => 'Error en el registre.'], 500);
+            return response()->json(['message' => 'Error en el registro.'], 500);
         }
 
         EmailVerificationController::clearVerifiedFlag($validated['email']);
@@ -89,7 +89,7 @@ class RegisterController extends Controller
         $token = $user->createToken('auth')->plainTextToken;
 
         return response()->json([
-            'message' => 'Registre completat correctament.',
+            'message' => 'Registro completado correctamente.',
             'data'    => [
                 'user'  => new UserResource($user),
                 'token' => $token,

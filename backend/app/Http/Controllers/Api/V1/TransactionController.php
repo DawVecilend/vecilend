@@ -160,14 +160,14 @@ class TransactionController extends Controller
         if ($objecte->user_id === $user->id) {
             return response()->json([
                 'message' => 'No puedes solicitar tu propio objeto.',
-                'errors'  => ['objecte_id' => ['L\'objecte que sol·licites és teu.']],
+                'errors'  => ['objecte_id' => ['El objeto que solicitas es tuyo.']],
             ], 422);
         }
 
         if ($objecte->tipus === 'lloguer' && !$objecte->preu_diari) {
             return response()->json([
                 'message' => 'Este objeto no tiene precio de alquiler configurado.',
-                'errors'  => ['objecte_id' => ['L\'objecte no té preu_diari per a lloguer.']],
+                'errors'  => ['objecte_id' => ['El objeto no tiene precio diario configurado para alquiler.']],
             ], 422);
         }
 
@@ -179,7 +179,7 @@ class TransactionController extends Controller
         if ($jaPendent) {
             return response()->json([
                 'message' => 'Ya tienes una solicitud pendiente sobre este objeto. Espera a que el propietario responda.',
-                'errors'  => ['objecte_id' => ['Ja tens una sol·licitud pendent sobre aquest objecte.']],
+                'errors'  => ['objecte_id' => ['Ya tienes una solicitud pendiente sobre este objeto.']],
             ], 422);
         }
 
@@ -192,7 +192,7 @@ class TransactionController extends Controller
         if ($hiHaSolapament) {
             return response()->json([
                 'message' => 'Las fechas seleccionadas no están disponibles.',
-                'errors'  => ['data_inici' => ['Hi ha una altra sol·licitud acceptada en aquestes dates.']],
+                'errors'  => ['data_inici' => ['Hay otra solicitud aceptada en esas fechas.']],
             ], 422);
         }
 
@@ -266,7 +266,7 @@ class TransactionController extends Controller
         if ($solicitud->estat !== 'pendent') {
             return response()->json([
                 'message' => 'Esta solicitud no se puede aceptar.',
-                'errors'  => ['estat' => ["L'estat actual és '{$solicitud->estat}'."]],
+                'errors'  => ['estat' => ["El estado actual es '{$solicitud->estat}'."]],
             ], 422);
         }
 
@@ -279,7 +279,7 @@ class TransactionController extends Controller
         if ($hiHaSolapament) {
             return response()->json([
                 'message' => 'Las fechas ya no están disponibles.',
-                'errors'  => ['data_inici' => ['S\'ha acceptat una altra sol·licitud per aquestes dates.']],
+                'errors'  => ['data_inici' => ['Se ha aceptado otra solicitud para esas fechas.']],
             ], 422);
         }
 
@@ -496,7 +496,7 @@ class TransactionController extends Controller
         if ($solicitud->estat !== 'acceptat') {
             return response()->json([
                 'message' => 'Esta transacción no está activa.',
-                'errors'  => ['estat' => ["L'estat actual de la solicitud és '{$solicitud->estat}'."]],
+                'errors'  => ['estat' => ["El estado actual de la solicitud es '{$solicitud->estat}'."]],
             ], 422);
         }
 
