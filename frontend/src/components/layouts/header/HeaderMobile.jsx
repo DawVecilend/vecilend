@@ -106,10 +106,10 @@ function HeaderMobile() {
       <div className="md:hidden h-[52px]" />
 
       <nav className="fixed bottom-4 left-1/2 z-50 w-[94%] max-w-[430px] -translate-x-1/2 rounded-[15px] bg-vecilend-dark-primary px-3 py-3 shadow-[0_-6px_20px_rgba(0,0,0,0.25)] md:hidden">
-        <div className="flex items-end justify-between gap-1">
+        <div className="flex items-center justify-between gap-1">
           <Link
             to="/"
-            className="flex flex-col items-center justify-center text-white"
+            className="flex flex-1 flex-col items-center justify-center text-white"
           >
             <img
               src="/assets/icons/home-icon.svg"
@@ -122,40 +122,8 @@ function HeaderMobile() {
           </Link>
 
           <Link
-            to={user ? "/objects/create" : "/login"}
-            className="flex flex-col items-center justify-center text-white"
-          >
-            <img
-              src="/assets/icons/add-object-icon.svg"
-              alt="Publicar"
-              className="h-[22px] w-[22px] object-contain"
-            />
-            <span className="mt-1 text-center font-body text-caption leading-caption text-white">
-              Publicar
-            </span>
-          </Link>
-
-          <Link
-            to={user ? "/orders" : "/login"}
-            className="relative flex flex-col items-center justify-center text-white"
-          >
-            <span className="material-symbols-outlined text-[22px] text-white">
-              receipt_long
-            </span>
-            <span className="mt-1 text-center font-body text-caption leading-caption text-white">
-              Pedidos
-            </span>
-            {user && (
-              <UnreadBadge
-                count={ordersTotalBadge}
-                className="!top-0 !right-2"
-              />
-            )}
-          </Link>
-
-          <Link
             to={user ? "/chats" : "/login"}
-            className="relative flex flex-col items-center justify-center text-white"
+            className="relative flex flex-1 flex-col items-center justify-center text-white"
           >
             <span className="material-symbols-outlined text-[22px] text-white">
               chat_bubble
@@ -169,8 +137,38 @@ function HeaderMobile() {
           </Link>
 
           <Link
+            to={user ? "/objects/create" : "/login"}
+            className="flex flex-1 flex-col items-center justify-center text-white"
+          >
+            <span className="material-symbols-outlined text-[22px] text-white">
+              add_circle
+            </span>
+            <span className="mt-1 text-center font-body text-caption leading-caption text-white">
+              Subir
+            </span>
+          </Link>
+
+          <Link
+            to={user ? "/orders" : "/login"}
+            className="relative flex flex-1 flex-col items-center justify-center text-white"
+          >
+            <span className="material-symbols-outlined text-[22px] text-white">
+              swap_horiz
+            </span>
+            <span className="mt-1 text-center font-body text-caption leading-caption text-white">
+              Pedidos
+            </span>
+            {user && (
+              <UnreadBadge
+                count={ordersTotalBadge}
+                className="!top-0 !right-2"
+              />
+            )}
+          </Link>
+
+          <Link
             to={user ? `/profile/${user.username}` : "/login"}
-            className="flex flex-col items-center justify-center text-white"
+            className="flex flex-1 flex-col items-center justify-center text-white"
           >
             <img
               src="/assets/icons/person-white-icon.svg"

@@ -14,7 +14,7 @@ function CategoryPill({ id, name, icon }) {
           {icon}
         </span>
       </div>
-      <span className="font-bold text-sm text-app-text leading-tight">
+      <span className="font-bold text-xs md:text-sm text-app-text leading-tight">
         {name}
       </span>
     </button>
