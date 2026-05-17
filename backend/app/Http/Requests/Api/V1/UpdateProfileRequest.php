@@ -31,10 +31,10 @@ class UpdateProfileRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'direccio.in'  => 'El municipi seleccionat no és vàlid.',
-            'avatar.image' => 'L\'avatar ha de ser una imatge.',
-            'avatar.mimes' => 'L\'avatar ha de ser de format: jpeg, png, jpg o webp.',
-            'avatar.max'   => 'L\'avatar no pot superar els 3 MB.',
+            'direccio.in'  => 'El municipio seleccionado no es válido.',
+            'avatar.image' => 'El avatar debe ser una imagen.',
+            'avatar.mimes' => 'El avatar debe estar en formato: jpeg, png, jpg o webp.',
+            'avatar.max'   => 'El avatar no puede superar los 3 MB.',
         ];
     }
 

@@ -27,10 +27,10 @@ function SettingsNav({ username, current }) {
 
   return (
     <>
-      <aside className="hidden md:flex flex-col p-4 bg-[#090f0e] w-64 shrink-0 border-r border-app-border transition-all duration-150 font-inter text-sm z-40">
+      <aside className="hidden md:flex flex-col p-4 bg-[#0e2925] dark:bg-[#0e2925] w-64 shrink-0 self-stretch border-r border-vecilend-dark-primary/20 transition-all duration-150 font-inter text-sm z-40 rounded-l-xl">
         <div className="mb-8 px-2">
           <h2 className="text-[#4fdbc8] font-bold text-lg">Configuración</h2>
-          <p className="text-[#859490] text-xs">Gestiona tu cuenta</p>
+          <p className="text-[#bbcac6] text-xs">Gestiona tu cuenta</p>
         </div>
 
         <nav className="space-y-1">
@@ -43,8 +43,8 @@ function SettingsNav({ username, current }) {
                 end={item.end}
                 className={
                   isActive
-                    ? "flex items-center gap-3 px-3 py-3 bg-[#4fdbc8]/10 text-[#4fdbc8] font-semibold border-r-4 border-[#4fdbc8] transition-all duration-150"
-                    : "flex items-center gap-3 px-3 py-3 text-[#859490] hover:bg-app-bg-card hover:text-app-text transition-all duration-150"
+                    ? "flex items-center gap-3 px-3 py-3 bg-[#4fdbc8]/15 text-[#4fdbc8] font-semibold border-r-4 border-[#4fdbc8] rounded-l-md transition-all duration-150"
+                    : "flex items-center gap-3 px-3 py-3 text-[#bbcac6] hover:bg-[#4fdbc8]/10 hover:text-white rounded-md transition-all duration-150"
                 }
               >
                 <span className="material-symbols-outlined">{item.icon}</span>
@@ -55,8 +55,8 @@ function SettingsNav({ username, current }) {
         </nav>
       </aside>
 
-      <div className="md:hidden sticky top-[52px] z-30 bg-app-bg border-b border-app-border">
-        <nav className="flex gap-1 overflow-x-auto px-2 py-2 vecilend-carousel">
+      <div className="md:hidden mb-3">
+        <nav className="flex gap-1 overflow-x-auto py-1 vecilend-carousel">
           {items.map((item) => {
             const isActive = current === item.key;
             return (
@@ -66,11 +66,11 @@ function SettingsNav({ username, current }) {
                 end={item.end}
                 className={
                   isActive
-                    ? "flex shrink-0 items-center gap-2 rounded-full bg-[#4fdbc8]/10 px-4 py-2 text-sm font-semibold text-[#4fdbc8] border border-[#4fdbc8]/40"
-                    : "flex shrink-0 items-center gap-2 rounded-full bg-app-bg-card px-4 py-2 text-sm font-medium text-app-text-secondary border border-app-border"
+                    ? "flex shrink-0 items-center gap-1.5 rounded-full bg-[#4fdbc8]/10 px-3 py-1.5 text-xs font-semibold text-[#4fdbc8] border border-[#4fdbc8]/40"
+                    : "flex shrink-0 items-center gap-1.5 rounded-full bg-app-bg-card px-3 py-1.5 text-xs font-medium text-app-text-secondary border border-app-border"
                 }
               >
-                <span className="material-symbols-outlined text-base">
+                <span className="material-symbols-outlined text-sm">
                   {item.icon}
                 </span>
                 <span>{item.label}</span>

@@ -11,15 +11,8 @@ const ThemeContext = createContext(null);
 const STORAGE_KEY = "vecilend_theme";
 
 function getInitialTheme() {
-  // 1. Preferència guardada
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved === "light" || saved === "dark") return saved;
-
-  // 2. Preferència del sistema
-  if (window.matchMedia("(prefers-color-scheme: light)").matches)
-    return "light";
-
-  // 3. Default: dark (l'identitat actual de Vecilend)
   return "dark";
 }
 

@@ -128,7 +128,7 @@ class ChatController extends Controller
         ])->findOrFail($id);
 
         if (!$conversa->teParticipant($userId)) {
-            return response()->json(['message' => 'No tens accés a aquesta conversa.'], 403);
+            return response()->json(['message' => 'No tienes acceso a esta conversación.'], 403);
         }
 
         return response()->json([
@@ -148,7 +148,7 @@ class ChatController extends Controller
         $conversa = Conversa::findOrFail($id);
 
         if (!$conversa->teParticipant($userId)) {
-            return response()->json(['message' => 'No tens accés a aquesta conversa.'], 403);
+            return response()->json(['message' => 'No tienes acceso a esta conversación.'], 403);
         }
 
         $perPage = min((int) $request->input('per_page', 50), 100);
@@ -189,7 +189,7 @@ class ChatController extends Controller
         $conversa = Conversa::findOrFail($id);
 
         if (!$conversa->teParticipant($userId)) {
-            return response()->json(['message' => 'No tens accés a aquesta conversa.'], 403);
+            return response()->json(['message' => 'No tienes acceso a esta conversación.'], 403);
         }
 
         $missatge = DB::transaction(function () use ($conversa, $userId, $request) {
@@ -230,7 +230,7 @@ class ChatController extends Controller
         $conversa = Conversa::findOrFail($id);
 
         if (!$conversa->teParticipant($userId)) {
-            return response()->json(['message' => 'No tens accés a aquesta conversa.'], 403);
+            return response()->json(['message' => 'No tienes acceso a esta conversación.'], 403);
         }
 
         $afectats = $conversa->missatges()
@@ -239,7 +239,7 @@ class ChatController extends Controller
             ->update(['llegit_at' => now()]);
 
         return response()->json([
-            'message' => 'Missatges marcats com a llegits.',
+            'message' => 'Mensajes marcados como leídos.',
             'updated' => $afectats,
         ]);
     }

@@ -45,18 +45,18 @@ class FavoriteController extends Controller
         $object = Objecte::find($id);
 
         if (!$object) {
-            return response()->json(['message' => 'Objecte no trobat'], 404);
+            return response()->json(['message' => 'Objeto no encontrado.'], 404);
         }
 
         // Evitar duplicats
         if ($user->favorits()->where('objecte_id', $id)->exists()) {
-            return response()->json(['message' => 'Ja està als favorits'], 409);
+            return response()->json(['message' => 'Ya está en tus favoritos.'], 409);
         }
 
         $user->favorits()->attach($id);
 
         return response()->json([
-            'message' => 'Afegit als favorits',
+            'message' => 'Añadido a favoritos.',
             'object_id' => $id,
         ], 201);
     }
@@ -71,13 +71,13 @@ class FavoriteController extends Controller
         $user = Auth::user();
 
         if (!$user->favorits()->where('objecte_id', $id)->exists()) {
-            return response()->json(['message' => 'No estava als favorits'], 404);
+            return response()->json(['message' => 'No estaba en tus favoritos.'], 404);
         }
 
         $user->favorits()->detach($id);
 
         return response()->json([
-            'message' => 'Eliminat dels favorits',
+            'message' => 'Eliminado de favoritos.',
             'object_id' => $id,
         ], 200);
     }

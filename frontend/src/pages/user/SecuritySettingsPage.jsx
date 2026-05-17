@@ -142,21 +142,22 @@ function SecuritySettingsPage() {
   };
 
   return (
-    <div className="bg-app-bg text-app-text antialiased flex flex-col dark font-inter">
-      <div className="flex min-h-[calc(100vh-80px)]">
-        <SettingsNav username={user?.username} current="security" />
+    <div className="bg-app-bg text-app-text antialiased font-inter min-h-[calc(100vh-80px)]">
+      <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8 py-3 md:py-6">
+        <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
+          <SettingsNav username={user?.username} current="security" />
 
-        <main className="flex-1 p-6 md:px-12 lg:px-16 max-w-7xl mx-auto bg-app-bg flex flex-col justify-center">
-          <header className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
-              Seguridad de la <span className="text-[#4fdbc8]">Cuenta</span>
-            </h1>
+          <main className="flex-1 min-w-0 p-0 md:p-6">
+            <header className="mb-8">
+              <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
+                Seguridad de la <span className="text-[#4fdbc8]">Cuenta</span>
+              </h1>
 
-            <p className="text-app-text-secondary text-lg max-w-2xl leading-relaxed">
-              Administra tus credenciales de acceso y protege tu información
-              personal.
-            </p>
-          </header>
+              <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
+                Administra tus credenciales de acceso y protege tu información
+                personal.
+              </p>
+            </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             <section className="lg:col-span-7 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
@@ -381,8 +382,9 @@ function SecuritySettingsPage() {
                 </div>
               </div>
             </section>
-          </div>
-        </main>
+            </div>
+          </main>
+        </div>
       </div>
 
       <Dialog

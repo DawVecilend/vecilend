@@ -58,7 +58,7 @@ class NotificacioController extends Controller
         }
 
         return response()->json([
-            'message' => 'Notificació marcada com a llegida.',
+            'message' => 'Notificación marcada como leída.',
             'data'    => new NotificacioResource($notif),
         ]);
     }
@@ -74,7 +74,7 @@ class NotificacioController extends Controller
             ->update(['llegida' => true]);
 
         return response()->json([
-            'message' => 'Totes les notificacions marcades com a llegides.',
+            'message' => 'Todas las notificaciones marcadas como leídas.',
             'updated' => $afectats,
         ]);
     }
@@ -89,7 +89,7 @@ class NotificacioController extends Controller
         $notif->delete();
 
         return response()->json([
-            'message' => 'Notificació eliminada.',
+            'message' => 'Notificación eliminada.',
         ]);
     }
 }

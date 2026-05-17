@@ -28,7 +28,7 @@ class PasswordResetController extends Controller
         // Sempre retornem el mateix missatge, independentment de si l'email
         // existeix a la BD. Això prevé l'enumeració d'usuaris.
         return response()->json([
-            'message' => "Si l'adreça existeix, rebràs un email amb les instruccions.",
+            'message' => 'Si la dirección existe, recibirás un email con las instrucciones.',
         ]);
     }
 
@@ -57,12 +57,12 @@ class PasswordResetController extends Controller
 
         if ($status === Password::PASSWORD_RESET) {
             return response()->json([
-                'message' => 'Contrasenya actualitzada correctament.',
+                'message' => 'Contraseña actualizada correctamente.',
             ]);
         }
 
         return response()->json([
-            'message' => "No s'ha pogut restablir la contrasenya.",
+            'message' => 'No se ha podido restablecer la contraseña.',
             'errors'  => [
                 'email' => [__($status)],
             ],
