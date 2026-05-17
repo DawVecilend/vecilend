@@ -30,9 +30,7 @@ class UserSeeder extends Seeder
                 'biography' => $u['biography'],
                 'telefon' => $u['telefon'],
                 'direccio' => $u['direccio'],
-                'avatar_url' => 'https://randomuser.me/api/portraits/'
-                    . ($u['genere'] === 'home' ? 'men' : 'women')
-                    . '/' . (abs(crc32($u['username'])) % 100) . '.jpg',
+                'avatar_url' => 'https://ui-avatars.com/api/?name=' . urlencode($u['nom'] . '+' . $u['cognoms']) . '&background=random&size=128',
                 'ubicacio' => DB::raw("ST_SetSRID(ST_MakePoint({$u['lng']}, {$u['lat']}), 4326)::geography"),
                 'actiu' => true,
                 'email_verified_at' => $now,
