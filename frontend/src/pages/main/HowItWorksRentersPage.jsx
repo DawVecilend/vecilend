@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import BtnBack from "../../components/elementos/BtnBack";
 
 function HowItWorksRentersPage() {
   return (
     <div className="font-inter text-app-text min-h-screen antialiased">
+      <section className="w-full px-4 md:px-10 pt-6">
+        <div className="mx-auto max-w-7xl">
+          <BtnBack />
+        </div>
+      </section>
       <section className="relative w-full overflow-hidden py-12 md:py-20">
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
           <div className="relative z-10">
