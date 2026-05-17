@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: vecilend_db
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_PASSWORD: admin
     # ⚠️ Sin "ports": la DB solo es accesible desde dentro de Docker
     volumes:
       - pgdata:/var/lib/postgresql/data
