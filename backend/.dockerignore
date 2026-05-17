@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+vendor
+node_modules
+storage/logs/*.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+tests
+phpunit.xml
+.phpunit.cache
+.phpactor.json
