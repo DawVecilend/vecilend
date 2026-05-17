@@ -68,15 +68,15 @@ function ProductCard({
             <img
               alt={userName}
               src={userAvatar}
-              className="h-8 w-8 rounded-full border-2 border-[#0e1513]/60 object-cover"
+              className="h-8 w-8 rounded-full border-2 border-app-border object-cover"
             />
 
-            <p className="text-sm text-app-text-secondary transition-colors hover:text-[#4fdbc8]">
+            <p className="text-sm text-app-text-secondary transition-colors hover:text-vecilend-dark-primary">
               {userName}
             </p>
           </div>
 
-          <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-[#4fdbc8]">
+          <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-vecilend-dark-primary">
             {title}
           </h3>
 
@@ -103,7 +103,7 @@ function ProductCard({
               )}
             </div>
 
-            <div className="flex shrink-0 items-center gap-0.5 text-sm font-bold text-[#facc15]">
+            <div className="flex shrink-0 items-center gap-0.5 text-sm font-bold text-[var(--color-app-star)]">
               {rating != null ? (
                 <>
                   <span

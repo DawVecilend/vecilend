@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -87,18 +87,13 @@ function DateRangeCalendar({
   initialRange,
   onRangeChange,
 }) {
-  const [rangeStart, setRangeStart] = useState(
+  const [rangeStart, setRangeStart] = useState(() =>
     initialRange?.start ? dayjs(initialRange.start) : null,
   );
-  const [rangeEnd, setRangeEnd] = useState(
+  const [rangeEnd, setRangeEnd] = useState(() =>
     initialRange?.end ? dayjs(initialRange.end) : null,
   );
   const [hint, setHint] = useState(null);
-
-  useEffect(() => {
-    if (initialRange?.start) setRangeStart(dayjs(initialRange.start));
-    if (initialRange?.end) setRangeEnd(dayjs(initialRange.end));
-  }, [initialRange?.start, initialRange?.end]);
 
   const reportChange = (start, end) => onRangeChange?.({ start, end });
 
@@ -143,7 +138,7 @@ function DateRangeCalendar({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
-      <div className="rounded-2xl bg-app-bg-card border border-app-border p-2">
+      <div className="rounded-2xl bg-app-bg-card border border-app-border p-2 w-full max-w-[340px] mx-auto overflow-hidden">
         <DateCalendar
           value={rangeStart}
           onChange={handleDateClick}
@@ -153,20 +148,23 @@ function DateRangeCalendar({
             day: { datesOcupades, rangeStart, rangeEnd },
           }}
           sx={{
-            color: "#F2F4F8",
+            width: "100%",
+            maxWidth: "320px",
+            color: "var(--color-app-text)",
             "& .MuiPickersCalendarHeader-label": {
-              color: "#F2F4F8",
+              color: "var(--color-app-text)",
               fontFamily: "Montserrat",
               fontWeight: 600,
             },
-            "& .MuiSvgIcon-root": { color: "#F2F4F8" },
+            "& .MuiSvgIcon-root": { color: "var(--color-app-text)" },
             "& .MuiDayCalendar-weekDayLabel": {
-              color: "#B6BCC8",
+              color: "var(--color-app-text-secondary)",
               fontFamily: "Inter",
             },
-            "& .MuiPickersDay-root": { color: "#F2F4F8" },
+            "& .MuiPickersDay-root": { color: "var(--color-app-text)" },
             "& .MuiPickersDay-root.Mui-disabled": {
-              color: "#4B5563 !important",
+              color: "var(--color-app-text-secondary) !important",
+              opacity: 0.5,
             },
           }}
         />

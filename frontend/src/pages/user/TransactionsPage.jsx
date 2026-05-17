@@ -74,7 +74,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
     <article className="rounded-2xl border border-app-border bg-app-card overflow-hidden flex flex-col md:flex-row">
       <Link
         to={`/objects/${tx.objecte_id}`}
-        className="md:w-48 h-40 md:h-auto shrink-0 bg-vecilend-dark-neutral"
+        className="md:w-48 h-40 md:h-auto shrink-0 bg-app-neutral"
       >
         <img
           src={image}
@@ -147,7 +147,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               <button
                 type="button"
                 onClick={() => navigate(`/transactions/${tx.id}/payment`)}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 max-w-max"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
               >
                 <span className="material-symbols-outlined text-base align-middle mr-1">
                   payments
@@ -178,7 +178,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
             <button
               type="button"
               onClick={() => onAction("review", tx.id, tx)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 max-w-max"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 star
@@ -191,7 +191,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
             <button
               type="button"
               onClick={() => onAction("review", tx.id, tx)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 max-w-max"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 star
@@ -234,7 +234,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               type="button"
               disabled={busy}
               onClick={() => onAction("return", tx.id)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-5 py-2 text-label font-bold text-[#003730] active:scale-95 disabled:opacity-50 max-w-max"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 disabled:opacity-50 max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 assignment_turned_in
@@ -426,7 +426,7 @@ function TransactionsPage() {
             onClick={() => setStatus(filter.id)}
             className={`px-4 py-2 rounded-full text-label font-body font-medium transition-all ${
               status === filter.id
-                ? "bg-vecilend-dark-primary text-[#003730]"
+                ? "bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
                 : "bg-app-card border border-app-border text-app-text hover:border-vecilend-dark-primary"
             }`}
           >
@@ -462,7 +462,7 @@ function TransactionsPage() {
           {role === "requester" && (
             <Link
               to="/objects"
-              className="inline-block mt-4 rounded-full bg-vecilend-dark-primary px-6 py-2 text-label font-bold text-[#003730]"
+              className="inline-block mt-4 rounded-full bg-vecilend-dark-primary px-6 py-2 text-label font-bold text-[var(--color-app-success-on)]"
             >
               Explorar objetos
             </Link>

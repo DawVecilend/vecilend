@@ -20,6 +20,7 @@ export const DEFAULT_FALLBACK_LOCATION = { lat: 41.3851, lng: 2.1734 }
 export function useGeolocation({
   fallbackToUser = true,
   fallbackToDefault = true,
+  autoRequest = true,
 } = {}) {
   const { user } = useAuth()
   const [coords, setCoords] = useState(null)
@@ -70,8 +71,9 @@ export function useGeolocation({
   }, [applyFallback])
 
   useEffect(() => {
+    if (!autoRequest) return
     requestLocation().catch(() => { /* fallback ja aplicat */ })
-  }, [])
+  }, [autoRequest])
 
   return { coords, status, error, requestLocation }
 }

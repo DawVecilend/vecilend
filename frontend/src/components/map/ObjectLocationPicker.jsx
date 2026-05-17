@@ -7,7 +7,8 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
-import { useGeolocation } from "../../hooks/useGeolocation";
+import { useAuth } from "../../contexts/AuthContext";
+import { useGeolocation, DEFAULT_FALLBACK_LOCATION } from "../../hooks/useGeolocation";
 import "../../utils/leafletIconFix";
 
 const pickerIcon = L.divIcon({
@@ -56,24 +57,33 @@ function FlyTo({ position }) {
  *     aquesta ubicació com a valor. Si l'usuari denega, no fa res.
  */
 function ObjectLocationPicker({ value, onChange }) {
-  const { coords, status, requestLocation } = useGeolocation();
+  const { user } = useAuth();
+  const { status, requestLocation } = useGeolocation({ autoRequest: false });
   const [mapCenter, setMapCenter] = useState(null);
   const [geoFailed, setGeoFailed] = useState(false);
 
-  // Centrem el mapa: prioritat al value (si en venim de l'edició),
-  // si no, agafem el primer coords que arribi de useGeolocation.
+  // Centrem el mapa amb la prioritat correcta per a creació d'objectes:
+  //   1. value (si venim d'edició o l'usuari ja ha triat)
+  //   2. user.ubicacio (ubicació guardada al perfil — el cas habitual a creació)
+  //   3. DEFAULT_FALLBACK_LOCATION
+  // NO demanem geolocalització automàticament: això sobreescrivia la ubicació
+  // del perfil amb la geolocalització del navegador/IP, que sovint no és on
+  // viu realment l'usuari.
   useEffect(() => {
-    if (value && !mapCenter) {
+    if (mapCenter) return;
+    if (value) {
       setMapCenter(value);
-    } else if (coords && !mapCenter) {
-      setMapCenter(coords);
+    } else if (user?.ubicacio) {
+      setMapCenter(user.ubicacio);
+    } else {
+      setMapCenter(DEFAULT_FALLBACK_LOCATION);
     }
-  }, [coords, value, mapCenter]);
+  }, [value, user, mapCenter]);
 
   if (!mapCenter) {
     return (
-      <div className="h-[260px] md:h-[320px] w-full rounded-[16px] bg-[#101217] border border-[#1D222A] flex items-center justify-center">
-        <span className="text-sm text-[#6E7480] font-body">
+      <div className="h-[260px] md:h-[320px] w-full rounded-[16px] bg-app-bg-card border border-app-border flex items-center justify-center">
+        <span className="text-sm text-app-text-secondary font-body">
           Obteniendo ubicación…
         </span>
       </div>
@@ -85,14 +95,9 @@ function ObjectLocationPicker({ value, onChange }) {
   const handleUseMyLocation = async () => {
     setGeoFailed(false);
     try {
-      // Si requestLocation retorna Promise (cas que hagis aplicat la fix
-      // de §11 de la guia), millor; si no, fem servir coords del state.
       const result = await requestLocation();
       if (result && result.lat != null) {
         onChange(result);
-      } else if (coords) {
-        // Fallback per si l'usuari encara no ha aplicat la fix
-        onChange(coords);
       }
     } catch {
       setGeoFailed(true);
@@ -101,7 +106,7 @@ function ObjectLocationPicker({ value, onChange }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="h-[260px] md:h-[320px] w-full rounded-[16px] overflow-hidden border border-[#1D222A]">
+      <div className="h-[260px] md:h-[320px] w-full rounded-[16px] overflow-hidden border border-app-border">
         <MapContainer
           center={[center.lat, center.lng]}
           zoom={14}
@@ -137,7 +142,7 @@ function ObjectLocationPicker({ value, onChange }) {
           type="button"
           onClick={handleUseMyLocation}
           disabled={status === "requesting"}
-          className="inline-flex items-center gap-2 rounded-[14px] bg-[#101217] border border-[#1D222A] px-4 py-2 font-body text-[14px] text-[#F2F4F8] hover:border-[#14B8A6] disabled:opacity-50 transition"
+          className="inline-flex items-center gap-2 rounded-[14px] bg-app-bg-card border border-app-border px-4 py-2 font-body text-[14px] text-app-text hover:border-vecilend-dark-primary disabled:opacity-50 transition"
         >
           <span className="material-symbols-outlined text-base">
             my_location
@@ -146,11 +151,11 @@ function ObjectLocationPicker({ value, onChange }) {
         </button>
 
         {value ? (
-          <span className="text-xs text-[#4fdbc8] font-body">
+          <span className="text-xs text-vecilend-dark-primary font-body">
             ✓ Ubicación seleccionada
           </span>
         ) : (
-          <span className="text-xs text-[#6E7480] font-body">
+          <span className="text-xs text-app-text-secondary font-body">
             Pulsa en el mapa o arrastra el marcador
           </span>
         )}

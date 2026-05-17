@@ -38,7 +38,7 @@ function RatingFilter({ value = {}, onChange }) {
             onClick={() => reportChange(opt.value)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
               rating === opt.value
-                ? "bg-vecilend-dark-primary text-[#003730]"
+                ? "bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
                 : "bg-app-card border border-app-border text-app-text hover:border-vecilend-dark-primary"
             }`}
           >

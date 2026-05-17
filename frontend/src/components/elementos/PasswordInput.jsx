@@ -11,7 +11,7 @@ function PasswordInput({
   return (
     <div className="relative group">
       {leftIcon && (
-        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors pointer-events-none">
+        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors pointer-events-none">
           {leftIcon}
         </span>
       )}

@@ -11,14 +11,14 @@ function getAvailabilityLabel(status) {
 function getAvailabilityClasses(status) {
   if (status === "no_disponible") {
     return {
-      container: "bg-[#0e1513]/60 text-[#ef4444]",
-      dot: "bg-[#ef4444]",
+      container: "bg-app-bg/60 text-[var(--color-app-danger)]",
+      dot: "bg-[var(--color-app-danger)]",
     };
   }
 
   return {
-    container: "bg-[#0e1513]/60 text-[#4fdbc8]",
-    dot: "bg-[#4fdbc8]",
+    container: "bg-app-bg/60 text-vecilend-dark-primary",
+    dot: "bg-vecilend-dark-primary",
   };
 }
 
@@ -113,7 +113,7 @@ function ProfileProductCard({
   return (
     <div className="relative w-full">
       <Link to={slug ? `/objects/${id}/${slug}` : `/objects/${id}`} className="block w-full">
-        <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-vecilend-dark-border bg-vecilend-dark-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
+        <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
           <div className="relative aspect-4/3 overflow-hidden">
             <img
               alt={title}
@@ -126,7 +126,7 @@ function ProfileProductCard({
                 ref={buttonRef}
                 type="button"
                 onClick={handleOpenMenu}
-                className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-[#0e1513]/40 text-white backdrop-blur-md transition-colors hover:text-[#4fdbc8]"
+                className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-app-bg/40 text-white backdrop-blur-md transition-colors hover:text-vecilend-dark-primary"
               >
                 <span className="material-symbols-outlined">more_horiz</span>
               </button>
@@ -154,11 +154,11 @@ function ProfileProductCard({
           </div>
 
           <div className="flex flex-1 flex-col p-6">
-            <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-[#4fdbc8]">
+            <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-vecilend-dark-primary">
               {title}
             </h3>
 
-            <p className="mb-4 min-h-[42px] text-sm text-[#bbcac6] line-clamp-2">
+            <p className="mb-4 min-h-[42px] text-sm text-app-text-secondary line-clamp-2">
               {description}
             </p>
 
@@ -181,7 +181,7 @@ function ProfileProductCard({
                 )}
               </div>
 
-              <div className="flex shrink-0 items-center gap-0.5 text-sm font-bold text-[#facc15]">
+              <div className="flex shrink-0 items-center gap-0.5 text-sm font-bold text-[var(--color-app-star)]">
                 {rating != null ? (
                   <>
                     <span
@@ -206,12 +206,12 @@ function ProfileProductCard({
       {openMenu && (
         <div
           ref={menuRef}
-          className="absolute right-4 top-[64px] z-50 w-[180px] overflow-hidden rounded-[14px] border border-[#2A2B31] bg-[#101217] shadow-xl"
+          className="absolute right-4 top-[64px] z-50 w-[180px] overflow-hidden rounded-[14px] border border-app-border bg-app-bg-card shadow-xl"
         >
           <button
             type="button"
             onClick={handleToggleVisibility}
-            className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[#F2F4F8] transition hover:bg-[#16181C]"
+            className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-app-text transition hover:bg-app-neutral"
           >
             <span className="material-symbols-outlined text-[20px]">
               {isHidden ? "visibility" : "visibility_off"}
@@ -223,7 +223,7 @@ function ProfileProductCard({
           <button
             type="button"
             onClick={handleEditClick}
-            className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[#F2F4F8] transition hover:bg-[#16181C]"
+            className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-app-text transition hover:bg-app-neutral"
           >
             <span className="material-symbols-outlined text-[20px]">edit</span>
             Editar
@@ -232,7 +232,7 @@ function ProfileProductCard({
           <button
             type="button"
             onClick={handleDeleteClick}
-            className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[#ef4444] transition hover:bg-[#ef4444]/10"
+            className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[var(--color-app-danger)] transition hover:bg-[var(--color-app-danger)]/10"
           >
             <span className="material-symbols-outlined text-[20px]">
               delete

@@ -59,7 +59,7 @@ function ResetPasswordPage() {
           </p>
           <Link
             to="/forgot-password"
-            className="text-[#4fdbc8] font-bold hover:underline"
+            className="text-vecilend-dark-primary font-bold hover:underline"
           >
             Solicitar uno nuevo
           </Link>
@@ -74,7 +74,7 @@ function ResetPasswordPage() {
         <h1 className="text-3xl font-extrabold tracking-tight mb-2">
           Crear contraseña nueva
         </h1>
-        <p className="text-[#859490] mb-6">
+        <p className="text-app-text-secondary mb-6">
           Para la cuenta <strong className="text-app-text">{email}</strong>
         </p>
 
@@ -89,10 +89,10 @@ function ResetPasswordPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={8}
-                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none"
+                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none"
                 placeholder="••••••••"
               />
-              <p className="text-xs text-[#859490]">Al menos 8 caracteres.</p>
+              <p className="text-xs text-app-text-secondary">Al menos 8 caracteres.</p>
             </div>
 
             <div className="space-y-1.5">
@@ -103,13 +103,13 @@ function ResetPasswordPage() {
                 value={passwordConfirmation}
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
                 required
-                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none"
+                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none"
                 placeholder="••••••••"
               />
             </div>
 
             {error && (
-              <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-2 rounded-lg text-sm font-medium">
+              <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-2 rounded-lg text-sm font-medium">
                 {error}
               </div>
             )}
@@ -117,14 +117,14 @@ function ResetPasswordPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-[#4fdbc8] text-[#003731] font-bold py-4 rounded-lg shadow-lg transition-all disabled:opacity-70 hover:bg-[#14b8a6] active:scale-[0.97]"
+              className="w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg transition-all disabled:opacity-70 hover:bg-vecilend-dark-primary active:scale-[0.97]"
             >
               {submitting ? "Guardando…" : "Cambiar contraseña"}
             </button>
           </form>
         ) : (
           <div className="bg-app-bg-card border border-app-border rounded-lg p-6 text-center">
-            <span className="material-symbols-outlined text-[#4fdbc8] text-5xl mb-2">
+            <span className="material-symbols-outlined text-vecilend-dark-primary text-5xl mb-2">
               check_circle
             </span>
             <h2 className="text-xl font-bold mb-2">¡Contraseña actualizada!</h2>

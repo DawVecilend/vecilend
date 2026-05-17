@@ -40,14 +40,19 @@ function HeaderDesktop() {
       (path === "/how-it-works/renters" &&
         location.pathname.startsWith("/how-it-works"));
     return isActive
-      ? "text-[#4fdbc8] border-b-2 border-[#4fdbc8] font-bold p-1 text-sm tracking-tight"
-      : "text-[#aebdb9] font-medium hover:text-[#4fdbc8] transition-colors p-1 text-sm tracking-tight";
+      ? "text-vecilend-dark-primary border-b-2 border-vecilend-dark-primary font-bold p-1 text-sm tracking-tight"
+      : "text-app-text-secondary font-medium hover:text-vecilend-dark-primary transition-colors p-1 text-sm tracking-tight";
   };
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-[#333b39] bg-[#0f1715]/70 backdrop-blur-[20px]">
+    <header
+      className="fixed top-0 z-50 w-full border-b backdrop-blur-[20px]"
+      style={{
+        backgroundColor: "var(--color-app-header-bg)",
+        borderColor: "var(--color-app-header-border)",
+      }}
+    >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-        {/* LEFT */}
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center">
             <Logo className="h-[45px] w-[136px]" />
@@ -69,7 +74,6 @@ function HeaderDesktop() {
           </nav>
         </div>
 
-        {/* RIGHT */}
         <div className="flex items-center gap-4">
           <SearchBar />
 
@@ -78,7 +82,7 @@ function HeaderDesktop() {
               to="/objects/create"
               aria-label="Publicar objeto"
               title="Publicar objeto"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-vecilend-dark-primary text-[#003730] shadow-md transition-all hover:bg-vecilend-dark-primary-hover hover:text-white active:scale-95"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] shadow-md transition-all hover:bg-vecilend-dark-primary-hover hover:text-white active:scale-95"
             >
               <span className="material-symbols-outlined text-[22px] font-bold">
                 add
@@ -91,25 +95,21 @@ function HeaderDesktop() {
               <div className="flex items-center gap-2">
                 <Link
                   to="/chats"
-                  className="relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#333b39] cursor-pointer"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-app-bg-card-secondary cursor-pointer text-app-text-secondary hover:text-app-text"
                 >
-                  <img
-                    src="/assets/icons/chats-no-fill-icon.svg"
-                    alt="Chats"
-                    className="h-6 w-6 opacity-80 transition-opacity duration-300 hover:opacity-100"
-                  />
+                  <span className="material-symbols-outlined text-[26px]">
+                    chat_bubble
+                  </span>
                   <UnreadBadge count={counts.chats} />
                 </Link>
 
                 <Link
                   to="/notifications"
-                  className="relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-[#333b39] cursor-pointer"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:bg-app-bg-card-secondary cursor-pointer text-app-text-secondary hover:text-app-text"
                 >
-                  <img
-                    src="/assets/icons/notifications-icon.svg"
-                    alt="Notificaciones"
-                    className="h-6 w-6 opacity-80 transition-opacity duration-300 hover:opacity-100"
-                  />
+                  <span className="material-symbols-outlined text-[26px]">
+                    notifications
+                  </span>
                   <UnreadBadge count={counts.notifications} />
                 </Link>
               </div>
@@ -135,13 +135,16 @@ function HeaderDesktop() {
                 </div>
                 {open && (
                   <div className="absolute top-12 right-0 z-20 w-56">
-                    <div className="overflow-hidden border border-white/5 bg-[#0f1715]/70 shadow-lg backdrop-blur-[20px] rounded-lg">
-                      <div className="flex flex-col divide-y divide-[#14B8A6]/10">
+                    <div
+                      className="overflow-hidden border border-app-border shadow-lg backdrop-blur-[20px] rounded-lg"
+                      style={{ backgroundColor: "var(--color-app-header-bg)" }}
+                    >
+                      <div className="flex flex-col divide-y divide-app-border">
                         <Link
                           to={`/profile/${user?.username}`}
-                          className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
+                          className="px-4 py-3 text-sm text-vecilend-dark-primary transition-colors hover:bg-app-bg-card-secondary"
                         >
-                          <p className="py-2 text-base text-white">
+                          <p className="py-2 text-base text-app-text">
                             <span>
                               {user.nom} {user.cognoms}
                             </span>
@@ -150,25 +153,25 @@ function HeaderDesktop() {
                         </Link>
                         <Link
                           to="/orders"
-                          className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
+                          className="px-4 py-3 text-sm text-vecilend-dark-primary transition-colors hover:bg-app-bg-card-secondary"
                         >
                           Mis pedidos
                         </Link>
                         <Link
                           to="/favorites"
-                          className="px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
+                          className="px-4 py-3 text-sm text-vecilend-dark-primary transition-colors hover:bg-app-bg-card-secondary"
                         >
                           Mis favoritos
                         </Link>
                         <Link
                           to={`/settings/profile/${user?.username}`}
-                          className="flex gap-2 px-4 py-3 text-sm text-[#14B8A6] transition-colors hover:bg-white/5 hover:text-white"
+                          className="flex gap-2 px-4 py-3 text-sm text-vecilend-dark-primary transition-colors hover:bg-app-bg-card-secondary"
                         >
                           Ajustes
                         </Link>
                         <button
                           onClick={logout}
-                          className="w-full cursor-pointer px-4 py-3 text-left text-sm text-[#14B8A6] transition-colors hover:bg-red-500/10 hover:text-red-400"
+                          className="w-full cursor-pointer px-4 py-3 text-left text-sm text-vecilend-dark-primary transition-colors hover:bg-[var(--color-app-danger)]/10 hover:text-[var(--color-app-danger)]"
                         >
                           Cerrar sesión
                         </button>
@@ -182,14 +185,14 @@ function HeaderDesktop() {
             <>
               <Link
                 to="/login"
-                className="hidden px-4 py-2.5 text-sm font-bold text-[#aebdb9] transition-colors hover:text-[#4fdbc8] md:block"
+                className="hidden px-4 py-2.5 text-sm font-bold text-app-text-secondary transition-colors hover:text-vecilend-dark-primary md:block"
               >
                 Iniciar sesión
               </Link>
 
               <Link
                 to="/register"
-                className="hidden rounded-full bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] px-6 py-2.5 text-sm font-bold text-[#003730] shadow-lg shadow-[#4fdbc8]/20 transition-transform active:scale-95 md:block"
+                className="hidden rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary-hover px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-vecilend-dark-primary/20 transition-transform active:scale-95 md:block"
               >
                 Registrarse
               </Link>

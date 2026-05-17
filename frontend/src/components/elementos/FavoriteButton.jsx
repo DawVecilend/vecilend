@@ -100,10 +100,10 @@ function FavoriteButton({
         title={isFavorite ? "Quitar de favoritos" : "Guardar favorito"}
         onClick={handleClick}
         disabled={busy}
-        className={`flex h-10 w-10 items-center justify-center rounded-full bg-[#0e1513]/50 shadow-lg backdrop-blur-md transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+        className={`flex h-10 w-10 items-center justify-center rounded-full bg-app-bg/50 shadow-lg backdrop-blur-md transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
           isFavorite
-            ? "text-[#ff4d6d] hover:text-[#ff6b81]"
-            : "text-white hover:text-[#ffb4ab]"
+            ? "text-[var(--color-app-danger)] hover:text-[var(--color-app-danger)]"
+            : "text-white hover:text-[var(--color-app-danger)]"
         }`}
       >
         {busy ? (
@@ -126,7 +126,7 @@ function FavoriteButton({
       </button>
 
       {errorMessage && (
-        <div className="absolute right-0 top-12 z-50 w-[240px] rounded-[12px] border border-red-500/30 bg-[#16181C] px-3 py-2 text-xs font-medium text-red-300 shadow-xl">
+        <div className="absolute right-0 top-12 z-50 w-[240px] rounded-[12px] border border-red-500/30 bg-app-neutral px-3 py-2 text-xs font-medium text-red-300 shadow-xl">
           {errorMessage}
         </div>
       )}

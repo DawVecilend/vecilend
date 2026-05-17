@@ -11,7 +11,7 @@ function AdminProtectedRoute({ requireRol = null }) {
         className="flex min-h-screen items-center justify-center"
         style={{ backgroundColor: "var(--color-app-bg)" }}
       >
-        <div className="h-10 w-10 rounded-full border-4 border-[#2A2B31] border-t-[#14B8A6] animate-spin" />
+        <div className="h-10 w-10 rounded-full border-4 border-app-border border-t-[#14B8A6] animate-spin" />
       </div>
     );
   }

@@ -32,23 +32,23 @@ function BenefitsSection() {
   ];
 
   return (
-    <section className="py-24 bg-[#0b100f] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <h2 className="font-inter text-4xl font-extrabold tracking-tight mb-4 text-[#e1e3e0]">
+    <section className="py-16 md:py-24 bg-app-bg-secondary overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-20">
+          <h2 className="font-inter text-3xl md:text-4xl font-extrabold tracking-tight mb-4 text-app-text">
             Alquilar nunca fue{" "}
-            <span className="text-[#4fdbc8]">tan fácil.</span>
+            <span className="text-vecilend-dark-primary">tan fácil.</span>
           </h2>
-          <p className="text-[#aebdb9] text-lg">
+          <p className="text-app-text-secondary text-base md:text-lg">
             Cuatro pasos simples para obtener lo que necesitas o comenzar a
             ganar dinero con tus activos.
           </p>
         </div>
-        <div className="relative grid md:grid-cols-4 gap-12">
+        <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {benefits.map((benefit, idx) => (
             <div
               key={benefit.id}
-              className="relative"
+              className="relative flex flex-col items-center text-center sm:items-start sm:text-left"
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
             >
@@ -58,8 +58,8 @@ function BenefitsSection() {
                 style={{
                   backgroundColor:
                     hoveredIdx !== null && idx <= hoveredIdx
-                      ? "#4fdbc8"
-                      : "#333b39",
+                      ? "var(--color-app-primary)"
+                      : "var(--color-app-border)",
                 }}
               />
               <BenefitCard

@@ -91,7 +91,7 @@ function FAQPage() {
   };
 
   return (
-    <div className="w-full overflow-x-hidden font-inter text-[#dde4e1] min-h-screen antialiased">
+    <div className="w-full overflow-x-hidden font-inter text-app-text min-h-screen antialiased">
       {/* Back Button */}
       <section className="w-full px-4 md:px-10 pt-6">
         <div className="mx-auto max-w-7xl">
@@ -127,7 +127,7 @@ function FAQPage() {
       </section>
 
       {/* Category Tabs */}
-      <section className="w-full py-8 px-4 md:px-10 bg-[#0b100f]">
+      <section className="w-full py-8 px-4 md:px-10 bg-app-bg">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-wrap gap-3 justify-center md:justify-start">
             {categories.map((cat) => (
@@ -136,7 +136,7 @@ function FAQPage() {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-6 py-3 rounded-full font-bold transition-all ${
                   activeCategory === cat.id
-                    ? "bg-vecilend-dark-primary text-[#003730]"
+                    ? "bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
                     : "bg-white/5 text-app-text hover:bg-white/10"
                 }`}
               >
@@ -266,7 +266,7 @@ function FAQPage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/objects"
-                  className="bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] text-[#003730] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-[#4fdbc8]/30 hover:scale-105 active:scale-95 transition-all"
+                  className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-vecilend-dark-primary/30 hover:scale-105 active:scale-95 transition-all"
                 >
                   Explorar Objetos
                 </Link>

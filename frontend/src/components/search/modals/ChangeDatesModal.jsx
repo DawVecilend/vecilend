@@ -27,10 +27,10 @@ function ChangeDatesModal({ open, onClose, initial, onApply }) {
       maxWidth="sm"
       PaperProps={{
         sx: {
-          backgroundColor: "#0A0A0B",
-          color: "#F2F4F8",
+          backgroundColor: "var(--color-app-bg-card)",
+          color: "var(--color-app-text)",
           borderRadius: isMobile ? 0 : 4,
-          border: "1px solid #2A2B31",
+          border: "1px solid var(--color-app-border)",
         },
       }}
     >
@@ -38,14 +38,14 @@ function ChangeDatesModal({ open, onClose, initial, onApply }) {
         sx={{
           fontFamily: "Montserrat",
           fontWeight: 700,
-          color: "#F2F4F8",
+          color: "var(--color-app-text)",
           display: "flex",
           justifyContent: "space-between",
-          borderBottom: "1px solid #2A2B31",
+          borderBottom: "1px solid var(--color-app-border)",
         }}
       >
         Cambiar fechas
-        <IconButton onClick={onClose} sx={{ color: "#B6BCC8" }}>
+        <IconButton onClick={onClose} sx={{ color: "var(--color-app-text-secondary)" }}>
           <span className="material-symbols-outlined">close</span>
         </IconButton>
       </DialogTitle>
@@ -61,7 +61,7 @@ function ChangeDatesModal({ open, onClose, initial, onApply }) {
         />
       </DialogContent>
       <DialogActions
-        sx={{ borderTop: "1px solid #2A2B31", px: 3, py: 2, gap: 1 }}
+        sx={{ borderTop: "1px solid var(--color-app-border)", px: 3, py: 2, gap: 1 }}
       >
         <button
           type="button"
@@ -84,7 +84,7 @@ function ChangeDatesModal({ open, onClose, initial, onApply }) {
             });
             onClose();
           }}
-          className="rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] disabled:opacity-50"
+          className="rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] disabled:opacity-50"
         >
           Aplicar
         </button>

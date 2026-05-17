@@ -148,7 +148,7 @@ function ProductsSection({
         }
       >
         {title && (
-          <h2 className="mb-8 text-center font-heading text-h2-desktop font-bold leading-h2 text-vecilend-dark-text">
+          <h2 className="mb-8 text-center font-heading text-h2-desktop font-bold leading-h2 text-app-text">
             {title}
           </h2>
         )}

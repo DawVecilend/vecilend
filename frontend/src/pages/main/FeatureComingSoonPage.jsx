@@ -44,7 +44,7 @@ function FeatureComingSoonPage() {
 
             <Link
               to="/"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-vecilend-dark-primary px-6 py-3 font-body text-label font-bold text-[#003730] transition-colors hover:bg-vecilend-dark-primary-hover hover:text-white"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-vecilend-dark-primary px-6 py-3 font-body text-label font-bold text-[var(--color-app-success-on)] transition-colors hover:bg-vecilend-dark-primary-hover hover:text-white"
             >
               <span className="material-symbols-outlined text-base">home</span>
               Ir al inicio

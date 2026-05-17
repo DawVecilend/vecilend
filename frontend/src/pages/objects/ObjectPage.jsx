@@ -373,7 +373,7 @@ function ObjectPage() {
         <div className="flex items-center justify-center gap-3 flex-wrap">
           <Link
             to={`/objects/${product.id}/edit`}
-            className="inline-flex items-center gap-2 rounded-full bg-vecilend-dark-primary px-5 py-2 text-label font-bold text-[#003730] active:scale-95 hover:opacity-90 transition cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-full bg-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 hover:opacity-90 transition cursor-pointer"
           >
             <span className="material-symbols-outlined text-base">edit</span>
             Editar
@@ -385,7 +385,7 @@ function ObjectPage() {
               setDeleteError(null);
               setConfirmDeleteOpen(true);
             }}
-            className="inline-flex items-center gap-2 rounded-full border border-[#ef4444] px-5 py-2 text-label font-bold text-[#ef4444] hover:bg-[#ef4444]/10 active:scale-95 transition cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--color-app-danger)] px-5 py-2 text-label font-bold text-[var(--color-app-danger)] hover:bg-[var(--color-app-danger)]/10 active:scale-95 transition cursor-pointer"
           >
             <span className="material-symbols-outlined text-base">delete</span>
             Eliminar
@@ -432,7 +432,7 @@ function ObjectPage() {
           <button
             type="button"
             onClick={() => openChatWith(product.propietari?.id)}
-            className="block w-full text-center rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] transition-transform active:scale-95 flex items-center justify-center gap-2"
+            className="block w-full text-center rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] transition-transform active:scale-95 flex items-center justify-center gap-2"
           >
             <span className="material-symbols-outlined !text-xl">
               chat_bubble
@@ -499,7 +499,7 @@ function ObjectPage() {
             placeholder="Mensaje acerca de la solicitud (opcional)"
             rows={4}
             maxLength={1000}
-            className="w-full rounded-xl bg-vecilend-dark-neutral border border-app-border p-3 text-body-base text-app-text font-body focus:outline-none focus:ring-2 focus:ring-vecilend-dark-primary"
+            className="w-full rounded-xl bg-app-neutral border border-app-border p-3 text-body-base text-app-text font-body focus:outline-none focus:ring-2 focus:ring-vecilend-dark-primary"
           />
         )}
 
@@ -525,7 +525,7 @@ function ObjectPage() {
             "w-full rounded-full px-6 py-3 text-body-base font-bold transition-transform active:scale-95 disabled:cursor-not-allowed cursor-pointer " +
             (needsDates
               ? "bg-app-card border border-app-border text-app-text-secondary disabled:opacity-100"
-              : "bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] text-[#003730] disabled:opacity-50")
+              : "bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] disabled:opacity-50")
           }
         >
           {submitting
@@ -647,7 +647,7 @@ function ObjectPage() {
             product.valoracio_objecte?.total > 0 ? (
               <div className="flex items-center gap-2">
                 <span
-                  className="material-symbols-outlined text-[#facc15] text-base"
+                  className="material-symbols-outlined text-[var(--color-app-star)] text-base"
                   style={{
                     fontVariationSettings: "'FILL' 1",
                   }}
@@ -655,7 +655,7 @@ function ObjectPage() {
                   star
                 </span>
 
-                <span className="text-[#facc15] font-bold">
+                <span className="text-[var(--color-app-star)] font-bold">
                   {Number(product.valoracio_objecte.avg).toFixed(1)}
                 </span>
 

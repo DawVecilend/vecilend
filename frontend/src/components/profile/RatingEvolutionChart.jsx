@@ -41,7 +41,7 @@ function RatingEvolutionChart({ data = [], title, color = "#4fdbc8" }) {
 
   if (!totalCount) {
     return (
-      <div className="bg-[#161d1b] p-6 rounded-lg flex flex-col h-[320px]">
+      <div className="bg-app-bg-secondary p-6 rounded-lg flex flex-col h-[320px]">
         <h3 className="text-app-text font-heading text-h3-desktop mb-4">
           {title}
         </h3>
@@ -55,7 +55,7 @@ function RatingEvolutionChart({ data = [], title, color = "#4fdbc8" }) {
   }
 
   return (
-    <div className="bg-[#161d1b] p-6 rounded-lg h-[320px] flex flex-col">
+    <div className="bg-app-bg-secondary p-6 rounded-lg h-[320px] flex flex-col">
       <h3 className="text-app-text font-heading text-h3-desktop mb-4">
         {title}{" "}
         <span className="text-app-text-secondary text-label font-body">
@@ -115,7 +115,7 @@ function RatingEvolutionChart({ data = [], title, color = "#4fdbc8" }) {
       </div>
 
       {totalCount > MAX_POINTS && (
-        <p className="text-[10px] text-[#859490] italic text-center mt-2">
+        <p className="text-[10px] text-app-text-secondary italic text-center mt-2">
           Mostrando las últimas {MAX_POINTS} valoraciones de {totalCount} en
           total
         </p>

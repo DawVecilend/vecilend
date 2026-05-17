@@ -301,19 +301,19 @@ function CreateObjectPage() {
     <>
       <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
         <BtnBack />
-        <h1 className="font-heading text-[28px] font-semibold text-[#F2F4F8] md:text-[32px]">
+        <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px]">
           Subir producto
         </h1>
         <div className="w-[90px]" />
       </div>
 
-      <section className="min-h-screen bg-[#0A0A0B] px-4 pb-16 pt-6 text-[#F2F4F8] md:px-6">
+      <section className="min-h-screen bg-app-bg px-4 pb-16 pt-6 text-app-text md:px-6">
         <div className="mx-auto w-full max-w-4xl">
           <form onSubmit={handleSubmit} className="space-y-10">
             {/* ── Imatges ── */}
-            <div className="rounded-[24px] border border-dashed border-[#1D222A] bg-[#050608] px-6 py-10 md:px-10 md:py-12">
+            <div className="rounded-[24px] border border-dashed border-app-border bg-app-bg px-6 py-10 md:px-10 md:py-12">
               <div className="flex flex-col items-center justify-center text-center">
-                <p className="mb-6 font-body text-[16px] text-[#F2F4F8]">
+                <p className="mb-6 font-body text-[16px] text-app-text">
                   Sube una o más imágenes
                 </p>
 
@@ -331,7 +331,7 @@ function CreateObjectPage() {
                       <button
                         type="button"
                         onClick={() => handleRemoveImage(image)}
-                        className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#121214] text-white shadow-md transition hover:bg-red-500"
+                        className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-app-bg-card text-app-text shadow-md transition hover:bg-red-500"
                       >
                         ×
                       </button>
@@ -341,7 +341,7 @@ function CreateObjectPage() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex h-[132px] w-[132px] items-center justify-center rounded-[20px] bg-[#16181C] transition-colors hover:bg-[#1B1E24]"
+                    className="flex h-[132px] w-[132px] items-center justify-center rounded-[20px] bg-app-neutral transition-colors hover:bg-app-bg-card-secondary"
                   >
                     <img
                       src="/assets/icons/add-object-icon.svg"
@@ -354,7 +354,7 @@ function CreateObjectPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-[#14B8A6] px-6 py-3 font-body text-[15px] font-medium text-white transition-all hover:bg-[#0F766E]"
+                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-vecilend-dark-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-vecilend-dark-primary-hover"
                 >
                   <img
                     src="/assets/icons/add-photo-icon.svg"
@@ -375,14 +375,14 @@ function CreateObjectPage() {
                 />
 
                 {images.length > 0 && (
-                  <p className="mt-4 text-sm text-[#B6BCC8]">
+                  <p className="mt-4 text-sm text-app-text-secondary">
                     {images.length} {images.length > 1 ? "imágenes" : "imagen"}{" "}
                     seleccionada{images.length > 1 ? "s" : ""}
                   </p>
                 )}
 
                 {fieldErrors.images && (
-                  <p className="mt-3 text-sm text-[#ef4444]">
+                  <p className="mt-3 text-sm text-[var(--color-app-danger)]">
                     {fieldErrors.images}
                   </p>
                 )}
@@ -391,7 +391,7 @@ function CreateObjectPage() {
 
             {/* ── Tipus: préstec o lloguer ── */}
             <div>
-              <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
+              <label className="mb-3 block font-heading text-[20px] font-semibold text-app-text">
                 Tipo de publicación
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -400,8 +400,8 @@ function CreateObjectPage() {
                   onClick={() => setForm((p) => ({ ...p, tipus: "lloguer" }))}
                   className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "lloguer"
-                      ? "bg-[#14B8A6] text-white"
-                      : "bg-[#101217] text-[#F2F4F8] hover:bg-[#161a21]"
+                      ? "bg-vecilend-dark-primary text-app-text"
+                      : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
                   <span className="material-symbols-outlined">payments</span>
@@ -418,8 +418,8 @@ function CreateObjectPage() {
                   }
                   className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "prestec"
-                      ? "bg-[#14B8A6] text-white"
-                      : "bg-[#101217] text-[#F2F4F8] hover:bg-[#161a21]"
+                      ? "bg-vecilend-dark-primary text-app-text"
+                      : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
                   <span className="material-symbols-outlined">
@@ -428,7 +428,7 @@ function CreateObjectPage() {
                   Préstamo gratuito
                 </button>
               </div>
-              <p className="mt-2 text-xs text-[#6E7480]">
+              <p className="mt-2 text-xs text-app-text-secondary">
                 {form.tipus === "lloguer"
                   ? "Cobrarás un precio por día por el uso del objeto."
                   : "Prestarás el objeto sin coste para la persona que lo solicite."}
@@ -439,13 +439,13 @@ function CreateObjectPage() {
             <div>
               <label
                 htmlFor="name"
-                className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
+                className="mb-3 block font-heading text-[20px] font-semibold text-app-text"
               >
                 Nombre del producto
               </label>
               <div
-                className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
-                  fieldErrors.name ? "border border-[#ef4444]" : ""
+                className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
+                  fieldErrors.name ? "border border-[var(--color-app-danger)]" : ""
                 }`}
               >
                 <img
@@ -461,11 +461,11 @@ function CreateObjectPage() {
                   value={form.name}
                   onChange={handleChange}
                   placeholder="Introducir el nombre del producto"
-                  className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:#fff] [&:-webkit-autofill]:[caret-color:#fff] [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_#101217_inset] [&:-webkit-autofill:focus]:[box-shadow:0_0_0_1000px_#101217_inset] [&:-webkit-autofill:hover]:[box-shadow:0_0_0_1000px_#101217_inset]"
+                  className="h-full w-full bg-transparent font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--color-app-text)] [&:-webkit-autofill]:[caret-color:var(--color-app-text)] [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:focus]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:hover]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset]"
                 />
               </div>
               {fieldErrors.name && (
-                <p className="mt-2 text-sm text-[#ef4444]">
+                <p className="mt-2 text-sm text-[var(--color-app-danger)]">
                   {fieldErrors.name}
                 </p>
               )}
@@ -476,16 +476,16 @@ function CreateObjectPage() {
               <div>
                 <label
                   htmlFor="pricePerDay"
-                  className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
+                  className="mb-3 block font-heading text-[20px] font-semibold text-app-text"
                 >
                   Precio (por día)
                 </label>
                 <div
-                  className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-[#101217] px-4 ${
-                    fieldErrors.pricePerDay ? "border border-[#ef4444]" : ""
+                  className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
+                    fieldErrors.pricePerDay ? "border border-[var(--color-app-danger)]" : ""
                   }`}
                 >
-                  <span className="text-[28px] leading-none text-[#6E7480]">
+                  <span className="text-[28px] leading-none text-app-text-secondary">
                     €
                   </span>
                   <input
@@ -497,11 +497,11 @@ function CreateObjectPage() {
                     value={form.pricePerDay}
                     onChange={handleChange}
                     placeholder="Mínimo 1,00€"
-                    className="h-full w-full bg-transparent font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none"
+                    className="h-full w-full bg-transparent font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none"
                   />
                 </div>
                 {fieldErrors.pricePerDay && (
-                  <p className="mt-2 text-sm text-[#ef4444]">
+                  <p className="mt-2 text-sm text-[var(--color-app-danger)]">
                     {fieldErrors.pricePerDay}
                   </p>
                 )}
@@ -512,7 +512,7 @@ function CreateObjectPage() {
             <div>
               <label
                 htmlFor="description"
-                className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]"
+                className="mb-3 block font-heading text-[20px] font-semibold text-app-text"
               >
                 Descripción
               </label>
@@ -523,12 +523,12 @@ function CreateObjectPage() {
                 value={form.description}
                 onChange={handleChange}
                 placeholder="Describe los detalles y características del producto"
-                className={`w-full rounded-[16px] bg-[#101217] px-4 py-4 font-body text-[16px] text-white placeholder:text-[#6E7480] focus:outline-none ${
-                  fieldErrors.description ? "border border-[#ef4444]" : ""
+                className={`w-full rounded-[16px] bg-app-bg-card px-4 py-4 font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none ${
+                  fieldErrors.description ? "border border-[var(--color-app-danger)]" : ""
                 }`}
               />
               {fieldErrors.description && (
-                <p className="mt-2 text-sm text-[#ef4444]">
+                <p className="mt-2 text-sm text-[var(--color-app-danger)]">
                   {fieldErrors.description}
                 </p>
               )}
@@ -537,7 +537,7 @@ function CreateObjectPage() {
             {/* ── Categoria + Subcategoria ── */}
             <div className="flex flex-col md:flex-row gap-6">
               <div className="flex-1">
-                <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
+                <label className="mb-3 block font-heading text-[20px] font-semibold text-app-text">
                   Categoría
                 </label>
                 <div ref={categoryDropdownRef} className="relative">
@@ -545,19 +545,19 @@ function CreateObjectPage() {
                     type="button"
                     onClick={() => setOpenCategories(!openCategories)}
                     disabled={loadingCategories}
-                    className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-[#101217] px-4 font-body text-[16px] text-white transition hover:bg-[#161a21] disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.category ? "border border-[#ef4444]" : ""
+                    className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-app-bg-card px-4 font-body text-[16px] text-app-text transition hover:bg-app-bg-card disabled:cursor-not-allowed disabled:opacity-70 ${
+                      fieldErrors.category ? "border border-[var(--color-app-danger)]" : ""
                     }`}
                   >
                     {loadingCategories ? (
-                      <span className="inline-flex items-center gap-2 text-[#6E7480]">
-                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
+                      <span className="inline-flex items-center gap-2 text-app-text-secondary">
+                        <span className="inline-block w-4 h-4 border-2 border-app-text-secondary border-t-transparent rounded-full animate-spin" />
                         Cargando categorías…
                       </span>
                     ) : (
                       <span
                         className={
-                          selectedCategory ? "text-white" : "text-[#6E7480]"
+                          selectedCategory ? "text-app-text" : "text-app-text-secondary"
                         }
                       >
                         {selectedCategory
@@ -585,7 +585,7 @@ function CreateObjectPage() {
                     </svg>
                   </button>
                   {openCategories && !loadingCategories && (
-                    <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
+                    <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-app-border bg-app-bg-card shadow-lg">
                       {categories.map((category) => {
                         const isActive =
                           String(category.id) === String(form.category);
@@ -596,8 +596,8 @@ function CreateObjectPage() {
                             onClick={() => handleSelectCategory(category.id)}
                             className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                               isActive
-                                ? "bg-[#0F766E]/20 text-[#14B8A6]"
-                                : "text-[#F2F4F8] hover:bg-[#16181C]"
+                                ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                : "text-app-text hover:bg-app-neutral"
                             }`}
                           >
                             {category.name}
@@ -608,14 +608,14 @@ function CreateObjectPage() {
                   )}
                 </div>
                 {fieldErrors.category && (
-                  <p className="mt-2 text-sm text-[#ef4444]">
+                  <p className="mt-2 text-sm text-[var(--color-app-danger)]">
                     {fieldErrors.category}
                   </p>
                 )}
               </div>
 
               <div className="flex-1">
-                <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
+                <label className="mb-3 block font-heading text-[20px] font-semibold text-app-text">
                   Subcategoría
                 </label>
                 <div ref={subcategoryDropdownRef} className="relative">
@@ -623,19 +623,19 @@ function CreateObjectPage() {
                     type="button"
                     onClick={() => setOpenSubcategories(!openSubcategories)}
                     disabled={loadingCategories || !selectedCategory}
-                    className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-[#101217] px-4 font-body text-[16px] text-white transition hover:bg-[#161a21] disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.subcategory ? "border border-[#ef4444]" : ""
+                    className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-app-bg-card px-4 font-body text-[16px] text-app-text transition hover:bg-app-bg-card disabled:cursor-not-allowed disabled:opacity-70 ${
+                      fieldErrors.subcategory ? "border border-[var(--color-app-danger)]" : ""
                     }`}
                   >
                     {loadingCategories ? (
-                      <span className="inline-flex items-center gap-2 text-[#6E7480]">
-                        <span className="inline-block w-4 h-4 border-2 border-[#6E7480] border-t-transparent rounded-full animate-spin" />
+                      <span className="inline-flex items-center gap-2 text-app-text-secondary">
+                        <span className="inline-block w-4 h-4 border-2 border-app-text-secondary border-t-transparent rounded-full animate-spin" />
                         Cargando subcategorías…
                       </span>
                     ) : (
                       <span
                         className={
-                          selectedSubcategory ? "text-white" : "text-[#6E7480]"
+                          selectedSubcategory ? "text-app-text" : "text-app-text-secondary"
                         }
                       >
                         {selectedSubcategory
@@ -665,7 +665,7 @@ function CreateObjectPage() {
                     </svg>
                   </button>
                   {openSubcategories && !loadingCategories && (
-                    <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-[#2A2B31] bg-[#101217] shadow-lg">
+                    <div className="absolute right-0 z-20 mt-2 max-h-[260px] w-full overflow-y-auto rounded-[16px] border border-app-border bg-app-bg-card shadow-lg">
                       {(selectedCategory?.subcategories || []).map(
                         (subcategory) => {
                           const isActive =
@@ -679,8 +679,8 @@ function CreateObjectPage() {
                               }
                               className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                                 isActive
-                                  ? "bg-[#0F766E]/20 text-[#14B8A6]"
-                                  : "text-[#F2F4F8] hover:bg-[#16181C]"
+                                  ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                  : "text-app-text hover:bg-app-neutral"
                               }`}
                             >
                               {subcategory.name}
@@ -692,7 +692,7 @@ function CreateObjectPage() {
                   )}
                 </div>
                 {fieldErrors.subcategory && (
-                  <p className="mt-2 text-sm text-[#ef4444]">
+                  <p className="mt-2 text-sm text-[var(--color-app-danger)]">
                     {fieldErrors.subcategory}
                   </p>
                 )}
@@ -701,10 +701,10 @@ function CreateObjectPage() {
 
             {/* ── Ubicación ── */}
             <div>
-              <label className="mb-3 block font-heading text-[20px] font-semibold text-[#F2F4F8]">
+              <label className="mb-3 block font-heading text-[20px] font-semibold text-app-text">
                 Ubicación del objeto
               </label>
-              <p className="mb-3 text-xs text-[#6E7480]">
+              <p className="mb-3 text-xs text-app-text-secondary">
                 Por defecto se usa tu ubicación, pero puedes ajustarla en el
                 mapa.
               </p>
@@ -713,7 +713,7 @@ function CreateObjectPage() {
                 onChange={handleLocationChange}
               />
               {fieldErrors.location && (
-                <p className="mt-2 text-sm text-[#ef4444]">
+                <p className="mt-2 text-sm text-[var(--color-app-danger)]">
                   {fieldErrors.location}
                 </p>
               )}
@@ -724,14 +724,14 @@ function CreateObjectPage() {
               <button
                 type="submit"
                 disabled={loadingSubmit}
-                className="rounded-[14px] bg-[#14B8A6] px-8 py-3 font-body text-[15px] font-semibold text-white transition-all hover:bg-[#0F766E] disabled:cursor-not-allowed disabled:opacity-70"
+                className="rounded-[14px] bg-vecilend-dark-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-vecilend-dark-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {loadingSubmit ? "Publicando..." : "Publicar producto"}
               </button>
 
               <div className="flex items-center">
                 {successMessage && (
-                  <div className="flex w-fit items-center gap-2 rounded-lg border border-[#4fdbc8]/50 bg-[#4fdbc8]/10 px-4 py-2 text-[#4fdbc8] animate-pulse">
+                  <div className="flex w-fit items-center gap-2 rounded-lg border border-vecilend-dark-primary/50 bg-vecilend-dark-primary/10 px-4 py-2 text-vecilend-dark-primary animate-pulse">
                     <span className="material-symbols-outlined text-sm">
                       check_circle
                     </span>
@@ -742,7 +742,7 @@ function CreateObjectPage() {
                 )}
 
                 {errorMessage && (
-                  <div className="flex w-fit items-center gap-2 rounded-lg border border-[#ef4444]/50 bg-[#ef4444]/10 px-4 py-2 text-[#ef4444] animate-pulse">
+                  <div className="flex w-fit items-center gap-2 rounded-lg border border-[var(--color-app-danger)]/50 bg-[var(--color-app-danger)]/10 px-4 py-2 text-[var(--color-app-danger)] animate-pulse">
                     <span className="material-symbols-outlined text-sm">
                       error
                     </span>

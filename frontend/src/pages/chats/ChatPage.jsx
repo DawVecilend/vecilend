@@ -215,7 +215,7 @@ function MessageBubble({ msg, onReply }) {
           className={
             "rounded-2xl px-4 py-2 " +
             (mine
-              ? "bg-app-primary text-[#003730] rounded-br-md"
+              ? "bg-app-primary text-[var(--color-app-success-on)] rounded-br-md"
               : "bg-app-bg-card border border-app-border text-app-text rounded-bl-md")
           }
         >
@@ -224,7 +224,7 @@ function MessageBubble({ msg, onReply }) {
               className={
                 "mb-2 border-l-2 pl-2 text-caption " +
                 (mine
-                  ? "border-[#003730] text-[#003730]/80"
+                  ? "border-vecilend-dark-primary text-[var(--color-app-success-on)]/80"
                   : "border-app-primary text-app-text-secondary")
               }
             >
@@ -247,7 +247,7 @@ function MessageBubble({ msg, onReply }) {
           <p
             className={
               "text-[10px] mt-1 text-right " +
-              (mine ? "text-[#003730]/70" : "text-app-text-secondary")
+              (mine ? "text-[var(--color-app-success-on)]/70" : "text-app-text-secondary")
             }
           >
             {formatDateTimeSmart(msg.created_at)}
@@ -667,7 +667,7 @@ function ChatPage() {
           type="button"
           onClick={handleSend}
           disabled={sending || !draft.trim()}
-          className="shrink-0 flex items-center justify-center h-11 w-11 rounded-full bg-app-primary text-[#003730] disabled:opacity-50 disabled:cursor-not-allowed transition-transform active:scale-95"
+          className="shrink-0 flex items-center justify-center h-11 w-11 rounded-full bg-app-primary text-[var(--color-app-success-on)] disabled:opacity-50 disabled:cursor-not-allowed transition-transform active:scale-95"
           aria-label="Enviar"
         >
           <span className="material-symbols-outlined">send</span>

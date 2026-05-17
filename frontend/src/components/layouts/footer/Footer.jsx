@@ -27,7 +27,7 @@ function Footer() {
           </div>
         </div>
 
-        <div className="order-2 my-8 h-px w-full bg-vecilend-dark-border md:hidden" />
+        <div className="order-2 my-8 h-px w-full bg-app-border md:hidden" />
 
         <div className="order-3 flex flex-col items-center md:items-start">
           <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">

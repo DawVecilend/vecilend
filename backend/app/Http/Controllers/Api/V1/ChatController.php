@@ -24,9 +24,10 @@ class ChatController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $userId = $request->user()->id;
+        $userId  = $request->user()->id;
+        $perPage = min((int) $request->input('per_page', 20), 50);
 
-        $converses = Conversa::query()
+        $paginator = Conversa::query()
             ->deUsuari($userId)
             ->with([
                 'usuari1:id,username,nom,cognoms,avatar_url',
@@ -38,7 +39,6 @@ class ChatController extends Controller
                 $q->where('emissor_id', '!=', $userId)
                     ->whereNull('llegit_at');
             }])
-            // Ordre per últim missatge — subselect a la mateixa taula
             ->orderByDesc(
                 Missatge::select('created_at')
                     ->whereColumn('conversa_id', 'converses.id')
@@ -46,10 +46,16 @@ class ChatController extends Controller
                     ->limit(1)
             )
             ->orderByDesc('updated_at')
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
-            'data' => ConversaResource::collection($converses),
+            'data' => ConversaResource::collection($paginator->getCollection()),
+            'meta' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'per_page'     => $paginator->perPage(),
+                'total'        => $paginator->total(),
+            ],
         ]);
     }
 
@@ -74,6 +80,10 @@ class ChatController extends Controller
                 $validated['objecte_id'] ?? null
             );
 
+            // Si l'usuari iniciador havia ocultat aquesta conversa anteriorment,
+            // la torna a fer visible per a ell — està obrint una conversa de nou.
+            $conversa->unhideFor($userId);
+
             // Si la conversa ja existia i ens passen un objecte_id diferent,
             // actualitzem la capçalera perquè la tarjeta "Sobre <objecte>" sigui
             // la que toca. Els missatges antics mantenen el seu objecte_id propi.
@@ -94,6 +104,11 @@ class ChatController extends Controller
                     'created_at'  => now(),
                 ]);
                 $conversa->touch();
+
+                // Si el receptor havia ocultat la conversa, el nou missatge
+                // la torna a fer visible per a ell.
+                $otherId = (int) $validated['user_id'];
+                $conversa->unhideFor($otherId);
             }
 
             return $conversa;
@@ -202,6 +217,15 @@ class ChatController extends Controller
                 'created_at'  => now(),
             ]);
             $conversa->touch();
+
+            // Si el receptor havia ocultat aquesta conversa, la tornem a fer
+            // visible per a ell — un missatge nou ressuscita el chat. L'emissor
+            // conserva el seu estat (no es desoculta a si mateix automàticament).
+            $otherId = $conversa->usuari_1_id === $userId
+                ? $conversa->usuari_2_id
+                : $conversa->usuari_1_id;
+            $conversa->unhideFor($otherId);
+
             return $m;
         });
 
@@ -241,6 +265,30 @@ class ChatController extends Controller
         return response()->json([
             'message' => 'Mensajes marcados como leídos.',
             'updated' => $afectats,
+        ]);
+    }
+
+    /**
+     * DELETE /api/v1/chats/{id}
+     *
+     * Oculta la conversa per a l'usuari autenticat. NO esborra la conversa
+     * ni els missatges — l'altre participant continua veient-la com sempre.
+     * Si l'altre li envia un missatge nou, tornarà a aparèixer a la llista
+     * (vegeu sendMessage).
+     */
+    public function destroy(Request $request, int $id): JsonResponse
+    {
+        $userId   = $request->user()->id;
+        $conversa = Conversa::findOrFail($id);
+
+        if (!$conversa->teParticipant($userId)) {
+            return response()->json(['message' => 'No tienes acceso a esta conversación.'], 403);
+        }
+
+        $conversa->hideFor($userId);
+
+        return response()->json([
+            'message' => 'Conversación eliminada.',
         ]);
     }
 }

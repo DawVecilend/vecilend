@@ -41,7 +41,7 @@ function ReviewModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4">
-      <div className="bg-[#161d1b] border border-[#3c4947] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div className="bg-app-bg-secondary border border-app-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
         <h2 className="text-app-text font-heading text-h2-desktop">
           Valorar a {otherUserName}
         </h2>
@@ -69,7 +69,7 @@ function ReviewModal({
           placeholder="Comentario (opcional)"
           rows={4}
           maxLength={1000}
-          className="w-full rounded-xl bg-vecilend-dark-neutral border border-app-border p-3 text-app-text"
+          className="w-full rounded-xl bg-app-neutral border border-app-border p-3 text-app-text"
         />
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -87,7 +87,7 @@ function ReviewModal({
             type="button"
             onClick={handleSubmit}
             disabled={submitting || puntuacio < 1}
-            className="px-5 py-2 rounded-full bg-vecilend-dark-primary text-[#003730] font-bold disabled:opacity-50"
+            className="px-5 py-2 rounded-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold disabled:opacity-50"
           >
             {submitting ? "Enviando…" : "Enviar valoración"}
           </button>

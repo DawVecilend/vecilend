@@ -37,18 +37,18 @@ function LoginPage() {
   return (
     <div className="bg-app-bg text-app-text antialiased md:h-[calc(100vh-80px)] md:overflow-hidden flex flex-col dark">
       <main className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
-        <section className="hidden md:flex md:w-1/2 relative bg-[#090f0e] items-center justify-center h-full overflow-hidden">
+        <section className="hidden md:flex md:w-1/2 relative bg-app-bg-card items-center justify-center h-full overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img
               alt="Professional Gear"
               className="w-full h-full object-cover opacity-40"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQW8YXGcPQGsj1Q0KeE6EM5PNeIb_2pLMJDvddODr88dUMeNgFpr5Qs5dEO2AB3ny82vvXhxKR1aN2E7BqjU2sV5FtcQZ-345ynN76RDdZv2smlnejUHG2dyJnTy2VyYGx6-IWF-CKxfbXp8pzNllfgIcWjEMqPvNwxWyDXubGsjAiiVqX-uFuvxCluOPaesKLrAtqv5nHmjRfKM-WAQLXtTiquVhbmhJZ62YM7sq7EbMBlR3I8WQF1s_63H87bU9H2tZ7BGot5ARl"
             />
-            <div className="absolute inset-0 bg-linear-to-tr from-[#0e1513] via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-app-bg via-transparent to-transparent"></div>
           </div>
           <div className="relative z-10 max-w-lg px-8">
-            <div className="bg-[#1a211f]/60 backdrop-blur-xl border border-app-border p-8 rounded-xl shadow-2xl">
-              <div className="flex gap-1 mb-4 text-[#4fdbc8]">
+            <div className="bg-app-bg-card-secondary/60 backdrop-blur-xl border border-app-border p-8 rounded-xl shadow-2xl">
+              <div className="flex gap-1 mb-4 text-vecilend-dark-primary">
                 {[...Array(5)].map((_, i) => (
                   <span
                     key={i}
@@ -65,7 +65,7 @@ function LoginPage() {
                 de mi zona.”
               </p>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#4fdbc8]">
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-vecilend-dark-primary">
                   <img
                     alt="User Avatar"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3lCex78R9gss1rSRXiBMONf6Kpo-aObjVvhOsdxYfDEV5VkAjs6H5udYWFVTbBQLLe-5OX-1Nfr__L2EXX8_85qkavwodEygWuVjZ6R_S-ujoopRTJ6XdUyiVw_F4VHAySzA5WVdjgh6exDBGT_RwCUnYkkCZZYY6CTNyMrYDouOrmBTLw1SX27Er49FLqX-_HboWJrblOlE2XV8QqCIM-hFlX3WtzUVzAQ7DIjz6roiYJcCohYGKap5Asn5a0VIiVco4tNU-khmT"
@@ -73,7 +73,7 @@ function LoginPage() {
                 </div>
                 <div>
                   <p className="font-bold text-app-text">Oriol Ferrer</p>
-                  <p className="text-sm text-[#859490]">Vecino de Barcelona</p>
+                  <p className="text-sm text-app-text-secondary">Vecino de Barcelona</p>
                 </div>
               </div>
             </div>
@@ -87,7 +87,7 @@ function LoginPage() {
               <h1 className="text-4xl font-extrabold text-app-text tracking-tight mb-2">
                 Bienvenido/a
               </h1>
-              <p className="text-[#859490] text-lg">
+              <p className="text-app-text-secondary text-lg">
                 Inicia sesión para acceder a tu comunidad.
               </p>
             </div>
@@ -96,7 +96,7 @@ function LoginPage() {
             <div className="flex flex-col gap-3 mb-6">
               <Link
                 to="/feature-coming-soon"
-                className="w-full flex items-center justify-center gap-3 bg-[#1a211f] hover:bg-[#252b2a] border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -120,9 +120,9 @@ function LoginPage() {
               </Link>
               <Link
                 to="/feature-coming-soon"
-                className="w-full flex items-center justify-center gap-3 bg-[#1a211f] hover:bg-[#252b2a] border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]"
               >
-                <svg className="w-5 h-5 fill-[#dde4e1]" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                   <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2.002-.156-3.725 1.09-4.51 1.09zM15.53 4.854c.87-1.05 1.454-2.506 1.293-3.96-1.247.052-2.76.831-3.656 1.883-.792.935-1.48 2.442-1.293 3.869 1.39.104 2.786-.74 3.656-1.792z"></path>
                 </svg>
                 <span>Continuar con Apple</span>
@@ -131,7 +131,7 @@ function LoginPage() {
 
             <div className="relative flex items-center justify-center mb-8">
               <div className="flex-grow border-t border-app-border"></div>
-              <span className="mx-4 text-xs font-bold text-[#859490] uppercase tracking-widest">
+              <span className="mx-4 text-xs font-bold text-app-text-secondary uppercase tracking-widest">
                 O iniciar con
               </span>
               <div className="flex-grow border-t border-app-border"></div>
@@ -147,7 +147,7 @@ function LoginPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, login: e.target.value })
                   }
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
                   placeholder="Nombre de usuario o email"
                   type="text"
                   required
@@ -161,7 +161,7 @@ function LoginPage() {
                   </label>
                   <Link
                     to="/forgot-password"
-                    className="text-xs font-bold text-[#4fdbc8] hover:underline"
+                    className="text-xs font-bold text-vecilend-dark-primary hover:underline"
                   >
                     ¿Olvidaste tu contraseña?
                   </Link>
@@ -171,20 +171,20 @@ function LoginPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
                   placeholder="••••••••"
                   required
                 />
               </div>
 
               {error && (
-                <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-2 rounded-lg text-sm font-medium text-center">
+                <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-2 rounded-lg text-sm font-medium text-center">
                   {error}
                 </div>
               )}
 
               <button
-                className={`w-full bg-[#4fdbc8] text-[#003731] font-bold py-4 rounded-lg shadow-lg shadow-[#4fdbc8]/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-[#14b8a6] active:scale-[0.97]"}`}
+                className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary active:scale-[0.97]"}`}
                 type="submit"
                 disabled={submitting}
               >
@@ -200,11 +200,11 @@ function LoginPage() {
             </form>
 
             <div className="mt-8 text-center">
-              <p className="text-[#859490] text-sm">
+              <p className="text-app-text-secondary text-sm">
                 ¿No tienes cuenta?{" "}
                 <Link
                   to="/register"
-                  className="text-[#4fdbc8] font-bold hover:underline"
+                  className="text-vecilend-dark-primary font-bold hover:underline"
                 >
                   Crea una aquí
                 </Link>

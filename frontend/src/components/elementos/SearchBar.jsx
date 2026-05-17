@@ -101,15 +101,15 @@ function SearchBar() {
 
   return (
     <>
-      <div className="hidden lg:flex items-center rounded-full bg-[#1d2422] px-2 py-1 transition-colors">
+      <div className="hidden lg:flex items-center rounded-full bg-app-bg-card-secondary px-2 py-1 transition-colors">
         {/* Lupa = botó d'execució */}
         <button
           type="button"
           onClick={executeSearch}
           aria-label="Buscar"
-          className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-[#333b39] transition-colors"
+          className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-app-bg-card-secondary transition-colors"
         >
-          <span className="material-symbols-outlined text-[#8b9390]">
+          <span className="material-symbols-outlined text-app-text-secondary">
             search
           </span>
         </button>
@@ -117,7 +117,7 @@ function SearchBar() {
         <input
           className={`${
             user ? "w-80" : "w-56"
-          } bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-[#e1e3e0] placeholder:text-[#8b9390] px-3`}
+          } bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-app-text placeholder:text-app-text-secondary px-3`}
           type="text"
           placeholder="Buscar objeto..."
           value={query}
@@ -129,7 +129,7 @@ function SearchBar() {
         <button
           type="button"
           onClick={() => setFiltersOpen(true)}
-          className="relative inline-flex items-center gap-1 rounded-full bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] px-4 py-2 text-sm font-bold text-[#003730] transition-all hover:from-vecilend-dark-primary-hover hover:to-vecilend-dark-primary-hover hover:text-white active:scale-95"
+          className="relative inline-flex items-center gap-1 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-4 py-2 text-sm font-bold text-[var(--color-app-success-on)] transition-all hover:from-vecilend-dark-primary-hover hover:to-vecilend-dark-primary-hover hover:text-white active:scale-95"
         >
           <span className="material-symbols-outlined text-base">tune</span>
           Filtros
