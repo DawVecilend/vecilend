@@ -86,7 +86,7 @@ function FieldError({ message }) {
   if (!message) return null;
 
   return (
-    <p className="text-xs text-[#ffb4ab] mt-1 ml-1 font-body">{message}</p>
+    <p className="text-xs text-[var(--color-app-danger)] mt-1 ml-1 font-body">{message}</p>
   );
 }
 
@@ -287,7 +287,7 @@ function PaymentMockPage() {
           </div>
         </div>
 
-        <div className="rounded-xl bg-vecilend-dark-neutral border border-app-border p-4 mb-6">
+        <div className="rounded-xl bg-app-neutral border border-app-border p-4 mb-6">
           <p className="text-caption text-app-text-secondary mb-1">
             Vas a pagar
           </p>
@@ -354,7 +354,7 @@ function PaymentMockPage() {
                       number: validateCardNumber(card.number),
                     }))
                   }
-                  className="mt-1 w-full bg-vecilend-dark-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
+                  className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
                 />
               </label>
 
@@ -391,7 +391,7 @@ function PaymentMockPage() {
                       name: validateName(card.name),
                     }))
                   }
-                  className="mt-1 w-full bg-vecilend-dark-neutral border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
+                  className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
                 />
               </label>
 
@@ -428,7 +428,7 @@ function PaymentMockPage() {
                         exp: validateExp(card.exp),
                       }))
                     }
-                    className="mt-1 w-full bg-vecilend-dark-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
+                    className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
                   />
                 </label>
 
@@ -464,7 +464,7 @@ function PaymentMockPage() {
                         cvv: validateCvv(card.cvv),
                       }))
                     }
-                    className="mt-1 w-full bg-vecilend-dark-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
+                    className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
                   />
                 </label>
 
@@ -480,7 +480,7 @@ function PaymentMockPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full mt-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+              className="w-full mt-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
             >
               {submitting
                 ? "Procesando…"

@@ -1,11 +1,28 @@
 import api from "./api";
 
 /**
- * GET /api/v1/chats — Llista totes les converses on participa l'usuari.
+ * GET /api/v1/chats — Llista paginada de converses.
+ * @param {Object} options
+ * @param {number} options.page          Pàgina (default 1)
+ * @param {number} options.per_page      Per pàgina (default 20, max 50)
  */
-export async function getChats() {
-  const response = await api.get("/chats");
-  return response.data.data;
+export async function getChats({ page = 1, per_page = 20 } = {}) {
+  const response = await api.get("/chats", {
+    params: { page, per_page },
+  });
+  return {
+    data: response.data.data,
+    meta: response.data.meta || null,
+  };
+}
+
+/**
+ * DELETE /api/v1/chats/{id} — Oculta la conversa per a l'usuari actual.
+ * Si l'altre envia un missatge nou, tornarà a aparèixer.
+ */
+export async function deleteChat(id) {
+  const response = await api.delete(`/chats/${id}`);
+  return response.data;
 }
 
 /**

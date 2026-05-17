@@ -59,7 +59,7 @@ function BtnOrder({ value = "recent", onChange }) {
                 className={`flex w-full items-center px-4 py-3 text-left font-body text-[14px] transition ${
                   isActive
                     ? "bg-vecilend-dark-primary-hover text-vecilend-dark-primary"
-                    : "text-app-text hover:bg-vecilend-dark-neutral"
+                    : "text-app-text hover:bg-app-neutral"
                 }`}
               >
                 {option.label}

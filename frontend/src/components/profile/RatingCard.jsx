@@ -9,16 +9,16 @@ import React from "react";
  */
 function RatingCard({ value, label, starred = false }) {
   return (
-    <div className="bg-[#090f0e] px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[110px]">
+    <div className="bg-app-bg-card px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[110px]">
       <div className="flex items-center gap-1">
-        <span className="text-[#4fdbc8] font-bold text-xl">{value ?? "-"}</span>
+        <span className="text-vecilend-dark-primary font-bold text-xl">{value ?? "-"}</span>
         {starred && value != null && (
           <span className="material-symbols-outlined icon-filled text-orange-500 text-sm">
             star
           </span>
         )}
       </div>
-      <span className="text-[10px] font-bold uppercase tracking-wider text-[#859490] text-center">
+      <span className="text-[10px] font-bold uppercase tracking-wider text-app-text-secondary text-center">
         {label}
       </span>
     </div>

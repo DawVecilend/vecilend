@@ -55,8 +55,8 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
         ? Number(initialFilters.min_user_rating)
         : 0,
     });
-    // dateRange el gestiona DateRangeCalendar via initialRange
-  }, [open, initialFilters]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   /**
    * Guarda els filtres a l'URL. Comportament:
@@ -140,10 +140,10 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
       maxWidth="md"
       PaperProps={{
         sx: {
-          backgroundColor: "#0A0A0B",
-          color: "#F2F4F8",
+          backgroundColor: "var(--color-app-bg-card)",
+          color: "var(--color-app-text)",
           borderRadius: isMobile ? 0 : 4,
-          border: "1px solid #2A2B31",
+          border: "1px solid var(--color-app-border)",
         },
       }}
     >
@@ -151,17 +151,17 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
         sx={{
           fontFamily: "Montserrat",
           fontWeight: 700,
-          color: "#F2F4F8",
+          color: "var(--color-app-text)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          borderBottom: "1px solid #2A2B31",
+          borderBottom: "1px solid var(--color-app-border)",
         }}
       >
         Filtros de búsqueda
         <IconButton
           onClick={onClose}
-          sx={{ color: "#B6BCC8" }}
+          sx={{ color: "var(--color-app-text-secondary)" }}
           aria-label="Cerrar"
         >
           <span className="material-symbols-outlined">close</span>
@@ -230,7 +230,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
 
       <DialogActions
         sx={{
-          borderTop: "1px solid #2A2B31",
+          borderTop: "1px solid var(--color-app-border)",
           px: 3,
           py: 2,
           gap: 1,
@@ -247,7 +247,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
         <button
           type="button"
           onClick={handleApply}
-          className="rounded-full bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] px-6 py-3 text-body-base font-bold text-[#003730]"
+          className="rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)]"
         >
           Guardar filtros
         </button>

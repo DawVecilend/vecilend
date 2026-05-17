@@ -150,7 +150,7 @@ function SecuritySettingsPage() {
           <main className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
-                Seguridad de la <span className="text-[#4fdbc8]">Cuenta</span>
+                Seguridad de la <span className="text-vecilend-dark-primary">Cuenta</span>
               </h1>
 
               <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
@@ -160,16 +160,16 @@ function SecuritySettingsPage() {
             </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-            <section className="lg:col-span-7 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
+            <section className="lg:col-span-7 bg-app-bg-card-secondary/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="material-symbols-outlined text-[#4fdbc8]">
+                <span className="material-symbols-outlined text-vecilend-dark-primary">
                   lock
                 </span>
                 <h2 className="text-xl font-bold">Cambiar Contraseña</h2>
               </div>
 
               {successMessage && (
-                <div className="mb-6 bg-[#4fdbc8]/10 border border-[#4fdbc8]/50 text-[#4fdbc8] px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
+                <div className="mb-6 bg-vecilend-dark-primary/10 border border-vecilend-dark-primary/50 text-vecilend-dark-primary px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
                   <span className="material-symbols-outlined text-base">
                     check_circle
                   </span>
@@ -180,7 +180,7 @@ function SecuritySettingsPage() {
               )}
 
               {errorMessage && (
-                <div className="mb-6 bg-[#ef4444]/10 border border-[#ef4444]/50 text-[#ef4444] px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
+                <div className="mb-6 bg-[var(--color-app-danger)]/10 border border-[var(--color-app-danger)]/50 text-[var(--color-app-danger)] px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
                   <span className="material-symbols-outlined text-base">
                     error
                   </span>
@@ -200,7 +200,7 @@ function SecuritySettingsPage() {
                     name="current_password"
                     value={passwords.current_password}
                     onChange={handlePasswordChange}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
                     placeholder="••••••••••••"
                   />
                 </div>
@@ -215,7 +215,7 @@ function SecuritySettingsPage() {
                       name="password"
                       value={passwords.password}
                       onChange={handlePasswordChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
                       placeholder="••••••••"
                     />
 
@@ -231,7 +231,7 @@ function SecuritySettingsPage() {
                       name="password_confirmation"
                       value={passwords.password_confirmation}
                       onChange={handlePasswordChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent transition-all outline-none text-app-text"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
                       placeholder="••••••••"
                     />
                   </div>
@@ -240,10 +240,10 @@ function SecuritySettingsPage() {
                 <div className="pt-2 flex justify-end">
                   <button
                     disabled={isLoading}
-                    className={`bg-[#4fdbc8] text-[#003731] px-10 py-3 rounded-lg font-bold shadow-lg transition-all ${
+                    className={`bg-vecilend-dark-primary text-[var(--color-app-success-on)] px-10 py-3 rounded-lg font-bold shadow-lg transition-all ${
                       isLoading
                         ? "opacity-70 cursor-not-allowed"
-                        : "hover:bg-[#14b8a6] active:scale-95"
+                        : "hover:bg-vecilend-dark-primary active:scale-95"
                     }`}
                     type="submit"
                   >
@@ -253,11 +253,11 @@ function SecuritySettingsPage() {
               </form>
             </section>
 
-            <section className="lg:col-span-5 bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl flex flex-col justify-between">
+            <section className="lg:col-span-5 bg-app-bg-card-secondary/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-[#ffb59e]">
+                    <span className="material-symbols-outlined text-[var(--color-app-warning)]">
                       verified_user
                     </span>
                     <h2 className="text-xl font-bold">Autenticación 2FA</h2>
@@ -273,7 +273,7 @@ function SecuritySettingsPage() {
                       onClick={(e) => e.preventDefault()}
                       onChange={() => {}}
                     />
-                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#bbcac6] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5"></div>
+                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5"></div>
                   </label>
                 </div>
 
@@ -282,7 +282,7 @@ function SecuritySettingsPage() {
                   aplicación de autenticación.
                 </p>
 
-                <p className="text-xs text-[#ffb59e] mb-6 leading-relaxed italic">
+                <p className="text-xs text-[var(--color-app-warning)] mb-6 leading-relaxed italic">
                   Esta funcionalidad se encuentra en fase de desarrollo y
                   todavía no ha sido implementada.
                 </p>
@@ -309,16 +309,16 @@ function SecuritySettingsPage() {
                   disabled
                   aria-disabled="true"
                   onClick={(e) => e.preventDefault()}
-                  className="w-full py-3 border border-[#4fdbc8]/30 text-[#4fdbc8]/60 rounded-lg text-sm font-bold cursor-not-allowed mt-2"
+                  className="w-full py-3 border border-vecilend-dark-primary/30 text-vecilend-dark-primary/60 rounded-lg text-sm font-bold cursor-not-allowed mt-2"
                 >
                   Configurar métodos alternativos
                 </button>
               </div>
             </section>
 
-            <section className="lg:col-span-12 bg-[#93000a]/10 border border-[#ffb4ab]/20 rounded-xl p-6 shadow-xl flex flex-col gap-4">
+            <section className="lg:col-span-12 bg-[var(--color-app-danger)]/10 border border-[var(--color-app-danger)]/20 rounded-xl p-6 shadow-xl flex flex-col gap-4">
               <div>
-                <h2 className="text-lg font-bold text-[#ffb4ab] mb-2 flex items-center gap-2">
+                <h2 className="text-lg font-bold text-[var(--color-app-danger)] mb-2 flex items-center gap-2">
                   <span className="material-symbols-outlined text-sm">
                     warning
                   </span>
@@ -331,7 +331,7 @@ function SecuritySettingsPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="rounded-lg border border-[#ffb59e]/30 bg-[#0e1513]/40 p-4 flex flex-col gap-3">
+                <div className="rounded-lg border border-[var(--color-app-warning)]/30 bg-app-bg/40 p-4 flex flex-col gap-3">
                   <div>
                     <h3 className="font-bold text-app-text mb-1">
                       Desactivar cuenta
@@ -350,13 +350,13 @@ function SecuritySettingsPage() {
                       setDeactivateError(null);
                       setDeactivateOpen(true);
                     }}
-                    className="w-full px-5 py-2.5 rounded-lg border border-[#ffb59e] text-[#ffb59e] font-bold hover:bg-[#ffb59e]/10 transition-all active:scale-95"
+                    className="w-full px-5 py-2.5 rounded-lg border border-[var(--color-app-warning)] text-[var(--color-app-warning)] font-bold hover:bg-[var(--color-app-warning)]/10 transition-all active:scale-95"
                   >
                     Desactivar cuenta
                   </button>
                 </div>
 
-                <div className="rounded-lg border border-[#ffb4ab]/30 bg-[#0e1513]/40 p-4 flex flex-col gap-3">
+                <div className="rounded-lg border border-[var(--color-app-danger)]/30 bg-app-bg/40 p-4 flex flex-col gap-3">
                   <div>
                     <h3 className="font-bold text-app-text mb-1">
                       Eliminar cuenta
@@ -375,7 +375,7 @@ function SecuritySettingsPage() {
                       setDeleteError(null);
                       setDeleteOpen(true);
                     }}
-                    className="w-full px-5 py-2.5 rounded-lg border border-[#ffb4ab] text-[#ffb4ab] font-bold hover:bg-[#ffb4ab] hover:text-[#690005] transition-all active:scale-95"
+                    className="w-full px-5 py-2.5 rounded-lg border border-[var(--color-app-danger)] text-[var(--color-app-danger)] font-bold hover:bg-[var(--color-app-danger)]/20 hover:text-[var(--color-app-danger)] transition-all active:scale-95"
                   >
                     Eliminar cuenta
                   </button>
@@ -414,7 +414,7 @@ function SecuritySettingsPage() {
           }}
         >
           <span className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#ef4444]">
+            <span className="material-symbols-outlined text-[var(--color-app-danger)]">
               warning
             </span>
             Eliminar tu cuenta
@@ -453,7 +453,7 @@ function SecuritySettingsPage() {
                 placeholder="Tu contraseña"
                 autoFocus
                 disabled={deleteBusy}
-                className="w-full bg-[#16181C] border border-app-border rounded-lg px-4 py-3 pr-11 text-app-text focus:ring-2 focus:ring-[#ef4444] outline-none"
+                className="w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 pr-11 text-app-text focus:ring-2 focus:ring-[var(--color-app-danger)] outline-none"
               />
 
               <button
@@ -474,12 +474,12 @@ function SecuritySettingsPage() {
           </label>
 
           {deleteError && (
-            <div className="mt-3 flex items-start gap-2 rounded-lg border border-[#ef4444]/50 bg-[#ef4444]/10 px-3 py-2">
-              <span className="material-symbols-outlined text-sm text-[#ef4444] mt-0.5">
+            <div className="mt-3 flex items-start gap-2 rounded-lg border border-[var(--color-app-danger)]/50 bg-[var(--color-app-danger)]/10 px-3 py-2">
+              <span className="material-symbols-outlined text-sm text-[var(--color-app-danger)] mt-0.5">
                 error
               </span>
 
-              <p className="text-xs text-[#ef4444] font-body leading-relaxed">
+              <p className="text-xs text-[var(--color-app-danger)] font-body leading-relaxed">
                 {deleteError}
               </p>
             </div>
@@ -498,7 +498,7 @@ function SecuritySettingsPage() {
             type="button"
             onClick={() => setDeleteOpen(false)}
             disabled={deleteBusy}
-            className="rounded-full border border-[#2A2B31] px-5 py-2 text-label font-body text-app-text hover:bg-[#16181C] disabled:opacity-50"
+            className="rounded-full border border-app-border px-5 py-2 text-label font-body text-app-text hover:bg-app-neutral disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -507,7 +507,7 @@ function SecuritySettingsPage() {
             type="button"
             onClick={handleConfirmDelete}
             disabled={deleteBusy || !deletePassword}
-            className="rounded-full bg-[#ef4444] hover:bg-[#dc2626] px-5 py-2 text-label font-bold text-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-full bg-[var(--color-app-danger)] hover:bg-[var(--color-app-danger)] px-5 py-2 text-label font-bold text-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {deleteBusy ? "Eliminando…" : "Sí, eliminar mi cuenta"}
           </button>
@@ -541,7 +541,7 @@ function SecuritySettingsPage() {
           }}
         >
           <span className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#ffb59e]">
+            <span className="material-symbols-outlined text-[var(--color-app-warning)]">
               warning
             </span>
             Desactivar tu cuenta
@@ -572,12 +572,12 @@ function SecuritySettingsPage() {
           </p>
 
           {deactivateError && (
-            <div className="mt-4 flex items-start gap-2 rounded-lg border border-[#ef4444]/50 bg-[#ef4444]/10 px-3 py-2">
-              <span className="material-symbols-outlined text-sm text-[#ef4444] mt-0.5">
+            <div className="mt-4 flex items-start gap-2 rounded-lg border border-[var(--color-app-danger)]/50 bg-[var(--color-app-danger)]/10 px-3 py-2">
+              <span className="material-symbols-outlined text-sm text-[var(--color-app-danger)] mt-0.5">
                 error
               </span>
 
-              <p className="text-xs text-[#ef4444] font-body leading-relaxed">
+              <p className="text-xs text-[var(--color-app-danger)] font-body leading-relaxed">
                 {deactivateError}
               </p>
             </div>
@@ -596,7 +596,7 @@ function SecuritySettingsPage() {
             type="button"
             onClick={() => setDeactivateOpen(false)}
             disabled={deactivateBusy}
-            className="rounded-full border border-[#2A2B31] px-5 py-2 text-label font-body text-app-text hover:bg-[#16181C] disabled:opacity-50"
+            className="rounded-full border border-app-border px-5 py-2 text-label font-body text-app-text hover:bg-app-neutral disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -605,7 +605,7 @@ function SecuritySettingsPage() {
             type="button"
             onClick={handleConfirmDeactivate}
             disabled={deactivateBusy}
-            className="rounded-full bg-[#ffb59e] hover:bg-[#f38764] px-5 py-2 text-label font-bold text-[#003731] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-full bg-[var(--color-app-warning)] hover:bg-[var(--color-app-warning)] px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {deactivateBusy ? "Desactivando…" : "Sí, desactivar mi cuenta"}
           </button>

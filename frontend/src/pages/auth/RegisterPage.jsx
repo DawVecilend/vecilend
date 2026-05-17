@@ -13,7 +13,7 @@ function FieldError({ messages }) {
   if (!messages || messages.length === 0) return null;
 
   return (
-    <p className="text-xs text-[#ffb4ab] mt-1 ml-1 font-body">
+    <p className="text-xs text-[var(--color-app-danger)] mt-1 ml-1 font-body">
       {Array.isArray(messages) ? messages[0] : messages}
     </p>
   );
@@ -303,7 +303,7 @@ function RegisterPage() {
     <div className="bg-app-bg text-app-text antialiased md:h-[calc(100vh-80px)] md:overflow-hidden flex flex-col dark">
       {step === 1 && (
         <main className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
-          <section className="hidden md:flex md:w-1/2 relative bg-[#090f0e] items-center justify-center h-full overflow-hidden">
+          <section className="hidden md:flex md:w-1/2 relative bg-app-bg-card items-center justify-center h-full overflow-hidden">
             <div className="absolute inset-0 z-0">
               <img
                 alt="Producto compartido entre vecinos"
@@ -311,12 +311,12 @@ function RegisterPage() {
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQW8YXGcPQGsj1Q0KeE6EM5PNeIb_2pLMJDvddODr88dUMeNgFpr5Qs5dEO2AB3ny82vvXhxKR1aN2E7BqjU2sV5FtcQZ-345ynN76RDdZv2smlnejUHG2dyJnTy2VyYGx6-IWF-CKxfbXp8pzNllfgIcWjEMqPvNwxWyDXubGsjAiiVqX-uFuvxCluOPaesKLrAtqv5nHmjRfKM-WAQLXtTiquVhbmhJZ62YM7sq7EbMBlR3I8WQF1s_63H87bU9H2tZ7BGot5ARl"
               />
 
-              <div className="absolute inset-0 bg-linear-to-tr from-[#0e1513] via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-linear-to-tr from-app-bg via-transparent to-transparent"></div>
             </div>
 
             <div className="relative z-10 max-w-lg px-8">
-              <div className="bg-[#1a211f]/60 backdrop-blur-xl border border-app-border p-8 rounded-xl shadow-2xl">
-                <div className="flex gap-1 mb-4 text-[#4fdbc8]">
+              <div className="bg-app-bg-card-secondary/60 backdrop-blur-xl border border-app-border p-8 rounded-xl shadow-2xl">
+                <div className="flex gap-1 mb-4 text-vecilend-dark-primary">
                   {[...Array(5)].map((_, i) => (
                     <span
                       key={i}
@@ -335,7 +335,7 @@ function RegisterPage() {
                 </p>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#4fdbc8]">
+                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-vecilend-dark-primary">
                     <img
                       alt="Avatar de usuario"
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3lCex78R9gss1rSRXiBMONf6Kpo-aObjVvhOsdxYfDEV5VkAjs6H5udYWFVTbBQLLe-5OX-1Nfr__L2EXX8_85qkavwodEygWuVjZ6R_S-ujoopRTJ6XdUyiVw_F4VHAySzA5WVdjgh6exDBGT_RwCUnYkkCZZYY6CTNyMrYDouOrmBTLw1SX27Er49FLqX-_HboWJrblOlE2XV8QqCIM-hFlX3WtzUVzAQ7DIjz6roiYJcCohYGKap5Asn5a0VIiVco4tNU-khmT"
@@ -343,9 +343,9 @@ function RegisterPage() {
                   </div>
 
                   <div>
-                    <p className="font-bold text-app-text">Laura Martínez</p>
-                    <p className="text-sm text-[#859490]">
-                      Vecina de Barcelona
+                    <p className="font-bold text-app-text">Oriol Ferrer</p>
+                    <p className="text-sm text-app-text-secondary">
+                      Vecino de Barcelona
                     </p>
                   </div>
                 </div>
@@ -360,13 +360,13 @@ function RegisterPage() {
                   Crear cuenta
                 </h1>
 
-                <p className="text-[#859490] text-lg">
+                <p className="text-app-text-secondary text-lg">
                   Únete a Vecilend y empieza a compartir con vecinos de tu zona.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 mb-6">
-                <button className="w-full flex items-center justify-center gap-3 bg-[#1a211f] hover:bg-[#252b2a] border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]">
+                <button className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]">
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -389,8 +389,8 @@ function RegisterPage() {
                   <span>Continuar con Google</span>
                 </button>
 
-                <button className="w-full flex items-center justify-center gap-3 bg-[#1a211f] hover:bg-[#252b2a] border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]">
-                  <svg className="w-5 h-5 fill-[#dde4e1]" viewBox="0 0 24 24">
+                <button className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]">
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                     <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2.002-.156-3.725 1.09-4.51 1.09zM15.53 4.854c.87-1.05 1.454-2.506 1.293-3.96-1.247.052-2.76.831-3.656 1.883-.792.935-1.48 2.442-1.293 3.869 1.39.104 2.786-.74 3.656-1.792z"></path>
                   </svg>
 
@@ -401,7 +401,7 @@ function RegisterPage() {
               <div className="relative flex items-center justify-center mb-8">
                 <div className="flex-grow border-t border-app-border"></div>
 
-                <span className="mx-4 text-xs font-bold text-[#859490] uppercase tracking-widest">
+                <span className="mx-4 text-xs font-bold text-app-text-secondary uppercase tracking-widest">
                   O usar cuenta
                 </span>
 
@@ -424,7 +424,7 @@ function RegisterPage() {
                         username: undefined,
                       }));
                     }}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
                     placeholder="Nombre de usuario"
                     type="text"
                     required
@@ -444,7 +444,7 @@ function RegisterPage() {
                       handleChange(e);
                       setFieldErrors((prev) => ({ ...prev, email: undefined }));
                     }}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
                     placeholder="correo@ejemplo.com"
                     type="email"
                     required
@@ -453,13 +453,13 @@ function RegisterPage() {
                 </div>
 
                 {error && (
-                  <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-2 rounded-lg text-sm font-medium text-center">
+                  <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-2 rounded-lg text-sm font-medium text-center">
                     {error}
                   </div>
                 )}
 
                 <button
-                  className={`w-full bg-[#4fdbc8] text-[#003731] font-bold py-4 rounded-lg shadow-lg shadow-[#4fdbc8]/20 transition-all flex items-center justify-center gap-2 mt-4 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#14b8a6] active:scale-[0.97]"}`}
+                  className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary active:scale-[0.97]"}`}
                   type="submit"
                   disabled={isLoading}
                 >
@@ -476,11 +476,11 @@ function RegisterPage() {
               </form>
 
               <div className="mt-8 text-center">
-                <p className="text-[#859490] text-sm">
+                <p className="text-app-text-secondary text-sm">
                   ¿Ya tienes cuenta?{" "}
                   <Link
                     to="/login"
-                    className="text-[#4fdbc8] font-bold hover:underline"
+                    className="text-vecilend-dark-primary font-bold hover:underline"
                   >
                     Inicia sesión
                   </Link>
@@ -496,26 +496,26 @@ function RegisterPage() {
           <div className="w-full max-w-md -mt-12 md:-mt-8">
             <div className="mb-10 md:mb-6">
               <div className="flex justify-between mb-3 px-1">
-                <span className="text-xs font-bold tracking-widest text-[#4fdbc8] uppercase">
+                <span className="text-xs font-bold tracking-widest text-vecilend-dark-primary uppercase">
                   Paso 2 de 3
                 </span>
 
-                <span className="text-xs font-medium text-[#859490]">
+                <span className="text-xs font-medium text-app-text-secondary">
                   Verificación de email
                 </span>
               </div>
 
-              <div className="flex h-1.5 w-full bg-[#1a211f] rounded-full overflow-hidden">
-                <div className="h-full w-1/3 bg-[#4fdbc8]/30"></div>
-                <div className="h-full w-1/3 bg-[#4fdbc8]"></div>
+              <div className="flex h-1.5 w-full bg-app-bg-card-secondary rounded-full overflow-hidden">
+                <div className="h-full w-1/3 bg-vecilend-dark-primary/30"></div>
+                <div className="h-full w-1/3 bg-vecilend-dark-primary"></div>
                 <div className="h-full w-1/3 bg-transparent"></div>
               </div>
             </div>
 
-            <div className="bg-[#1a211f] rounded-xl p-8 border border-app-border shadow-2xl relative">
+            <div className="bg-app-bg-card-secondary rounded-xl p-8 border border-app-border shadow-2xl relative">
               <button
                 onClick={() => setStep(1)}
-                className="absolute top-6 left-6 flex items-center gap-1 text-[#859490] hover:text-[#4fdbc8] transition-colors font-medium text-sm"
+                className="absolute top-6 left-6 flex items-center gap-1 text-app-text-secondary hover:text-vecilend-dark-primary transition-colors font-medium text-sm"
               >
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_back
@@ -525,8 +525,8 @@ function RegisterPage() {
               </button>
 
               <div className="flex flex-col items-center mb-6 mt-2">
-                <div className="w-20 h-20 bg-[#14b8a6]/20 rounded-full flex items-center justify-center mb-4 ring-4 ring-[#14b8a6]/5">
-                  <span className="material-symbols-outlined icon-filled text-[#4fdbc8] text-4xl">
+                <div className="w-20 h-20 bg-vecilend-dark-primary/20 rounded-full flex items-center justify-center mb-4 ring-4 ring-vecilend-dark-primary/5">
+                  <span className="material-symbols-outlined icon-filled text-vecilend-dark-primary text-4xl">
                     mail
                   </span>
                 </div>
@@ -537,7 +537,7 @@ function RegisterPage() {
 
                 <p className="text-app-text-secondary text-center text-sm leading-relaxed">
                   Hemos enviado un código de verificación a{" "}
-                  <span className="font-bold text-[#4fdbc8]">
+                  <span className="font-bold text-vecilend-dark-primary">
                     {formData.email}
                   </span>
                   . Introduce el código para confirmar tu cuenta.
@@ -548,7 +548,7 @@ function RegisterPage() {
                 <div className="relative py-2 flex items-center">
                   <div className="flex-grow border-t border-app-border"></div>
 
-                  <span className="flex-shrink mx-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#859490]">
+                  <span className="flex-shrink mx-4 text-[10px] font-bold uppercase tracking-[0.2em] text-app-text-secondary">
                     Introduce el código
                   </span>
 
@@ -581,7 +581,7 @@ function RegisterPage() {
                             onPaste={handleOtpPaste}
                             inputMode="numeric"
                             autoComplete="one-time-code"
-                            className="w-12 h-14 bg-[#252b2a] border-2 border-app-border rounded-lg text-center text-xl font-bold text-[#4fdbc8] focus:border-[#4fdbc8] focus:ring-0 outline-none transition-colors"
+                            className="w-12 h-14 bg-app-bg-card-secondary border-2 border-app-border rounded-lg text-center text-xl font-bold text-vecilend-dark-primary focus:border-vecilend-dark-primary focus:ring-0 outline-none transition-colors"
                             maxLength="1"
                             type="text"
                           />
@@ -591,13 +591,13 @@ function RegisterPage() {
                       <button
                         type="submit"
                         disabled={isLoading}
-                        className={`w-full bg-[#4fdbc8] text-[#003731] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-[#4fdbc8]/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#14b8a6]"}`}
+                        className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-vecilend-dark-primary/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary"}`}
                       >
                         {isLoading ? "Verificando..." : "Verificar código"}
                       </button>
 
                       {error && (
-                        <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-2 rounded-lg text-sm font-medium text-center">
+                        <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-2 rounded-lg text-sm font-medium text-center">
                           {error}
                         </div>
                       )}
@@ -610,7 +610,7 @@ function RegisterPage() {
                     type="button"
                     onClick={handleResendCode}
                     disabled={resendCooldown > 0}
-                    className={`text-sm font-medium transition-colors ${resendCooldown > 0 ? "text-[#859490] cursor-not-allowed" : "text-[#4fdbc8] hover:underline"}`}
+                    className={`text-sm font-medium transition-colors ${resendCooldown > 0 ? "text-app-text-secondary cursor-not-allowed" : "text-vecilend-dark-primary hover:underline"}`}
                   >
                     {resendCooldown > 0
                       ? `Reenviar en ${resendCooldown}s`
@@ -629,10 +629,10 @@ function RegisterPage() {
             <div className="w-full md:w-2/3 flex flex-col justify-center h-full relative">
               <div
                 id="final-form-card"
-                className="w-full max-h-[85vh] bg-[#1a211f] border border-app-border/30 rounded-xl p-6 lg:px-10 lg:py-7 shadow-2xl relative flex flex-col overflow-y-auto custom-scrollbar"
+                className="w-full max-h-[85vh] bg-app-bg-card-secondary border border-app-border/30 rounded-xl p-6 lg:px-10 lg:py-7 shadow-2xl relative flex flex-col overflow-y-auto custom-scrollbar"
               >
-                <div className="absolute top-0 left-0 w-full h-1 bg-[#2f3634]">
-                  <div className="h-full bg-[#4fdbc8] w-full shadow-[0_0_10px_rgba(79,219,200,0.5)] transition-all duration-500"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-app-bg-card-secondary">
+                  <div className="h-full bg-vecilend-dark-primary w-full shadow-[0_0_10px_rgba(79,219,200,0.5)] transition-all duration-500"></div>
                 </div>
 
                 <div className="mb-4 mt-2">
@@ -641,12 +641,12 @@ function RegisterPage() {
                       Últimos datos personales
                     </h1>
 
-                    <span className="text-sm text-[#4fdbc8] font-semibold px-3 py-1 bg-[#14b8a6]/20 rounded-full border border-[#4fdbc8]/20">
+                    <span className="text-sm text-vecilend-dark-primary font-semibold px-3 py-1 bg-vecilend-dark-primary/20 rounded-full border border-vecilend-dark-primary/20">
                       Paso 3 de 3
                     </span>
                   </div>
 
-                  <div className="text-[#859490] text-sm">
+                  <div className="text-app-text-secondary text-sm">
                     <p>
                       Cuéntanos un poco más sobre ti para completar tu perfil.
                     </p>
@@ -660,7 +660,7 @@ function RegisterPage() {
                 >
                   <div className="space-y-4">
                     {error && (
-                      <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-1.5 rounded-lg text-xs font-medium text-center">
+                      <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-1.5 rounded-lg text-xs font-medium text-center">
                         {error}
                       </div>
                     )}
@@ -672,7 +672,7 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
                             person
                           </span>
 
@@ -687,7 +687,7 @@ function RegisterPage() {
                               }));
                             }}
                             required
-                            className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Nombre"
                             type="text"
                           />
@@ -701,7 +701,7 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
                             badge
                           </span>
 
@@ -716,7 +716,7 @@ function RegisterPage() {
                               }));
                             }}
                             required
-                            className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Apellidos"
                             type="text"
                           />
@@ -741,7 +741,7 @@ function RegisterPage() {
                             }));
                           }}
                           required
-                          className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
+                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                           placeholder="••••••••"
                         />
                         <FieldError messages={fieldErrors.password} />
@@ -766,7 +766,7 @@ function RegisterPage() {
                             }));
                           }}
                           required
-                          className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
+                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                           placeholder="••••••••"
                         />
                         <FieldError
@@ -777,7 +777,7 @@ function RegisterPage() {
                       {formData.password_confirmation &&
                         formData.password !==
                           formData.password_confirmation && (
-                          <p className="text-xs text-[#ffb4ab] mt-1 ml-1 font-body">
+                          <p className="text-xs text-[var(--color-app-danger)] mt-1 ml-1 font-body">
                             Las contraseñas no coinciden.
                           </p>
                         )}
@@ -788,7 +788,7 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
                             location_on
                           </span>
 
@@ -809,7 +809,7 @@ function RegisterPage() {
                             onBlur={() =>
                               setTimeout(() => setShowSuggestions(false), 200)
                             }
-                            className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Ej. Castelldefels"
                             type="text"
                             autoComplete="off"
@@ -817,19 +817,19 @@ function RegisterPage() {
                           />
 
                           {showSuggestions && suggestions.length > 0 && (
-                            <ul className="absolute z-50 w-full mt-1 bg-[#1a211f] border border-app-border rounded-lg shadow-2xl max-h-32 overflow-y-auto custom-scrollbar">
+                            <ul className="absolute z-50 w-full mt-1 bg-app-bg-card-secondary border border-app-border rounded-lg shadow-2xl max-h-32 overflow-y-auto custom-scrollbar">
                               {suggestions.map((suggestion) => (
                                 <li
                                   key={suggestion.id}
                                   onClick={() =>
                                     handleSelectSuggestion(suggestion)
                                   }
-                                  className="px-4 py-2 text-xs text-app-text hover:bg-[#2f3634] hover:text-[#4fdbc8] cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
+                                  className="px-4 py-2 text-xs text-app-text hover:bg-app-bg-card-secondary hover:text-vecilend-dark-primary cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
                                 >
                                   <span className="font-medium">
                                     {suggestion.name}
                                   </span>
-                                  <span className="text-xs text-[#859490] ml-2">
+                                  <span className="text-xs text-app-text-secondary ml-2">
                                     {suggestion.province}
                                   </span>
                                 </li>
@@ -846,7 +846,7 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] group-focus-within:text-[#4fdbc8] text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
                             call
                           </span>
 
@@ -860,7 +860,7 @@ function RegisterPage() {
                                 telefon: undefined,
                               }));
                             }}
-                            className="w-full bg-[#2f3634] border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="+34 600 000 000"
                             type="tel"
                           />
@@ -875,7 +875,7 @@ function RegisterPage() {
                           </label>
 
                           <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-[#2f3634] border border-app-border flex items-center justify-center overflow-hidden">
+                            <div className="w-10 h-10 rounded-full bg-app-bg-card-secondary border border-app-border flex items-center justify-center overflow-hidden">
                               {formData.avatar ? (
                                 <img
                                   src={URL.createObjectURL(formData.avatar)}
@@ -883,13 +883,13 @@ function RegisterPage() {
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <span className="material-symbols-outlined text-[#859490]">
+                                <span className="material-symbols-outlined text-app-text-secondary">
                                   account_circle
                                 </span>
                               )}
                             </div>
 
-                            <label className="cursor-pointer px-4 py-1.5 text-sm font-medium border border-[#859490] rounded-lg text-app-text hover:bg-[#2f3634] transition-colors flex items-center gap-2">
+                            <label className="cursor-pointer px-4 py-1.5 text-sm font-medium border border-app-border rounded-lg text-app-text hover:bg-app-bg-card-secondary transition-colors flex items-center gap-2">
                               <span className="material-symbols-outlined text-sm">
                                 upload
                               </span>
@@ -915,7 +915,7 @@ function RegisterPage() {
                         name="biography"
                         value={formData.biography}
                         onChange={handleChange}
-                        className="w-full bg-[#2f3634] border-none rounded-lg px-4 py-2 focus:ring-2 focus:ring-inset focus:ring-[#4fdbc8] text-app-text placeholder:text-[#859490]/50 outline-none transition-all resize-none text-sm"
+                        className="w-full bg-app-bg-card-secondary border-none rounded-lg px-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all resize-none text-sm"
                         placeholder="Cuéntanos algo sobre ti, qué sueles compartir o qué tipo de objetos te interesan..."
                         rows="2"
                       ></textarea>
@@ -925,7 +925,7 @@ function RegisterPage() {
                   <div className="pt-4 flex flex-col sm:flex-row gap-3 mt-auto">
                     <button
                       onClick={() => setStep(2)}
-                      className="flex-1 px-6 py-3 rounded-xl border border-app-border text-app-text font-semibold hover:bg-[#2f3634] transition-all active:scale-[0.98] text-sm"
+                      className="flex-1 px-6 py-3 rounded-xl border border-app-border text-app-text font-semibold hover:bg-app-bg-card-secondary transition-all active:scale-[0.98] text-sm"
                       type="button"
                     >
                       Volver
@@ -933,7 +933,7 @@ function RegisterPage() {
 
                     <button
                       disabled={isLoading}
-                      className={`flex-1 px-6 py-3 rounded-xl bg-[#4fdbc8] text-[#003731] font-bold shadow-lg shadow-[#4fdbc8]/20 transition-all text-sm ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110 active:scale-[0.98]"}`}
+                      className={`flex-1 px-6 py-3 rounded-xl bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold shadow-lg shadow-vecilend-dark-primary/20 transition-all text-sm ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110 active:scale-[0.98]"}`}
                       type="submit"
                     >
                       {isLoading ? "Creando cuenta..." : "Completar registro"}
@@ -945,7 +945,7 @@ function RegisterPage() {
 
             <div className="w-full md:w-1/3 flex flex-col gap-6 lg:gap-8 justify-center h-full">
               <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
-                <div className="w-10 h-10 rounded-lg bg-[#14b8a6]/20 flex items-center justify-center text-[#4fdbc8] mb-4">
+                <div className="w-10 h-10 rounded-lg bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-4">
                   <span className="material-symbols-outlined">
                     verified_user
                   </span>
@@ -956,7 +956,7 @@ function RegisterPage() {
                     Datos seguros
                   </h3>
 
-                  <p className="text-xs lg:text-sm text-[#859490]">
+                  <p className="text-xs lg:text-sm text-app-text-secondary">
                     Tus datos personales se protegen para que puedas usar
                     Vecilend con confianza.
                   </p>
@@ -964,7 +964,7 @@ function RegisterPage() {
               </div>
 
               <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
-                <div className="w-10 h-10 rounded-lg bg-[#f38764]/20 flex items-center justify-center text-[#ffb59e] mb-4">
+                <div className="w-10 h-10 rounded-lg bg-[var(--color-app-warning)]/20 flex items-center justify-center text-[var(--color-app-warning)] mb-4">
                   <span className="material-symbols-outlined">palette</span>
                 </div>
 
@@ -973,7 +973,7 @@ function RegisterPage() {
                     Apariencia personalizada
                   </h3>
 
-                  <p className="text-xs lg:text-sm text-[#859490]">
+                  <p className="text-xs lg:text-sm text-app-text-secondary">
                     Podrás elegir entre modo claro u oscuro para adaptar
                     Vecilend a tu preferencia visual.
                   </p>
@@ -981,7 +981,7 @@ function RegisterPage() {
               </div>
 
               <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
-                <div className="w-10 h-10 rounded-lg bg-[#b9e9e0]/20 flex items-center justify-center text-[#a0d0c6] mb-4">
+                <div className="w-10 h-10 rounded-lg bg-vecilend-dark-primary/20/20 flex items-center justify-center text-vecilend-dark-primary mb-4">
                   <span className="material-symbols-outlined">speed</span>
                 </div>
 
@@ -990,7 +990,7 @@ function RegisterPage() {
                     Configuración rápida
                   </h3>
 
-                  <p className="text-xs lg:text-sm text-[#859490]">
+                  <p className="text-xs lg:text-sm text-app-text-secondary">
                     Ya casi está. Después de este paso, tu cuenta estará lista
                     para empezar a usar Vecilend.
                   </p>

@@ -35,7 +35,7 @@ function ForgotPasswordPage() {
 
         {!success ? (
           <>
-            <p className="text-[#859490] mb-6">
+            <p className="text-app-text-secondary mb-6">
               Introduce tu email y te enviaremos un enlace para restablecerla.
             </p>
 
@@ -49,13 +49,13 @@ function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-[#4fdbc8] focus:border-transparent outline-none transition-all"
+                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
                   placeholder="tu@email.com"
                 />
               </div>
 
               {error && (
-                <div className="bg-[#93000a]/20 border border-[#93000a] text-[#ffb4ab] px-4 py-2 rounded-lg text-sm font-medium">
+                <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-2 rounded-lg text-sm font-medium">
                   {error}
                 </div>
               )}
@@ -63,7 +63,7 @@ function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-[#4fdbc8] text-[#003731] font-bold py-4 rounded-lg shadow-lg shadow-[#4fdbc8]/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed hover:bg-[#14b8a6] active:scale-[0.97]"
+                className="w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed hover:bg-vecilend-dark-primary active:scale-[0.97]"
               >
                 {submitting ? "Enviando…" : "Enviar enlace de restablecimiento"}
               </button>
@@ -72,7 +72,7 @@ function ForgotPasswordPage() {
         ) : (
           <div className="bg-app-bg-card border border-app-border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-[#4fdbc8] text-3xl">
+              <span className="material-symbols-outlined text-vecilend-dark-primary text-3xl">
                 mark_email_read
               </span>
               <h2 className="text-xl font-bold">Email enviado</h2>
@@ -82,12 +82,12 @@ function ForgotPasswordPage() {
               está registrada, recibirás un correo con instrucciones para
               restablecer tu contraseña.
             </p>
-            <p className="text-sm text-[#859490]">
+            <p className="text-sm text-app-text-secondary">
               Revisa también la carpeta de spam. El enlace caduca en 1 hora.
             </p>
             <Link
               to="/login"
-              className="inline-block mt-4 text-[#4fdbc8] font-bold hover:underline"
+              className="inline-block mt-4 text-vecilend-dark-primary font-bold hover:underline"
             >
               ← Volver al inicio de sesión
             </Link>

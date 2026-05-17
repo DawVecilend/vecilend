@@ -35,7 +35,7 @@ function ForbiddenPage({
   return (
     <section className="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center">
       <div className="mx-auto max-w-md">
-        <p className="font-heading text-[120px] leading-none font-extrabold bg-gradient-to-br from-vecilend-dark-primary to-[#4fdbc8] bg-clip-text text-transparent">
+        <p className="font-heading text-[120px] leading-none font-extrabold bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary bg-clip-text text-transparent">
           403
         </p>
         <h1 className="mt-2 font-heading text-h2-desktop text-app-text">
@@ -45,7 +45,7 @@ function ForbiddenPage({
         <div className="mt-6 flex justify-center gap-3 flex-wrap">
           <Link
             to="/"
-            className="rounded-full bg-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[#003730] active:scale-95"
+            className="rounded-full bg-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] active:scale-95"
           >
             Volver al inicio
           </Link>

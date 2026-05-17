@@ -67,19 +67,19 @@ function CategoriesSection({ categories = [] }) {
   };
 
   return (
-    <section className="bg-[#1d2422] py-20">
+    <section className="bg-app-bg-secondary py-20">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-end mb-10">
           <div>
-            <h2 className="font-inter text-3xl font-extrabold tracking-tight mb-2 text-[#e1e3e0]">
+            <h2 className="font-inter text-3xl font-extrabold tracking-tight mb-2 text-app-text">
               Descubre nuestras categorías
             </h2>
-            <p className="text-[#aebdb9]">
+            <p className="text-app-text-secondary">
               Encuentra todo lo que necesitas en un solo lugar.
             </p>
           </div>
           <Link
-            className="hidden md:inline-flex text-[#4fdbc8] font-bold text-sm items-center hover:underline"
+            className="hidden md:inline-flex text-vecilend-dark-primary font-bold text-sm items-center hover:underline"
             to="/objects"
           >
             Ver todo el catálogo
@@ -92,7 +92,7 @@ function CategoriesSection({ categories = [] }) {
               type="button"
               onClick={() => scrollByPage(-1)}
               aria-label="Categorías anteriores"
-              className="hidden md:flex absolute left-[-36px] top-1/2 -translate-y-1/2 z-10 items-center justify-center text-[#4fdbc8] hover:text-white transition-colors"
+              className="hidden md:flex absolute left-[-36px] top-1/2 -translate-y-1/2 z-10 items-center justify-center text-vecilend-dark-primary hover:text-white transition-colors"
             >
               <span
                 className="material-symbols-outlined"
@@ -132,7 +132,7 @@ function CategoriesSection({ categories = [] }) {
               type="button"
               onClick={() => scrollByPage(1)}
               aria-label="Más categorías"
-              className="hidden md:flex absolute right-[-36px] top-1/2 -translate-y-1/2 z-10 items-center justify-center text-[#4fdbc8] hover:text-white transition-colors"
+              className="hidden md:flex absolute right-[-36px] top-1/2 -translate-y-1/2 z-10 items-center justify-center text-vecilend-dark-primary hover:text-white transition-colors"
             >
               <span
                 className="material-symbols-outlined"

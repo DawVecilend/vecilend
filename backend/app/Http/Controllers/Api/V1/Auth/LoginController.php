@@ -23,8 +23,10 @@ class LoginController extends Controller
 
         if (!$authenticated) {
             // Comprovar si existeix però està inactiu
-            $userExists = User::where('email', $login)
-                ->orWhere('username', $login)
+            $userExists = User::where(function ($q) use ($login) {
+                $q->where('email', $login)
+                    ->orWhere('username', $login);
+            })
                 ->where('actiu', false)
                 ->exists();
 

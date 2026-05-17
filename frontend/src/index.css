@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap');
 @import "tailwindcss";
 
-/* ─── Variables base ─── */
 @theme {
   --font-heading: "Montserrat", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -23,7 +22,6 @@
   --leading-label: 1.4;
   --leading-caption: 1.35;
 
-  /* Colors del design system */
   --color-vecilend-dark-bg: #0A0A0B;
   --color-vecilend-dark-bg-secondary: #161D1B;
   --color-vecilend-dark-card: #121214;
@@ -46,10 +44,10 @@
   --color-vecilend-light-primary-hover: #0F766E;
   --color-vecilend-light-secondary: #22C55E;
 
-  /* ─── Aliasses semàntics (apunten al dark per defecte) ─── */
   --color-app-bg: var(--color-vecilend-dark-bg);
   --color-app-bg-secondary: var(--color-vecilend-dark-bg-secondary);
   --color-app-bg-card: var(--color-vecilend-dark-card);
+  --color-app-bg-card-secondary: #333b39;
   --color-app-neutral: var(--color-vecilend-dark-neutral);
   --color-app-border: var(--color-vecilend-dark-border);
   --color-app-text: var(--color-vecilend-dark-text);
@@ -57,14 +55,34 @@
   --color-app-primary: var(--color-vecilend-dark-primary);
   --color-app-primary-hover: var(--color-vecilend-dark-primary-hover);
   --color-app-secondary: var(--color-vecilend-dark-secondary);
+
+  --color-app-header-bg: rgba(15, 23, 21, 0.7);
+  --color-app-header-border: #2A2B31;
+  --color-app-header-hover: #333b39;
+  --color-app-star: #facc15;
+  --color-app-success: #4fdbc8;
+  --color-app-success-strong: #14B8A6;
+  --color-app-success-on: #003730;
+  --color-app-warning: #f38764;
+  --color-app-warning-strong: #6c2106;
+  --color-app-danger: #ef4444;
+  --color-app-cta-bg: #1d2422;
+  --color-app-cta-text: #e1e3e0;
+  --color-app-cta-muted: #bbcac6;
+  --color-app-cta-card-bg: rgba(255, 255, 255, 0.05);
+  --color-app-cta-card-hover-bg: rgba(255, 255, 255, 0.1);
+  --color-app-cta-card-border: rgba(255, 255, 255, 0.05);
+  --color-app-cta-card-border-hover: rgba(255, 255, 255, 0.1);
+
+  --color-app-categories-section: #161D1B;
+  --color-app-categories-card: #0A0F0E;
 }
 
-/* ─── Override quan data-theme="light" ─── */
 :root[data-theme="light"] {
   --color-app-bg: #F7F8FA;
   --color-app-bg-card: #FFFFFF;
   --color-app-bg-secondary: #EDF1F0;
-  --color-app-bg-card-secondary: #EDEFEF;
+  --color-app-bg-card-secondary: #E6EAE9;
   --color-app-neutral: #F1F3F6;
   --color-app-border: #E3E7EE;
   --color-app-text: #0B1220;
@@ -72,9 +90,29 @@
   --color-app-primary: #14B8A6;
   --color-app-primary-hover: #0F766E;
   --color-app-secondary: #22C55E;
+
+  --color-app-categories-section: #EDF1F0;
+  --color-app-categories-card: #DCE3E1;
+
+  --color-app-header-bg: rgba(255, 255, 255, 0.85);
+  --color-app-header-border: #E3E7EE;
+  --color-app-header-hover: #E8EEEC;
+  --color-app-star: #d97706;
+  --color-app-success: #0d8d7d;
+  --color-app-success-strong: #0F766E;
+  --color-app-success-on: #ffffff;
+  --color-app-warning: #c84a1e;
+  --color-app-warning-strong: #FFEDE6;
+  --color-app-danger: #b91c1c;
+  --color-app-cta-bg: #FFFFFF;
+  --color-app-cta-text: #0B1220;
+  --color-app-cta-muted: #4B5563;
+  --color-app-cta-card-bg: rgba(0, 0, 0, 0.03);
+  --color-app-cta-card-hover-bg: rgba(0, 0, 0, 0.06);
+  --color-app-cta-card-border: rgba(0, 0, 0, 0.06);
+  --color-app-cta-card-border-hover: rgba(0, 0, 0, 0.12);
 }
 
-/* Dark explícit */
 :root[data-theme="dark"] {
   --color-app-bg: #0A0A0B;
   --color-app-bg-card: #121214;
@@ -87,6 +125,27 @@
   --color-app-primary: #14B8A6;
   --color-app-primary-hover: #0F766E;
   --color-app-secondary: #22C55E;
+
+  --color-app-categories-section: #161D1B;
+  --color-app-categories-card: #0A0F0E;
+
+  --color-app-header-bg: rgba(15, 23, 21, 0.7);
+  --color-app-header-border: #2A2B31;
+  --color-app-header-hover: #333b39;
+  --color-app-star: #facc15;
+  --color-app-success: #4fdbc8;
+  --color-app-success-strong: #14B8A6;
+  --color-app-success-on: #003730;
+  --color-app-warning: #f38764;
+  --color-app-warning-strong: #6c2106;
+  --color-app-danger: #ef4444;
+  --color-app-cta-bg: #1d2422;
+  --color-app-cta-text: #e1e3e0;
+  --color-app-cta-muted: #bbcac6;
+  --color-app-cta-card-bg: rgba(255, 255, 255, 0.05);
+  --color-app-cta-card-hover-bg: rgba(255, 255, 255, 0.1);
+  --color-app-cta-card-border: rgba(255, 255, 255, 0.05);
+  --color-app-cta-card-border-hover: rgba(255, 255, 255, 0.1);
 }
 
 :root {
@@ -107,21 +166,19 @@ textarea {
   resize: none;
 }
 
-/* ─── Aplica transicions globals als canvis de color ─── */
 * {
   transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 
-/* ─── Leaflet dark theme overrides ─── */
 .leaflet-container {
-  background: var(--color-vecilend-dark-neutral);
+  background: var(--color-app-neutral);
   font-family: 'Inter', sans-serif;
 }
 
 .leaflet-popup-content-wrapper {
-  background: var(--color-vecilend-dark-card) !important;
-  color: var(--color-vecilend-dark-text) !important;
-  border: 1px solid var(--color-vecilend-dark-border);
+  background: var(--color-app-bg-card) !important;
+  color: var(--color-app-text) !important;
+  border: 1px solid var(--color-app-border);
   border-radius: 16px !important;
   padding: 0 !important;
 }
@@ -132,32 +189,31 @@ textarea {
 }
 
 .leaflet-popup-tip {
-  background: var(--color-vecilend-dark-card) !important;
+  background: var(--color-app-bg-card) !important;
 }
 
 .leaflet-popup-close-button {
-  color: var(--color-vecilend-dark-text-secondary) !important;
+  color: var(--color-app-text-secondary) !important;
   font-size: 20px !important;
   padding: 6px 8px 0 0 !important;
 }
 
 .leaflet-control-attribution {
-  background: rgba(10, 10, 11, 0.6) !important;
-  color: var(--color-vecilend-dark-text-secondary) !important;
+  background: var(--color-app-bg-card) !important;
+  color: var(--color-app-text-secondary) !important;
   font-size: 10px;
 }
 
 .leaflet-control-attribution a {
-  color: var(--color-vecilend-dark-primary) !important;
+  color: var(--color-app-primary) !important;
 }
 
 .leaflet-control-zoom a {
-  background: var(--color-vecilend-dark-card) !important;
-  color: var(--color-vecilend-dark-text) !important;
-  border-color: var(--color-vecilend-dark-border) !important;
+  background: var(--color-app-bg-card) !important;
+  color: var(--color-app-text) !important;
+  border-color: var(--color-app-border) !important;
 }
 
-/* ─── Leaflet z-index (< 50 perquè no superin el header) ─── */
 .leaflet-container,
 .leaflet-top,
 .leaflet-bottom    { z-index: 1 !important; }
@@ -174,7 +230,6 @@ textarea {
   border: none !important;
 }
 
-/* Carrusel de categories: amaga la scrollbar però manté el scroll funcional */
 .vecilend-carousel {
   scrollbar-width: none;
 }
@@ -182,7 +237,6 @@ textarea {
   display: none;
 }
 
-/* Oculta visualmente la scrollbar del body manteniendo el scroll funcional */
 html.no-body-scrollbar,
 body.no-body-scrollbar {
   scrollbar-width: none;

@@ -267,7 +267,7 @@ function NotificationsPage() {
 
   return (
     <section className="mx-auto w-full max-w-2xl px-4 pt-6 pb-32">
-      <header className="flex items-center justify-between mb-6">
+      <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4 mb-6">
         <h1 className="text-h1-mobile md:text-h1-desktop font-extrabold text-app-text font-heading">
           Notificaciones
         </h1>
@@ -275,7 +275,7 @@ function NotificationsPage() {
           <button
             type="button"
             onClick={handleMarkAll}
-            className="text-app-primary font-bold text-label hover:underline"
+            className="self-start md:self-auto text-app-primary font-bold text-label hover:underline"
           >
             Marcar todas como leídas
           </button>

@@ -6,7 +6,7 @@ function SecondaryButton({ url, text, onClick, width }) {
       <button
         onClick={onClick}
         style={{ width }}
-        className="border-2 border-[#14B8A6] h-[44px] px-4 flex items-center text-[#F2F4F8] rounded-2xl"
+        className="border-2 border-[#14B8A6] h-[44px] px-4 flex items-center text-app-text rounded-2xl"
       >
         {text}
       </button>
@@ -16,7 +16,7 @@ function SecondaryButton({ url, text, onClick, width }) {
     <Link
       to={url}
       style={{ width }}
-      className="border-2 border-[#14B8A6] h-[44px] px-4 flex items-center text-[#F2F4F8] rounded-2xl"
+      className="border-2 border-[#14B8A6] h-[44px] px-4 flex items-center text-app-text rounded-2xl"
     >
       {text}
     </Link>

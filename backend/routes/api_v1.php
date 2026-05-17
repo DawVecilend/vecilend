@@ -83,6 +83,7 @@ Route::middleware(['auth:sanctum', 'last_seen', 'log_user_action'])->group(funct
     Route::get('/chats/{id}/messages',        [ChatController::class, 'messages'])->where('id', '[0-9]+');
     Route::post('/chats/{id}/messages',       [ChatController::class, 'sendMessage'])->where('id', '[0-9]+');
     Route::put('/chats/{id}/read',            [ChatController::class, 'markAsRead'])->where('id', '[0-9]+');
+    Route::delete('/chats/{id}',              [ChatController::class, 'destroy'])->where('id', '[0-9]+');
 
     Route::get('/notifications',              [NotificacioController::class, 'index']);
     Route::put('/notifications/read-all',     [NotificacioController::class, 'markAllAsRead']);

@@ -67,7 +67,7 @@ function ConfirmDeleteModal({
         }}
       >
         <span className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-[#ef4444]">
+          <span className="material-symbols-outlined text-[var(--color-app-danger)]">
             warning
           </span>
           {title}
@@ -85,11 +85,11 @@ function ConfirmDeleteModal({
           </p>
         )}
         {errorMessage && (
-          <div className="mt-4 flex items-start gap-2 rounded-lg border border-[#ef4444]/50 bg-[#ef4444]/10 px-3 py-2">
-            <span className="material-symbols-outlined text-sm text-[#ef4444] mt-0.5">
+          <div className="mt-4 flex items-start gap-2 rounded-lg border border-[var(--color-app-danger)]/50 bg-[var(--color-app-danger)]/10 px-3 py-2">
+            <span className="material-symbols-outlined text-sm text-[var(--color-app-danger)] mt-0.5">
               error
             </span>
-            <p className="text-xs text-[#ef4444] font-body leading-relaxed">
+            <p className="text-xs text-[var(--color-app-danger)] font-body leading-relaxed">
               {errorMessage}
             </p>
           </div>
@@ -103,7 +103,7 @@ function ConfirmDeleteModal({
           type="button"
           onClick={onClose}
           disabled={busy}
-          className="rounded-full border border-[#2A2B31] px-5 py-2 text-label font-body text-app-text hover:bg-[#16181C] disabled:opacity-50"
+          className="rounded-full border border-app-border px-5 py-2 text-label font-body text-app-text hover:bg-app-neutral disabled:opacity-50"
         >
           Cancelar
         </button>
@@ -111,7 +111,7 @@ function ConfirmDeleteModal({
           type="button"
           onClick={onConfirm}
           disabled={busy}
-          className="rounded-full bg-[#ef4444] hover:bg-[#dc2626] px-5 py-2 text-label font-bold text-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-full bg-[var(--color-app-danger)] hover:bg-[var(--color-app-danger)] px-5 py-2 text-label font-bold text-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {busy ? "Eliminando…" : confirmLabel}
         </button>

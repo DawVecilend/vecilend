@@ -63,7 +63,7 @@ function AboutUsPage() {
   ];
 
   return (
-    <div className="w-full overflow-x-hidden font-inter text-[#dde4e1] min-h-screen antialiased">
+    <div className="w-full overflow-x-hidden font-inter text-app-text min-h-screen antialiased">
       {/* Back Button */}
       <section className="w-full px-4 md:px-10 pt-6">
         <div className="mx-auto max-w-7xl">
@@ -164,7 +164,7 @@ function AboutUsPage() {
       </section>
 
       {/* Values Section */}
-      <section className="w-full py-20 md:py-32 bg-[#0b100f] px-4 md:px-10">
+      <section className="w-full py-20 md:py-32 bg-app-bg px-4 md:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="font-heading text-[44px] font-extrabold text-app-text mb-4">
@@ -224,7 +224,7 @@ function AboutUsPage() {
                 >
                   {/* Timeline dot */}
                   <div className="hidden md:flex w-1/2 justify-center">
-                    <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-vecilend-dark-primary border-4 border-[#0b0e0d] top-1/2 z-10"></div>
+                    <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-vecilend-dark-primary border-4 border-app-border top-1/2 z-10"></div>
                   </div>
 
                   {/* Content */}
@@ -249,7 +249,7 @@ function AboutUsPage() {
       </section>
 
       {/* Why Join Section */}
-      <section className="w-full py-20 md:py-32 bg-[#0b100f] px-4 md:px-10">
+      <section className="w-full py-20 md:py-32 bg-app-bg px-4 md:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -335,24 +335,24 @@ function AboutUsPage() {
               />
             </div>
             <div className="relative z-10 max-w-xl">
-              <h2 className="font-inter text-4xl md:text-5xl font-extrabold text-[#e1e3e0] leading-tight mb-6">
+              <h2 className="font-inter text-4xl md:text-5xl font-extrabold text-app-text leading-tight mb-6">
                 Comienza tu viaje en{" "}
                 <span className="text-vecilend-dark-primary">Vecilend</span>
               </h2>
-              <p className="text-[#aebdb9] text-lg mb-10 leading-relaxed">
+              <p className="text-app-text-secondary text-lg mb-10 leading-relaxed">
                 Únete a miles de vecinos que ya están ahorrando dinero,
                 generando ingresos y construyendo una comunidad más fuerte.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/objects"
-                  className="bg-gradient-to-br from-[#14b8a6] to-[#4fdbc8] text-[#003730] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-[#4fdbc8]/30 hover:scale-105 active:scale-95 transition-all"
+                  className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-vecilend-dark-primary/30 hover:scale-105 active:scale-95 transition-all"
                 >
                   Explorar Objetos
                 </Link>
                 <Link
                   to="/objects/create"
-                  className="bg-white/10 backdrop-blur-md text-[#e1e3e0] border border-white/20 px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/20 transition-all"
+                  className="bg-white/10 backdrop-blur-md text-app-text border border-white/20 px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/20 transition-all"
                 >
                   Publicar Objeto
                 </Link>

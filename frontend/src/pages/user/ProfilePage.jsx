@@ -175,9 +175,9 @@ function ProfilePage() {
   }
 
   return (
-    <div className="bg-[#0e1513] text-[#dde4e1] antialiased min-h-screen dark">
+    <div className="bg-app-bg text-app-text antialiased min-h-screen dark">
       <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
-        <section className="relative bg-[#161d1b] rounded-xl p-8 md:p-12 overflow-hidden">
+        <section className="relative bg-app-bg-secondary rounded-xl p-8 md:p-12 overflow-hidden">
           <div className="relative flex flex-col md:flex-row gap-8 items-start">
             {/* ── Avatar ── */}
             <div className="relative shrink-0">
@@ -191,11 +191,11 @@ function ProfilePage() {
             <div className="flex-1 flex flex-col gap-6 w-full">
               <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-x-8 gap-y-6">
                 <div className="space-y-4 min-w-0">
-                  <h1 className="text-4xl md:text-5xl font-extrabold text-[#dde4e1] tracking-tight break-words">
+                  <h1 className="text-4xl md:text-5xl font-extrabold text-app-text tracking-tight break-words">
                     {profile?.nom} {profile?.cognoms}
                   </h1>
 
-                  <p className="flex items-center gap-1 text-[#bbcac6] font-medium">
+                  <p className="flex items-center gap-1 text-app-text-secondary font-medium">
                     <span className="material-symbols-outlined !text-lg">
                       location_on
                     </span>
@@ -203,10 +203,10 @@ function ProfilePage() {
                   </p>
 
                   <div className="space-y-2">
-                    <h2 className="text-xl font-bold text-[#4fdbc8]">
+                    <h2 className="text-xl font-bold text-vecilend-dark-primary">
                       Acerca de {profile?.nom}
                     </h2>
-                    <p className="text-[#bbcac6] leading-relaxed line-clamp-4 whitespace-pre-line">
+                    <p className="text-app-text-secondary leading-relaxed line-clamp-4 whitespace-pre-line">
                       {profile?.biography ||
                         "Este usuario aún no ha añadido biografía."}
                     </p>
@@ -251,7 +251,7 @@ function ProfilePage() {
                 {isOwnProfile ? (
                   <Link
                     to={`/settings/profile/${username}/editing`}
-                    className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2"
+                    className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-vecilend-dark-primary/25 active:scale-95 transition-all flex items-center gap-2"
                   >
                     <span className="material-symbols-outlined !text-xl">
                       edit
@@ -264,7 +264,7 @@ function ProfilePage() {
                       type="button"
                       onClick={handleContact}
                       disabled={contacting}
-                      className="bg-gradient-to-br from-[#4fdbc8] to-[#14b8a6] text-[#003731] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-[#4fdbc8]/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-vecilend-dark-primary/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       <span className="material-symbols-outlined !text-xl">mail</span>
                       {contacting ? "Abriendo…" : `Contacta a ${profile?.nom}`}
@@ -273,7 +273,7 @@ function ProfilePage() {
                       <button
                         type="button"
                         onClick={() => setReportOpen(true)}
-                        className="text-[#bbcac6] hover:text-red-400 px-4 py-4 rounded-full font-bold transition-colors flex items-center gap-2"
+                        className="text-app-text-secondary hover:text-red-400 px-4 py-4 rounded-full font-bold transition-colors flex items-center gap-2"
                         title="Reportar a este usuario"
                       >
                         <span className="material-symbols-outlined !text-xl">flag</span>
@@ -288,7 +288,7 @@ function ProfilePage() {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
+          <h2 className="text-3xl font-extrabold tracking-tight text-app-text">
             Evolución de las valoraciones
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -307,7 +307,7 @@ function ProfilePage() {
 
         <section className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
+            <h2 className="text-3xl font-extrabold tracking-tight text-app-text">
               {isOwnProfile
                 ? "Mis objetos publicados"
                 : `Objetos de ${profile?.nom}`}
@@ -316,7 +316,7 @@ function ProfilePage() {
             {latestObjects.length > 0 && (
               <Link
                 to={`/profile/${username}/objects`}
-                className="text-[#4fdbc8] font-bold hover:underline flex items-center gap-1"
+                className="text-vecilend-dark-primary font-bold hover:underline flex items-center gap-1"
               >
                 Ver todos
               </Link>
@@ -324,12 +324,12 @@ function ProfilePage() {
           </div>
 
           {loading ? (
-            <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
-              <p className="text-[#bbcac6]">Cargando productos...</p>
+            <div className="rounded-lg border border-app-border bg-app-bg-secondary p-10 text-center">
+              <p className="text-app-text-secondary">Cargando productos...</p>
             </div>
           ) : latestObjects.length === 0 ? (
-            <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
-              <p className="text-[#bbcac6]">
+            <div className="rounded-lg border border-app-border bg-app-bg-secondary p-10 text-center">
+              <p className="text-app-text-secondary">
                 {isOwnProfile
                   ? "Aún no has publicado ningún objeto."
                   : `${profile?.nom || username} todavía no ha publicado objetos.`}
@@ -338,7 +338,7 @@ function ProfilePage() {
               {isOwnProfile && (
                 <Link
                   to="/objects/create"
-                  className="inline-block mt-4 bg-[#4fdbc8] text-[#003731] px-6 py-2.5 rounded-full font-bold hover:bg-[#14b8a6]"
+                  className="inline-block mt-4 bg-vecilend-dark-primary text-[var(--color-app-success-on)] px-6 py-2.5 rounded-full font-bold hover:bg-vecilend-dark-primary"
                 >
                   Publicar mi primer objeto
                 </Link>

@@ -105,7 +105,7 @@ function ChatsListPage() {
 
   const load = useCallback(async () => {
     try {
-      const data = await getChats();
+      const { data } = await getChats({ page: 1, per_page: 50 });
       setChats(Array.isArray(data) ? data : []);
       setError(null);
     } catch (e) {

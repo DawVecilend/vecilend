@@ -82,7 +82,7 @@ function UserReviewsList({ username }) {
   return (
     <section className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
-        <h2 className="text-3xl font-extrabold tracking-tight text-[#dde4e1]">
+        <h2 className="text-3xl font-extrabold tracking-tight text-app-text">
           Reseñas recibidas
         </h2>
         <div className="flex gap-2 flex-wrap">
@@ -93,8 +93,8 @@ function UserReviewsList({ username }) {
               onClick={() => handleRoleChange(r.id)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 role === r.id
-                  ? "bg-[#4fdbc8] text-[#003730]"
-                  : "bg-[#161d1b] border border-[#3c4947] text-[#dde4e1] hover:border-[#4fdbc8]"
+                  ? "bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
+                  : "bg-app-bg-secondary border border-app-border text-app-text hover:border-vecilend-dark-primary"
               }`}
             >
               {r.label}
@@ -104,14 +104,14 @@ function UserReviewsList({ username }) {
       </div>
 
       {loading && (
-        <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
-          <p className="text-[#bbcac6]">Cargando…</p>
+        <div className="rounded-lg border border-app-border bg-app-bg-secondary p-10 text-center">
+          <p className="text-app-text-secondary">Cargando…</p>
         </div>
       )}
 
       {!loading && reviews.length === 0 && (
-        <div className="rounded-lg border border-[#3c4947] bg-[#161d1b] p-10 text-center">
-          <p className="text-[#bbcac6]">
+        <div className="rounded-lg border border-app-border bg-app-bg-secondary p-10 text-center">
+          <p className="text-app-text-secondary">
             Aún no hay reseñas{role !== "qualsevol" ? " para este rol" : ""}.
           </p>
         </div>
@@ -127,7 +127,7 @@ function UserReviewsList({ username }) {
           {reviews.map((rev) => (
             <article
               key={rev.id}
-              className="bg-[#161d1b] p-6 rounded-lg space-y-3 border-l-4 border-[#4fdbc8]"
+              className="bg-app-bg-secondary p-6 rounded-lg space-y-3 border-l-4 border-vecilend-dark-primary"
             >
               <div className="flex items-center gap-3">
                 {rev.autor?.avatar_url ? (
@@ -137,14 +137,14 @@ function UserReviewsList({ username }) {
                     className="w-12 h-12 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-[#252b2a]" />
+                  <div className="w-12 h-12 rounded-full bg-app-bg-card-secondary" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-[#dde4e1] truncate">
+                  <h4 className="font-bold text-app-text truncate">
                     {rev.autor?.username ? (
                       <Link
                         to={`/profile/${rev.autor.username}`}
-                        className="hover:text-[#4fdbc8]"
+                        className="hover:text-vecilend-dark-primary"
                       >
                         {rev.autor.nom} {rev.autor.cognoms}
                       </Link>
@@ -168,7 +168,7 @@ function UserReviewsList({ username }) {
                   />
                 </div>
                 {rev.created_at && (
-                  <span className="text-xs text-[#859490] shrink-0">
+                  <span className="text-xs text-app-text-secondary shrink-0">
                     {new Date(rev.created_at).toLocaleDateString("es-ES", {
                       day: "2-digit",
                       month: "short",
@@ -179,15 +179,15 @@ function UserReviewsList({ username }) {
               </div>
 
               {rev.comentari && (
-                <p className="text-[#bbcac6] italic">"{rev.comentari}"</p>
+                <p className="text-app-text-secondary italic">"{rev.comentari}"</p>
               )}
 
               {rev.objecte && (
-                <p className="text-xs text-[#859490]">
+                <p className="text-xs text-app-text-secondary">
                   Sobre el objeto:{" "}
                   <Link
                     to={(rev.objecte.slug ? `/objects/${rev.objecte.id}/${rev.objecte.slug}` : `/objects/${rev.objecte.id}`)}
-                    className="text-[#4fdbc8] hover:underline"
+                    className="text-vecilend-dark-primary hover:underline"
                   >
                     {rev.objecte.nom}
                   </Link>
@@ -196,7 +196,7 @@ function UserReviewsList({ username }) {
 
               {rev.rol && role === "qualsevol" && (
                 <div className="flex justify-end">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider bg-[#14b8a6]/20 text-[#4fdbc8] border border-[#4fdbc8]/30">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider bg-vecilend-dark-primary/20 text-vecilend-dark-primary border border-vecilend-dark-primary/30">
                     {rev.rol === "propietari"
                       ? "Como propietario"
                       : "Como solicitante"}

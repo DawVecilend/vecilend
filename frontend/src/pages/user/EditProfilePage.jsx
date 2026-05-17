@@ -150,18 +150,18 @@ function EditProfilePage() {
 
             <main className="flex-1 min-w-0 p-0 md:p-6">
               <header className="mb-8">
-                <div className="h-10 md:h-12 w-64 md:w-80 bg-[#2f3634]/40 rounded animate-pulse" />
-                <div className="mt-3 h-5 w-72 md:w-96 bg-[#2f3634]/40 rounded animate-pulse" />
+                <div className="h-10 md:h-12 w-64 md:w-80 bg-app-bg-card-secondary/40 rounded animate-pulse" />
+                <div className="mt-3 h-5 w-72 md:w-96 bg-app-bg-card-secondary/40 rounded animate-pulse" />
               </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Columna esquerra: avatar + slider */}
               <div className="lg:col-span-4 space-y-6">
-                <div className="bg-[#2f3634]/40 rounded-xl p-6 border border-app-border/20">
+                <div className="bg-app-bg-card-secondary/40 rounded-xl p-6 border border-app-border/20">
                   <div className="w-36 h-36 mx-auto mb-4 bg-app-bg-card rounded-xl animate-pulse" />
                   <div className="h-9 w-full bg-app-bg-card rounded-lg animate-pulse" />
                 </div>
-                <div className="bg-[#2f3634]/40 rounded-xl p-6 border border-app-border/20">
+                <div className="bg-app-bg-card-secondary/40 rounded-xl p-6 border border-app-border/20">
                   <div className="h-3 w-40 bg-app-bg-card rounded animate-pulse mb-4" />
                   <div className="h-2 w-full bg-app-bg-card rounded animate-pulse" />
                 </div>
@@ -169,7 +169,7 @@ function EditProfilePage() {
 
               {/* Columna dreta: 5 camps */}
               <div className="lg:col-span-8">
-                <div className="bg-[#2f3634]/40 rounded-xl p-8 border border-app-border/20">
+                <div className="bg-app-bg-card-secondary/40 rounded-xl p-8 border border-app-border/20">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div key={i} className="space-y-2">
@@ -201,7 +201,7 @@ function EditProfilePage() {
           <main className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
-                Perfil de <span className="text-[#4fdbc8]">Usuario</span>
+                Perfil de <span className="text-vecilend-dark-primary">Usuario</span>
               </h1>
               <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
                 Gestiona tu identidad y preferencias en Vecilend.
@@ -213,11 +213,11 @@ function EditProfilePage() {
             className="grid grid-cols-1 lg:grid-cols-12 gap-8"
           >
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-6 border border-app-border/20 shadow-xl text-center">
+              <div className="bg-app-bg-card-secondary/40 backdrop-blur-md rounded-xl p-6 border border-app-border/20 shadow-xl text-center">
                 <div className="relative group w-36 h-36 mx-auto mb-4">
                   <img
                     alt="Avatar"
-                    className="w-full h-full object-cover rounded-xl border-2 border-[#4fdbc8]/20"
+                    className="w-full h-full object-cover rounded-xl border-2 border-vecilend-dark-primary/20"
                     src={
                       previewImage ||
                       profile.avatar_url ||
@@ -235,7 +235,7 @@ function EditProfilePage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current.click()}
-                  className="w-full py-2 bg-[#21514a] text-[#92c2b8] rounded-lg text-xs font-bold transition-colors hover:bg-app-bg-card"
+                  className="w-full py-2 bg-vecilend-dark-primary/20 text-vecilend-dark-primary rounded-lg text-xs font-bold transition-colors hover:bg-app-bg-card"
                 >
                   Cambiar foto
                 </button>
@@ -243,7 +243,7 @@ function EditProfilePage() {
             </div>
 
             <div className="lg:col-span-8 flex flex-col justify-between">
-              <div className="bg-[#2f3634]/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
+              <div className="bg-app-bg-card-secondary/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
@@ -253,7 +253,7 @@ function EditProfilePage() {
                       name="nom"
                       value={formData.nom}
                       onChange={handleChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
                       type="text"
                     />
                   </div>
@@ -265,7 +265,7 @@ function EditProfilePage() {
                       name="cognoms"
                       value={formData.cognoms}
                       onChange={handleChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
                       type="text"
                     />
                   </div>
@@ -277,7 +277,7 @@ function EditProfilePage() {
                       name="telefon"
                       value={formData.telefon}
                       onChange={handleChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
                       type="text"
                       placeholder="600 000 000"
                     />
@@ -296,22 +296,22 @@ function EditProfilePage() {
                       onBlur={() =>
                         setTimeout(() => setShowSuggestions(false), 200)
                       }
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
                       type="text"
                       autoComplete="off"
                     />
                     {showSuggestions && suggestions.length > 0 && (
-                      <ul className="absolute z-50 w-full mt-1 bg-[#1a211f] border border-app-border rounded-lg shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
+                      <ul className="absolute z-50 w-full mt-1 bg-app-bg-card-secondary border border-app-border rounded-lg shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
                         {suggestions.map((suggestion) => (
                           <li
                             key={suggestion.id}
                             onClick={() => handleSelectSuggestion(suggestion)}
-                            className="px-4 py-2.5 text-sm text-app-text hover:bg-[#2f3634] hover:text-[#4fdbc8] cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
+                            className="px-4 py-2.5 text-sm text-app-text hover:bg-app-bg-card-secondary hover:text-vecilend-dark-primary cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
                           >
                             <span className="font-medium">
                               {suggestion.name}
                             </span>
-                            <span className="text-xs text-[#859490] ml-2">
+                            <span className="text-xs text-app-text-secondary ml-2">
                               {suggestion.province}
                             </span>
                           </li>
@@ -329,9 +329,9 @@ function EditProfilePage() {
                       onChange={handleChange}
                       maxLength={255}
                       rows={4}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-[#4fdbc8] outline-none resize-none transition-all"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none resize-none transition-all"
                     ></textarea>
-                    <p className="text-[10px] text-[#859490] mt-1 text-right">
+                    <p className="text-[10px] text-app-text-secondary mt-1 text-right">
                       {(formData.biography || "").length} / 255
                     </p>
                   </div>
@@ -344,14 +344,14 @@ function EditProfilePage() {
                 <button
                   type="button"
                   onClick={handleDiscard}
-                  className="px-6 py-3 text-sm font-bold text-[#859490] hover:text-app-text transition-colors"
+                  className="px-6 py-3 text-sm font-bold text-app-text-secondary hover:text-app-text transition-colors"
                 >
                   Descartar
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="px-10 py-3 bg-[#4fdbc8] text-[#003731] font-bold rounded-lg shadow-lg disabled:opacity-50 transition-all hover:bg-[#14b8a6]"
+                  className="px-10 py-3 bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold rounded-lg shadow-lg disabled:opacity-50 transition-all hover:bg-vecilend-dark-primary"
                 >
                   {isSaving ? "Guardando..." : "Guardar Cambios"}
                 </button>
@@ -359,7 +359,7 @@ function EditProfilePage() {
 
               <div className="flex items-center">
                 {successMessage && (
-                  <div className="bg-[#4fdbc8]/10 border border-[#4fdbc8]/50 text-[#4fdbc8] px-4 py-2 rounded-lg flex items-center gap-2 animate-pulse w-fit">
+                  <div className="bg-vecilend-dark-primary/10 border border-vecilend-dark-primary/50 text-vecilend-dark-primary px-4 py-2 rounded-lg flex items-center gap-2 animate-pulse w-fit">
                     <span className="material-symbols-outlined text-sm">
                       check_circle
                     </span>
@@ -369,7 +369,7 @@ function EditProfilePage() {
                   </div>
                 )}
                 {errorMessage && (
-                  <div className="bg-[#ef4444]/10 border border-[#ef4444]/50 text-[#ef4444] px-4 py-2 rounded-lg flex items-center gap-2 animate-pulse w-fit">
+                  <div className="bg-[var(--color-app-danger)]/10 border border-[var(--color-app-danger)]/50 text-[var(--color-app-danger)] px-4 py-2 rounded-lg flex items-center gap-2 animate-pulse w-fit">
                     <span className="material-symbols-outlined text-sm">
                       error
                     </span>

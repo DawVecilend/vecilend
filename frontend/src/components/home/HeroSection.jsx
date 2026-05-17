@@ -6,43 +6,43 @@ function HeroSection() {
       <div className="absolute left-0 top-10 h-[280px] w-[280px] rounded-full bg-vecilend-dark-primary/10 blur-3xl"></div>
       <div className="absolute bottom-0 right-0 h-[280px] w-[280px] rounded-full bg-vecilend-dark-secondary/10 blur-3xl"></div>
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
-        <div className="relative z-10">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 md:px-6 lg:grid-cols-2">
+        <div className="relative z-10 text-center lg:text-left">
           <span className="mb-6 inline-block rounded-full border border-vecilend-dark-primary/20 bg-vecilend-dark-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-vecilend-dark-primary">
             Comparte, no compres
           </span>
 
-          <h1 className="max-w-[680px] font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
+          <h1 className="max-w-[680px] mx-auto lg:mx-0 font-heading text-[36px] sm:text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
             Alquila lo que necesitas, <br />
             <span className="italic text-vecilend-dark-primary">
               cerca de ti.
             </span>
           </h1>
 
-          <p className="mt-6 max-w-[600px] font-body text-body-base leading-body text-app-text-secondary md:text-[18px]">
+          <p className="mt-6 max-w-[600px] mx-auto lg:mx-0 font-body text-body-base leading-body text-app-text-secondary md:text-[18px]">
             Encuentra herramientas, tecnología, material deportivo y objetos del
             día a día compartidos por vecinos de tu zona. Ahorra dinero, evita
             compras innecesarias y aprovecha lo que ya existe a tu alrededor.
           </p>
 
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
             <Link
               to="/objects"
-              className="inline-flex items-center justify-center rounded-[16px] bg-vecilend-dark-primary px-8 py-4 font-body text-body-base font-bold text-vecilend-dark-bg shadow-xl shadow-vecilend-dark-primary/20 transition-all hover:scale-[1.02] hover:bg-vecilend-dark-primary-hover active:scale-95"
+              className="inline-flex items-center justify-center rounded-[16px] bg-vecilend-dark-primary px-8 py-4 font-body text-body-base font-bold text-[var(--color-app-success-on)] shadow-xl shadow-vecilend-dark-primary/20 transition-all hover:scale-[1.02] hover:bg-vecilend-dark-primary-hover active:scale-95"
             >
               Ver todos los productos
             </Link>
 
             <Link
               to="/objects/create"
-              className="inline-flex items-center justify-center rounded-[16px] border border-app-border bg-white/5 px-8 py-4 font-body text-body-base font-bold text-app-text transition-all hover:border-vecilend-dark-primary hover:bg-vecilend-dark-primary/10 active:scale-95"
+              className="inline-flex items-center justify-center rounded-[16px] border border-app-border bg-app-bg-card-secondary/50 px-8 py-4 font-body text-body-base font-bold text-app-text transition-all hover:border-vecilend-dark-primary hover:bg-vecilend-dark-primary/10 active:scale-95"
             >
               Subir producto
             </Link>
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative hidden lg:block">
           <div className="absolute -left-10 -top-10 h-[220px] w-[220px] rounded-full bg-vecilend-dark-primary/10 blur-3xl"></div>
           <div className="absolute -bottom-10 -right-10 h-[220px] w-[220px] rounded-full bg-vecilend-dark-secondary/10 blur-3xl"></div>
 

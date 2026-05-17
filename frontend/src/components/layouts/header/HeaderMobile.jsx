@@ -47,14 +47,15 @@ function HeaderMobile() {
 
   return (
     <>
-      {/* ── Barra superior móvil ── */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-app-bg/90 backdrop-blur-md border-b border-app-border">
+      <header
+        className="md:hidden fixed top-0 left-0 right-0 z-40 backdrop-blur-md border-b border-app-border"
+        style={{ backgroundColor: "var(--color-app-header-bg)" }}
+      >
         <div className="flex items-center gap-1.5 px-2 py-2">
-          {/* Notificaciones */}
           <Link
             to={user ? "/notifications" : "/login"}
             aria-label="Notificaciones"
-            className="relative shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-app-card border border-app-border text-app-text"
+            className="relative shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-app-bg-card border border-app-border text-app-text"
           >
             <span className="material-symbols-outlined text-[20px]">
               notifications
@@ -62,10 +63,9 @@ function HeaderMobile() {
             {user && <UnreadBadge count={counts.notifications} />}
           </Link>
 
-          {/* Input búsqueda */}
           <form
             onSubmit={submitSearch}
-            className="flex-1 min-w-0 flex items-center gap-1.5 bg-app-card border border-app-border rounded-full px-3 py-1.5"
+            className="flex-1 min-w-0 flex items-center gap-1.5 bg-app-bg-card border border-app-border rounded-full px-3 py-1.5"
           >
             <span className="material-symbols-outlined text-app-text-secondary text-[18px] shrink-0">
               search
@@ -92,25 +92,21 @@ function HeaderMobile() {
             )}
           </form>
 
-          {/* Filtros */}
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Filtros"
-            className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-vecilend-dark-primary text-[#003730]"
+            className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
           >
             <span className="material-symbols-outlined text-[20px]">tune</span>
           </button>
         </div>
       </header>
 
-      {/* Espaciador para que el contenido no quede bajo la barra superior */}
       <div className="md:hidden h-[52px]" />
 
-      {/* ── Bottom nav ── */}
       <nav className="fixed bottom-4 left-1/2 z-50 w-[94%] max-w-[430px] -translate-x-1/2 rounded-[15px] bg-vecilend-dark-primary px-3 py-3 shadow-[0_-6px_20px_rgba(0,0,0,0.25)] md:hidden">
         <div className="flex items-end justify-between gap-1">
-          {/* Inicio */}
           <Link
             to="/"
             className="flex flex-col items-center justify-center text-white"
@@ -125,7 +121,6 @@ function HeaderMobile() {
             </span>
           </Link>
 
-          {/* Publicar */}
           <Link
             to={user ? "/objects/create" : "/login"}
             className="flex flex-col items-center justify-center text-white"
@@ -140,7 +135,6 @@ function HeaderMobile() {
             </span>
           </Link>
 
-          {/* Pedidos */}
           <Link
             to={user ? "/orders" : "/login"}
             className="relative flex flex-col items-center justify-center text-white"
@@ -159,7 +153,6 @@ function HeaderMobile() {
             )}
           </Link>
 
-          {/* Chats */}
           <Link
             to={user ? "/chats" : "/login"}
             className="relative flex flex-col items-center justify-center text-white"
@@ -175,7 +168,6 @@ function HeaderMobile() {
             )}
           </Link>
 
-          {/* Perfil */}
           <Link
             to={user ? `/profile/${user.username}` : "/login"}
             className="flex flex-col items-center justify-center text-white"

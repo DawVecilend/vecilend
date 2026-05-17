@@ -19,6 +19,13 @@ class Conversa extends Model
         'usuari_1_id',
         'usuari_2_id',
         'objecte_id',
+        'usuari_1_hidden_at',
+        'usuari_2_hidden_at',
+    ];
+
+    protected $casts = [
+        'usuari_1_hidden_at' => 'datetime',
+        'usuari_2_hidden_at' => 'datetime',
     ];
 
     // ── Relacions ──
@@ -72,6 +79,37 @@ class Conversa extends Model
         return $this->usuari_1_id === $userId || $this->usuari_2_id === $userId;
     }
 
+    public function hiddenAtFor(int $userId): ?\Illuminate\Support\Carbon
+    {
+        if ($this->usuari_1_id === $userId) return $this->usuari_1_hidden_at;
+        if ($this->usuari_2_id === $userId) return $this->usuari_2_hidden_at;
+        return null;
+    }
+
+    public function hideFor(int $userId): bool
+    {
+        $col = $this->columnHiddenAtFor($userId);
+        if (!$col) return false;
+        $this->{$col} = now();
+        return $this->save();
+    }
+
+    public function unhideFor(int $userId): bool
+    {
+        $col = $this->columnHiddenAtFor($userId);
+        if (!$col) return false;
+        if ($this->{$col} === null) return true;
+        $this->{$col} = null;
+        return $this->save();
+    }
+
+    public function columnHiddenAtFor(int $userId): ?string
+    {
+        if ($this->usuari_1_id === $userId) return 'usuari_1_hidden_at';
+        if ($this->usuari_2_id === $userId) return 'usuari_2_hidden_at';
+        return null;
+    }
+
     /**
      * Crea o recupera la conversa entre dos usuaris.
      * Respecta el CHECK constraint usuari_1_id < usuari_2_id.
@@ -110,7 +148,30 @@ class Conversa extends Model
 
     // ── Scopes ──
 
+    /**
+     * Converses on participa $userId, excloent les que ha ocultat.
+     * Una conversa ocultada per l'usuari es torna visible si l'altre participant
+     * envia un missatge nou (created_at > hidden_at) — això es gestiona via
+     * la lògica del controlador en enviar missatge.
+     */
     public function scopeDeUsuari(Builder $q, int $userId): Builder
+    {
+        return $q->where(function ($qq) use ($userId) {
+            $qq->where(function ($a) use ($userId) {
+                $a->where('usuari_1_id', $userId)
+                    ->whereNull('usuari_1_hidden_at');
+            })->orWhere(function ($b) use ($userId) {
+                $b->where('usuari_2_id', $userId)
+                    ->whereNull('usuari_2_hidden_at');
+            });
+        });
+    }
+
+    /**
+     * Totes les converses on participa $userId, incloent les ocultades.
+     * Útil per al backend en enviar un missatge (per des-ocultar al receptor).
+     */
+    public function scopeDeUsuariAmbOcultes(Builder $q, int $userId): Builder
     {
         return $q->where(function ($qq) use ($userId) {
             $qq->where('usuari_1_id', $userId)
