@@ -23,10 +23,13 @@ class UserFactory extends Factory
             'biography' => fake()->paragraph(),
             'telefon' => fake()->phoneNumber(),
             'direccio' => fake()->city(),
-            'avatar_url' => 'https://randomuser.me/api/portraits/'
-                . (fake()->boolean() ? 'men' : 'women')
-                . '/' . fake()->numberBetween(0, 99) . '.jpg',
-            'google_id' => null,
+            'avatar_url' => function (array $attributes) {
+                $nom = $attributes['nom'] ?? 'User';
+                $cognoms = $attributes['cognoms'] ?? '';
+                return 'https://ui-avatars.com/api/?name='
+                    . urlencode(trim($nom . '+' . $cognoms))
+                    . '&background=random&size=128';
+            },
             'ubicacio' => DB::raw(sprintf(
                 "ST_SetSRID(ST_MakePoint(%f, %f), 4326)::geography",
                 fake()->longitude(1.95, 2.25),
