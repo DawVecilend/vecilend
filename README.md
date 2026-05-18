@@ -2,8 +2,8 @@
 
 Plataforma web de préstec i lloguer d'objectes entre veïns amb geolocalització. Connecta persones properes per compartir objectes de forma fàcil, segura i sostenible.
 
-🌐 **Producció:** [https://www.vecilend.com](https://www.vecilend.com)
-🛠️ **Backoffice:** [https://www.vecilend.com/backoffice](https://www.vecilend.com/backoffice)
+- 🌐 **Producció:** https://www.vecilend.com
+- 🛠️ **Backoffice:** https://www.vecilend.com/backoffice
 
 ## Stack Tecnològic
 
