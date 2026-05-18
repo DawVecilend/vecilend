@@ -1,2 +1,0 @@
-Archivo JSON con todos lo municipios de España
-https://datos.gob.es/es/catalogo/a09002970-municipios-de-espana
