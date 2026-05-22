@@ -14,10 +14,10 @@ class UserSeeder extends Seeder
         $now = Carbon::now();
 
         $usuaris = [
-            ['username' => 'maria', 'nom' => 'Maria', 'cognoms' => 'García López', 'genere' => 'dona', 'email' => 'maria@example.com', 'lng' => 2.0950, 'lat' => 41.3850, 'biography' => 'Usuaria de prueba.', 'telefon' => '666666667', 'direccio' => 'Barcelona'],
-            ['username' => 'pere', 'nom' => 'Pere', 'cognoms' => 'Martínez Soler', 'genere' => 'home', 'email' => 'pere@example.com', 'lng' => 2.0780, 'lat' => 41.3790, 'biography' => 'Usuario de prueba.', 'telefon' => '666666668', 'direccio' => 'Gavá'],
-            ['username' => 'laura', 'nom' => 'Laura', 'cognoms' => 'Fernández Roca', 'genere' => 'dona', 'email' => 'laura@example.com', 'lng' => 2.1000, 'lat' => 41.3900, 'biography' => 'Usuaria de prueba.', 'telefon' => '666666669', 'direccio' => 'Viladecans'],
-            ['username' => 'joan', 'nom' => 'Joan', 'cognoms' => 'Puig Vidal', 'genere' => 'home', 'email' => 'joan@example.com', 'lng' => 2.0830, 'lat' => 41.3770, 'biography' => 'Usuario de prueba.', 'telefon' => '666666670', 'direccio' => 'Castelldefels'],
+            ['username' => 'maria', 'nom' => 'Maria', 'cognoms' => 'García López', 'genere' => 'dona', 'email' => 'maria@example.com', 'lng' => 2.17744, 'lat' => 41.38229, 'biography' => 'Usuaria de prueba.', 'telefon' => '666666667', 'direccio' => 'Barcelona'],
+            ['username' => 'pere', 'nom' => 'Pere', 'cognoms' => 'Martínez Soler', 'genere' => 'home', 'email' => 'pere@example.com', 'lng' => 1.998511, 'lat' => 41.304085, 'biography' => 'Usuario de prueba.', 'telefon' => '666666668', 'direccio' => 'Gavá'],
+            ['username' => 'laura', 'nom' => 'Laura', 'cognoms' => 'Fernández Roca', 'genere' => 'dona', 'email' => 'laura@example.com', 'lng' => 2.019943, 'lat' => 41.316051, 'biography' => 'Usuaria de prueba.', 'telefon' => '666666669', 'direccio' => 'Viladecans'],
+            ['username' => 'joan', 'nom' => 'Joan', 'cognoms' => 'Puig Vidal', 'genere' => 'home', 'email' => 'joan@example.com', 'lng' => 1.976691, 'lat' => 41.280106, 'biography' => 'Usuario de prueba.', 'telefon' => '666666670', 'direccio' => 'Castelldefels'],
         ];
 
         foreach ($usuaris as $u) {
