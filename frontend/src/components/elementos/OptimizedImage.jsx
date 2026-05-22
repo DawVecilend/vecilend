@@ -16,7 +16,8 @@ function OptimizedImage({
   const ext = dotIndex > 0 ? src.substring(dotIndex + 1).toLowerCase() : "";
 
   const isExternal = /^https?:\/\//.test(src);
-  const supportsConversion = !isExternal && ["png", "jpg", "jpeg"].includes(ext);
+  const supportsConversion =
+    !isExternal && ["png", "jpg", "jpeg"].includes(ext);
 
   if (!supportsConversion) {
     return (
@@ -27,7 +28,7 @@ function OptimizedImage({
         width={width}
         height={height}
         loading={loading}
-        fetchpriority={fetchPriority}
+        fetchPriority={fetchPriority}
         decoding="async"
         {...rest}
       />
@@ -45,7 +46,7 @@ function OptimizedImage({
         width={width}
         height={height}
         loading={loading}
-        fetchpriority={fetchPriority}
+        fetchPriority={fetchPriority}
         decoding="async"
         {...rest}
       />

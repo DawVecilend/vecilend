@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BtnBack from "../../components/elementos/BtnBack";
 import { getCategories } from "../../services/categories";
-import { getProduct, updateObject, deleteObject, setMainImage as setMainImageApi, } from "../../services/objects";
+import {
+  getProduct,
+  updateObject,
+  deleteObject,
+  setMainImage as setMainImageApi,
+} from "../../services/objects";
 import { mapCategories } from "../../mappers/categoryMapper";
 import { cldTransform } from "../../utils/cloudinary";
 import ObjectLocationPicker from "../../components/map/ObjectLocationPicker";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
-
 
 function EditObjectPage() {
   const { id } = useParams();
@@ -687,7 +691,9 @@ function EditObjectPage() {
 
               <div
                 className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
-                  fieldErrors.name ? "border border-[var(--color-app-danger)]" : ""
+                  fieldErrors.name
+                    ? "border border-[var(--color-app-danger)]"
+                    : ""
                 }`}
               >
                 <img
@@ -703,7 +709,7 @@ function EditObjectPage() {
                   autoComplete="off"
                   value={form.name}
                   onChange={handleChange}
-                  placeholder="Introducir el nombre del producto"
+                  placeholder="Nombre del producto"
                   className="h-full w-full bg-transparent font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--color-app-text)] [&:-webkit-autofill]:[caret-color:var(--color-app-text)] [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:focus]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:hover]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset]"
                 />
               </div>
@@ -726,7 +732,9 @@ function EditObjectPage() {
 
                 <div
                   className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
-                    fieldErrors.pricePerDay ? "border border-[var(--color-app-danger)]" : ""
+                    fieldErrors.pricePerDay
+                      ? "border border-[var(--color-app-danger)]"
+                      : ""
                   }`}
                 >
                   <span className="text-[28px] leading-none text-app-text-secondary">
@@ -770,7 +778,9 @@ function EditObjectPage() {
                 onChange={handleChange}
                 placeholder="Describe los detalles y características del producto"
                 className={`w-full rounded-[16px] bg-app-bg-card px-4 py-4 font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none ${
-                  fieldErrors.description ? "border border-[var(--color-app-danger)]" : ""
+                  fieldErrors.description
+                    ? "border border-[var(--color-app-danger)]"
+                    : ""
                 }`}
               />
 
@@ -793,7 +803,9 @@ function EditObjectPage() {
                     onClick={() => setOpenCategories(!openCategories)}
                     disabled={loadingCategories}
                     className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-app-bg-card px-4 font-body text-[16px] text-app-text transition hover:bg-app-bg-card disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.category ? "border border-[var(--color-app-danger)]" : ""
+                      fieldErrors.category
+                        ? "border border-[var(--color-app-danger)]"
+                        : ""
                     }`}
                   >
                     {loadingCategories ? (
@@ -804,7 +816,9 @@ function EditObjectPage() {
                     ) : (
                       <span
                         className={
-                          selectedCategory ? "text-app-text" : "text-app-text-secondary"
+                          selectedCategory
+                            ? "text-app-text"
+                            : "text-app-text-secondary"
                         }
                       >
                         {selectedCategory
@@ -876,7 +890,9 @@ function EditObjectPage() {
                     onClick={() => setOpenSubcategories(!openSubcategories)}
                     disabled={loadingCategories || !selectedCategory}
                     className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-app-bg-card px-4 font-body text-[16px] text-app-text transition hover:bg-app-bg-card disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.subcategory ? "border border-[var(--color-app-danger)]" : ""
+                      fieldErrors.subcategory
+                        ? "border border-[var(--color-app-danger)]"
+                        : ""
                     }`}
                   >
                     {loadingCategories ? (
@@ -887,7 +903,9 @@ function EditObjectPage() {
                     ) : (
                       <span
                         className={
-                          selectedSubcategory ? "text-app-text" : "text-app-text-secondary"
+                          selectedSubcategory
+                            ? "text-app-text"
+                            : "text-app-text-secondary"
                         }
                       >
                         {selectedSubcategory
