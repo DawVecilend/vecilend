@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import BtnBack from "../../components/elementos/BtnBack";
 
@@ -10,7 +9,7 @@ function HowItWorksRentersPage() {
           <BtnBack />
         </div>
       </section>
-      <section className="relative w-full overflow-hidden py-12 md:py-20">
+      <section className="relative w-full overflow-hidden py-12 md:py-20 px-4 md:px-10">
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
           <div className="relative z-10">
             <span className="mb-6 inline-block rounded-full border border-vecilend-dark-primary/20 bg-vecilend-dark-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-vecilend-dark-primary">
@@ -46,7 +45,7 @@ function HowItWorksRentersPage() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative hidden lg:block">
             <div className="relative top-12 left-12 w-lg h-lg rounded-xl overflow-hidden aspect-square shadow-2xl rotate-2">
               <img
                 className="w-full h-full object-cover"
@@ -66,10 +65,10 @@ function HowItWorksRentersPage() {
       </section>
 
       {/* Process Section */}
-      <section className="py-16 bg-app-bg-secondary">
+      <section className="py-16 bg-app-bg-secondary px-4 md:px-10">
         <div className="max-w-7xl mx-auto">
-          <div className=" mb-10">
-            <h2 className="text-4xl font-extrabold mb-4 text-app-text">
+          <div className="mb-10 text-center md:text-left">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-app-text">
               Tu Flujo de Alquiler
             </h2>
             <p className="text-app-text-secondary">
@@ -79,8 +78,8 @@ function HowItWorksRentersPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-8 relative">
             {/* Step 1 */}
-            <div className="group bg-app-bg p-10 rounded-lg transition-all duration-300 border border-app-border">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors">
+            <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
+              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined text-4xl">
                   category
                 </span>
@@ -95,8 +94,8 @@ function HowItWorksRentersPage() {
               </p>
             </div>
             {/* Step 2 */}
-            <div className="group bg-app-bg p-10 rounded-lg transition-all duration-300 border border-app-border">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors">
+            <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
+              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined text-4xl">
                   event_available
                 </span>
@@ -111,8 +110,8 @@ function HowItWorksRentersPage() {
               </p>
             </div>
             {/* Step 3 */}
-            <div className="group bg-app-bg p-10 rounded-lg transition-all duration-300 border border-app-border">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors">
+            <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
+              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined text-4xl">
                   handshake
                 </span>
@@ -130,8 +129,8 @@ function HowItWorksRentersPage() {
       </section>
 
       {/* Why Rent with Us? (Bento Style) */}
-      <section className="py-24 px-8 max-w-7xl mx-auto">
-        <h2 className="text-4xl font-extrabold mb-12 text-center text-app-text">
+      <section className="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-12 text-center text-app-text">
           ¿Por qué alquilar con nosotros?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -232,9 +231,9 @@ function HowItWorksRentersPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 px-8 md:px-24 bg-app-bg-secondary">
+      <section className="py-16 md:py-24 px-4 md:px-10 lg:px-24 bg-app-bg-secondary">
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-inter text-4xl font-bold text-center mb-16 text-app-text">
+          <h2 className="font-inter text-3xl md:text-4xl font-bold text-center mb-16 text-app-text">
             Preguntas frecuentes
           </h2>
           <div className="space-y-4">
@@ -310,7 +309,7 @@ function HowItWorksRentersPage() {
             </p>
             <Link
               to="/objects"
-              className="bg-app-bg-card text-vecilend-dark-primary px-12 py-5 rounded-full font-bold text-xl hover:scale-105 transition-transform shadow-2xl"
+              className="inline-flex items-center justify-center bg-white text-vecilend-dark-primary px-8 md:px-12 py-4 md:py-5 rounded-full font-bold text-lg md:text-xl shadow-2xl hover:scale-105 transition-transform active:scale-95"
             >
               Explorar Ahora
             </Link>

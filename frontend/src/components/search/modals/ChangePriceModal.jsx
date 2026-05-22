@@ -28,6 +28,7 @@ function ChangePriceModal({ open, onClose, initial, onApply }) {
       fullScreen={isMobile}
       fullWidth
       maxWidth="sm"
+      disableScrollLock
       PaperProps={{
         sx: {
           backgroundColor: "var(--color-app-bg-card)",

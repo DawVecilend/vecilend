@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import BtnBack from "../../components/elementos/BtnBack";
 import {
   getNotifications,
   markNotificationAsRead,
@@ -267,7 +268,8 @@ function NotificationsPage() {
 
   return (
     <section className="mx-auto w-full max-w-2xl px-4 pt-6 pb-32">
-      <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4 mb-6">
+      <BtnBack />
+      <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4 mb-6 mt-4 md:mt-0">
         <h1 className="text-h1-mobile md:text-h1-desktop font-extrabold text-app-text font-heading">
           Notificaciones
         </h1>

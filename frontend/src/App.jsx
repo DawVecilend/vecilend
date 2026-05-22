@@ -70,6 +70,7 @@ import AdminCreateCategoryPage from "./pages/admin/AdminCreateCategoryPage";
 
 // ADMIN COMPONENTS
 import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
+import CookieBanner from "./components/elementos/CookieBanner";
 import AdminLayout from "./components/admin/AdminLayout";
 
 function App() {
@@ -122,6 +123,7 @@ function App() {
             <AuthProvider>
               <UnreadCountsProvider>
                 <ScrollToTop />
+                <CookieBanner />
 
                 <div className="hidden md:block">
                   <HeaderDesktop />

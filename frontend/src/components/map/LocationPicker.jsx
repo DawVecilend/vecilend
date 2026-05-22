@@ -149,7 +149,7 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
           <span className="material-symbols-outlined text-base">
             my_location
           </span>
-          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación"}
+          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación actual"}
         </button>
         {geoFailed && (
           <p className="text-caption text-amber-400 font-body ml-1">

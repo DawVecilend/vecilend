@@ -556,13 +556,13 @@ function MyOrdersPage() {
       </p>
 
       {/* Pestanyes */}
-      <div className="flex gap-2 mb-4 border-b border-app-border overflow-x-auto overflow-y-hidden vecilend-carousel">
+      <div className="flex flex-col md:flex-row gap-2 mb-4 border-b border-app-border md:overflow-x-auto md:overflow-y-hidden md:vecilend-carousel">
         {TABS.map((t) => (
           <button
             key={t.id}
             type="button"
             onClick={() => setTab(t)}
-            className={`relative px-4 py-3 font-body text-body-base font-semibold transition-colors whitespace-nowrap ${
+            className={`relative px-4 py-3 font-body text-body-base font-semibold transition-colors text-left md:text-center whitespace-nowrap ${
               tab.id === t.id
                 ? "text-vecilend-dark-primary"
                 : "text-app-text-secondary hover:text-app-text"
@@ -577,7 +577,10 @@ function MyOrdersPage() {
               )}
             </span>
             {tab.id === t.id && (
-              <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-vecilend-dark-primary" />
+              <>
+                <span className="hidden md:block absolute bottom-[-1px] left-0 right-0 h-0.5 bg-vecilend-dark-primary" />
+                <span className="md:hidden absolute top-0 bottom-0 left-0 w-0.5 bg-vecilend-dark-primary" />
+              </>
             )}
           </button>
         ))}

@@ -1,7 +1,6 @@
-import { useState, useEffect, useMemo, useContext } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import SearchModal from "../search/SearchModal";
-import { AuthContext } from "../../contexts/AuthContext";
 
 const PENDING_FILTERS_KEY = "vecilend_pending_filters";
 
@@ -12,9 +11,6 @@ function SearchBar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-
-  const auth = useContext(AuthContext);
-  const user = auth?.user;
 
   const isObjectsPage = location.pathname === "/objects";
 
@@ -101,13 +97,13 @@ function SearchBar() {
 
   return (
     <>
-      <div className="hidden lg:flex items-center rounded-full bg-app-bg-card-secondary px-2 py-1 transition-colors">
+      <div className="flex w-full items-center rounded-full bg-app-bg-card-secondary px-2 py-1 transition-colors min-w-0 max-w-[560px]">
         {/* Lupa = botó d'execució */}
         <button
           type="button"
           onClick={executeSearch}
           aria-label="Buscar"
-          className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-app-bg-card-secondary transition-colors"
+          className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full hover:bg-app-bg-card-secondary transition-colors"
         >
           <span className="material-symbols-outlined text-app-text-secondary">
             search
@@ -115,9 +111,7 @@ function SearchBar() {
         </button>
 
         <input
-          className={`${
-            user ? "w-80" : "w-56"
-          } bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-app-text placeholder:text-app-text-secondary px-3`}
+          className="flex-1 min-w-0 bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-app-text placeholder:text-app-text-secondary px-3"
           type="text"
           placeholder="Buscar objeto..."
           value={query}
@@ -129,7 +123,7 @@ function SearchBar() {
         <button
           type="button"
           onClick={() => setFiltersOpen(true)}
-          className="relative inline-flex items-center gap-1 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-4 py-2 text-sm font-bold text-[var(--color-app-success-on)] transition-all hover:from-vecilend-dark-primary-hover hover:to-vecilend-dark-primary-hover hover:text-white active:scale-95"
+          className="shrink-0 relative inline-flex items-center gap-1 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-4 py-2 text-sm font-bold text-[var(--color-app-success-on)] transition-all hover:from-vecilend-dark-primary-hover hover:to-vecilend-dark-primary-hover hover:text-white active:scale-95"
         >
           <span className="material-symbols-outlined text-base">tune</span>
           Filtros

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import OptimizedImage from "../../components/elementos/OptimizedImage";
 import { Link } from "react-router-dom";
 import BtnBack from "../../components/elementos/BtnBack";
 
@@ -129,7 +130,7 @@ function FAQPage() {
       {/* Category Tabs */}
       <section className="w-full py-8 px-4 md:px-10 bg-app-bg">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+          <div className="flex flex-wrap gap-3 justify-center">
             {categories.map((cat) => (
               <button
                 key={cat.id}
@@ -249,7 +250,7 @@ function FAQPage() {
         <div className="mx-auto max-w-7xl">
           <div className="relative bg-gradient-to-br from-vecilend-dark-primary/20 to-vecilend-dark-secondary/20 rounded-[3rem] p-12 md:p-16 overflow-hidden border border-vecilend-dark-primary/50">
             <div className="absolute top-0 right-0 w-1/2 h-full -z-0 opacity-10 hidden lg:block">
-              <img
+              <OptimizedImage
                 className="w-full h-full object-cover grayscale"
                 src="/assets/img3-hero-section.png"
                 alt="Únete a Vecilend"

@@ -138,6 +138,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
       fullScreen={isMobile}
       fullWidth
       maxWidth="md"
+      disableScrollLock
       PaperProps={{
         sx: {
           backgroundColor: "var(--color-app-bg-card)",

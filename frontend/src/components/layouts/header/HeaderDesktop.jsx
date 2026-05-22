@@ -52,8 +52,8 @@ function HeaderDesktop() {
         borderColor: "var(--color-app-header-border)",
       }}
     >
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-8">
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-6 py-4">
+        <div className="flex items-center gap-8 shrink-0">
           <Link to="/" className="flex items-center">
             <Logo className="h-[45px] w-[136px]" />
           </Link>
@@ -74,9 +74,11 @@ function HeaderDesktop() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="hidden lg:flex flex-1 min-w-0 justify-center">
           <SearchBar />
+        </div>
 
+        <div className="flex items-center gap-4 shrink-0 ml-auto lg:ml-0">
           {user && (
             <Link
               to="/objects/create"

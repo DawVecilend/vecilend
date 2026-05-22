@@ -1,8 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import SettingsNav from "../../components/layouts/SettingsNav";
+import BtnBack from "../../components/elementos/BtnBack";
 
 function SettingsPage() {
   const { user } = useAuth();
@@ -12,7 +12,8 @@ function SettingsPage() {
   return (
     <div className="bg-app-bg text-app-text antialiased font-inter min-h-[calc(100vh-80px)]">
       <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8 py-3 md:py-6">
-        <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
+        <BtnBack />
+        <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)] mt-4 md:mt-0">
           <SettingsNav username={user?.username} current="home" />
 
           <main className="flex-1 min-w-0 p-0 md:p-6">

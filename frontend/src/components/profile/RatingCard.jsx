@@ -1,4 +1,3 @@
-import React from "react";
 
 /**
  * Targeta compacta del perfil amb un valor + label.

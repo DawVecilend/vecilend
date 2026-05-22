@@ -156,6 +156,10 @@
 
 * { box-sizing: border-box; }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   background-color: var(--color-app-bg);
   color: var(--color-app-text);

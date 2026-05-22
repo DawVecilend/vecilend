@@ -53,7 +53,7 @@ function AdminLoginPage() {
                 value={formData.login}
                 onChange={(e) => setFormData({ ...formData, login: e.target.value })}
                 required
-                placeholder="admin@vecilend.com"
+                placeholder="tu@email.com"
                 className="w-full rounded-lg px-4 py-3 text-sm outline-none bg-app-neutral border border-app-border text-app-text"
               />
             </div>

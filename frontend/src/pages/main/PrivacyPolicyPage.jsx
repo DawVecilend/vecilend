@@ -102,7 +102,7 @@ function PrivacyPolicyPage() {
           <p>
             Utilizamos almacenamiento local del navegador para mantener tu
             sesión iniciada, recordar tus preferencias de visualización (como el
-            tema claro u oscuro) y mejorar la experiencia. No usamos cookies de
+            tema claro u oscuro) y registrar tu consentimiento de cookies. Detalles completos en la sección "Política de cookies" más abajo. No usamos cookies de
             seguimiento publicitario.
           </p>
         </Section>

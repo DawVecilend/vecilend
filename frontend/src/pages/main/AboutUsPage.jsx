@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BtnBack from "../../components/elementos/BtnBack";
+import OptimizedImage from "../../components/elementos/OptimizedImage";
 
 function AboutUsPage() {
   const stats = [
@@ -144,17 +145,17 @@ function AboutUsPage() {
 
               <div className="relative grid grid-cols-2 gap-4">
                 <div className="overflow-hidden rounded-[18px] border border-app-border shadow-2xl shadow-black/30">
-                  <img
+                  <OptimizedImage
                     src="/assets/img2-hero-section.png"
                     alt="Comunidad Vecilend"
-                    className="h-[240px] w-full object-cover opacity-90"
+                    className="h-[200px] md:h-[240px] w-full object-cover opacity-90"
                   />
                 </div>
-                <div className="overflow-hidden rounded-[18px] border border-app-border shadow-2xl shadow-black/30 pt-8">
-                  <img
+                <div className="overflow-hidden rounded-[18px] border border-app-border shadow-2xl shadow-black/30 mt-8">
+                  <OptimizedImage
                     src="/assets/img4-hero-section.png"
                     alt="Objetos compartidos"
-                    className="h-[240px] w-full object-cover opacity-90"
+                    className="h-[200px] md:h-[240px] w-full object-cover opacity-90"
                   />
                 </div>
               </div>
@@ -312,7 +313,7 @@ function AboutUsPage() {
               <div className="absolute -bottom-10 -right-10 h-[240px] w-[240px] rounded-full bg-vecilend-dark-secondary/10 blur-3xl"></div>
 
               <div className="relative overflow-hidden rounded-[24px] border border-app-border shadow-2xl shadow-black/30">
-                <img
+                <OptimizedImage
                   src="/assets/img1-hero-section.png"
                   alt="Comunidad Vecilend"
                   className="h-[500px] w-full object-cover opacity-90"
@@ -328,7 +329,7 @@ function AboutUsPage() {
         <div className="mx-auto max-w-7xl">
             <div className="relative bg-gradient-to-br from-vecilend-dark-primary/20 to-vecilend-dark-secondary/20 rounded-[3rem] p-12 md:p-16 overflow-hidden border border-vecilend-dark-primary/50">
             <div className="absolute top-0 right-0 w-1/2 h-full -z-0 opacity-10 hidden lg:block">
-              <img
+              <OptimizedImage
                 className="w-full h-full object-cover grayscale"
                 src="/assets/img3-hero-section.png"
                 alt="Únete a Vecilend"

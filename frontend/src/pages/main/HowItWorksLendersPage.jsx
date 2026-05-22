@@ -43,7 +43,7 @@ function HowItWorksLendersPage() {
           <BtnBack />
         </div>
       </section>
-      <section className="relative w-full overflow-hidden py-12 md:py-20">
+      <section className="relative w-full overflow-hidden py-12 md:py-20 px-4 md:px-10">
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
           <div className="relative z-10">
             <span className="mb-6 inline-block rounded-full border border-vecilend-dark-primary/20 bg-vecilend-dark-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-vecilend-dark-primary">
@@ -79,7 +79,7 @@ function HowItWorksLendersPage() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative hidden lg:block">
             <div className="relative top-0 right-0 w-lg h-lg rounded-xl overflow-hidden shadow-2xl -rotate-3 z-0">
               <img
                 className="w-full h-full object-cover"
@@ -99,10 +99,10 @@ function HowItWorksLendersPage() {
       </section>
 
       {/* Process Section */}
-      <section className="py-16 bg-app-bg-secondary">
+      <section className="py-16 bg-app-bg-secondary px-4 md:px-10">
         <div className="max-w-7xl mx-auto">
-          <div className=" mb-10">
-            <h2 className="text-4xl font-extrabold mb-4 text-app-text">
+          <div className="mb-10 text-center md:text-left">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-app-text">
               El proceso de alquiler
             </h2>
             <p className="text-app-text-secondary">
@@ -112,8 +112,8 @@ function HowItWorksLendersPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-8 relative">
             {/* Step 1 */}
-            <div className="group bg-app-bg p-10 rounded-lg transition-all duration-300 border border-app-border">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors">
+            <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
+              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined">add_a_photo</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
@@ -126,8 +126,8 @@ function HowItWorksLendersPage() {
               </p>
             </div>
             {/* Step 2 */}
-            <div className="group bg-app-bg p-10 rounded-lg transition-all duration-300 border border-app-border">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors">
+            <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
+              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined">fact_check</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
@@ -139,8 +139,8 @@ function HowItWorksLendersPage() {
               </p>
             </div>
             {/* Step 3 */}
-            <div className="group bg-app-bg p-10 rounded-lg transition-all duration-300 border border-app-border">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors">
+            <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
+              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined">payments</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
@@ -156,8 +156,8 @@ function HowItWorksLendersPage() {
       </section>
 
       {/* Lender Protection */}
-      <section className="py-24 px-8 md:px-24 overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
+      <section className="py-16 md:py-24 px-4 md:px-10 lg:px-24 overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8 md:gap-16 items-center">
           <div className="w-full md:w-1/2">
             <span className="text-vecilend-dark-primary font-bold font-inter mb-4 block uppercase tracking-widest text-sm">
               La seguridad es lo primero
@@ -255,9 +255,9 @@ function HowItWorksLendersPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 px-8 md:px-24">
+      <section className="py-16 md:py-24 px-4 md:px-10 lg:px-24">
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-inter text-4xl font-bold text-center mb-16 text-app-text">
+          <h2 className="font-inter text-3xl md:text-4xl font-bold text-center mb-16 text-app-text">
             Preguntas frecuentes
           </h2>
           <div className="space-y-4">
@@ -322,8 +322,8 @@ function HowItWorksLendersPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-8 md:px-24">
-        <div className="max-w-7xl mx-auto bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary rounded-xl p-12 md:p-24 text-center text-white relative overflow-hidden">
+      <section className="py-16 md:py-24 px-4 md:px-10 lg:px-24">
+        <div className="max-w-7xl mx-auto bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary rounded-xl p-8 md:p-16 lg:p-24 text-center text-white relative overflow-hidden">
           {/* Elementos Decorativos */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10">
             <svg className="w-full h-full preserve-3d" viewBox="0 0 100 100">
@@ -341,7 +341,7 @@ function HowItWorksLendersPage() {
           <div className="relative z-10">
             <Link
               to="/objects/create"
-              className="bg-white text-vecilend-dark-primary px-12 py-5 rounded-full font-bold text-xl shadow-2xl hover:scale-105 transition-transform active:scale-95"
+              className="bg-white text-vecilend-dark-primary px-8 md:px-12 py-4 md:py-5 rounded-full font-bold text-lg md:text-xl shadow-2xl hover:scale-105 transition-transform active:scale-95"
             >
               Publicar producto
             </Link>

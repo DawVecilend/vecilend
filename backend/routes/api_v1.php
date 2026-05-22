@@ -28,15 +28,15 @@ use App\Models\Conversa;
 use App\Models\Notificacio;
 
 // ── Públiques (usuari) ──
-Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:register');
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
-Route::post('/check-user', [RegisterController::class, 'checkUser']);
-Route::post('/email/send-code',   [EmailVerificationController::class, 'sendCode']);
-Route::post('/email/verify-code', [EmailVerificationController::class, 'verifyCode']);
+Route::post('/check-user', [RegisterController::class, 'checkUser'])->middleware('throttle:30,1');
+Route::post('/email/send-code',   [EmailVerificationController::class, 'sendCode'])->middleware('throttle:email-verify');
+Route::post('/email/verify-code', [EmailVerificationController::class, 'verifyCode'])->middleware('throttle:email-verify');
 Route::get('/profile/{username}', [UserController::class, 'getByUsername']);
 Route::get('/profile/{username}/objects', [ObjecteController::class, 'getUserObjects']);
-Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
-Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('throttle:password-forgot');
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('throttle:password-reset');
 Route::get('/categories', [CategoriaController::class, 'index']);
 Route::get('/objects', [ObjecteController::class, 'index']);
 Route::get('/objects/nearby', [ObjecteController::class, 'nearby']);

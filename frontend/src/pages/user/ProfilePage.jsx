@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProfile, getUserObjects } from "../../services/profile";
@@ -13,6 +12,7 @@ import UserReviewsList from "../../components/profile/UserReviewsList";
 import { getReviewsEvolution } from "../../services/reviews";
 import { createChat } from "../../services/chats";
 import ReportModal from "../../components/elementos/ReportModal";
+import BtnBack from "../../components/elementos/BtnBack";
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -177,6 +177,7 @@ function ProfilePage() {
   return (
     <div className="bg-app-bg text-app-text antialiased min-h-screen dark">
       <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
+        <div className="-mt-20 md:hidden"><BtnBack /></div>
         <section className="relative bg-app-bg-secondary rounded-xl p-8 md:p-12 overflow-hidden">
           <div className="relative flex flex-col md:flex-row gap-8 items-start">
             {/* ── Avatar ── */}

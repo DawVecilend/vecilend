@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import BtnBack from "../../components/elementos/BtnBack";
 import { Link } from "react-router-dom";
 import { getChats } from "../../services/chats";
 import { getDraft, subscribeToDrafts } from "../../services/chatDrafts";
@@ -130,7 +131,8 @@ function ChatsListPage() {
 
   return (
     <section className="mx-auto w-full max-w-2xl px-4 pt-6 pb-32">
-      <header className="flex items-center justify-between mb-6">
+      <BtnBack />
+      <header className="flex items-center justify-between mb-6 mt-4 md:mt-0">
         <h1 className="text-h1-mobile md:text-h1-desktop font-extrabold text-app-text font-heading">
           Chats
         </h1>

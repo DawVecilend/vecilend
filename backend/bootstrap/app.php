@@ -23,6 +23,13 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*', headers:
+            Request::HEADER_X_FORWARDED_FOR |
+            Request::HEADER_X_FORWARDED_HOST |
+            Request::HEADER_X_FORWARDED_PORT |
+            Request::HEADER_X_FORWARDED_PROTO |
+            Request::HEADER_X_FORWARDED_AWS_ELB
+        );
         $middleware->prepend(ForceJsonResponse::class);
         $middleware->alias([
             'empleat'         => \App\Http\Middleware\EnsureEmpleat::class,
@@ -51,6 +58,34 @@ return Application::configure(basePath: dirname(__DIR__))
         RateLimiter::for('login', function (Request $request) {
             $key = strtolower((string) $request->input('login')) . '|' . $request->ip();
             return Limit::perMinute(5)->by($key);
+        });
+
+        RateLimiter::for('register', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip());
+        });
+
+        RateLimiter::for('password-forgot', function (Request $request) {
+            $email = strtolower((string) $request->input('email'));
+            return [
+                Limit::perMinute(3)->by($email),
+                Limit::perMinute(10)->by($request->ip()),
+            ];
+        });
+
+        RateLimiter::for('password-reset', function (Request $request) {
+            $email = strtolower((string) $request->input('email'));
+            return [
+                Limit::perMinute(5)->by($email),
+                Limit::perMinute(10)->by($request->ip()),
+            ];
+        });
+
+        RateLimiter::for('email-verify', function (Request $request) {
+            $email = strtolower((string) $request->input('email'));
+            return [
+                Limit::perMinute(3)->by($email),
+                Limit::perMinute(10)->by($request->ip()),
+            ];
         });
     })
     ->create();
