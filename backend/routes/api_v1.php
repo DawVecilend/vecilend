@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\TwoFactorController;
 use App\Http\Controllers\Api\V1\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
@@ -31,6 +32,7 @@ use App\Models\Notificacio;
 // ── Públiques (usuari) ──
 Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:register');
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
+Route::post('/login/2fa', [LoginController::class, 'verify2fa'])->middleware('throttle:login');
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->middleware('throttle:30,1');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->middleware('throttle:30,1');
 Route::post('/check-user', [RegisterController::class, 'checkUser'])->middleware('throttle:30,1');
@@ -55,6 +57,12 @@ Route::middleware(['auth:sanctum', 'last_seen', 'log_user_action'])->group(funct
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
+
+    Route::post('/2fa/setup',                [TwoFactorController::class, 'setup'])->middleware('throttle:10,1');
+    Route::post('/2fa/confirm',              [TwoFactorController::class, 'confirm'])->middleware('throttle:10,1');
+    Route::post('/2fa/disable',              [TwoFactorController::class, 'disable'])->middleware('throttle:10,1');
+    Route::post('/2fa/recovery-codes',       [TwoFactorController::class, 'showRecoveryCodes'])->middleware('throttle:10,1');
+    Route::post('/2fa/recovery-codes/regenerate', [TwoFactorController::class, 'regenerateRecoveryCodes'])->middleware('throttle:10,1');
 
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);

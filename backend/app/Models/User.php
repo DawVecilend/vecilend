@@ -31,17 +31,25 @@ class User extends Authenticatable
         'ubicacio',
         'actiu',
         'last_seen_at',
+        'two_factor_secret',
+        'two_factor_enabled',
+        'two_factor_recovery_codes',
+        'two_factor_confirmed_at',
     ];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes'];
 
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'last_seen_at'      => 'datetime',
-            'password'          => 'hashed',
-            'actiu'             => 'boolean',
+            'email_verified_at'         => 'datetime',
+            'last_seen_at'              => 'datetime',
+            'password'                  => 'hashed',
+            'actiu'                     => 'boolean',
+            'two_factor_enabled'        => 'boolean',
+            'two_factor_secret'         => 'encrypted',
+            'two_factor_recovery_codes' => 'encrypted:array',
+            'two_factor_confirmed_at'   => 'datetime',
         ];
     }
 

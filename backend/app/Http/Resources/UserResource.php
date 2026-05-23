@@ -23,6 +23,8 @@ class UserResource extends JsonResource
             'ubicacio' => $this->ubicacio ? $this->coordenades() : null,
 
             'actiu' => $this->actiu,
+            'two_factor_enabled' => (bool) $this->two_factor_enabled,
+            'has_password' => ! is_null($this->password),
             'email_verified_at' => $this->email_verified_at?->toISOString(),
             'valoracio_propietari_avg'   => $this->valoracio_propietari_avg   ?? null,
             'valoracio_propietari_total' => $this->valoracio_propietari_total ?? 0,

@@ -20,6 +20,12 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
+import {
+  TwoFactorSetupModal,
+  TwoFactorDisableModal,
+  TwoFactorRecoveryModal,
+} from "../../components/elementos/TwoFactorModals";
+
 function SecuritySettingsPage() {
   const { user } = useContext(AuthContext);
   const auth = useContext(AuthContext);
@@ -45,6 +51,33 @@ function SecuritySettingsPage() {
   const [deactivateOpen, setDeactivateOpen] = useState(false);
   const [deactivateBusy, setDeactivateBusy] = useState(false);
   const [deactivateError, setDeactivateError] = useState(null);
+
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
+    Boolean(user?.two_factor_enabled),
+  );
+  const [twoFactorSetupOpen, setTwoFactorSetupOpen] = useState(false);
+  const [twoFactorDisableOpen, setTwoFactorDisableOpen] = useState(false);
+  const [twoFactorRecoveryOpen, setTwoFactorRecoveryOpen] = useState(false);
+  const userHasPassword = user ? Boolean(user.has_password) : true;
+
+  React.useEffect(() => {
+    setTwoFactorEnabled(Boolean(user?.two_factor_enabled));
+  }, [user?.two_factor_enabled]);
+
+  const handleToggle2fa = () => {
+    if (twoFactorEnabled) setTwoFactorDisableOpen(true);
+    else setTwoFactorSetupOpen(true);
+  };
+
+  const handle2faActivated = () => {
+    setTwoFactorEnabled(true);
+    auth.getUser?.();
+  };
+
+  const handle2faDisabled = () => {
+    setTwoFactorEnabled(false);
+    auth.getUser?.();
+  };
 
   const handlePasswordChange = (e) => {
     setPasswords((prev) => ({
@@ -257,41 +290,34 @@ function SecuritySettingsPage() {
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-[var(--color-app-warning)]">
+                    <span className={`material-symbols-outlined ${twoFactorEnabled ? "text-vecilend-dark-primary" : "text-[var(--color-app-warning)]"}`}>
                       verified_user
                     </span>
                     <h2 className="text-xl font-bold">Autenticación 2FA</h2>
                   </div>
 
-                  <label className="relative inline-flex items-center cursor-not-allowed opacity-60">
+                  <label className="relative inline-flex items-center cursor-pointer">
                     <input
-                      checked={false}
-                      readOnly
-                      disabled
+                      checked={twoFactorEnabled}
+                      onChange={handleToggle2fa}
                       className="sr-only peer"
                       type="checkbox"
-                      onClick={(e) => e.preventDefault()}
-                      onChange={() => {}}
                     />
-                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5"></div>
+                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:bg-vecilend-dark-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-white"></div>
                   </label>
                 </div>
 
-                <p className="text-sm text-app-text-secondary mb-3 leading-relaxed">
+                <p className="text-sm text-app-text-secondary mb-6 leading-relaxed">
                   Añade una capa extra de seguridad a tu cuenta usando una
-                  aplicación de autenticación.
-                </p>
-
-                <p className="text-xs text-[var(--color-app-warning)] mb-6 leading-relaxed italic">
-                  Esta funcionalidad se encuentra en fase de desarrollo y
-                  todavía no ha sido implementada.
+                  aplicación de autenticación como Google Authenticator, Authy o
+                  1Password.
                 </p>
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20 opacity-60">
+                <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20">
                   <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-app-text-secondary">
+                    <span className={`material-symbols-outlined ${twoFactorEnabled ? "text-vecilend-dark-primary" : "text-app-text-secondary"}`}>
                       smartphone
                     </span>
                     <span className="text-sm font-bold text-app-text">
@@ -299,20 +325,26 @@ function SecuritySettingsPage() {
                     </span>
                   </div>
 
-                  <span className="text-[10px] uppercase tracking-wider font-bold bg-app-bg/40 text-app-text-secondary px-2 py-0.5 rounded">
-                    Inactivo
+                  <span
+                    className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded ${
+                      twoFactorEnabled
+                        ? "bg-vecilend-dark-primary/20 text-vecilend-dark-primary"
+                        : "bg-app-bg/40 text-app-text-secondary"
+                    }`}
+                  >
+                    {twoFactorEnabled ? "Activo" : "Inactivo"}
                   </span>
                 </div>
 
-                <button
-                  type="button"
-                  disabled
-                  aria-disabled="true"
-                  onClick={(e) => e.preventDefault()}
-                  className="w-full py-3 border border-vecilend-dark-primary/30 text-vecilend-dark-primary/60 rounded-lg text-sm font-bold cursor-not-allowed mt-2"
-                >
-                  Configurar métodos alternativos
-                </button>
+                {twoFactorEnabled && (
+                  <button
+                    type="button"
+                    onClick={() => setTwoFactorRecoveryOpen(true)}
+                    className="w-full py-3 border border-vecilend-dark-primary/30 text-vecilend-dark-primary rounded-lg text-sm font-bold mt-2 hover:bg-vecilend-dark-primary/10 transition-colors active:scale-95"
+                  >
+                    Ver códigos de recuperación
+                  </button>
+                )}
               </div>
             </section>
 
@@ -613,6 +645,25 @@ function SecuritySettingsPage() {
           </button>
         </DialogActions>
       </Dialog>
+      <TwoFactorSetupModal
+        open={twoFactorSetupOpen}
+        onClose={() => setTwoFactorSetupOpen(false)}
+        onActivated={handle2faActivated}
+        userHasPassword={userHasPassword}
+      />
+
+      <TwoFactorDisableModal
+        open={twoFactorDisableOpen}
+        onClose={() => setTwoFactorDisableOpen(false)}
+        onDisabled={handle2faDisabled}
+        userHasPassword={userHasPassword}
+      />
+
+      <TwoFactorRecoveryModal
+        open={twoFactorRecoveryOpen}
+        onClose={() => setTwoFactorRecoveryOpen(false)}
+        userHasPassword={userHasPassword}
+      />
     </div>
   );
 }

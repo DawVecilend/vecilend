@@ -3,9 +3,11 @@ import { useState } from "react";
 import PasswordInput from "../../components/elementos/PasswordInput";
 import OptimizedImage from "../../components/elementos/OptimizedImage";
 import { useAuth } from "../../contexts/AuthContext";
+import { useToast } from "../../contexts/ToastContext";
 
 function LoginPage() {
-  const { login } = useAuth();
+  const { login, verifyLogin2fa } = useAuth();
+  const { showToast } = useToast();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -14,6 +16,8 @@ function LoginPage() {
   });
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [twoFactorToken, setTwoFactorToken] = useState(null);
+  const [twoFactorCode, setTwoFactorCode] = useState("");
 
   const handleGoogleLogin = () => {
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -26,8 +30,13 @@ function LoginPage() {
     setSubmitting(true);
 
     try {
-      await login(formData);
-      navigate("/");
+      const result = await login(formData);
+      if (result?.requires2fa) {
+        setTwoFactorToken(result.twoFactorToken);
+        setTwoFactorCode("");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       if (err.response?.status === 401) setError("Credenciales incorrectas");
       else if (err.response?.status === 403)
@@ -38,6 +47,48 @@ function LoginPage() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handle2faSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+    try {
+      const result = await verifyLogin2fa({
+        twoFactorToken,
+        code: twoFactorCode.trim(),
+      });
+      if (result?.recoveryCodesUsed) {
+        const left = result.recoveryCodesLeft ?? 0;
+        const message =
+          left === 0
+            ? "Has usado tu último código de recuperación. Genera nuevos códigos desde Ajustes."
+            : `Has usado un código de recuperación. Te quedan ${left}.`;
+        showToast(message, { type: "info", duration: 6000 });
+      }
+      navigate("/");
+    } catch (err) {
+      if (err.response?.status === 422)
+        setError(
+          err.response.data.errors?.code?.[0] ||
+            err.response.data.message ||
+            "Código incorrecto.",
+        );
+      else if (err.response?.status === 401)
+        setError(
+          err.response.data.message ||
+            "La sesión de verificación ha expirado.",
+        );
+      else setError("Error de conexión");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleBackToLogin = () => {
+    setTwoFactorToken(null);
+    setTwoFactorCode("");
+    setError(null);
   };
 
   return (
@@ -137,6 +188,51 @@ function LoginPage() {
               <div className="flex-grow border-t border-app-border"></div>
             </div>
 
+            {twoFactorToken ? (
+              <form className="space-y-5" onSubmit={handle2faSubmit}>
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-semibold text-app-text-secondary">
+                    Código de verificación
+                  </label>
+                  <input
+                    value={twoFactorCode}
+                    onChange={(e) => setTwoFactorCode(e.target.value)}
+                    inputMode="text"
+                    autoComplete="one-time-code"
+                    placeholder="123456 o XXXXX-XXXXX"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider text-center focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                    required
+                    autoFocus
+                  />
+                  <p className="text-xs text-app-text-secondary mt-2">
+                    Introduce el código de 6 dígitos de tu app de
+                    autenticación o uno de tus códigos de recuperación.
+                  </p>
+                </div>
+
+                {error && (
+                  <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-2 rounded-lg text-sm font-medium text-center">
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary active:scale-[0.97]"}`}
+                  type="submit"
+                  disabled={submitting || !twoFactorCode.trim()}
+                >
+                  <span>{submitting ? "Verificando..." : "Verificar e iniciar sesión"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleBackToLogin}
+                  className="w-full text-sm text-app-text-secondary hover:text-app-text underline"
+                >
+                  Volver al inicio de sesión
+                </button>
+              </form>
+            ) : (
             <form className="space-y-5" onSubmit={handleSubmit}>
               <div className="space-y-1.5">
                 <label className="block text-sm font-semibold text-app-text-secondary">
@@ -198,6 +294,7 @@ function LoginPage() {
                 )}
               </button>
             </form>
+            )}
 
             <div className="mt-8 text-center">
               <p className="text-app-text-secondary text-sm">
