@@ -23,6 +23,11 @@ function RegisterPage() {
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const handleGoogleLogin = () => {
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    window.location.href = `${apiUrl}/api/v1/auth/google/redirect`;
+  };
+
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
@@ -367,7 +372,11 @@ function RegisterPage() {
               </div>
 
               <div className="flex flex-col gap-3 mb-6">
-                <button className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]">
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]"
+                >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -854,7 +863,7 @@ function RegisterPage() {
                               }));
                             }}
                             className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
-                            placeholder="+34 600 000 000"
+                            placeholder="+34 612 345 678"
                             type="tel"
                           />
                         </div>

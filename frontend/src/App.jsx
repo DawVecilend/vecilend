@@ -28,6 +28,7 @@ import FAQPage from "./pages/main/FAQPage";
 // AUTH PAGES
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 
 // USER PAGES
 import ProfilePage from "./pages/user/ProfilePage";
@@ -138,6 +139,10 @@ function App() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route
+                      path="/auth/google/callback"
+                      element={<GoogleCallbackPage />}
+                    />
 
                     <Route
                       path="/how-it-works/requesters"

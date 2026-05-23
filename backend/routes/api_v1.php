@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\BackofficeAuthController;
@@ -30,6 +31,8 @@ use App\Models\Notificacio;
 // ── Públiques (usuari) ──
 Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:register');
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->middleware('throttle:30,1');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->middleware('throttle:30,1');
 Route::post('/check-user', [RegisterController::class, 'checkUser'])->middleware('throttle:30,1');
 Route::post('/email/send-code',   [EmailVerificationController::class, 'sendCode'])->middleware('throttle:email-verify');
 Route::post('/email/verify-code', [EmailVerificationController::class, 'verifyCode'])->middleware('throttle:email-verify');

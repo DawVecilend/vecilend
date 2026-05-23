@@ -218,7 +218,8 @@ function EditProfilePage() {
           <main className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
-                Perfil de <span className="text-vecilend-dark-primary">Usuario</span>
+                Perfil de{" "}
+                <span className="text-vecilend-dark-primary">Usuario</span>
               </h1>
               <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
                 Gestiona tu identidad y preferencias en Vecilend.
@@ -316,7 +317,7 @@ function EditProfilePage() {
                         onChange={handleChange}
                         className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
                         type="text"
-                        placeholder="600 000 000"
+                        placeholder="612 345 678"
                       />
                     </div>
                     <div className="space-y-2 relative">
