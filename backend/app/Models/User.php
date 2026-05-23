@@ -29,8 +29,6 @@ class User extends Authenticatable
         'avatar_public_id',
         'google_id',
         'ubicacio',
-
-        'actiu',
         'last_seen_at',
     ];
 

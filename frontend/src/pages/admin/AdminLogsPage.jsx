@@ -167,12 +167,12 @@ function AdminLogsPage() {
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             type="button"
             onClick={handleExportLogs}
             disabled={exporting || loading}
-            className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-app-primary/15 text-app-primary hover:bg-app-primary/25 disabled:opacity-60 whitespace-nowrap"
+            className="inline-flex items-center justify-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-app-primary/15 text-app-primary hover:bg-app-primary/25 disabled:opacity-60 whitespace-nowrap w-full sm:w-auto"
           >
             <span className="material-symbols-outlined text-base">download</span>
             {exporting ? "Exportando…" : "Exportar CSV"}
@@ -181,7 +181,7 @@ function AdminLogsPage() {
             type="button"
             onClick={() => setCleanConfirmOpen(true)}
             disabled={cleaning || loading}
-            className="inline-flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 disabled:opacity-60 whitespace-nowrap"
+            className="inline-flex items-center justify-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 disabled:opacity-60 whitespace-nowrap w-full sm:w-auto"
           >
             <span className="material-symbols-outlined text-base">delete_sweep</span>
             Limpiar historial
@@ -246,7 +246,7 @@ function AdminLogsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[700px] text-sm">
               <thead>
                 <tr className="bg-app-neutral border-b border-app-border">
                   {["#", "Tipo", "Actor", "Acción", "Entidad afectada", "IP", "Fecha"].map((h) => (
@@ -338,14 +338,14 @@ function AdminLogsPage() {
 
       {cleanConfirmOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/60"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
           onClick={(e) => {
             if (e.target === e.currentTarget && !cleaning) {
               setCleanConfirmOpen(false);
             }
           }}
         >
-          <div className="w-full max-w-md rounded-2xl border border-app-border bg-app-bg-card p-6">
+          <div className="w-full max-w-md mx-auto rounded-2xl border border-app-border bg-app-bg-card p-6">
             <h3 className="text-lg font-bold text-app-text mb-2">
               ¿Eliminar logs antiguos?
             </h3>

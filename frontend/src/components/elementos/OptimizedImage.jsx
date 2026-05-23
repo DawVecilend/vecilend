@@ -19,6 +19,9 @@ function OptimizedImage({
   const supportsConversion =
     !isExternal && ["png", "jpg", "jpeg"].includes(ext);
 
+  const imgStyle = { display: "block", ...(rest.style || {}) };
+  const { style: _ignoredStyle, ...restNoStyle } = rest;
+
   if (!supportsConversion) {
     return (
       <img
@@ -30,13 +33,14 @@ function OptimizedImage({
         loading={loading}
         fetchPriority={fetchPriority}
         decoding="async"
-        {...rest}
+        style={imgStyle}
+        {...restNoStyle}
       />
     );
   }
 
   return (
-    <picture>
+    <picture style={{ display: "contents" }}>
       <source srcSet={`${base}.avif`} type="image/avif" sizes={sizes} />
       <source srcSet={`${base}.webp`} type="image/webp" sizes={sizes} />
       <img
@@ -48,7 +52,8 @@ function OptimizedImage({
         loading={loading}
         fetchPriority={fetchPriority}
         decoding="async"
-        {...rest}
+        style={imgStyle}
+        {...restNoStyle}
       />
     </picture>
   );

@@ -44,7 +44,7 @@ function AdminCreateEmpleatPage() {
   const inputClass = "w-full rounded-lg px-4 py-3 text-sm outline-none bg-app-neutral border border-app-border text-app-text";
 
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-4 lg:p-8 max-w-2xl">
       <button onClick={() => navigate("/backoffice/empleats")} className="text-sm text-app-text-secondary hover:text-app-text mb-6 flex items-center gap-1">
         ← Volver
       </button>

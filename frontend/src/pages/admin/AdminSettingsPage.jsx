@@ -64,7 +64,7 @@ function AdminSettingsPage() {
   };
 
   return (
-    <div className="p-8 flex flex-col gap-8 max-w-3xl">
+    <div className="p-4 lg:p-8 flex flex-col gap-8 max-w-3xl">
       <div>
         <h1 className="text-2xl font-bold font-heading text-app-text">Ajustes</h1>
         <p className="text-sm text-app-text-secondary mt-1">

@@ -8,7 +8,10 @@ import {
 } from "react-router-dom";
 
 import { getProduct, deleteObject } from "../../services/objects";
-import { createTransaction, getTransactions } from "../../services/transactions";
+import {
+  createTransaction,
+  getTransactions,
+} from "../../services/transactions";
 import { createChat } from "../../services/chats";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -616,14 +619,18 @@ function ObjectPage() {
           )}
 
           {!isOwnObject && isAuthenticated && product?.propietari && (
-            <button
-              type="button"
-              onClick={() => setReportOpen(true)}
-              className="order-7 lg:order-none self-start inline-flex items-center gap-1.5 text-xs text-app-text-secondary hover:text-red-400 transition-colors"
-            >
-              <span className="material-symbols-outlined text-base">flag</span>
-              Reportar objeto o usuario
-            </button>
+            <div className="order-7 lg:order-none -mt-4 lg:mt-0 flex justify-center lg:block">
+              <button
+                type="button"
+                onClick={() => setReportOpen(true)}
+                className="inline-flex items-center gap-1.5 text-xs text-app-text-secondary hover:text-red-400 transition-colors"
+              >
+                <span className="material-symbols-outlined text-base">
+                  flag
+                </span>
+                Reportar objeto o usuario
+              </button>
+            </div>
           )}
 
           {product.ubicacio && (
@@ -655,7 +662,7 @@ function ObjectPage() {
           )}
 
           <div className="order-3 lg:order-none space-y-2">
-            <h1 className="text-app-text text-h1-mobile lg:text-h1-desktop font-heading">
+            <h1 className="text-app-text text-[20px] sm:text-[24px] lg:text-h1-desktop font-heading break-words leading-tight">
               {product.nom}
             </h1>
 
@@ -707,11 +714,11 @@ function ObjectPage() {
               </div>
             ) : (
               <div className="mt-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-vecilend-dark-secondary">
+                <span className="material-symbols-outlined text-vecilend-dark-secondary shrink-0">
                   volunteer_activism
                 </span>
 
-                <span className="text-h2-desktop font-bold text-vecilend-dark-secondary font-heading">
+                <span className="text-h3-desktop md:text-h2-desktop font-bold text-vecilend-dark-secondary font-heading whitespace-nowrap">
                   Préstamo gratuito
                 </span>
               </div>

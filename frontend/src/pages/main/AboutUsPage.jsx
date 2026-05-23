@@ -143,7 +143,7 @@ function AboutUsPage() {
               <div className="absolute -left-10 -top-10 h-[240px] w-[240px] rounded-full bg-vecilend-dark-primary/10 blur-3xl"></div>
               <div className="absolute -bottom-10 -right-10 h-[240px] w-[240px] rounded-full bg-vecilend-dark-secondary/10 blur-3xl"></div>
 
-              <div className="relative grid grid-cols-2 gap-4">
+              <div className="relative grid grid-cols-2 gap-4 items-start">
                 <div className="overflow-hidden rounded-[18px] border border-app-border shadow-2xl shadow-black/30">
                   <OptimizedImage
                     src="/assets/img2-hero-section.png"

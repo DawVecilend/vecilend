@@ -56,7 +56,7 @@ function AdminUsersPage() {
   const selectClass = "rounded-lg px-3 py-2.5 text-sm outline-none bg-app-bg-card border border-app-border text-app-text cursor-pointer";
 
   return (
-    <div className="p-8 flex flex-col gap-6">
+    <div className="p-4 lg:p-8 flex flex-col gap-6">
       <ConfirmDeleteModal
         open={confirm.open}
         onClose={() => setConfirm({ open: false, action: null, user: null })}
@@ -71,7 +71,7 @@ function AdminUsersPage() {
         busy={confirmBusy}
       />
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold font-heading text-app-text">Usuarios</h1>
       </div>
 
@@ -91,8 +91,8 @@ function AdminUsersPage() {
           <div className="h-8 w-8 rounded-full border-4 border-app-border border-t-app-primary animate-spin" />
         </div>
       ) : (
-        <div className="rounded-xl border border-app-border overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="rounded-xl border border-app-border overflow-x-auto">
+          <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr className="bg-app-neutral border-b border-app-border">
                 {["Usuario", "Email", "Estado", "Acciones"].map((h) => (

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import OptimizedImage from "../elementos/OptimizedImage";
 
 function HeroSection() {
   return (
@@ -49,7 +50,7 @@ function HeroSection() {
           <div className="relative grid grid-cols-2 gap-4">
             <div className="space-y-4">
               <div className="overflow-hidden rounded-[18px] border border-app-border shadow-2xl shadow-black/30 rotate-[-2deg] transition-transform duration-500 hover:rotate-0">
-                <img
+                <OptimizedImage
                   src="/assets/img1-hero-section.png"
                   alt="Vecinos compartiendo objetos"
                   className="h-[190px] w-full object-cover opacity-90"
@@ -57,7 +58,7 @@ function HeroSection() {
               </div>
 
               <div className="translate-x-4 overflow-hidden rounded-[18px] border border-app-border shadow-2xl shadow-black/30">
-                <img
+                <OptimizedImage
                   src="/assets/img2-hero-section.png"
                   alt="Herramientas disponibles para alquilar"
                   className="h-[260px] w-full object-cover opacity-90"
@@ -67,7 +68,7 @@ function HeroSection() {
 
             <div className="space-y-4 pt-8">
               <div className="-translate-x-4 overflow-hidden rounded-[18px] border border-app-border shadow-2xl shadow-black/30">
-                <img
+                <OptimizedImage
                   src="/assets/img3-hero-section.png"
                   alt="Bicicleta disponible para alquilar"
                   className="h-[260px] w-full object-cover opacity-90"
@@ -75,7 +76,7 @@ function HeroSection() {
               </div>
 
               <div className="overflow-hidden rounded-[18px] border border-app-border shadow-2xl shadow-black/30 rotate-[3deg] transition-transform duration-500 hover:rotate-0">
-                <img
+                <OptimizedImage
                   src="/assets/img4-hero-section.png"
                   alt="Cámara disponible para alquilar"
                   className="h-[190px] w-full object-cover opacity-90"

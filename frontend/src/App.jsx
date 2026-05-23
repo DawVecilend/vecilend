@@ -17,8 +17,8 @@ import HomePage from "./pages/main/HomePage";
 import StatusPage from "./pages/main/StatusPage";
 import NotFoundPage from "./pages/main/NotFoundPage";
 import ForbiddenPage from "./pages/main/ForbiddenPage";
-import HowItWorksRentersPage from "./pages/main/HowItWorksRentersPage";
-import HowItWorksLendersPage from "./pages/main/HowItWorksLendersPage";
+import HowItWorksRequestersPage from "./pages/main/HowItWorksRequestersPage";
+import HowItWorksOwnersPage from "./pages/main/HowItWorksOwnersPage";
 import TermsPage from "./pages/main/TermsPage";
 import PrivacyPolicyPage from "./pages/main/PrivacyPolicyPage";
 import FeatureComingSoonPage from "./pages/main/FeatureComingSoonPage";
@@ -140,12 +140,20 @@ function App() {
                     <Route path="/register" element={<RegisterPage />} />
 
                     <Route
+                      path="/how-it-works/requesters"
+                      element={<HowItWorksRequestersPage />}
+                    />
+                    <Route
+                      path="/how-it-works/owners"
+                      element={<HowItWorksOwnersPage />}
+                    />
+                    <Route
                       path="/how-it-works/renters"
-                      element={<HowItWorksRentersPage />}
+                      element={<Navigate to="/how-it-works/requesters" replace />}
                     />
                     <Route
                       path="/how-it-works/lenders"
-                      element={<HowItWorksLendersPage />}
+                      element={<Navigate to="/how-it-works/owners" replace />}
                     />
 
                     <Route path="/status" element={<StatusPage />} />

@@ -667,7 +667,9 @@ function MyOrdersPage() {
                 disabled={loadingMore}
                 className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
               >
-                {loadingMore ? "Cargando…" : "Cargar más"}
+                {loadingMore
+                  ? "Cargando…"
+                  : `Cargar más (${meta.total - orders.length} restantes)`}
               </button>
             </div>
           )}

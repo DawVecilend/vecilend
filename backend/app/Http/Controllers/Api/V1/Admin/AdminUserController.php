@@ -33,7 +33,8 @@ class AdminUserController extends Controller
         if (!$user->actiu) {
             return response()->json(['message' => 'El usuario ya está bloqueado.'], Response::HTTP_BAD_REQUEST);
         }
-        $user->update(['actiu' => false]);
+        $user->actiu = false;
+        $user->save();
         $this->logAdminAction($request, 'block', $user, [
             'payload' => ['actiu' => false],
             'motiu'   => $validated['motiu'] ?? null,
@@ -65,7 +66,8 @@ class AdminUserController extends Controller
         if ($user->actiu) {
             return response()->json(['message' => 'El usuario ya está activo.'], Response::HTTP_BAD_REQUEST);
         }
-        $user->update(['actiu' => true]);
+        $user->actiu = true;
+        $user->save();
         $this->logAdminAction($request, 'unblock', $user, ['payload' => ['actiu' => true]]);
         return new UserResource($user->refresh());
     }

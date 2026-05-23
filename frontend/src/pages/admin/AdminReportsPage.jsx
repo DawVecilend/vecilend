@@ -200,7 +200,7 @@ function AdminReportsPage() {
   const selectClass = "rounded-lg px-3 py-2 text-sm outline-none bg-app-neutral border border-app-border text-app-text cursor-pointer";
 
   return (
-    <div className="p-8 flex flex-col gap-6">
+    <div className="p-4 lg:p-8 flex flex-col gap-6">
       <ResolveModal
         open={!!resolveTarget}
         report={resolveTarget}
@@ -242,8 +242,8 @@ function AdminReportsPage() {
           No hay reportes con estos filtros.
         </div>
       ) : (
-        <div className="rounded-xl border border-app-border overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="rounded-xl border border-app-border overflow-x-auto">
+          <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr className="bg-app-neutral border-b border-app-border">
                 {["#", "Motivo", "Reportador", "Reportado", "Objeto", "Estado", "Fecha", "Acciones"].map((h) => (

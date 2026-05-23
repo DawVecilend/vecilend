@@ -299,12 +299,14 @@ function CreateObjectPage() {
 
   return (
     <>
-      <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
-        <BtnBack />
-        <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px]">
+      <div className="mx-auto flex w-full max-w-[1380px] items-center gap-4 px-10 pt-6">
+        <div className="flex-1 flex justify-start">
+          <BtnBack />
+        </div>
+        <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px] text-center">
           Subir producto
         </h1>
-        <div className="w-[90px]" />
+        <div className="flex-1" />
       </div>
 
       <section className="min-h-screen bg-app-bg px-4 pb-16 pt-6 text-app-text md:px-6">
@@ -398,7 +400,7 @@ function CreateObjectPage() {
                 <button
                   type="button"
                   onClick={() => setForm((p) => ({ ...p, tipus: "lloguer" }))}
-                  className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  className={`flex items-center justify-center gap-2 h-[56px] px-3 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "lloguer"
                       ? "bg-vecilend-dark-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
@@ -416,7 +418,7 @@ function CreateObjectPage() {
                       pricePerDay: "",
                     }))
                   }
-                  className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  className={`flex items-center justify-center gap-2 h-[56px] px-3 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "prestec"
                       ? "bg-vecilend-dark-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"

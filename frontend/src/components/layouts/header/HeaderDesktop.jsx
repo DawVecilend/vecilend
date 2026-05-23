@@ -37,7 +37,7 @@ function HeaderDesktop() {
   const getNavClass = (path) => {
     const isActive =
       location.pathname === path ||
-      (path === "/how-it-works/renters" &&
+      (path === "/how-it-works/requesters" &&
         location.pathname.startsWith("/how-it-works"));
     return isActive
       ? "text-vecilend-dark-primary border-b-2 border-vecilend-dark-primary font-bold p-1 text-sm tracking-tight"
@@ -63,8 +63,8 @@ function HeaderDesktop() {
               Objetos
             </Link>
             <Link
-              to="/how-it-works/renters"
-              className={getNavClass("/how-it-works/renters")}
+              to="/how-it-works/requesters"
+              className={getNavClass("/how-it-works/requesters")}
             >
               ¿Cómo funciona?
             </Link>

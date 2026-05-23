@@ -196,7 +196,7 @@ function FAQPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Link
-              to="/how-it-works/renters"
+              to="/how-it-works/requesters"
               className="p-8 bg-white/5 hover:bg-white/10 rounded-[24px] border border-app-border transition-all group"
             >
               <span className="material-symbols-outlined text-7xl text-vecilend-dark-primary mb-4 block">
@@ -212,7 +212,7 @@ function FAQPage() {
             </Link>
 
             <Link
-              to="/how-it-works/lenders"
+              to="/how-it-works/owners"
               className="p-8 bg-white/5 hover:bg-white/10 rounded-[24px] border border-app-border transition-all group"
             >
               <span className="material-symbols-outlined text-7xl text-vecilend-dark-primary mb-4 block">

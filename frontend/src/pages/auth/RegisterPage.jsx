@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import api from "../../services/api";
+import OptimizedImage from "../../components/elementos/OptimizedImage";
 import municipalitiesData from "../../data/municipios.json";
 
 import { normalizeString } from "../../utils/string";
@@ -305,10 +306,10 @@ function RegisterPage() {
         <main className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
           <section className="hidden md:flex md:w-1/2 relative bg-app-bg-card items-center justify-center h-full overflow-hidden">
             <div className="absolute inset-0 z-0">
-              <img
+              <OptimizedImage
                 alt="Producto compartido entre vecinos"
                 className="w-full h-full object-cover opacity-40"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQW8YXGcPQGsj1Q0KeE6EM5PNeIb_2pLMJDvddODr88dUMeNgFpr5Qs5dEO2AB3ny82vvXhxKR1aN2E7BqjU2sV5FtcQZ-345ynN76RDdZv2smlnejUHG2dyJnTy2VyYGx6-IWF-CKxfbXp8pzNllfgIcWjEMqPvNwxWyDXubGsjAiiVqX-uFuvxCluOPaesKLrAtqv5nHmjRfKM-WAQLXtTiquVhbmhJZ62YM7sq7EbMBlR3I8WQF1s_63H87bU9H2tZ7BGot5ARl"
+                src="/assets/auth-shared-item.jpg"
               />
 
               <div className="absolute inset-0 bg-linear-to-tr from-app-bg via-transparent to-transparent"></div>
@@ -336,9 +337,9 @@ function RegisterPage() {
 
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-vecilend-dark-primary">
-                    <img
+                    <OptimizedImage
                       alt="Avatar de usuario"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3lCex78R9gss1rSRXiBMONf6Kpo-aObjVvhOsdxYfDEV5VkAjs6H5udYWFVTbBQLLe-5OX-1Nfr__L2EXX8_85qkavwodEygWuVjZ6R_S-ujoopRTJ6XdUyiVw_F4VHAySzA5WVdjgh6exDBGT_RwCUnYkkCZZYY6CTNyMrYDouOrmBTLw1SX27Er49FLqX-_HboWJrblOlE2XV8QqCIM-hFlX3WtzUVzAQ7DIjz6roiYJcCohYGKap5Asn5a0VIiVco4tNU-khmT"
+                      src="/assets/auth-user-avatar.jpg"
                     />
                   </div>
 
