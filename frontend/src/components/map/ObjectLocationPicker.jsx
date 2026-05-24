@@ -8,7 +8,10 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import { useAuth } from "../../contexts/AuthContext";
-import { useGeolocation, DEFAULT_FALLBACK_LOCATION } from "../../hooks/useGeolocation";
+import {
+  useGeolocation,
+  DEFAULT_FALLBACK_LOCATION,
+} from "../../hooks/useGeolocation";
 import "../../utils/leafletIconFix";
 
 const pickerIcon = L.divIcon({
@@ -53,7 +56,7 @@ function FlyTo({ position }) {
  *   - Si `value` és null (cas de creació), el mapa es centra a
  *     la ubicació de l'usuari (de useGeolocation: navigator → user.ubicacio
  *     → DEFAULT_FALLBACK_LOCATION) i NO posa pin fins que l'usuari toca.
- *   - "Usar mi ubicación" demana al navegador i si funciona, selecciona
+ *   - "Usar mi ubicación actual" demana al navegador i si funciona, selecciona
  *     aquesta ubicació com a valor. Si l'usuari denega, no fa res.
  */
 function ObjectLocationPicker({ value, onChange }) {
@@ -147,7 +150,7 @@ function ObjectLocationPicker({ value, onChange }) {
           <span className="material-symbols-outlined text-base">
             my_location
           </span>
-          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación"}
+          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación actual"}
         </button>
 
         {value ? (

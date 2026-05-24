@@ -53,7 +53,7 @@ class AdminLogController extends Controller
 
             $query->orderByDesc('logs.created_at')->chunk(500, function ($logs) use ($out) {
                 foreach ($logs as $log) {
-                    fputcsv($out, [
+                    fputcsv($out, array_map([$this, 'csvSanitize'], [
                         $log->id,
                         $log->created_at,
                         $log->tipus,
@@ -69,7 +69,7 @@ class AdminLogController extends Controller
                         $log->id_entitat_afectada,
                         $log->ip,
                         $log->detall,
-                    ]);
+                    ]));
                 }
             });
 
@@ -78,6 +78,15 @@ class AdminLogController extends Controller
             'Content-Type'        => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ]);
+    }
+
+    protected function csvSanitize($value): string
+    {
+        $str = (string) ($value ?? '');
+        if ($str !== '' && in_array($str[0], ['=', '+', '-', '@', "\t", "\r"], true)) {
+            return "'" . $str;
+        }
+        return $str;
     }
 
     /**

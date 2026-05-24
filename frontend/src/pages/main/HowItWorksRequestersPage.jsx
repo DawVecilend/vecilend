@@ -70,7 +70,7 @@ function HowItWorksRequestersPage() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-10 text-center md:text-left">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-app-text">
-              Tu Flujo de Alquiler
+              Tu flujo de alquiler
             </h2>
             <p className="text-app-text-secondary">
               Hemos simplificado la logística para que puedas disfrutar de tus
@@ -142,7 +142,7 @@ function HowItWorksRequestersPage() {
                 Tranquilidad total
               </span>
               <h3 className="text-3xl font-bold mb-4 text-app-text">
-                Seguro Todo Riesgo
+                Seguro todo riesgo
               </h3>
               <p className="text-app-text-secondary mb-6">
                 Nuestro seguro 'Fluid Care' está incluido en cada alquiler. Ya
@@ -178,7 +178,7 @@ function HowItWorksRequestersPage() {
             <span className="material-symbols-outlined text-5xl mb-6">
               eco
             </span>
-            <h3 className="text-2xl font-bold mb-4">Sustentabilidad</h3>
+            <h3 className="text-2xl font-bold mb-4">Sostenibilidad</h3>
             <p className="text-[var(--color-app-success-on)]/80 mb-4">
               Alquilar en lugar de comprar reduce el desperdicio y fomenta una
               economía circular en tu comunidad local.
@@ -195,7 +195,7 @@ function HowItWorksRequestersPage() {
             <span className="material-symbols-outlined text-5xl mb-6">
               handshake
             </span>
-            <h3 className="text-2xl font-bold mb-4">Confianza Vecinal</h3>
+            <h3 className="text-2xl font-bold mb-4">Confianza vecinal</h3>
             <p className="text-vecilend-dark-primary/80 font-medium">
               Sistema de verificación de identidad y valoraciones reales para
               una experiencia 100% segura.

@@ -4,10 +4,10 @@ import OptimizedImage from "../../components/elementos/OptimizedImage";
 
 function AboutUsPage() {
   const stats = [
-    { number: "5K+", label: "Usuarios Activos" },
-    { number: "12K+", label: "Objetos en Circulación" },
-    { number: "€250K", label: "Ahorros Generados" },
-    { number: "98%", label: "Confianza Comunidad" },
+    { number: "5K+", label: "Usuarios activos" },
+    { number: "12K+", label: "Objetos en circulación" },
+    { number: "€250K", label: "Ahorros generados" },
+    { number: "98%", label: "Confianza de la comunidad" },
   ];
 
   const values = [
@@ -40,12 +40,13 @@ function AboutUsPage() {
   const milestones = [
     {
       date: "2024",
-      title: "El Comienzo",
-      description: "Vecilend nace con la visión de revolucionar el consumo local.",
+      title: "El comienzo",
+      description:
+        "Vecilend nace con la visión de revolucionar el consumo local.",
     },
     {
       date: "2025",
-      title: "Primera Comunidad",
+      title: "Primera comunidad",
       description:
         "Alcanzamos 1,000 usuarios y publicamos nuestros primeros 5,000 objetos.",
     },
@@ -57,7 +58,7 @@ function AboutUsPage() {
     },
     {
       date: "Ahora",
-      title: "Crecimiento Continuo",
+      title: "Crecimiento continuo",
       description:
         "Seguimos innovando para mejorar la experiencia de nuestra comunidad.",
     },
@@ -80,12 +81,14 @@ function AboutUsPage() {
         <div className="relative mx-auto grid max-w-7xl items-center gap-12">
           <div className="relative z-10 text-center">
             <span className="mb-6 inline-block rounded-full border border-vecilend-dark-primary/20 bg-vecilend-dark-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-vecilend-dark-primary">
-              Sobre Nosotros
+              Sobre nosotros
             </span>
 
             <h1 className="max-w-[800px] mx-auto font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
               Compartir es el futuro del{" "}
-              <span className="italic text-vecilend-dark-primary">consumo.</span>
+              <span className="italic text-vecilend-dark-primary">
+                consumo.
+              </span>
             </h1>
 
             <p className="mt-6 max-w-[600px] mx-auto font-body text-body-base leading-body text-app-text-secondary md:text-[18px]">
@@ -109,7 +112,9 @@ function AboutUsPage() {
                 <p className="font-heading text-[48px] font-extrabold text-vecilend-dark-primary mb-2">
                   {stat.number}
                 </p>
-                <p className="text-app-text-secondary font-body">{stat.label}</p>
+                <p className="text-app-text-secondary font-body">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
@@ -123,7 +128,7 @@ function AboutUsPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="font-heading text-[44px] font-extrabold mb-6 text-app-text">
-                Nuestra Misión
+                Nuestra misión
               </h2>
               <p className="text-app-text-secondary text-lg leading-relaxed mb-6">
                 En Vecilend creemos que la prosperidad no viene del consumo
@@ -134,8 +139,8 @@ function AboutUsPage() {
               <p className="text-app-text-secondary text-lg leading-relaxed">
                 Conectamos vecinos para compartir recursos, generar ingresos
                 adicionales y construir comunidades más fuertes, sostenibles e
-                inclusivas. Porque lo mejor que puedes tener es lo que
-                comparten tus vecinos.
+                inclusivas. Porque lo mejor que puedes tener es lo que comparten
+                tus vecinos.
               </p>
             </div>
 
@@ -169,7 +174,7 @@ function AboutUsPage() {
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="font-heading text-[44px] font-extrabold text-app-text mb-4">
-              Nuestros Valores
+              Nuestros valores
             </h2>
             <p className="text-app-text-secondary text-lg max-w-2xl mx-auto">
               Los principios que guían cada decisión que tomamos en Vecilend.
@@ -202,7 +207,7 @@ function AboutUsPage() {
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="font-heading text-[44px] font-extrabold text-app-text mb-4">
-              Nuestro Viaje
+              Nuestro viaje
             </h2>
             <p className="text-app-text-secondary text-lg max-w-2xl mx-auto">
               Desde una idea hasta convertirse en una comunidad vibrante.
@@ -218,9 +223,7 @@ function AboutUsPage() {
                 <div
                   key={idx}
                   className={`relative flex gap-8 ${
-                    idx % 2 === 0
-                      ? "md:flex-row-reverse"
-                      : "md:flex-row"
+                    idx % 2 === 0 ? "md:flex-row-reverse" : "md:flex-row"
                   }`}
                 >
                   {/* Timeline dot */}
@@ -261,19 +264,19 @@ function AboutUsPage() {
               <div className="space-y-6">
                 {[
                   {
-                    title: "Ahorra Dinero",
+                    title: "Ahorra dinero",
                     desc: "Alquila lo que necesitas por menos del 50% del precio de compra.",
                   },
                   {
-                    title: "Gana Ingresos",
+                    title: "Gana ingresos",
                     desc: "Monetiza tus objetos ociosos alquilándolos a tus vecinos.",
                   },
                   {
-                    title: "Cuida el Planeta",
+                    title: "Cuida el planeta",
                     desc: "Reduce tu huella de carbono compartiendo en lugar de comprar.",
                   },
                   {
-                    title: "Conoce tu Comunidad",
+                    title: "Conoce tu comunidad",
                     desc: "Construye relaciones significativas con tus vecinos.",
                   },
                 ].map((item, idx) => (
@@ -299,9 +302,7 @@ function AboutUsPage() {
                       <h3 className="text-lg font-bold text-app-text">
                         {item.title}
                       </h3>
-                      <p className="text-app-text-secondary">
-                        {item.desc}
-                      </p>
+                      <p className="text-app-text-secondary">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -327,7 +328,7 @@ function AboutUsPage() {
       {/* CTA Section */}
       <section className="w-full py-24 px-4 md:px-10">
         <div className="mx-auto max-w-7xl">
-            <div className="relative bg-gradient-to-br from-vecilend-dark-primary/20 to-vecilend-dark-secondary/20 rounded-[3rem] p-12 md:p-16 overflow-hidden border border-vecilend-dark-primary/50">
+          <div className="relative bg-gradient-to-br from-vecilend-dark-primary/20 to-vecilend-dark-secondary/20 rounded-[3rem] p-12 md:p-16 overflow-hidden border border-vecilend-dark-primary/50">
             <div className="absolute top-0 right-0 w-1/2 h-full -z-0 opacity-10 hidden lg:block">
               <OptimizedImage
                 className="w-full h-full object-cover grayscale"
@@ -349,13 +350,13 @@ function AboutUsPage() {
                   to="/objects"
                   className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-vecilend-dark-primary/30 hover:scale-105 active:scale-95 transition-all"
                 >
-                  Explorar Objetos
+                  Explorar objetos
                 </Link>
                 <Link
                   to="/objects/create"
                   className="bg-white/10 backdrop-blur-md text-app-text border border-white/20 px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/20 transition-all"
                 >
-                  Publicar Objeto
+                  Publicar objeto
                 </Link>
               </div>
             </div>
@@ -375,7 +376,9 @@ function AboutUsPage() {
               </p>
             </div>
             <div>
-              <h3 className="font-bold text-lg text-app-text mb-3">Compromiso</h3>
+              <h3 className="font-bold text-lg text-app-text mb-3">
+                Compromiso
+              </h3>
               <p className="text-app-text-secondary leading-relaxed">
                 Cada día trabajamos para crear una plataforma más segura, justa
                 y sostenible.
@@ -390,6 +393,26 @@ function AboutUsPage() {
                 comunidad.
               </p>
             </div>
+          </div>
+
+          <div className="mt-16 pt-12 border-t border-app-border text-center">
+            <h3 className="font-heading text-2xl font-bold text-app-text mb-3">
+              ¿Tienes alguna duda?
+            </h3>
+            <p className="text-app-text-secondary leading-relaxed mb-4">
+              Nuestro equipo de soporte está disponible para ayudarte con
+              cualquier consulta sobre la plataforma.
+            </p>
+            <a
+              href="mailto:support@vecilend.com"
+              className="group inline-flex items-center gap-2 text-vecilend-dark-primary font-bold"
+            >
+              <span className="material-symbols-outlined">mail</span>
+
+              <span className="group-hover:underline">
+                support@vecilend.com
+              </span>
+            </a>
           </div>
         </div>
       </section>

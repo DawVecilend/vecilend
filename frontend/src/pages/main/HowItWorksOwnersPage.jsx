@@ -69,7 +69,7 @@ function HowItWorksOwnersPage() {
                 to="/objects/create"
                 className="inline-flex items-center justify-center rounded-[16px] bg-vecilend-dark-primary px-8 py-4 font-body text-body-base font-bold text-app-bg shadow-xl shadow-vecilend-dark-primary/20 transition-all hover:scale-[1.02] hover:bg-vecilend-dark-primary-hover active:scale-95"
               >
-                Subir producto
+                Subir objeto
               </Link>
               <Link
                 to="/how-it-works/requesters"
@@ -118,7 +118,7 @@ function HowItWorksOwnersPage() {
                 <span className="material-symbols-outlined">add_a_photo</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
-                Publica tu Objeto
+                Publica tu objeto
               </h3>
               <p className="text-app-text-secondary leading-relaxed">
                 Haz fotos, fija tu precio y publica gratis. Establece precios
@@ -132,7 +132,7 @@ function HowItWorksOwnersPage() {
                 <span className="material-symbols-outlined">fact_check</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
-                Gestiona Solicitudes
+                Gestiona solicitudes
               </h3>
               <p className="text-app-text-secondary leading-relaxed">
                 Revisa los perfiles de los arrendatarios y acepta reservas según
@@ -145,7 +145,7 @@ function HowItWorksOwnersPage() {
                 <span className="material-symbols-outlined">payments</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
-                Recibe tus Pagos
+                Recibe tus pagos
               </h3>
               <p className="text-app-text-secondary leading-relaxed">
                 Recibe pagos automáticos directamente en tu cuenta bancaria
@@ -344,7 +344,7 @@ function HowItWorksOwnersPage() {
               to="/objects/create"
               className="bg-white text-vecilend-dark-primary px-8 md:px-12 py-4 md:py-5 rounded-full font-bold text-lg md:text-xl shadow-2xl hover:scale-105 transition-transform active:scale-95"
             >
-              Publicar producto
+              Publicar objeto
             </Link>
           </div>
         </div>

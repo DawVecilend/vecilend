@@ -83,13 +83,15 @@ class AdminCategoriaController extends Controller {
 
     protected function logAdminAction(Request $request, string $action, Categoria $category, array $details = []): void {
         DB::table('logs')->insert([
-            'user_id' => $request->user()->id,
+            'user_id'    => null,
+            'empleat_id' => $request->user()->id,
             'tipus' => 'admin',
             'accio' => "categoria_{$action}",
             'detall' => json_encode($details),
             'entitat_afectada' => 'categoria',
             'id_entitat_afectada' => $category->id,
             'ip' => $request->ip(),
+            'created_at' => now(),
         ]);
     }
 }

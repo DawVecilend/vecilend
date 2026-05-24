@@ -31,14 +31,14 @@ function HeroSection() {
               to="/objects"
               className="inline-flex items-center justify-center rounded-[16px] bg-vecilend-dark-primary px-8 py-4 font-body text-body-base font-bold text-[var(--color-app-success-on)] shadow-xl shadow-vecilend-dark-primary/20 transition-all hover:scale-[1.02] hover:bg-vecilend-dark-primary-hover active:scale-95"
             >
-              Ver todos los productos
+              Ver todos los objetos
             </Link>
 
             <Link
               to="/objects/create"
               className="inline-flex items-center justify-center rounded-[16px] border border-app-border bg-app-bg-card-secondary/50 px-8 py-4 font-body text-body-base font-bold text-app-text transition-all hover:border-vecilend-dark-primary hover:bg-vecilend-dark-primary/10 active:scale-95"
             >
-              Subir producto
+              Subir objeto
             </Link>
           </div>
         </div>

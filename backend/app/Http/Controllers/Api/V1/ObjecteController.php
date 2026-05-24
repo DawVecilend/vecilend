@@ -356,7 +356,7 @@ class ObjecteController extends Controller
             ->where('solicituds.estat', 'acceptat')
             ->where(function ($q) {
                 $q->whereNull('transaccions.id')
-                  ->orWhereIn('transaccions.estat', ['en_curs']);
+                    ->orWhereIn('transaccions.estat', ['en_curs']);
             })
             ->select('solicituds.data_inici', 'solicituds.data_fi')
             ->orderBy('solicituds.data_inici')
@@ -513,7 +513,7 @@ class ObjecteController extends Controller
                 ]);
 
                 return response()->json([
-                    'message' => 'Error al subir las imágenes. Inténtalo de nuevo.',
+                    'message' => 'Error al añadir las imágenes. Inténtalo de nuevo.',
                 ], 500);
             }
         }

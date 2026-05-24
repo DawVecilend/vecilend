@@ -93,13 +93,15 @@ class AdminSubcategoriaController extends Controller {
 
     protected function logAdminAction(Request $request, string $action, Subcategoria $subcategory, array $details = []): void {
         DB::table('logs')->insert([
-            'user_id' => $request->user()->id,
+            'user_id'    => null,
+            'empleat_id' => $request->user()->id,
             'tipus' => 'admin',
             'accio' => "subcategoria_{$action}",
             'detall' => json_encode($details),
             'entitat_afectada' => 'subcategoria',
             'id_entitat_afectada' => $subcategory->id,
             'ip' => $request->ip(),
+            'created_at' => now(),
         ]);
     }
 }

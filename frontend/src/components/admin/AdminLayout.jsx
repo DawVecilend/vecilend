@@ -65,7 +65,7 @@ function AdminLayout() {
           </button>
           <Logo className="h-9 w-auto" />
           <span className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-app-primary/10 text-app-primary">
-            {empleat?.rol === "admin" ? "Admin Panel" : "Soporte"}
+            {empleat?.rol === "admin" ? "Administración" : "Soporte"}
           </span>
         </div>
 

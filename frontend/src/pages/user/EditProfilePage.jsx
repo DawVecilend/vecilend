@@ -391,7 +391,7 @@ function EditProfilePage() {
                     disabled={isSaving}
                     className="px-8 md:px-10 py-3 bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold rounded-lg shadow-lg disabled:opacity-50 transition-all hover:bg-vecilend-dark-primary-hover"
                   >
-                    {isSaving ? "Guardando..." : "Guardar Cambios"}
+                    {isSaving ? "Guardando..." : "Guardar cambios"}
                   </button>
                 </div>
 

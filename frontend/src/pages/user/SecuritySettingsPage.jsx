@@ -198,7 +198,7 @@ function SecuritySettingsPage() {
                 <span className="material-symbols-outlined text-vecilend-dark-primary">
                   lock
                 </span>
-                <h2 className="text-xl font-bold">Cambiar Contraseña</h2>
+                <h2 className="text-xl font-bold">Cambiar contraseña</h2>
               </div>
 
               {successMessage && (
@@ -280,7 +280,7 @@ function SecuritySettingsPage() {
                     }`}
                     type="submit"
                   >
-                    {isLoading ? "Actualizando..." : "Actualizar Contraseña"}
+                    {isLoading ? "Actualizando..." : "Actualizar contraseña"}
                   </button>
                 </div>
               </form>

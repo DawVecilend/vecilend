@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use \App\Models\User;
 use PragmaRX\Google2FA\Google2FA;
@@ -21,30 +22,21 @@ class LoginController extends Controller
         $login = $request->input('login');
         $password = $request->input('password');
 
-        $authenticated = Auth::guard('web')->attempt(['email' => $login, 'password' => $password, 'actiu' => true]) ||
-            Auth::guard('web')->attempt(['username' => $login, 'password' => $password, 'actiu' => true]);
+        $user = User::where('email', $login)->orWhere('username', $login)->first();
 
-        if (!$authenticated) {
-            $userExists = User::where(function ($q) use ($login) {
-                $q->where('email', $login)
-                    ->orWhere('username', $login);
-            })
-                ->where('actiu', false)
-                ->exists();
-
-            if ($userExists) {
-                return response()->json([
-                    'message' => 'Tu cuenta está desactivada. Contacta con soporte técnico.',
-                ], 403);
-            }
-
+        if (!$user || !Hash::check($password, $user->password)) {
             return response()->json([
                 'message' => 'Credenciales incorrectas.',
             ], 401);
         }
 
-        /** @var \App\Models\User $user */
-        $user = Auth::guard('web')->user();
+        if (!$user->actiu) {
+            return response()->json([
+                'message' => 'Tu cuenta está desactivada. Contacta con soporte técnico.',
+            ], 403);
+        }
+
+        Auth::guard('web')->setUser($user);
 
         if ($user->two_factor_enabled) {
             $challengeToken = Str::random(64);

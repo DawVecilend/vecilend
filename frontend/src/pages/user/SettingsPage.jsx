@@ -103,8 +103,8 @@ function SettingsPage() {
                     Preferencias
                   </h3>
                   <p className="text-app-text-secondary text-sm leading-relaxed mb-6">
-                    Personaliza la apariencia de la aplicación y revisa nuestras
-                    políticas de tratamiento de datos.
+                    Personaliza la apariencia de la aplicación y revisa nuestra
+                    política de tratamiento de datos.
                   </p>
                 </div>
 
@@ -148,7 +148,7 @@ function SettingsPage() {
                   </div>
 
                   <Link
-                    to="/politica-de-privacidad"
+                    to="/privacy-policy"
                     className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-4 bg-app-bg-card rounded-lg border border-app-border hover:border-vecilend-dark-primary/40 transition-colors group"
                   >
                     <div className="flex items-center gap-3 min-w-0">
@@ -156,7 +156,7 @@ function SettingsPage() {
                         privacy_tip
                       </span>
                       <span className="text-sm font-bold text-app-text">
-                        Políticas de privacidad
+                        Política de privacidad
                       </span>
                     </div>
                     <span className="material-symbols-outlined text-app-text-secondary text-base group-hover:text-vecilend-dark-primary transition-colors self-end sm:self-auto">

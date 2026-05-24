@@ -89,12 +89,12 @@ function CategoryPage() {
                   {currentCategory.name}
                 </h1>
                 <p className="mt-2 font-body text-body-base text-app-text-secondary">
-                  Se han encontrado {products.length} productos en esta
+                  Se han encontrado {products.length} objetos en esta
                   categoría.
                 </p>
               </section>
               <ProductsSection
-                title={`Productos de ${currentCategory.name}`}
+                title={`Objetos de ${currentCategory.name}`}
                 products={products}
               />
             </>
@@ -105,15 +105,15 @@ function CategoryPage() {
                   {currentCategory.name}
                 </h1>
                 <p className="mt-2 font-body text-body-base text-app-text-secondary">
-                  Se han encontrado 0 productos en esta categoría.
+                  Se han encontrado 0 objetos en esta categoría.
                 </p>
               </section>
               <section className="rounded-[20px] border border-app-border bg-app-bg-card p-10 text-center">
                 <h2 className="font-heading text-h3-desktop text-app-text">
-                  No hay productos en esta categoría
+                  No hay objetos en esta categoría
                 </h2>
                 <p className="mt-3 font-body text-body text-app-text-secondary">
-                  Todavía no hay productos publicados en "{currentCategory.name}
+                  Todavía no hay objetos publicados en "{currentCategory.name}
                   ".
                 </p>
               </section>

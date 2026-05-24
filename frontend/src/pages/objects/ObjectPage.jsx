@@ -118,7 +118,7 @@ function ObjectPage() {
         setMainImage(data?.imatges?.[0]?.url || null);
       })
       .catch((err) => {
-        console.error("Error cargando producto:", err);
+        console.error("Error cargando objeto:", err);
 
         if (!cancelled) {
           setProduct(null);
@@ -349,7 +349,7 @@ function ObjectPage() {
     } catch (err) {
       const msg =
         err.response?.data?.message ||
-        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+        "No se ha podido eliminar el objeto. Inténtalo de nuevo.";
 
       setDeleteError(msg);
     } finally {
@@ -739,7 +739,7 @@ function ObjectPage() {
           }
         }}
         onConfirm={handleConfirmDelete}
-        title="¿Eliminar producto?"
+        title="¿Eliminar objeto?"
         message={`Vas a eliminar "${product.nom}".`}
         description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
         confirmLabel="Sí, eliminar"

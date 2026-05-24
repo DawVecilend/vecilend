@@ -81,7 +81,7 @@ function ProfilePage() {
     );
 
     if (!productToUpdate) {
-      alert("No se ha encontrado el producto");
+      alert("No se ha encontrado el objeto");
       return;
     }
 
@@ -104,7 +104,7 @@ function ProfilePage() {
 
       alert(
         error.response?.data?.message ||
-          "No se ha podido cambiar la visibilidad del producto",
+          "No se ha podido cambiar la visibilidad del objeto",
       );
     }
   }
@@ -131,11 +131,11 @@ function ProfilePage() {
       setConfirmDeleteOpen(false);
       setProductToDelete(null);
     } catch (error) {
-      console.error("Error eliminando producto:", error);
+      console.error("Error eliminando objeto:", error);
 
       const message =
         error.response?.data?.message ||
-        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+        "No se ha podido eliminar el objeto. Inténtalo de nuevo.";
 
       setDeleteError(message);
     } finally {
@@ -326,7 +326,7 @@ function ProfilePage() {
 
           {loading ? (
             <div className="rounded-lg border border-app-border bg-app-bg-secondary p-10 text-center">
-              <p className="text-app-text-secondary">Cargando productos...</p>
+              <p className="text-app-text-secondary">Cargando objetos...</p>
             </div>
           ) : latestObjects.length === 0 ? (
             <div className="rounded-lg border border-app-border bg-app-bg-secondary p-10 text-center">
@@ -373,8 +373,8 @@ function ProfilePage() {
           }
         }}
         onConfirm={handleConfirmDelete}
-        title="¿Eliminar producto?"
-        message={`Vas a eliminar "${productToDelete?.title || "este producto"}".`}
+        title="¿Eliminar objeto?"
+        message={`Vas a eliminar "${productToDelete?.title || "este objeto"}".`}
         description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
         confirmLabel="Sí, eliminar"
         busy={deleting}

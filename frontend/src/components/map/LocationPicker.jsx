@@ -50,7 +50,7 @@ function FlyTo({ position }) {
  *
  * Distinció important:
  *   - 'value' (prop controlada): el lloc seleccionat explícitament per l'usuari
- *     (click, drag, o "Usar mi ubicación"). Pot ser null si l'usuari no ha
+ *     (click, drag, o "Usar mi ubicación actual"). Pot ser null si l'usuari no ha
  *     interactuat — en aquest cas, el component consumidor pot decidir no
  *     aplicar cap filtre d'ubicació.
  *   - 'mapCenter' (state intern): on es centra visualment el mapa per defecte

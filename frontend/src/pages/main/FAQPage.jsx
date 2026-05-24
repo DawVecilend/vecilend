@@ -72,8 +72,8 @@ function FAQPage() {
 
   const categories = [
     { id: "all", label: "Todas las preguntas" },
-    { id: "solicitantes", label: "Para Solicitantes" },
-    { id: "propietarios", label: "Para Propietarios" },
+    { id: "solicitantes", label: "Para solicitantes" },
+    { id: "propietarios", label: "Para propietarios" },
     { id: "general", label: "General" },
   ];
 
@@ -108,7 +108,7 @@ function FAQPage() {
         <div className="relative mx-auto grid max-w-7xl items-center gap-12">
           <div className="relative z-10 text-center">
             <span className="mb-6 inline-block rounded-full border border-vecilend-dark-primary/20 bg-vecilend-dark-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-vecilend-dark-primary">
-              Preguntas Frecuentes
+              Preguntas frecuentes
             </span>
 
             <h1 className="max-w-[800px] mx-auto font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
@@ -154,9 +154,9 @@ function FAQPage() {
           {activeCategory !== "all" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-center mb-8 text-app-text">
-                {activeCategory === "solicitantes" && "Preguntas para Solicitantes"}
-                {activeCategory === "propietarios" && "Preguntas para Propietarios"}
-                {activeCategory === "general" && "Preguntas Generales"}
+                {activeCategory === "solicitantes" && "Preguntas para solicitantes"}
+                {activeCategory === "propietarios" && "Preguntas para propietarios"}
+                {activeCategory === "general" && "Preguntas generales"}
               </h2>
             </div>
           )}
@@ -269,13 +269,13 @@ function FAQPage() {
                   to="/objects"
                   className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-vecilend-dark-primary/30 hover:scale-105 active:scale-95 transition-all"
                 >
-                  Explorar Objetos
+                  Explorar objetos
                 </Link>
                 <Link
                   to="/objects/create"
                   className="bg-white/10 backdrop-blur-md text-app-text border border-white/20 px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/20 transition-all"
                 >
-                  Publicar Objeto
+                  Publicar objeto
                 </Link>
               </div>
             </div>

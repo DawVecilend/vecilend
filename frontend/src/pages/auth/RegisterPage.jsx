@@ -312,7 +312,7 @@ function RegisterPage() {
           <section className="hidden md:flex md:w-1/2 relative bg-app-bg-card items-center justify-center h-full overflow-hidden">
             <div className="absolute inset-0 z-0">
               <OptimizedImage
-                alt="Producto compartido entre vecinos"
+                alt="Objeto compartido entre vecinos"
                 className="w-full h-full object-cover opacity-40"
                 src="/assets/auth-shared-item.jpg"
               />
@@ -336,7 +336,7 @@ function RegisterPage() {
                 <p className="text-xl font-medium leading-relaxed italic text-app-text mb-6">
                   "Vecilend me ha ayudado a encontrar justo lo que necesitaba
                   sin tener que comprarlo. Es fácil de usar, cercano y da mucha
-                  confianza saber que los productos están compartidos por
+                  confianza saber que los objetos están compartidos por
                   vecinos de mi zona."
                 </p>
 

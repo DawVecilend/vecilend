@@ -95,6 +95,10 @@ class AdminReportController extends Controller
                     DB::table('users')
                         ->where('id', $report->usuari_reportat_id)
                         ->update(['actiu' => false, 'updated_at' => now()]);
+                    DB::table('personal_access_tokens')
+                        ->where('tokenable_type', \App\Models\User::class)
+                        ->where('tokenable_id', $report->usuari_reportat_id)
+                        ->delete();
                     $usuariBloquejat = true;
                 }
 

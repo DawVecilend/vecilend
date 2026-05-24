@@ -136,6 +136,11 @@ class UserController extends Controller
             'password' => Hash::make($request->validated('password')),
         ]);
 
+        $currentTokenId = $request->user()->currentAccessToken()?->id;
+        $user->tokens()
+            ->when($currentTokenId, fn($q) => $q->where('id', '!=', $currentTokenId))
+            ->delete();
+
         return response()->json([
             'success' => true,
             'message' => 'Contraseña actualizada correctamente.'

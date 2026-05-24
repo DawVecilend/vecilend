@@ -23,11 +23,11 @@ class EmpleatSeeder extends Seeder
                 'rol'      => 'admin',
             ],
             [
-                'username' => 'soporte',
+                'username' => 'support',
                 'nom'      => 'Soporte',
                 'cognoms'  => 'Técnico',
-                'email'    => 'soporte@vecilend.com',
-                'password' => Hash::make('Suport1234!'),
+                'email'    => 'support@vecilend.com',
+                'password' => Hash::make('Support1234!'),
                 'rol'      => 'suport',
             ],
         ];

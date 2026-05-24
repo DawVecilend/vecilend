@@ -35,6 +35,7 @@ class AdminUserController extends Controller
         }
         $user->actiu = false;
         $user->save();
+        $user->tokens()->delete();
         $this->logAdminAction($request, 'block', $user, [
             'payload' => ['actiu' => false],
             'motiu'   => $validated['motiu'] ?? null,

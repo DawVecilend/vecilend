@@ -163,11 +163,11 @@ function App() {
 
                     <Route path="/status" element={<StatusPage />} />
                     <Route
-                      path="/terminos-y-condiciones"
+                      path="/terms-and-conditions"
                       element={<TermsPage />}
                     />
                     <Route
-                      path="/politica-de-privacidad"
+                      path="/privacy-policy"
                       element={<PrivacyPolicyPage />}
                     />
                     <Route

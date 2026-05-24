@@ -100,8 +100,8 @@ function EditObjectPage() {
 
         setExistingImages(product.imatges || []);
       } catch (error) {
-        console.error("Error cargando producto:", error);
-        setErrorMessage("No se ha podido cargar el producto");
+        console.error("Error cargando objeto:", error);
+        setErrorMessage("No se ha podido cargar el objeto");
       } finally {
         setLoadingPage(false);
         setLoadingCategories(false);
@@ -191,7 +191,7 @@ function EditObjectPage() {
 
       case "images":
         if (currentTotalImages <= 0) {
-          return "El producto debe tener al menos una imagen";
+          return "El objeto debe tener al menos una imagen";
         }
         return "";
 
@@ -399,7 +399,7 @@ function EditObjectPage() {
     } catch (error) {
       const message =
         error.response?.data?.message ||
-        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+        "No se ha podido eliminar el objeto. Inténtalo de nuevo.";
 
       setDeleteError(message);
     } finally {
@@ -451,14 +451,14 @@ function EditObjectPage() {
 
       await updateObject(id, formData);
 
-      setSuccessMessage("Producto actualizado correctamente");
+      setSuccessMessage("Objeto actualizado correctamente");
       setErrorMessage("");
 
       setTimeout(() => {
         navigate(`/objects/${id}`);
       }, 1000);
     } catch (error) {
-      console.error("Error actualizando producto:", error);
+      console.error("Error actualizando objeto:", error);
 
       if (error.response?.status === 422 && error.response.data?.errors) {
         const validationErrors = error.response.data.errors;
@@ -467,7 +467,7 @@ function EditObjectPage() {
       } else {
         setErrorMessage(
           error.response?.data?.message ||
-            "No se ha podido actualizar el producto",
+            "No se ha podido actualizar el objeto",
         );
       }
     } finally {
@@ -484,7 +484,7 @@ function EditObjectPage() {
           </div>
 
           <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px] text-center">
-            Editar producto
+            Editar objeto
           </h1>
 
           <div className="flex-1" />
@@ -492,7 +492,7 @@ function EditObjectPage() {
 
         <section className="min-h-screen bg-app-bg px-4 pb-16 pt-6 text-app-text md:px-6">
           <div className="mx-auto w-full max-w-4xl rounded-[24px] border border-app-border bg-app-bg-card p-8">
-            <p className="text-app-text-secondary">Cargando producto...</p>
+            <p className="text-app-text-secondary">Cargando objeto...</p>
           </div>
         </section>
       </>
@@ -507,7 +507,7 @@ function EditObjectPage() {
         </div>
 
         <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px] text-center">
-          Editar producto
+          Editar objeto
         </h1>
 
         <div className="flex-1" />
@@ -519,7 +519,7 @@ function EditObjectPage() {
             <div className="rounded-[24px] border border-dashed border-app-border bg-app-bg px-6 py-10 md:px-10 md:py-12">
               <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-6 font-body text-[16px] text-app-text">
-                  Imágenes del producto
+                  Imágenes del objeto
                 </p>
 
                 <div className="flex w-full flex-wrap items-center justify-center gap-4">
@@ -690,7 +690,7 @@ function EditObjectPage() {
                 htmlFor="name"
                 className="mb-3 block font-heading text-[20px] font-semibold text-app-text"
               >
-                Nombre del producto
+                Nombre del objeto
               </label>
 
               <div
@@ -713,7 +713,7 @@ function EditObjectPage() {
                   autoComplete="off"
                   value={form.name}
                   onChange={handleChange}
-                  placeholder="Nombre del producto"
+                  placeholder="Nombre del objeto"
                   className="h-full w-full bg-transparent font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--color-app-text)] [&:-webkit-autofill]:[caret-color:var(--color-app-text)] [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:focus]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:hover]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset]"
                 />
               </div>
@@ -780,7 +780,7 @@ function EditObjectPage() {
                 rows="5"
                 value={form.description}
                 onChange={handleChange}
-                placeholder="Describe los detalles y características del producto"
+                placeholder="Describe los detalles y características del objeto"
                 className={`w-full rounded-[16px] bg-app-bg-card px-4 py-4 font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none ${
                   fieldErrors.description
                     ? "border border-[var(--color-app-danger)]"
@@ -1076,7 +1076,7 @@ function EditObjectPage() {
             </h2>
 
             <p className="mb-4 font-body text-sm text-app-text-secondary">
-              Una vez eliminado, no podrás recuperar este producto ni sus
+              Una vez eliminado, no podrás recuperar este objeto ni sus
               imágenes.
             </p>
 
@@ -1091,7 +1091,7 @@ function EditObjectPage() {
               <span className="material-symbols-outlined text-base">
                 delete
               </span>
-              Eliminar producto
+              Eliminar objeto
             </button>
           </div>
         </div>
@@ -1103,7 +1103,7 @@ function EditObjectPage() {
           if (!deleting) setConfirmDeleteOpen(false);
         }}
         onConfirm={handleConfirmDelete}
-        title="¿Eliminar producto?"
+        title="¿Eliminar objeto?"
         message={`Vas a eliminar "${form.name}".`}
         description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
         confirmLabel="Sí, eliminar"

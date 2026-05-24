@@ -118,7 +118,7 @@ function LoginPage() {
               <p className="text-xl font-medium leading-relaxed italic text-app-text mb-6">
                 “Vecilend me ha ayudado a encontrar justo lo que necesitaba sin
                 tener que comprarlo. Es fácil de usar, cercano y da mucha
-                confianza saber que los productos están compartidos por vecinos
+                confianza saber que los objetos están compartidos por vecinos
                 de mi zona.”
               </p>
               <div className="flex items-center gap-4">

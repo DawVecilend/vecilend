@@ -22,7 +22,7 @@ function Footer() {
               to="/faq"
               className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary"
             >
-              FAQ
+              Preguntas frecuentes
             </Link>
           </div>
         </div>
@@ -96,17 +96,17 @@ function Footer() {
           <div className="mt-8 flex flex-col items-center gap-4 md:mt-[20px] md:gap-[32px]">
             <div className="flex flex-col items-center gap-4 md:flex-row md:flex-wrap md:justify-center md:gap-6">
               <Link
-                to="/terminos-y-condiciones"
+                to="/terms-and-conditions"
                 className="font-body text-body-base text-app-text underline underline-offset-4 transition-colors duration-200 hover:text-vecilend-dark-primary"
               >
                 Términos y condiciones
               </Link>
 
               <Link
-                to="/politica-de-privacidad"
+                to="/privacy-policy"
                 className="font-body text-body-base text-app-text underline underline-offset-4 transition-colors duration-200 hover:text-vecilend-dark-primary"
               >
-                Políticas de privacidad
+                Política de privacidad
               </Link>
             </div>
 

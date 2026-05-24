@@ -124,7 +124,7 @@ function CreateObjectPage() {
         return "";
 
       case "images":
-        if (!currentImages.length) return "Debes subir al menos una imagen";
+        if (!currentImages.length) return "Debes añadir al menos una imagen";
         return "";
 
       case "location":
@@ -278,18 +278,18 @@ function CreateObjectPage() {
 
       await createObject(formData);
 
-      setSuccessMessage("¡Producto publicado correctamente!");
+      setSuccessMessage("¡Objeto publicado correctamente!");
       setErrorMessage("");
       setTimeout(() => navigate("/objects"), 1200);
     } catch (error) {
-      console.error("Error creando producto:", error);
+      console.error("Error creando objeto:", error);
       if (error.response?.status === 422 && error.response.data?.errors) {
         const validationErrors = error.response.data.errors;
         const firstErrorKey = Object.keys(validationErrors)[0];
         setErrorMessage(validationErrors[firstErrorKey][0]);
       } else {
         setErrorMessage(
-          error.response?.data?.message || "No se ha podido crear el producto",
+          error.response?.data?.message || "No se ha podido crear el objeto",
         );
       }
     } finally {
@@ -304,7 +304,7 @@ function CreateObjectPage() {
           <BtnBack />
         </div>
         <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px] text-center">
-          Subir producto
+          Subir objeto
         </h1>
         <div className="flex-1" />
       </div>
@@ -316,7 +316,7 @@ function CreateObjectPage() {
             <div className="rounded-[24px] border border-dashed border-app-border bg-app-bg px-6 py-10 md:px-10 md:py-12">
               <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-6 font-body text-[16px] text-app-text">
-                  Sube una o más imágenes
+                  Añade una o más imágenes
                 </p>
 
                 <div className="flex w-full flex-wrap items-center justify-center gap-4">
@@ -363,7 +363,7 @@ function CreateObjectPage() {
                     alt=""
                     className="h-5 w-5"
                   />
-                  Subir imagen
+                  Añadir imagen
                 </button>
 
                 <input
@@ -443,7 +443,7 @@ function CreateObjectPage() {
                 htmlFor="name"
                 className="mb-3 block font-heading text-[20px] font-semibold text-app-text"
               >
-                Nombre del producto
+                Nombre del objeto
               </label>
               <div
                 className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
@@ -464,7 +464,7 @@ function CreateObjectPage() {
                   autoComplete="off"
                   value={form.name}
                   onChange={handleChange}
-                  placeholder="Nombre del producto"
+                  placeholder="Nombre del objeto"
                   className="h-full w-full bg-transparent font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--color-app-text)] [&:-webkit-autofill]:[caret-color:var(--color-app-text)] [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:focus]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:hover]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset]"
                 />
               </div>
@@ -528,7 +528,7 @@ function CreateObjectPage() {
                 rows="5"
                 value={form.description}
                 onChange={handleChange}
-                placeholder="Describe los detalles y características del producto"
+                placeholder="Describe los detalles y características del objeto"
                 className={`w-full rounded-[16px] bg-app-bg-card px-4 py-4 font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none ${
                   fieldErrors.description
                     ? "border border-[var(--color-app-danger)]"
@@ -742,7 +742,7 @@ function CreateObjectPage() {
                 disabled={loadingSubmit}
                 className="rounded-[14px] bg-vecilend-dark-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-vecilend-dark-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
               >
-                {loadingSubmit ? "Publicando..." : "Publicar producto"}
+                {loadingSubmit ? "Publicando..." : "Publicar objeto"}
               </button>
 
               <div className="flex items-center">

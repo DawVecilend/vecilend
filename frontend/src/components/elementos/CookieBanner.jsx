@@ -89,7 +89,7 @@ function CookieBanner() {
                 uso para mejorar el servicio. Puedes aceptar todas, rechazar
                 las opcionales o personalizar tu elección. Consulta nuestra{" "}
                 <Link
-                  to="/politica-de-privacidad"
+                  to="/privacy-policy"
                   className="text-vecilend-dark-primary hover:underline font-bold"
                 >
                   política de privacidad
