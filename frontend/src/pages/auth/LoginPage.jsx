@@ -93,7 +93,7 @@ function LoginPage() {
 
   return (
     <div className="bg-app-bg text-app-text antialiased md:h-[calc(100vh-80px)] md:overflow-hidden flex flex-col dark">
-      <main className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
+      <section className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
         <section className="hidden md:flex md:w-1/2 relative bg-app-bg-card items-center justify-center h-full overflow-hidden">
           <div className="absolute inset-0 z-0">
             <OptimizedImage
@@ -194,7 +194,7 @@ function LoginPage() {
                   <label className="block text-sm font-semibold text-app-text-secondary">
                     Código de verificación
                   </label>
-                  <input
+                  <input aria-label="Código de verificación"
                     value={twoFactorCode}
                     onChange={(e) => setTwoFactorCode(e.target.value)}
                     inputMode="text"
@@ -238,7 +238,7 @@ function LoginPage() {
                 <label className="block text-sm font-semibold text-app-text-secondary">
                   Usuario / Email
                 </label>
-                <input
+                <input aria-label="Usuario / Email"
                   value={formData.login}
                   onChange={(e) =>
                     setFormData({ ...formData, login: e.target.value })
@@ -309,7 +309,7 @@ function LoginPage() {
             </div>
           </div>
         </section>
-      </main>
+      </section>
     </div>
   );
 }

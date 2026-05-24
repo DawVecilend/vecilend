@@ -308,7 +308,7 @@ function RegisterPage() {
   return (
     <div className="bg-app-bg text-app-text antialiased md:h-[calc(100vh-80px)] md:overflow-hidden flex flex-col dark">
       {step === 1 && (
-        <main className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
+        <section className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
           <section className="hidden md:flex md:w-1/2 relative bg-app-bg-card items-center justify-center h-full overflow-hidden">
             <div className="absolute inset-0 z-0">
               <OptimizedImage
@@ -416,7 +416,7 @@ function RegisterPage() {
                     Usuario
                   </label>
 
-                  <input
+                  <input aria-label="Usuario"
                     name="username"
                     value={formData.username}
                     onChange={(e) => {
@@ -439,7 +439,7 @@ function RegisterPage() {
                     Email
                   </label>
 
-                  <input
+                  <input aria-label="Email"
                     name="email"
                     value={formData.email}
                     onChange={(e) => {
@@ -490,11 +490,11 @@ function RegisterPage() {
               </div>
             </div>
           </section>
-        </main>
+        </section>
       )}
 
       {step === 2 && (
-        <main className="flex-grow flex flex-col items-center justify-center px-4 h-full">
+        <section className="flex-grow flex flex-col items-center justify-center px-4 h-full">
           <div className="w-full max-w-md -mt-12 md:-mt-8">
             <div className="mb-10 md:mb-6">
               <div className="flex justify-between mb-3 px-1">
@@ -622,11 +622,11 @@ function RegisterPage() {
               </div>
             </div>
           </div>
-        </main>
+        </section>
       )}
 
       {step === 3 && (
-        <main className="flex-grow flex flex-col items-center justify-center pt-8 pb-12 px-4 md:pt-10 md:pb-8 h-full overflow-hidden">
+        <section className="flex-grow flex flex-col items-center justify-center pt-8 pb-12 px-4 md:pt-10 md:pb-8 h-full overflow-hidden">
           <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row gap-6 lg:gap-8 items-stretch justify-center h-[90%]">
             <div className="w-full md:w-2/3 flex flex-col justify-center h-full relative">
               <div
@@ -678,7 +678,7 @@ function RegisterPage() {
                             person
                           </span>
 
-                          <input
+                          <input aria-label="Nombre"
                             name="nom"
                             value={formData.nom}
                             onChange={(e) => {
@@ -707,7 +707,7 @@ function RegisterPage() {
                             badge
                           </span>
 
-                          <input
+                          <input aria-label="Apellidos"
                             name="cognoms"
                             value={formData.cognoms}
                             onChange={(e) => {
@@ -794,7 +794,7 @@ function RegisterPage() {
                             location_on
                           </span>
 
-                          <input
+                          <input aria-label="Población"
                             name="direccio"
                             value={formData.direccio}
                             onChange={(e) => {
@@ -852,7 +852,7 @@ function RegisterPage() {
                             call
                           </span>
 
-                          <input
+                          <input aria-label="Teléfono"
                             name="telefon"
                             value={formData.telefon}
                             onChange={(e) => {
@@ -896,7 +896,7 @@ function RegisterPage() {
                                 upload
                               </span>
                               Elegir archivo
-                              <input
+                              <input aria-label="Subir avatar"
                                 type="file"
                                 className="hidden"
                                 accept="image/jpeg,image/png,image/webp"
@@ -913,7 +913,7 @@ function RegisterPage() {
                         Biografía
                       </label>
 
-                      <textarea
+                      <textarea aria-label="Biografía"
                         name="biography"
                         value={formData.biography}
                         onChange={handleChange}
@@ -1000,7 +1000,7 @@ function RegisterPage() {
               </div>
             </div>
           </div>
-        </main>
+        </section>
       )}
     </div>
   );

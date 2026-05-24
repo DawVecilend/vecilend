@@ -42,28 +42,28 @@ function AdminCreateUserPage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-app-text mb-1.5">Nombre *</label>
-              <input type="text" value={form.nom} onChange={(e) => update("nom", e.target.value)} required className={inputClass} />
+              <input aria-label="Nombre" type="text" value={form.nom} onChange={(e) => update("nom", e.target.value)} required className={inputClass} />
             </div>
             <div>
               <label className="block text-sm font-medium text-app-text mb-1.5">Apellidos *</label>
-              <input type="text" value={form.cognoms} onChange={(e) => update("cognoms", e.target.value)} required className={inputClass} />
+              <input aria-label="Apellidos" type="text" value={form.cognoms} onChange={(e) => update("cognoms", e.target.value)} required className={inputClass} />
             </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-app-text mb-1.5">Email *</label>
-            <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} required className={inputClass} />
+            <input aria-label="Email" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} required className={inputClass} />
           </div>
           <div>
             <label className="block text-sm font-medium text-app-text mb-1.5">Nombre de usuario *</label>
-            <input type="text" value={form.username} onChange={(e) => update("username", e.target.value)} required className={inputClass} />
+            <input aria-label="Nombre de usuario" type="text" value={form.username} onChange={(e) => update("username", e.target.value)} required className={inputClass} />
           </div>
           <div>
             <label className="block text-sm font-medium text-app-text mb-1.5">Contraseña *</label>
-            <input type="password" value={form.password} onChange={(e) => update("password", e.target.value)} required className={inputClass} />
+            <input aria-label="Contraseña" type="password" value={form.password} onChange={(e) => update("password", e.target.value)} required className={inputClass} />
           </div>
           <div>
             <label className="block text-sm font-medium text-app-text mb-1.5">Confirmar contraseña *</label>
-            <input type="password" value={form.password_confirmation} onChange={(e) => update("password_confirmation", e.target.value)} required className={inputClass} />
+            <input aria-label="Confirmar contraseña" type="password" value={form.password_confirmation} onChange={(e) => update("password_confirmation", e.target.value)} required className={inputClass} />
           </div>
         </div>
 

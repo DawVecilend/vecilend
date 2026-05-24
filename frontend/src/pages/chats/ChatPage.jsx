@@ -653,7 +653,7 @@ function ChatPage() {
       )}
 
       <div className="pt-3 border-t border-app-border flex items-end gap-2 shrink-0">
-        <textarea
+        <textarea aria-label="Mensaje"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={handleKeyDown}

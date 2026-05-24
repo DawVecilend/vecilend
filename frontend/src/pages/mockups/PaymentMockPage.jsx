@@ -331,7 +331,7 @@ function PaymentMockPage() {
                   Número de tarjeta
                 </span>
 
-                <input
+                <input aria-label="Número de tarjeta"
                   inputMode="numeric"
                   autoComplete="cc-number"
                   placeholder="0000 0000 0000 0000"
@@ -367,7 +367,7 @@ function PaymentMockPage() {
                   Titular
                 </span>
 
-                <input
+                <input aria-label="Nombre del titular"
                   autoComplete="cc-name"
                   placeholder="NOMBRE APELLIDOS"
                   value={card.name}
@@ -405,7 +405,7 @@ function PaymentMockPage() {
                     Caducidad
                   </span>
 
-                  <input
+                  <input aria-label="Fecha de caducidad"
                     inputMode="numeric"
                     autoComplete="cc-exp"
                     placeholder="MM/AA"
@@ -441,7 +441,7 @@ function PaymentMockPage() {
                     CVV
                   </span>
 
-                  <input
+                  <input aria-label="Código de seguridad CVC"
                     inputMode="numeric"
                     autoComplete="cc-csc"
                     placeholder="123"

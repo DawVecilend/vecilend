@@ -102,7 +102,7 @@ function CookieBanner() {
           {showDetails && (
             <div className="mt-4 space-y-3 border-t border-app-border pt-4">
               <label className="flex items-start gap-3 cursor-not-allowed opacity-90">
-                <input
+                <input aria-label="Cookies esenciales (siempre activas)"
                   type="checkbox"
                   checked
                   disabled
@@ -123,7 +123,7 @@ function CookieBanner() {
               </label>
 
               <label className="flex items-start gap-3 cursor-pointer">
-                <input
+                <input aria-label="Cookies de personalización"
                   type="checkbox"
                   checked={prefs.personalization}
                   onChange={(e) =>
@@ -146,7 +146,7 @@ function CookieBanner() {
               </label>
 
               <label className="flex items-start gap-3 cursor-pointer">
-                <input
+                <input aria-label="Cookies analíticas"
                   type="checkbox"
                   checked={prefs.analytics}
                   onChange={(e) =>

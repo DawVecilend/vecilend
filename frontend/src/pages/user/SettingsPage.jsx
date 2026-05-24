@@ -16,7 +16,7 @@ function SettingsPage() {
         <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)] mt-4 md:mt-0">
           <SettingsNav username={user?.username} current="home" />
 
-          <main className="flex-1 min-w-0 p-0 md:p-6">
+          <section className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
                 Hola,{" "}
@@ -166,7 +166,7 @@ function SettingsPage() {
                 </div>
               </div>
             </div>
-          </main>
+          </section>
         </div>
       </div>
     </div>

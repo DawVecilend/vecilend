@@ -62,7 +62,7 @@ function CategoryPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-app-bg px-6 py-10 text-app-text">
+      <section className="min-h-screen bg-app-bg px-6 py-10 text-app-text">
         <div className="mx-auto max-w-[1380px]">
           <div className="flex items-center justify-between gap-4">
             <BtnBack />
@@ -120,7 +120,7 @@ function CategoryPage() {
             </>
           )}
         </div>
-      </main>
+      </section>
     </>
   );
 }

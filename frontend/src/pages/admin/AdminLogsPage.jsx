@@ -191,7 +191,7 @@ function AdminLogsPage() {
 
       <div className="rounded-xl border border-app-border bg-app-bg-card p-4 mb-5 flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-[180px]">
-          <input
+          <input aria-label="Filtrar por usuario"
             type="text"
             placeholder="Filtrar por usuario..."
             value={filterActor}
@@ -200,19 +200,19 @@ function AdminLogsPage() {
           />
         </div>
 
-        <select value={filterTipus} onChange={(e) => setFilterTipus(e.target.value)} className={selectClass}>
+        <select aria-label="Filtrar por tipo" value={filterTipus} onChange={(e) => setFilterTipus(e.target.value)} className={selectClass}>
           <option value="all">Todos los tipos</option>
           <option value="admin">Admin</option>
           <option value="auth">Auth (login/logout)</option>
           <option value="usuari">Usuario</option>
         </select>
 
-        <select value={filterAction} onChange={(e) => setFilterAction(e.target.value)} className={selectClass}>
+        <select aria-label="Filtrar por acción" value={filterAction} onChange={(e) => setFilterAction(e.target.value)} className={selectClass}>
           <option value="all">Todas las acciones</option>
           {uniqueActions.map((a) => <option key={a} value={a}>{a}</option>)}
         </select>
 
-        <select value={filterEntity} onChange={(e) => setFilterEntity(e.target.value)} className={selectClass}>
+        <select aria-label="Filtrar por entidad" value={filterEntity} onChange={(e) => setFilterEntity(e.target.value)} className={selectClass}>
           <option value="all">Todas las entidades</option>
           {uniqueEntities.map((e) => <option key={e} value={e}>{e}</option>)}
         </select>
@@ -353,7 +353,7 @@ function AdminLogsPage() {
               Se eliminarán permanentemente los registros anteriores al número de días indicado. Esta acción no se puede deshacer.
             </p>
             <div className="flex items-center gap-2 mb-4">
-              <input
+              <input aria-label="Días a conservar"
                 type="number"
                 min={1}
                 max={3650}

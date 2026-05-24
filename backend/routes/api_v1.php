@@ -35,6 +35,7 @@ Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:l
 Route::post('/login/2fa', [LoginController::class, 'verify2fa'])->middleware('throttle:login');
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->middleware('throttle:30,1');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->middleware('throttle:30,1');
+Route::post('/auth/google/exchange', [GoogleAuthController::class, 'exchange'])->middleware('throttle:30,1');
 Route::post('/check-user', [RegisterController::class, 'checkUser'])->middleware('throttle:30,1');
 Route::post('/email/send-code',   [EmailVerificationController::class, 'sendCode'])->middleware('throttle:email-verify');
 Route::post('/email/verify-code', [EmailVerificationController::class, 'verifyCode'])->middleware('throttle:email-verify');

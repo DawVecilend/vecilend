@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import api from "../../services/api";
 
 const ERROR_MESSAGES = {
   oauth_failed: "No se ha podido completar el inicio de sesión con Google.",
@@ -8,6 +9,7 @@ const ERROR_MESSAGES = {
   provisioning_failed: "Ha habido un problema al crear tu cuenta. Inténtalo de nuevo.",
   account_disabled: "Tu cuenta está desactivada. Contacta con soporte técnico.",
   access_denied: "Has cancelado el inicio de sesión con Google.",
+  invalid_code: "El enlace de inicio de sesión ha caducado. Inténtalo de nuevo.",
 };
 
 function GoogleCallbackPage() {
@@ -20,7 +22,7 @@ function GoogleCallbackPage() {
   useEffect(() => {
     if (handled.current) return;
 
-    const token = searchParams.get("token");
+    const code = searchParams.get("code");
     const errorCode = searchParams.get("error");
 
     if (errorCode) {
@@ -30,21 +32,28 @@ function GoogleCallbackPage() {
       return;
     }
 
-    if (!token) {
+    if (!code) {
       handled.current = true;
-      setError("No se ha recibido el token de autenticación.");
+      setError("No se ha recibido el código de autenticación.");
       window.setTimeout(() => navigate("/login", { replace: true }), 3500);
       return;
     }
 
     handled.current = true;
-    localStorage.setItem("auth_token", token);
 
-    getUser()
+    api.post("/auth/google/exchange", { code }, { skipAuthRedirect: true })
+      .then((response) => {
+        const token = response?.data?.data?.token;
+        if (!token) {
+          throw new Error("missing_token");
+        }
+        localStorage.setItem("auth_token", token);
+        return getUser();
+      })
       .then(() => navigate("/", { replace: true }))
       .catch(() => {
         localStorage.removeItem("auth_token");
-        setError("No se ha podido cargar tu perfil. Inténtalo de nuevo.");
+        setError(ERROR_MESSAGES.invalid_code);
         window.setTimeout(() => navigate("/login", { replace: true }), 3500);
       });
   }, [searchParams, navigate, getUser]);

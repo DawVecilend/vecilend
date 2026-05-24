@@ -33,15 +33,23 @@ function ProductCard({
     }
   }
 
+  function handleCardClick(e) {
+    const interactive = e.target.closest("a, button");
+    if (interactive) return;
+    navigate(detailLink);
+  }
+
   return (
-    <Link to={detailLink} className="block w-full">
+    <div onClick={handleCardClick} className="block w-full cursor-pointer">
       <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
         <div className="relative aspect-4/3 overflow-hidden">
-          <img
-            alt={title}
-            src={image}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
+          <Link to={detailLink} aria-label={title} className="block h-full w-full">
+            <img
+              alt={title}
+              src={image}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          </Link>
 
           <FavoriteButton
             objectId={id}
@@ -54,16 +62,10 @@ function ProductCard({
         </div>
 
         <div className="flex flex-1 flex-col p-6">
-          <div
-            role="link"
-            tabIndex={0}
+          <button
+            type="button"
             onClick={handleProfileClick}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                handleProfileClick(e);
-              }
-            }}
-            className="mb-4 inline-flex cursor-pointer items-center gap-2 self-start"
+            className="mb-4 inline-flex cursor-pointer items-center gap-2 self-start bg-transparent border-0 p-0 text-left"
           >
             <img
               alt={userName}
@@ -71,13 +73,15 @@ function ProductCard({
               className="h-8 w-8 rounded-full border-2 border-app-border object-cover"
             />
 
-            <p className="text-sm text-app-text-secondary transition-colors hover:text-vecilend-dark-primary">
+            <span className="text-sm text-app-text-secondary transition-colors hover:text-vecilend-dark-primary">
               {userName}
-            </p>
-          </div>
+            </span>
+          </button>
 
           <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-vecilend-dark-primary">
-            {title}
+            <Link to={detailLink} className="hover:underline">
+              {title}
+            </Link>
           </h3>
 
           <p className="mb-4 min-h-[42px] text-sm text-app-text-secondary line-clamp-2">
@@ -123,7 +127,7 @@ function ProductCard({
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

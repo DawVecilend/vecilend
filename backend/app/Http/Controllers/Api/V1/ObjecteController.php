@@ -428,6 +428,12 @@ class ObjecteController extends Controller
         $authUser = $request->user();
         $isOwn = $authUser && $authUser->id === $user->id;
 
+        if (!$user->actiu && !$isOwn) {
+            return response()->json([
+                'message' => 'Usuario no encontrado.',
+            ], 404);
+        }
+
         $query = Objecte::query()
             ->ambCoordenades()
             ->with([
@@ -439,7 +445,6 @@ class ObjecteController extends Controller
             ->where('user_id', $user->id)
             ->orderByDesc('created_at');
 
-        // Visitants i altres usuaris només veuen els disponibles
         if (!$isOwn) {
             $query->where('estat', 'disponible');
         }

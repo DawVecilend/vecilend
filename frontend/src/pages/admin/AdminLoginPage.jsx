@@ -48,7 +48,7 @@ function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div>
               <label className="block text-sm font-medium text-app-text mb-1.5">Email o usuario</label>
-              <input
+              <input aria-label="Email o usuario"
                 type="text"
                 value={formData.login}
                 onChange={(e) => setFormData({ ...formData, login: e.target.value })}

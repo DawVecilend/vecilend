@@ -70,7 +70,7 @@ function HeaderMobile() {
             <span className="material-symbols-outlined text-app-text-secondary text-[18px] shrink-0">
               search
             </span>
-            <input
+            <input aria-label="Buscar"
               type="text"
               inputMode="search"
               placeholder="Buscar…"

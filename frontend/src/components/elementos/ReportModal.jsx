@@ -82,7 +82,7 @@ function ReportModal({
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label className="block text-sm font-medium text-app-text mb-1.5">Motivo *</label>
-            <select
+            <select aria-label="Motivo"
               value={motiu}
               onChange={(e) => setMotiu(e.target.value)}
               required
@@ -111,7 +111,7 @@ function ReportModal({
             <label className="block text-sm font-medium text-app-text mb-1.5">
               Descripción <span className="text-app-text-secondary font-normal">(opcional)</span>
             </label>
-            <textarea
+            <textarea aria-label="Descripción (opcional)"
               value={descripcio}
               onChange={(e) => setDescripcio(e.target.value)}
               maxLength={2000}

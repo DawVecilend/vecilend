@@ -140,7 +140,7 @@ function UserReviewsList({ username }) {
                   <div className="w-12 h-12 rounded-full bg-app-bg-card-secondary" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-app-text truncate">
+                  <h3 className="font-bold text-app-text truncate">
                     {rev.autor?.username ? (
                       <Link
                         to={`/profile/${rev.autor.username}`}
@@ -153,7 +153,7 @@ function UserReviewsList({ username }) {
                         {rev.autor?.nom} {rev.autor?.cognoms}
                       </>
                     )}
-                  </h4>
+                  </h3>
                   <Rating
                     value={rev.puntuacio}
                     readOnly

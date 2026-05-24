@@ -8,7 +8,7 @@ function LenderPortalPage() {
       {/* Cabecera Modular */}
       <HeaderDesktop />
 
-      <main className="pt-20">
+      <section className="pt-20">
         {/* Hero Section */}
         <section className="relative min-h-[819px] flex items-center px-8 md:px-24 overflow-hidden bg-app-bg-card">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -351,7 +351,7 @@ function LenderPortalPage() {
             </div>
           </div>
         </section>
-      </main>
+      </section>
 
       {/* Footer */}
       <footer className="bg-app-bg-card w-full py-12 px-8 border-t border-app-border/50">

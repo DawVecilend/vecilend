@@ -140,14 +140,14 @@ function AdminCategoriesPage() {
 
                   {editingId === cat.id ? (
                     <div className="flex-1 flex flex-col gap-2 min-w-0">
-                      <input
+                      <input aria-label="Nombre"
                         value={editingName}
                         onChange={(e) => setEditingName(e.target.value)}
                         autoFocus
                         className="rounded-lg px-3 py-1.5 text-sm bg-app-neutral border border-app-border text-app-text outline-none"
                       />
 
-                      <textarea
+                      <textarea aria-label="Descripción"
                         value={editingDescription}
                         onChange={(e) => setEditingDescription(e.target.value)}
                         placeholder="Descripción"
@@ -222,14 +222,14 @@ function AdminCategoriesPage() {
 
                         {editingId === `sub-${sub.id}` ? (
                           <div className="flex-1 flex flex-col gap-2 min-w-0">
-                            <input
+                            <input aria-label="Nombre"
                               value={editingName}
                               onChange={(e) => setEditingName(e.target.value)}
                               autoFocus
                               className="rounded-lg px-3 py-1.5 text-sm bg-app-neutral border border-app-border text-app-text outline-none"
                             />
 
-                            <textarea
+                            <textarea aria-label="Descripción"
                               value={editingDescription}
                               onChange={(e) => setEditingDescription(e.target.value)}
                               placeholder="Descripción"

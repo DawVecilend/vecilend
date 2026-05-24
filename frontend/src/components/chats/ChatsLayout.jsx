@@ -8,6 +8,7 @@ const POLL_MS = 7000;
 const PER_PAGE = 20;
 
 function ChatRow({ chat, active, draft, onDelete }) {
+  const navigate = useNavigate();
   const altre = chat.altre_usuari;
   const ultim = chat.ultim_missatge;
   const noLlegits = chat.missatges_no_llegits || 0;
@@ -29,20 +30,29 @@ function ChatRow({ chat, active, draft, onDelete }) {
 
   return (
     <div className="relative">
-      <Link
-        to={`/chats/${chat.id}`}
+      <div
+        onClick={(e) => {
+          if (e.target.closest("a, button")) return;
+          navigate(`/chats/${chat.id}`);
+        }}
         className={
-          "flex items-center gap-3 p-3 rounded-xl border transition-colors " +
+          "flex items-center gap-3 p-3 rounded-xl border transition-colors cursor-pointer " +
           (active
             ? "border-app-primary/60 bg-app-primary/5"
             : "border-app-border bg-app-bg-card hover:bg-app-bg-card-secondary")
         }
       >
-        <img
-          src={altre?.avatar_url || "/assets/icons/empty-user-icon.svg"}
-          alt={altre?.nom || "Usuario"}
-          className="h-12 w-12 rounded-full object-cover shrink-0"
-        />
+        <Link
+          to={`/chats/${chat.id}`}
+          aria-label={altre ? `${altre.nom} ${altre.cognoms || ""}`.trim() : "Conversación"}
+          className="contents"
+        >
+          <img
+            src={altre?.avatar_url || "/assets/icons/empty-user-icon.svg"}
+            alt={altre?.nom || "Usuario"}
+            className="h-12 w-12 rounded-full object-cover shrink-0"
+          />
+        </Link>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
@@ -89,7 +99,7 @@ function ChatRow({ chat, active, draft, onDelete }) {
         >
           <span className="material-symbols-outlined text-[20px]">close</span>
         </button>
-      </Link>
+      </div>
     </div>
   );
 }

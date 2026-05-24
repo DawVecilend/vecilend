@@ -169,7 +169,7 @@ function EditProfilePage() {
           <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
             <SettingsNav username={user?.username} current="profile" />
 
-            <main className="flex-1 min-w-0 p-0 md:p-6">
+            <section className="flex-1 min-w-0 p-0 md:p-6">
               <header className="mb-8">
                 <div className="h-10 md:h-12 w-64 md:w-80 bg-app-bg-card-secondary/40 rounded animate-pulse" />
                 <div className="mt-3 h-5 w-72 md:w-96 bg-app-bg-card-secondary/40 rounded animate-pulse" />
@@ -202,7 +202,7 @@ function EditProfilePage() {
                   </div>
                 </div>
               </div>
-            </main>
+            </section>
           </div>
         </div>
       </div>
@@ -215,7 +215,7 @@ function EditProfilePage() {
         <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
           <SettingsNav username={user?.username} current="profile" />
 
-          <main className="flex-1 min-w-0 p-0 md:p-6">
+          <section className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
                 Perfil de{" "}
@@ -254,7 +254,7 @@ function EditProfilePage() {
                       </span>
                     </button>
                   </div>
-                  <input
+                  <input aria-label="Subir avatar"
                     type="file"
                     ref={fileInputRef}
                     onChange={handleFileChange}
@@ -287,7 +287,7 @@ function EditProfilePage() {
                       <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                         Nombre
                       </label>
-                      <input
+                      <input aria-label="Nombre"
                         name="nom"
                         value={formData.nom}
                         onChange={handleChange}
@@ -299,7 +299,7 @@ function EditProfilePage() {
                       <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                         Apellidos
                       </label>
-                      <input
+                      <input aria-label="Apellidos"
                         name="cognoms"
                         value={formData.cognoms}
                         onChange={handleChange}
@@ -311,7 +311,7 @@ function EditProfilePage() {
                       <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                         Teléfono
                       </label>
-                      <input
+                      <input aria-label="Teléfono"
                         name="telefon"
                         value={formData.telefon}
                         onChange={handleChange}
@@ -324,7 +324,7 @@ function EditProfilePage() {
                       <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                         Dirección
                       </label>
-                      <input
+                      <input aria-label="Dirección"
                         name="direccio"
                         value={formData.direccio}
                         onChange={handleDireccioChange}
@@ -361,7 +361,7 @@ function EditProfilePage() {
                       <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest ml-1">
                         Biografía
                       </label>
-                      <textarea
+                      <textarea aria-label="Biografía"
                         name="biography"
                         value={formData.biography}
                         onChange={handleChange}
@@ -419,7 +419,7 @@ function EditProfilePage() {
                 </div>
               </div>
             </form>
-          </main>
+          </section>
         </div>
       </div>
     </div>

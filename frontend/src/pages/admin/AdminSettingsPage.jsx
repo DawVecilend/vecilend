@@ -183,7 +183,7 @@ function AdminSettingsPage() {
                   No modifica la tarea programada nocturna.
                 </p>
                 <div className="mt-2 flex items-center gap-2">
-                  <input
+                  <input aria-label="Días a conservar"
                     type="number"
                     min={1}
                     max={3650}

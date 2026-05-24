@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -104,7 +106,8 @@ class GoogleAuthController extends Controller
             return redirect()->away($frontendUrl . '/auth/google/callback?error=account_disabled');
         }
 
-        $token = $user->createToken('google-oauth')->plainTextToken;
+        $code = bin2hex(random_bytes(32));
+        Cache::put('oauth_code:' . $code, $user->id, now()->addSeconds(60));
 
         DB::table('logs')->insert([
             'user_id'             => $user->id,
@@ -118,7 +121,34 @@ class GoogleAuthController extends Controller
             'created_at'          => now(),
         ]);
 
-        return redirect()->away($frontendUrl . '/auth/google/callback?token=' . urlencode($token));
+        return redirect()->away($frontendUrl . '/auth/google/callback?code=' . urlencode($code));
+    }
+
+    public function exchange(Request $request): JsonResponse
+    {
+        $code = (string) $request->input('code', '');
+        if ($code === '' || strlen($code) > 128) {
+            return response()->json(['message' => 'Código inválido.'], 422);
+        }
+
+        $userId = Cache::pull('oauth_code:' . $code);
+        if (! $userId) {
+            return response()->json(['message' => 'Código inválido o expirado.'], 401);
+        }
+
+        $user = User::find($userId);
+        if (! $user || ! $user->actiu) {
+            return response()->json(['message' => 'Cuenta no disponible.'], 401);
+        }
+
+        $token = $user->createToken('google-oauth')->plainTextToken;
+
+        return response()->json([
+            'data' => [
+                'user'  => new \App\Http\Resources\UserResource($user),
+                'token' => $token,
+            ],
+        ]);
     }
 
     private function generateUniqueUsername(string $email): string

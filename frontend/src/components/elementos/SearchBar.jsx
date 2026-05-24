@@ -110,7 +110,7 @@ function SearchBar() {
           </span>
         </button>
 
-        <input
+        <input aria-label="Buscar"
           className="flex-1 min-w-0 bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-app-text placeholder:text-app-text-secondary px-3"
           type="text"
           placeholder="Buscar objeto..."

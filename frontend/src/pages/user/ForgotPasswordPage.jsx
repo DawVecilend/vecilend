@@ -44,7 +44,7 @@ function ForgotPasswordPage() {
                 <label className="block text-sm font-semibold text-app-text-secondary">
                   Email
                 </label>
-                <input
+                <input aria-label="Email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

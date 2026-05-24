@@ -81,9 +81,9 @@ function AdminEmpleatsPage() {
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <input type="text" placeholder="Buscar..." value={search} onChange={(e) => setSearch(e.target.value)}
+        <input aria-label="Buscar" type="text" placeholder="Buscar..." value={search} onChange={(e) => setSearch(e.target.value)}
           className="rounded-lg px-4 py-2.5 text-sm outline-none bg-app-bg-card border border-app-border text-app-text flex-1 min-w-[200px]" />
-        <select value={filterRol} onChange={(e) => setFilterRol(e.target.value)} className={selectClass}>
+        <select aria-label="Filtrar por rol" value={filterRol} onChange={(e) => setFilterRol(e.target.value)} className={selectClass}>
           <option value="all">Todos los roles</option>
           <option value="admin">Administradores</option>
           <option value="suport">Soporte técnico</option>

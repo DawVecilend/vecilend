@@ -239,7 +239,7 @@ export function TwoFactorSetupModal({ open, onClose, onActivated, userHasPasswor
               <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest">
                 Código de verificación
               </label>
-              <input
+              <input aria-label="Código de verificación"
                 value={code}
                 onChange={(e) =>
                   setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
@@ -380,7 +380,7 @@ export function TwoFactorDisableModal({ open, onClose, onDisabled, userHasPasswo
           <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest">
             Código de verificación o de recuperación
           </label>
-          <input
+          <input aria-label="Código de verificación o de recuperación"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             inputMode="text"
@@ -525,7 +525,7 @@ export function TwoFactorRecoveryModal({ open, onClose, userHasPassword }) {
               <label className="text-xs font-bold text-app-text-secondary uppercase tracking-widest">
                 Código de verificación
               </label>
-              <input
+              <input aria-label="Código de verificación"
                 value={code}
                 onChange={(e) =>
                   setCode(e.target.value.replace(/\D/g, "").slice(0, 6))

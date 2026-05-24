@@ -176,7 +176,7 @@ function ProfilePage() {
 
   return (
     <div className="bg-app-bg text-app-text antialiased min-h-screen dark">
-      <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
+      <section className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
         <div className="-mt-20 md:hidden"><BtnBack /></div>
         <section className="relative bg-app-bg-secondary rounded-xl p-8 md:p-12 overflow-hidden">
           <div className="relative flex flex-col md:flex-row gap-8 items-start">
@@ -361,7 +361,7 @@ function ProfilePage() {
         </section>
 
         <UserReviewsList username={username} />
-      </main>
+      </section>
 
       <ConfirmDeleteModal
         open={confirmDeleteOpen}

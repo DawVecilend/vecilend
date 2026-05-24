@@ -4,7 +4,7 @@ function BenefitCard({ icon, title, text }) {
       <div className="w-24 h-24 bg-app-bg-card text-app-text rounded-3xl flex items-center justify-center mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-[var(--color-app-success-on)] transition-all duration-500 shadow-xl shadow-black/20 border border-app-border">
           <span className="material-symbols-outlined text-4xl">{icon}</span>
       </div>
-      <h4 className="font-bold text-xl mb-3 text-app-text">{title}</h4>
+      <h3 className="font-bold text-xl mb-3 text-app-text">{title}</h3>
       <p className="text-app-text-secondary text-sm leading-relaxed">{text}</p>
     </div>
   )

@@ -497,7 +497,7 @@ function ObjectPage() {
         )}
 
         {!needsDates && (
-          <textarea
+          <textarea aria-label="Mensaje al propietario"
             value={missatge}
             onChange={(e) => setMissatge(e.target.value)}
             placeholder="Mensaje acerca de la solicitud (opcional)"

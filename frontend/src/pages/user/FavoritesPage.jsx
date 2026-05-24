@@ -43,7 +43,7 @@ function FavoritesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-app-bg px-4 py-8 text-app-text md:px-10">
+    <section className="min-h-screen bg-app-bg px-4 py-8 text-app-text md:px-10">
       <section className="mx-auto w-full max-w-[1380px]">
         <BtnBack />
 
@@ -106,7 +106,7 @@ function FavoritesPage() {
           </section>
         )}
       </section>
-    </main>
+    </section>
   );
 }
 

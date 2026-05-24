@@ -180,7 +180,7 @@ function SecuritySettingsPage() {
         <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
           <SettingsNav username={user?.username} current="security" />
 
-          <main className="flex-1 min-w-0 p-0 md:p-6">
+          <section className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
                 Seguridad de la <span className="text-vecilend-dark-primary">Cuenta</span>
@@ -297,13 +297,13 @@ function SecuritySettingsPage() {
                   </div>
 
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input
+                    <input aria-label="Activar verificación en dos pasos"
                       checked={twoFactorEnabled}
                       onChange={handleToggle2fa}
                       className="sr-only peer"
                       type="checkbox"
                     />
-                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:bg-vecilend-dark-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-white"></div>
+                    <span className="inline-block w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:bg-vecilend-dark-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-white"></span>
                   </label>
                 </div>
 
@@ -415,7 +415,7 @@ function SecuritySettingsPage() {
               </div>
             </section>
             </div>
-          </main>
+          </section>
         </div>
       </div>
 
@@ -479,7 +479,7 @@ function SecuritySettingsPage() {
             </span>
 
             <div className="mt-2 relative">
-              <input
+              <input aria-label="Contraseña actual para eliminar la cuenta"
                 type={deleteShowPassword ? "text" : "password"}
                 value={deletePassword}
                 onChange={(e) => setDeletePassword(e.target.value)}

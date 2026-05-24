@@ -63,7 +63,7 @@ function ReviewModal({
           />
         </div>
 
-        <textarea
+        <textarea aria-label="Comentario de la valoración"
           value={comentari}
           onChange={(e) => setComentari(e.target.value)}
           placeholder="Comentario (opcional)"

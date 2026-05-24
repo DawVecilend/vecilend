@@ -98,13 +98,13 @@ function ResolveModal({ open, report, onClose, onResolved }) {
               <p className="text-xs text-app-text-secondary mb-1">Acciones a aplicar:</p>
               {report.usuari_reportat?.actiu !== false && (
                 <label className="flex items-center gap-2 text-sm text-app-text cursor-pointer">
-                  <input type="checkbox" checked={bloquearUsuari} onChange={(e) => setBloquearUsuari(e.target.checked)} className="cursor-pointer" />
+                  <input aria-label="Bloquear al usuario" type="checkbox" checked={bloquearUsuari} onChange={(e) => setBloquearUsuari(e.target.checked)} className="cursor-pointer" />
                   Bloquear al usuario reportado
                 </label>
               )}
               {report.objecte && (isAdmin || report.motiu === "objecte_inapropiat") && (
                 <label className="flex items-center gap-2 text-sm text-app-text cursor-pointer">
-                  <input type="checkbox" checked={eliminarObjecte} onChange={(e) => setEliminarObjecte(e.target.checked)} className="cursor-pointer" />
+                  <input aria-label="Eliminar el objeto reportado" type="checkbox" checked={eliminarObjecte} onChange={(e) => setEliminarObjecte(e.target.checked)} className="cursor-pointer" />
                   Eliminar el objeto referenciado
                 </label>
               )}
@@ -121,7 +121,7 @@ function ResolveModal({ open, report, onClose, onResolved }) {
             <label className="block text-sm font-medium text-app-text mb-1.5">
               Nota interna <span className="text-app-text-secondary font-normal">(opcional)</span>
             </label>
-            <textarea
+            <textarea aria-label="Nota interna (opcional)"
               value={nota}
               onChange={(e) => setNota(e.target.value)}
               rows={3}
@@ -214,13 +214,13 @@ function AdminReportsPage() {
       </div>
 
       <div className="flex flex-wrap gap-3 items-center">
-        <select value={filterEstat} onChange={(e) => setFilterEstat(e.target.value)} className={selectClass}>
+        <select aria-label="Filtrar por estado" value={filterEstat} onChange={(e) => setFilterEstat(e.target.value)} className={selectClass}>
           <option value="all">Todos los estados</option>
           <option value="pendent">Pendientes</option>
           <option value="resolt">Resueltos</option>
           <option value="descartat">Descartados</option>
         </select>
-        <select value={filterMotiu} onChange={(e) => setFilterMotiu(e.target.value)} className={selectClass}>
+        <select aria-label="Filtrar por motivo" value={filterMotiu} onChange={(e) => setFilterMotiu(e.target.value)} className={selectClass}>
           <option value="all">Todos los motivos</option>
           {REPORT_MOTIUS.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
         </select>

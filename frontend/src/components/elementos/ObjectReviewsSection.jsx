@@ -26,7 +26,7 @@ function ReviewCard({ rev }) {
           <div className="w-10 h-10 rounded-full bg-app-neutral" />
         )}
         <div className="flex-1 min-w-0">
-          <h4 className="font-bold text-app-text truncate">
+          <h3 className="font-bold text-app-text truncate">
             {rev.autor?.username ? (
               <Link
                 to={`/profile/${rev.autor.username}`}
@@ -37,7 +37,7 @@ function ReviewCard({ rev }) {
             ) : (
               rev.autor?.nom
             )}
-          </h4>
+          </h3>
           <Rating
             value={rev.puntuacio}
             readOnly

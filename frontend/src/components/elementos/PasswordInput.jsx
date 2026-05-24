@@ -15,7 +15,7 @@ function PasswordInput({
           {leftIcon}
         </span>
       )}
-      <input
+      <input aria-label="Contraseña"
         {...props}
         type={visible ? "text" : "password"}
         className={`${leftIcon ? "pl-10 " : ""}pr-10 ${className}`}
