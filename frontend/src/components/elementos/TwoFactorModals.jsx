@@ -109,7 +109,7 @@ function RecoveryCodesPanel({ codes, onDone, doneLabel = "He guardado mis códig
           <button
             type="button"
             onClick={onDone}
-            className="ml-auto inline-flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-lg bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
+            className="ml-auto inline-flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-lg bg-app-primary text-[var(--color-app-success-on)]"
           >
             {doneLabel}
           </button>
@@ -206,7 +206,7 @@ export function TwoFactorSetupModal({ open, onClose, onActivated, userHasPasswor
       <DialogContent dividers sx={{ borderColor: "var(--color-app-border)" }}>
         {step === "loading" && (
           <div className="py-8 text-center">
-            <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-app-border border-t-vecilend-dark-primary" />
+            <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-app-border border-t-app-primary" />
             <p className="mt-4 text-app-text-secondary">Generando configuración...</p>
           </div>
         )}
@@ -247,7 +247,7 @@ export function TwoFactorSetupModal({ open, onClose, onActivated, userHasPasswor
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 placeholder="123456"
-                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-widest text-center text-lg focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none"
+                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-widest text-center text-lg focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none"
               />
             </div>
 
@@ -277,7 +277,7 @@ export function TwoFactorSetupModal({ open, onClose, onActivated, userHasPasswor
               type="button"
               onClick={handleConfirm}
               disabled={busy || code.length !== 6}
-              className="rounded-full bg-vecilend-dark-primary px-5 py-2 text-sm font-bold text-[var(--color-app-success-on)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-full bg-app-primary px-5 py-2 text-sm font-bold text-[var(--color-app-success-on)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {busy ? "Verificando..." : "Activar 2FA"}
             </button>
@@ -370,7 +370,7 @@ export function TwoFactorDisableModal({ open, onClose, onDisabled, userHasPasswo
             <PasswordInput
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none text-app-text"
+              className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none text-app-text"
               placeholder="••••••••"
             />
           </div>
@@ -386,7 +386,7 @@ export function TwoFactorDisableModal({ open, onClose, onDisabled, userHasPasswo
             inputMode="text"
             autoComplete="one-time-code"
             placeholder="123456 o XXXXX-XXXXX"
-            className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none"
+            className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none"
           />
         </div>
 
@@ -515,7 +515,7 @@ export function TwoFactorRecoveryModal({ open, onClose, userHasPassword }) {
                 <PasswordInput
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none text-app-text"
+                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none text-app-text"
                   placeholder="••••••••"
                 />
               </div>
@@ -533,7 +533,7 @@ export function TwoFactorRecoveryModal({ open, onClose, userHasPassword }) {
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 placeholder="123456"
-                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-widest text-center text-lg focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none"
+                className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-widest text-center text-lg focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none"
               />
             </div>
 
@@ -589,7 +589,7 @@ export function TwoFactorRecoveryModal({ open, onClose, userHasPassword }) {
               type="button"
               onClick={handleSubmit}
               disabled={busy || code.length !== 6 || (userHasPassword && !password)}
-              className="rounded-full bg-vecilend-dark-primary px-5 py-2 text-sm font-bold text-[var(--color-app-success-on)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-full bg-app-primary px-5 py-2 text-sm font-bold text-[var(--color-app-success-on)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {busy ? "Verificando..." : "Ver códigos"}
             </button>
@@ -599,7 +599,7 @@ export function TwoFactorRecoveryModal({ open, onClose, userHasPassword }) {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full bg-vecilend-dark-primary px-5 py-2 text-sm font-bold text-[var(--color-app-success-on)]"
+            className="rounded-full bg-app-primary px-5 py-2 text-sm font-bold text-[var(--color-app-success-on)]"
           >
             Cerrar
           </button>

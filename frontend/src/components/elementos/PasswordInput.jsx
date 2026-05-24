@@ -11,7 +11,7 @@ function PasswordInput({
   return (
     <div className="relative group">
       {leftIcon && (
-        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors pointer-events-none">
+        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors pointer-events-none">
           {leftIcon}
         </span>
       )}
@@ -24,7 +24,7 @@ function PasswordInput({
         type="button"
         onClick={() => setVisible((v) => !v)}
         aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
-        className={`absolute right-3 top-1/2 -translate-y-1/2 text-app-text-secondary hover:text-vecilend-dark-primary ${iconClassName}`}
+        className={`absolute right-3 top-1/2 -translate-y-1/2 text-app-text-secondary hover:text-app-primary ${iconClassName}`}
       >
         <span className="material-symbols-outlined text-lg">
           {visible ? "visibility_off" : "visibility"}

@@ -123,7 +123,7 @@ function SearchBar() {
         <button
           type="button"
           onClick={() => setFiltersOpen(true)}
-          className="shrink-0 relative inline-flex items-center gap-1 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-4 py-2 text-sm font-bold text-[var(--color-app-success-on)] transition-colors hover:from-vecilend-dark-primary-hover hover:to-vecilend-dark-primary-hover hover:text-white"
+          className="shrink-0 relative inline-flex items-center gap-1 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-4 py-2 text-sm font-bold text-[var(--color-app-success-on)] transition-colors hover:from-app-primary-hover hover:to-app-primary-hover hover:text-white"
         >
           <span className="material-symbols-outlined text-base">tune</span>
           Filtros

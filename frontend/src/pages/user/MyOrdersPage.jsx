@@ -152,7 +152,7 @@ function OrderCard({ tx, tab, onAction, busyId }) {
                   ? `/objects/${tx.objecte_id}/${tx.objecte.slug}`
                   : `/objects/${tx.objecte_id}`
               }
-              className="font-heading text-h3-mobile text-app-text hover:text-vecilend-dark-primary"
+              className="font-heading text-h3-mobile text-app-text hover:text-app-primary"
             >
               {tx.objecte?.nom}
             </Link>
@@ -161,7 +161,7 @@ function OrderCard({ tx, tab, onAction, busyId }) {
               {otherUser ? (
                 <Link
                   to={`/profile/${otherUser.username}`}
-                  className="text-vecilend-dark-primary hover:underline"
+                  className="text-app-primary hover:underline"
                 >
                   {otherUser.nom}
                 </Link>
@@ -182,12 +182,12 @@ function OrderCard({ tx, tab, onAction, busyId }) {
             {tx.dies === 1 ? "" : "s"}
           </span>
           {isLloguer && tx.preu_total != null && (
-            <span className="text-vecilend-dark-primary font-bold">
+            <span className="text-app-primary font-bold">
               Total: {tx.preu_total.toFixed(2)}€
             </span>
           )}
           {!isLloguer && (
-            <span className="text-vecilend-dark-secondary font-bold">
+            <span className="text-app-secondary font-bold">
               Préstamo gratuito
             </span>
           )}
@@ -245,7 +245,7 @@ function OrderCard({ tx, tab, onAction, busyId }) {
                 <button
                   type="button"
                   onClick={() => navigate(`/transactions/${tx.id}/payment`)}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)]"
                 >
                   <span className="material-symbols-outlined text-base">
                     payments
@@ -268,7 +268,7 @@ function OrderCard({ tx, tab, onAction, busyId }) {
                   type="button"
                   disabled={busy}
                   onClick={() => onAction("return", tx.id)}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] disabled:opacity-50"
                 >
                   <span className="material-symbols-outlined text-base">
                     assignment_turned_in
@@ -303,7 +303,7 @@ function OrderCard({ tx, tab, onAction, busyId }) {
               <button
                 type="button"
                 onClick={() => onAction("review", tx.id, tx)}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)]"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)]"
               >
                 <span className="material-symbols-outlined text-base">
                   star
@@ -564,7 +564,7 @@ function MyOrdersPage() {
             onClick={() => setTab(t)}
             className={`relative px-4 py-3 font-body text-body-base font-semibold transition-colors text-left md:text-center whitespace-nowrap ${
               tab.id === t.id
-                ? "text-vecilend-dark-primary"
+                ? "text-app-primary"
                 : "text-app-text-secondary hover:text-app-text"
             }`}
           >
@@ -578,8 +578,8 @@ function MyOrdersPage() {
             </span>
             {tab.id === t.id && (
               <>
-                <span className="hidden md:block absolute bottom-[-1px] left-0 right-0 h-0.5 bg-vecilend-dark-primary" />
-                <span className="md:hidden absolute top-0 bottom-0 left-0 w-0.5 bg-vecilend-dark-primary" />
+                <span className="hidden md:block absolute bottom-[-1px] left-0 right-0 h-0.5 bg-app-primary" />
+                <span className="md:hidden absolute top-0 bottom-0 left-0 w-0.5 bg-app-primary" />
               </>
             )}
           </button>
@@ -597,8 +597,8 @@ function MyOrdersPage() {
               onClick={() => setStatus(f.id)}
               className={`px-4 py-2 rounded-full text-label font-body font-medium transition-all ${
                 status === f.id
-                  ? "bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
-                  : "bg-app-card border border-app-border text-app-text hover:border-vecilend-dark-primary"
+                  ? "bg-app-primary text-[var(--color-app-success-on)]"
+                  : "bg-app-card border border-app-border text-app-text hover:border-app-primary"
               }`}
             >
               {f.label}
@@ -637,7 +637,7 @@ function MyOrdersPage() {
           {tab.id === "requests_sent" && (
             <Link
               to="/objects"
-              className="inline-block mt-4 rounded-full bg-vecilend-dark-primary px-6 py-2 text-label font-bold text-[var(--color-app-success-on)]"
+              className="inline-block mt-4 rounded-full bg-app-primary px-6 py-2 text-label font-bold text-[var(--color-app-success-on)]"
             >
               Explorar objetos
             </Link>
@@ -665,7 +665,7 @@ function MyOrdersPage() {
                 type="button"
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
+                className="rounded-full bg-app-bg-card border border-app-border hover:border-app-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
               >
                 {loadingMore
                   ? "Cargando…"

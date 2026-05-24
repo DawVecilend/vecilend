@@ -81,7 +81,7 @@ function FavoritesPage() {
           <section className="mt-8 rounded-[24px] border border-app-border bg-app-bg-card px-6 py-14 text-center md:px-10">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-app-bg">
               <span
-                className="material-symbols-outlined text-[34px] text-vecilend-dark-primary"
+                className="material-symbols-outlined text-[34px] text-app-primary"
                 style={{ fontVariationSettings: "'FILL' 1" }}
               >
                 favorite
@@ -99,7 +99,7 @@ function FavoritesPage() {
 
             <Link
               to="/objects"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-vecilend-dark-primary px-6 py-3 font-body text-sm font-bold text-white transition-colors hover:bg-vecilend-dark-primary-hover"
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-app-primary px-6 py-3 font-body text-sm font-bold text-white transition-colors hover:bg-app-primary-hover"
             >
               Explorar objetos
             </Link>

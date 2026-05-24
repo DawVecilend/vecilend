@@ -40,9 +40,9 @@
   --color-vecilend-light-border: #E3E7EE;
   --color-vecilend-light-text: #0B1220;
   --color-vecilend-light-text-secondary: #4B5563;
-  --color-vecilend-light-primary: #14B8A6;
-  --color-vecilend-light-primary-hover: #0F766E;
-  --color-vecilend-light-secondary: #22C55E;
+  --color-vecilend-light-primary: #0F766E;
+  --color-vecilend-light-primary-hover: #115E59;
+  --color-vecilend-light-secondary: #15803D;
 
   --color-app-bg: var(--color-vecilend-dark-bg);
   --color-app-bg-secondary: var(--color-vecilend-dark-bg-secondary);
@@ -87,9 +87,9 @@
   --color-app-border: #E3E7EE;
   --color-app-text: #0B1220;
   --color-app-text-secondary: #4B5563;
-  --color-app-primary: #14B8A6;
-  --color-app-primary-hover: #0F766E;
-  --color-app-secondary: #22C55E;
+  --color-app-primary: #0F766E;
+  --color-app-primary-hover: #115E59;
+  --color-app-secondary: #15803D;
 
   --color-app-categories-section: #EDF1F0;
   --color-app-categories-card: #DCE3E1;
@@ -97,11 +97,11 @@
   --color-app-header-bg: rgba(255, 255, 255, 0.85);
   --color-app-header-border: #E3E7EE;
   --color-app-header-hover: #E8EEEC;
-  --color-app-star: #d97706;
+  --color-app-star: #b45309;
   --color-app-success: #0d8d7d;
-  --color-app-success-strong: #0F766E;
+  --color-app-success-strong: #115E59;
   --color-app-success-on: #ffffff;
-  --color-app-warning: #c84a1e;
+  --color-app-warning: #b91c1c;
   --color-app-warning-strong: #FFEDE6;
   --color-app-danger: #b91c1c;
   --color-app-cta-bg: #FFFFFF;

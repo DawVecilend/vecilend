@@ -88,7 +88,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
           <div>
             <Link
               to={`/objects/${tx.objecte_id}`}
-              className="font-heading text-h3-mobile text-app-text hover:text-vecilend-dark-primary"
+              className="font-heading text-h3-mobile text-app-text hover:text-app-primary"
             >
               {tx.objecte?.nom}
             </Link>
@@ -98,7 +98,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               {otherUser ? (
                 <Link
                   to={`/profile/${otherUser.username}`}
-                  className="text-vecilend-dark-primary hover:underline"
+                  className="text-app-primary hover:underline"
                 >
                   {otherUser.nom}
                 </Link>
@@ -121,13 +121,13 @@ function TransactionCard({ tx, role, onAction, busyId }) {
           </span>
 
           {isLloguer && tx.preu_total != null && (
-            <span className="text-vecilend-dark-primary font-bold">
+            <span className="text-app-primary font-bold">
               Total: {Number(tx.preu_total).toFixed(2)}€
             </span>
           )}
 
           {!isLloguer && (
-            <span className="text-vecilend-dark-secondary font-bold">
+            <span className="text-app-secondary font-bold">
               Préstamo gratuito
             </span>
           )}
@@ -147,7 +147,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               <button
                 type="button"
                 onClick={() => navigate(`/transactions/${tx.id}/payment`)}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
               >
                 <span className="material-symbols-outlined text-base align-middle mr-1">
                   payments
@@ -178,7 +178,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
             <button
               type="button"
               onClick={() => onAction("review", tx.id, tx)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 star
@@ -191,7 +191,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
             <button
               type="button"
               onClick={() => onAction("review", tx.id, tx)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 star
@@ -234,7 +234,7 @@ function TransactionCard({ tx, role, onAction, busyId }) {
               type="button"
               disabled={busy}
               onClick={() => onAction("return", tx.id)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 disabled:opacity-50 max-w-max"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 disabled:opacity-50 max-w-max"
             >
               <span className="material-symbols-outlined text-base align-middle mr-1">
                 assignment_turned_in
@@ -405,14 +405,14 @@ function TransactionsPage() {
             onClick={() => setRole(tab.id)}
             className={`relative px-4 py-3 font-body text-body-base font-semibold transition-colors ${
               role === tab.id
-                ? "text-vecilend-dark-primary"
+                ? "text-app-primary"
                 : "text-app-text-secondary hover:text-app-text"
             }`}
           >
             {tab.label}
 
             {role === tab.id && (
-              <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-vecilend-dark-primary" />
+              <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-app-primary" />
             )}
           </button>
         ))}
@@ -426,8 +426,8 @@ function TransactionsPage() {
             onClick={() => setStatus(filter.id)}
             className={`px-4 py-2 rounded-full text-label font-body font-medium transition-all ${
               status === filter.id
-                ? "bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
-                : "bg-app-card border border-app-border text-app-text hover:border-vecilend-dark-primary"
+                ? "bg-app-primary text-[var(--color-app-success-on)]"
+                : "bg-app-card border border-app-border text-app-text hover:border-app-primary"
             }`}
           >
             {filter.label}
@@ -462,7 +462,7 @@ function TransactionsPage() {
           {role === "requester" && (
             <Link
               to="/objects"
-              className="inline-block mt-4 rounded-full bg-vecilend-dark-primary px-6 py-2 text-label font-bold text-[var(--color-app-success-on)]"
+              className="inline-block mt-4 rounded-full bg-app-primary px-6 py-2 text-label font-bold text-[var(--color-app-success-on)]"
             >
               Explorar objetos
             </Link>
@@ -490,7 +490,7 @@ function TransactionsPage() {
                 type="button"
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
+                className="rounded-full bg-app-bg-card border border-app-border hover:border-app-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
               >
                 {loadingMore
                   ? "Cargando…"

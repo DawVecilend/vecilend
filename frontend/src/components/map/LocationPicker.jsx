@@ -144,7 +144,7 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
           type="button"
           onClick={handleUseMyLocation}
           disabled={status === "requesting"}
-          className="self-start inline-flex items-center gap-2 rounded-full bg-app-neutral border border-app-border px-4 py-2 text-label text-app-text font-body hover:border-vecilend-dark-primary disabled:opacity-50"
+          className="self-start inline-flex items-center gap-2 rounded-full bg-app-neutral border border-app-border px-4 py-2 text-label text-app-text font-body hover:border-app-primary disabled:opacity-50"
         >
           <span className="material-symbols-outlined text-base">
             my_location

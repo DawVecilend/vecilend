@@ -102,18 +102,18 @@ function FAQPage() {
 
       {/* Hero Section */}
       <section className="relative w-full overflow-hidden py-12 md:py-20 px-4 md:px-10">
-        <div className="absolute left-0 top-10 h-[280px] w-[280px] rounded-full bg-vecilend-dark-primary/10 blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 h-[280px] w-[280px] rounded-full bg-vecilend-dark-secondary/10 blur-3xl"></div>
+        <div className="absolute left-0 top-10 h-[280px] w-[280px] rounded-full bg-app-primary/10 blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 h-[280px] w-[280px] rounded-full bg-app-secondary/10 blur-3xl"></div>
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12">
           <div className="relative z-10 text-center">
-            <span className="mb-6 inline-block rounded-full border border-vecilend-dark-primary/20 bg-vecilend-dark-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-vecilend-dark-primary">
+            <span className="mb-6 inline-block rounded-full border border-app-primary/20 bg-app-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-app-primary">
               Preguntas frecuentes
             </span>
 
             <h1 className="max-w-[800px] mx-auto font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
               Encontramos las respuestas a tus{" "}
-              <span className="italic text-vecilend-dark-primary">
+              <span className="italic text-app-primary">
                 preguntas.
               </span>
             </h1>
@@ -137,7 +137,7 @@ function FAQPage() {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-6 py-3 rounded-full font-bold transition-all ${
                   activeCategory === cat.id
-                    ? "bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
+                    ? "bg-app-primary text-[var(--color-app-success-on)]"
                     : "bg-white/5 text-app-text hover:bg-white/10"
                 }`}
               >
@@ -166,7 +166,7 @@ function FAQPage() {
               <div key={idx}>
                 {activeCategory === "all" && (
                   <div className="mb-2">
-                    <p className="text-sm font-bold text-vecilend-dark-primary uppercase tracking-wider">
+                    <p className="text-sm font-bold text-app-primary uppercase tracking-wider">
                       {item.category}
                     </p>
                   </div>
@@ -199,10 +199,10 @@ function FAQPage() {
               to="/how-it-works/requesters"
               className="p-8 bg-white/5 hover:bg-white/10 rounded-[24px] border border-app-border transition-all group"
             >
-              <span className="material-symbols-outlined text-7xl text-vecilend-dark-primary mb-4 block">
+              <span className="material-symbols-outlined text-7xl text-app-primary mb-4 block">
                 shopping_bag
               </span>
-              <h3 className="text-2xl font-bold text-app-text mb-3 group-hover:text-vecilend-dark-primary transition-colors">
+              <h3 className="text-2xl font-bold text-app-text mb-3 group-hover:text-app-primary transition-colors">
                 Cómo alquilar
               </h3>
               <p className="text-app-text-secondary">
@@ -215,10 +215,10 @@ function FAQPage() {
               to="/how-it-works/owners"
               className="p-8 bg-white/5 hover:bg-white/10 rounded-[24px] border border-app-border transition-all group"
             >
-              <span className="material-symbols-outlined text-7xl text-vecilend-dark-primary mb-4 block">
+              <span className="material-symbols-outlined text-7xl text-app-primary mb-4 block">
                 trending_up
               </span>
-              <h3 className="text-2xl font-bold text-app-text mb-3 group-hover:text-vecilend-dark-primary transition-colors">
+              <h3 className="text-2xl font-bold text-app-text mb-3 group-hover:text-app-primary transition-colors">
                 Cómo publicar
               </h3>
               <p className="text-app-text-secondary">
@@ -231,10 +231,10 @@ function FAQPage() {
               to="/about-us"
               className="p-8 bg-white/5 hover:bg-white/10 rounded-[24px] border border-app-border transition-all group"
             >
-              <span className="material-symbols-outlined text-7xl text-vecilend-dark-primary mb-4 block">
+              <span className="material-symbols-outlined text-7xl text-app-primary mb-4 block">
                 info
               </span>
-              <h3 className="text-2xl font-bold text-app-text mb-3 group-hover:text-vecilend-dark-primary transition-colors">
+              <h3 className="text-2xl font-bold text-app-text mb-3 group-hover:text-app-primary transition-colors">
                 Sobre Vecilend
               </h3>
               <p className="text-app-text-secondary">
@@ -248,7 +248,7 @@ function FAQPage() {
       {/* CTA Section */}
       <section className="w-full py-24 px-4 md:px-10">
         <div className="mx-auto max-w-7xl">
-          <div className="relative bg-gradient-to-br from-vecilend-dark-primary/20 to-vecilend-dark-secondary/20 rounded-[3rem] p-12 md:p-16 overflow-hidden border border-vecilend-dark-primary/50">
+          <div className="relative bg-gradient-to-br from-app-primary/20 to-app-secondary/20 rounded-[3rem] p-12 md:p-16 overflow-hidden border border-app-primary/50">
             <div className="absolute top-0 right-0 w-1/2 h-full -z-0 opacity-10 hidden lg:block">
               <OptimizedImage
                 className="w-full h-full object-cover grayscale"
@@ -267,7 +267,7 @@ function FAQPage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/objects"
-                  className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-vecilend-dark-primary/30 hover:scale-105 active:scale-95 transition-all"
+                  className="bg-gradient-to-br from-app-primary to-app-primary text-[var(--color-app-success-on)] px-10 py-5 rounded-2xl font-black text-lg shadow-2xl shadow-app-primary/30 hover:scale-105 active:scale-95 transition-all"
                 >
                   Explorar objetos
                 </Link>

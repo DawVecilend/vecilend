@@ -13,12 +13,12 @@ function LenderPortalPage() {
         <section className="relative min-h-[819px] flex items-center px-8 md:px-24 overflow-hidden bg-app-bg-card">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="z-10">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-vecilend-dark-primary/10 text-vecilend-dark-primary font-bold text-sm mb-6 font-inter tracking-wide uppercase">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-app-primary/10 text-app-primary font-bold text-sm mb-6 font-inter tracking-wide uppercase">
                 Portal del Prestamista
               </span>
               <h1 className="font-inter text-5xl md:text-7xl font-extrabold text-app-text leading-[1.1] mb-8 tracking-tight">
                 Convierte tu objeto en{" "}
-                <span className="text-vecilend-dark-primary italic">ganancias</span>.
+                <span className="text-app-primary italic">ganancias</span>.
               </h1>
               <p className="text-xl text-app-text-secondary max-w-lg mb-10 leading-relaxed">
                 Empieza a prestar en minutos. Únete a miles de propietarios que
@@ -26,7 +26,7 @@ function LenderPortalPage() {
                 confianza.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-vecilend-dark-primary/20 hover:scale-105 transition-transform active:scale-95">
+                <button className="bg-gradient-to-br from-app-primary to-app-primary text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-app-primary/20 hover:scale-105 transition-transform active:scale-95">
                   Publicar objeto
                 </button>
                 <button className="bg-app-bg-card text-app-text px-8 py-4 rounded-full font-bold text-lg border border-app-border/15 hover:bg-app-bg-secondary transition-colors">
@@ -90,7 +90,7 @@ function LenderPortalPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Paso 1 */}
               <div className="bg-app-bg-card p-8 rounded-xl hover:translate-y-[-8px] transition-transform duration-300">
-                <div className="w-14 h-14 rounded-full bg-vecilend-dark-primary/10 flex items-center justify-center text-vecilend-dark-primary mb-8">
+                <div className="w-14 h-14 rounded-full bg-app-primary/10 flex items-center justify-center text-app-primary mb-8">
                   <span className="material-symbols-outlined text-3xl">
                     add_a_photo
                   </span>
@@ -112,7 +112,7 @@ function LenderPortalPage() {
               </div>
               {/* Paso 2 */}
               <div className="bg-app-bg-card p-8 rounded-xl hover:translate-y-[-8px] transition-transform duration-300">
-                <div className="w-14 h-14 rounded-full bg-vecilend-dark-primary/10 flex items-center justify-center text-vecilend-dark-primary mb-8">
+                <div className="w-14 h-14 rounded-full bg-app-primary/10 flex items-center justify-center text-app-primary mb-8">
                   <span className="material-symbols-outlined text-3xl">
                     check_circle
                   </span>
@@ -134,7 +134,7 @@ function LenderPortalPage() {
               </div>
               {/* Paso 3 */}
               <div className="bg-app-bg-card p-8 rounded-xl hover:translate-y-[-8px] transition-transform duration-300">
-                <div className="w-14 h-14 rounded-full bg-vecilend-dark-primary/10 flex items-center justify-center text-vecilend-dark-primary mb-8">
+                <div className="w-14 h-14 rounded-full bg-app-primary/10 flex items-center justify-center text-app-primary mb-8">
                   <span className="material-symbols-outlined text-3xl">
                     payments
                   </span>
@@ -162,7 +162,7 @@ function LenderPortalPage() {
         <section className="py-24 px-8 md:px-24 bg-app-bg-card overflow-hidden">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
             <div className="w-full md:w-1/2">
-              <span className="text-vecilend-dark-primary font-bold font-inter mb-4 block uppercase tracking-widest text-sm">
+              <span className="text-app-primary font-bold font-inter mb-4 block uppercase tracking-widest text-sm">
                 La seguridad es lo primero
               </span>
               <h2 className="font-inter text-4xl md:text-5xl font-bold mb-8 leading-tight text-app-text">
@@ -212,10 +212,10 @@ function LenderPortalPage() {
               </div>
             </div>
             <div className="w-full md:w-1/2 relative">
-              <div className="bg-vecilend-dark-primary/5 rounded-full absolute -top-12 -right-12 w-96 h-96 blur-3xl"></div>
+              <div className="bg-app-primary/5 rounded-full absolute -top-12 -right-12 w-96 h-96 blur-3xl"></div>
               <div className="relative bg-app-bg-card p-8 rounded-xl shadow-2xl border border-app-border/10">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 rounded-full bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary">
+                  <div className="w-12 h-12 rounded-full bg-app-primary/20 flex items-center justify-center text-app-primary">
                     <span className="material-symbols-outlined">security</span>
                   </div>
                   <div>
@@ -329,7 +329,7 @@ function LenderPortalPage() {
 
         {/* Final CTA */}
         <section className="py-24 px-8 md:px-24 bg-app-bg-card">
-          <div className="max-w-7xl mx-auto bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary rounded-xl p-12 md:p-24 text-center text-white relative overflow-hidden">
+          <div className="max-w-7xl mx-auto bg-gradient-to-br from-app-primary to-app-primary rounded-xl p-12 md:p-24 text-center text-white relative overflow-hidden">
             {/* Elementos Decorativos */}
             <div className="absolute top-0 left-0 w-full h-full opacity-10">
               <svg className="w-full h-full preserve-3d" viewBox="0 0 100 100">
@@ -345,7 +345,7 @@ function LenderPortalPage() {
               objeto trabaje para ti.
             </p>
             <div className="relative z-10">
-              <button className="bg-white text-vecilend-dark-primary px-12 py-5 rounded-full font-bold text-xl shadow-2xl hover:scale-105 transition-transform active:scale-95">
+              <button className="bg-white text-app-primary px-12 py-5 rounded-full font-bold text-xl shadow-2xl hover:scale-105 transition-transform active:scale-95">
                 Publicar mi objeto
               </button>
             </div>
@@ -369,19 +369,19 @@ function LenderPortalPage() {
             <div className="space-y-3 flex flex-col">
               <Link
                 to="#"
-                className="text-app-text-secondary hover:text-vecilend-dark-primary transition-all opacity-80 hover:opacity-100"
+                className="text-app-text-secondary hover:text-app-primary transition-all opacity-80 hover:opacity-100"
               >
                 Términos de Servicio
               </Link>
               <Link
                 to="#"
-                className="text-app-text-secondary hover:text-vecilend-dark-primary transition-all opacity-80 hover:opacity-100"
+                className="text-app-text-secondary hover:text-app-primary transition-all opacity-80 hover:opacity-100"
               >
                 Políticas de Privacidad
               </Link>
               <Link
                 to="#"
-                className="text-app-text-secondary hover:text-vecilend-dark-primary transition-all opacity-80 hover:opacity-100"
+                className="text-app-text-secondary hover:text-app-primary transition-all opacity-80 hover:opacity-100"
               >
                 Cobertura de Seguro
               </Link>
@@ -389,13 +389,13 @@ function LenderPortalPage() {
             <div className="space-y-3 flex flex-col">
               <Link
                 to="#"
-                className="text-app-text-secondary hover:text-vecilend-dark-primary transition-all opacity-80 hover:opacity-100"
+                className="text-app-text-secondary hover:text-app-primary transition-all opacity-80 hover:opacity-100"
               >
                 Protección del Prestamista
               </Link>
               <Link
                 to="#"
-                className="text-app-text-secondary hover:text-vecilend-dark-primary transition-all opacity-80 hover:opacity-100"
+                className="text-app-text-secondary hover:text-app-primary transition-all opacity-80 hover:opacity-100"
               >
                 Normas de la Comunidad
               </Link>

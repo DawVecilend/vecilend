@@ -24,7 +24,7 @@ function BtnOrder({ value = "recent", onChange }) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="inline-flex min-w-[190px] items-center justify-between gap-3 rounded-[10px] border border-app-border bg-app-bg-card px-4 py-2 font-body text-[14px] font-medium text-app-text transition hover:border-vecilend-dark-primary"
+        className="inline-flex min-w-[190px] items-center justify-between gap-3 rounded-[10px] border border-app-border bg-app-bg-card px-4 py-2 font-body text-[14px] font-medium text-app-text transition hover:border-app-primary"
       >
         <span>{selectedOption.label}</span>
 
@@ -58,7 +58,7 @@ function BtnOrder({ value = "recent", onChange }) {
                 onClick={() => handleSelect(option.value)}
                 className={`flex w-full items-center px-4 py-3 text-left font-body text-[14px] transition ${
                   isActive
-                    ? "bg-vecilend-dark-primary-hover text-vecilend-dark-primary"
+                    ? "bg-app-primary-hover text-app-primary"
                     : "text-app-text hover:bg-app-neutral"
                 }`}
               >

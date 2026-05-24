@@ -322,7 +322,7 @@ function RegisterPage() {
 
             <div className="relative z-10 max-w-lg px-8">
               <div className="bg-app-bg-card-secondary/60 backdrop-blur-xl border border-app-border p-8 rounded-xl shadow-2xl">
-                <div className="flex gap-1 mb-4 text-vecilend-dark-primary">
+                <div className="flex gap-1 mb-4 text-app-primary">
                   {[...Array(5)].map((_, i) => (
                     <span
                       key={i}
@@ -341,7 +341,7 @@ function RegisterPage() {
                 </p>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-vecilend-dark-primary">
+                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-app-primary">
                     <OptimizedImage
                       alt="Avatar de usuario"
                       src="/assets/auth-user-avatar.jpg"
@@ -426,7 +426,7 @@ function RegisterPage() {
                         username: undefined,
                       }));
                     }}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
                     placeholder="Nombre de usuario"
                     type="text"
                     required
@@ -446,7 +446,7 @@ function RegisterPage() {
                       handleChange(e);
                       setFieldErrors((prev) => ({ ...prev, email: undefined }));
                     }}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
                     placeholder="correo@ejemplo.com"
                     type="email"
                     required
@@ -461,7 +461,7 @@ function RegisterPage() {
                 )}
 
                 <button
-                  className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary active:scale-[0.97]"}`}
+                  className={`w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-app-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-app-primary active:scale-[0.97]"}`}
                   type="submit"
                   disabled={isLoading}
                 >
@@ -482,7 +482,7 @@ function RegisterPage() {
                   ¿Ya tienes cuenta?{" "}
                   <Link
                     to="/login"
-                    className="text-vecilend-dark-primary font-bold hover:underline"
+                    className="text-app-primary font-bold hover:underline"
                   >
                     Inicia sesión
                   </Link>
@@ -498,7 +498,7 @@ function RegisterPage() {
           <div className="w-full max-w-md -mt-12 md:-mt-8">
             <div className="mb-10 md:mb-6">
               <div className="flex justify-between mb-3 px-1">
-                <span className="text-xs font-bold tracking-widest text-vecilend-dark-primary uppercase">
+                <span className="text-xs font-bold tracking-widest text-app-primary uppercase">
                   Paso 2 de 3
                 </span>
 
@@ -508,8 +508,8 @@ function RegisterPage() {
               </div>
 
               <div className="flex h-1.5 w-full bg-app-bg-card-secondary rounded-full overflow-hidden">
-                <div className="h-full w-1/3 bg-vecilend-dark-primary/30"></div>
-                <div className="h-full w-1/3 bg-vecilend-dark-primary"></div>
+                <div className="h-full w-1/3 bg-app-primary/30"></div>
+                <div className="h-full w-1/3 bg-app-primary"></div>
                 <div className="h-full w-1/3 bg-transparent"></div>
               </div>
             </div>
@@ -517,7 +517,7 @@ function RegisterPage() {
             <div className="bg-app-bg-card-secondary rounded-xl p-8 border border-app-border shadow-2xl relative">
               <button
                 onClick={() => setStep(1)}
-                className="absolute top-6 left-6 flex items-center gap-1 text-app-text-secondary hover:text-vecilend-dark-primary transition-colors font-medium text-sm"
+                className="absolute top-6 left-6 flex items-center gap-1 text-app-text-secondary hover:text-app-primary transition-colors font-medium text-sm"
               >
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_back
@@ -527,8 +527,8 @@ function RegisterPage() {
               </button>
 
               <div className="flex flex-col items-center mb-6 mt-2">
-                <div className="w-20 h-20 bg-vecilend-dark-primary/20 rounded-full flex items-center justify-center mb-4 ring-4 ring-vecilend-dark-primary/5">
-                  <span className="material-symbols-outlined icon-filled text-vecilend-dark-primary text-4xl">
+                <div className="w-20 h-20 bg-app-primary/20 rounded-full flex items-center justify-center mb-4 ring-4 ring-app-primary/5">
+                  <span className="material-symbols-outlined icon-filled text-app-primary text-4xl">
                     mail
                   </span>
                 </div>
@@ -539,7 +539,7 @@ function RegisterPage() {
 
                 <p className="text-app-text-secondary text-center text-sm leading-relaxed">
                   Hemos enviado un código de verificación a{" "}
-                  <span className="font-bold text-vecilend-dark-primary">
+                  <span className="font-bold text-app-primary">
                     {formData.email}
                   </span>
                   . Introduce el código para confirmar tu cuenta.
@@ -583,7 +583,7 @@ function RegisterPage() {
                             onPaste={handleOtpPaste}
                             inputMode="numeric"
                             autoComplete="one-time-code"
-                            className="w-12 h-14 bg-app-bg-card-secondary border-2 border-app-border rounded-lg text-center text-xl font-bold text-vecilend-dark-primary focus:border-vecilend-dark-primary focus:ring-0 outline-none transition-colors"
+                            className="w-12 h-14 bg-app-bg-card-secondary border-2 border-app-border rounded-lg text-center text-xl font-bold text-app-primary focus:border-app-primary focus:ring-0 outline-none transition-colors"
                             maxLength="1"
                             type="text"
                           />
@@ -593,7 +593,7 @@ function RegisterPage() {
                       <button
                         type="submit"
                         disabled={isLoading}
-                        className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-vecilend-dark-primary/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary"}`}
+                        className={`w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-app-primary/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-app-primary"}`}
                       >
                         {isLoading ? "Verificando..." : "Verificar código"}
                       </button>
@@ -612,7 +612,7 @@ function RegisterPage() {
                     type="button"
                     onClick={handleResendCode}
                     disabled={resendCooldown > 0}
-                    className={`text-sm font-medium transition-colors ${resendCooldown > 0 ? "text-app-text-secondary cursor-not-allowed" : "text-vecilend-dark-primary hover:underline"}`}
+                    className={`text-sm font-medium transition-colors ${resendCooldown > 0 ? "text-app-text-secondary cursor-not-allowed" : "text-app-primary hover:underline"}`}
                   >
                     {resendCooldown > 0
                       ? `Reenviar en ${resendCooldown}s`
@@ -634,7 +634,7 @@ function RegisterPage() {
                 className="w-full max-h-[85vh] bg-app-bg-card-secondary border border-app-border/30 rounded-xl p-6 lg:px-10 lg:py-7 shadow-2xl relative flex flex-col overflow-y-auto custom-scrollbar"
               >
                 <div className="absolute top-0 left-0 w-full h-1 bg-app-bg-card-secondary">
-                  <div className="h-full bg-vecilend-dark-primary w-full shadow-[0_0_10px_rgba(79,219,200,0.5)] transition-all duration-500"></div>
+                  <div className="h-full bg-app-primary w-full shadow-[0_0_10px_rgba(79,219,200,0.5)] transition-all duration-500"></div>
                 </div>
 
                 <div className="mb-4 mt-2">
@@ -643,7 +643,7 @@ function RegisterPage() {
                       Últimos datos personales
                     </h1>
 
-                    <span className="text-sm text-vecilend-dark-primary font-semibold px-3 py-1 bg-vecilend-dark-primary/20 rounded-full border border-vecilend-dark-primary/20">
+                    <span className="text-sm text-app-primary font-semibold px-3 py-1 bg-app-primary/20 rounded-full border border-app-primary/20">
                       Paso 3 de 3
                     </span>
                   </div>
@@ -674,7 +674,7 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors">
                             person
                           </span>
 
@@ -689,7 +689,7 @@ function RegisterPage() {
                               }));
                             }}
                             required
-                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Nombre"
                             type="text"
                           />
@@ -703,7 +703,7 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors">
                             badge
                           </span>
 
@@ -718,7 +718,7 @@ function RegisterPage() {
                               }));
                             }}
                             required
-                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Apellidos"
                             type="text"
                           />
@@ -743,7 +743,7 @@ function RegisterPage() {
                             }));
                           }}
                           required
-                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                           placeholder="••••••••"
                         />
                         <FieldError messages={fieldErrors.password} />
@@ -768,7 +768,7 @@ function RegisterPage() {
                             }));
                           }}
                           required
-                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                           placeholder="••••••••"
                         />
                         <FieldError
@@ -790,7 +790,7 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors">
                             location_on
                           </span>
 
@@ -811,7 +811,7 @@ function RegisterPage() {
                             onBlur={() =>
                               setTimeout(() => setShowSuggestions(false), 200)
                             }
-                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Ej. Castelldefels"
                             type="text"
                             autoComplete="off"
@@ -826,7 +826,7 @@ function RegisterPage() {
                                   onClick={() =>
                                     handleSelectSuggestion(suggestion)
                                   }
-                                  className="px-4 py-2 text-xs text-app-text hover:bg-app-bg-card-secondary hover:text-vecilend-dark-primary cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
+                                  className="px-4 py-2 text-xs text-app-text hover:bg-app-bg-card-secondary hover:text-app-primary cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
                                 >
                                   <span className="font-medium">
                                     {suggestion.name}
@@ -848,7 +848,7 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors">
                             call
                           </span>
 
@@ -862,7 +862,7 @@ function RegisterPage() {
                                 telefon: undefined,
                               }));
                             }}
-                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="+34 612 345 678"
                             type="tel"
                           />
@@ -917,7 +917,7 @@ function RegisterPage() {
                         name="biography"
                         value={formData.biography}
                         onChange={handleChange}
-                        className="w-full bg-app-bg-card-secondary border-none rounded-lg px-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all resize-none text-sm"
+                        className="w-full bg-app-bg-card-secondary border-none rounded-lg px-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all resize-none text-sm"
                         placeholder="Cuéntanos algo sobre ti, qué sueles compartir o qué tipo de objetos te interesan..."
                         rows="2"
                       ></textarea>
@@ -935,7 +935,7 @@ function RegisterPage() {
 
                     <button
                       disabled={isLoading}
-                      className={`flex-1 px-6 py-3 rounded-xl bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold shadow-lg shadow-vecilend-dark-primary/20 transition-all text-sm ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110 active:scale-[0.98]"}`}
+                      className={`flex-1 px-6 py-3 rounded-xl bg-app-primary text-[var(--color-app-success-on)] font-bold shadow-lg shadow-app-primary/20 transition-all text-sm ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110 active:scale-[0.98]"}`}
                       type="submit"
                     >
                       {isLoading ? "Creando cuenta..." : "Completar registro"}
@@ -947,7 +947,7 @@ function RegisterPage() {
 
             <div className="w-full md:w-1/3 flex flex-col gap-6 lg:gap-8 justify-center h-full">
               <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
-                <div className="w-10 h-10 rounded-lg bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-4">
+                <div className="w-10 h-10 rounded-lg bg-app-primary/20 flex items-center justify-center text-app-primary mb-4">
                   <span className="material-symbols-outlined">
                     verified_user
                   </span>
@@ -983,7 +983,7 @@ function RegisterPage() {
               </div>
 
               <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
-                <div className="w-10 h-10 rounded-lg bg-vecilend-dark-primary/20/20 flex items-center justify-center text-vecilend-dark-primary mb-4">
+                <div className="w-10 h-10 rounded-lg bg-app-primary/20/20 flex items-center justify-center text-app-primary mb-4">
                   <span className="material-symbols-outlined">speed</span>
                 </div>
 

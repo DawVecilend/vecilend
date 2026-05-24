@@ -87,7 +87,7 @@ function ReviewModal({
             type="button"
             onClick={handleSubmit}
             disabled={submitting || puntuacio < 1}
-            className="px-5 py-2 rounded-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold disabled:opacity-50"
+            className="px-5 py-2 rounded-full bg-app-primary text-[var(--color-app-success-on)] font-bold disabled:opacity-50"
           >
             {submitting ? "Enviando…" : "Enviar valoración"}
           </button>

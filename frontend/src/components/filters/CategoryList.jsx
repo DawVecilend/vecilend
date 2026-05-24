@@ -23,7 +23,7 @@ function CategoryList({ categories = [], filters, applyFilterPatch, onSelect }) 
               onClick={() => toggle(cat.id)}
               className={`flex items-center justify-between px-2 py-2 rounded-lg transition-colors text-left ${
                 isActive
-                  ? "bg-vecilend-dark-primary/10 text-vecilend-dark-primary"
+                  ? "bg-app-primary/10 text-app-primary"
                   : "hover:bg-app-bg-card text-app-text"
               }`}
             >
@@ -57,7 +57,7 @@ function CategoryList({ categories = [], filters, applyFilterPatch, onSelect }) 
                   }}
                   className={`text-left px-2 py-1.5 rounded text-caption transition-colors ${
                     isActive && !filters?.subcategory
-                      ? "text-vecilend-dark-primary font-bold"
+                      ? "text-app-primary font-bold"
                       : "text-app-text-secondary hover:text-app-text"
                   }`}
                 >
@@ -78,7 +78,7 @@ function CategoryList({ categories = [], filters, applyFilterPatch, onSelect }) 
                       }}
                       className={`text-left px-2 py-1.5 rounded text-caption transition-colors ${
                         isSubActive
-                          ? "text-vecilend-dark-primary font-bold"
+                          ? "text-app-primary font-bold"
                           : "text-app-text-secondary hover:text-app-text"
                       }`}
                     >

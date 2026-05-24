@@ -96,7 +96,7 @@ function HeaderMobile() {
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Filtros"
-            className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
+            className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-app-primary text-[var(--color-app-success-on)]"
           >
             <span className="material-symbols-outlined text-[20px]">tune</span>
           </button>
@@ -105,7 +105,7 @@ function HeaderMobile() {
 
       <div className="md:hidden h-[52px]" />
 
-      <nav className="fixed bottom-4 left-1/2 z-50 w-[94%] max-w-[430px] -translate-x-1/2 rounded-[15px] bg-vecilend-dark-primary px-3 py-3 shadow-[0_-6px_20px_rgba(0,0,0,0.25)] md:hidden">
+      <nav className="fixed bottom-4 left-1/2 z-50 w-[94%] max-w-[430px] -translate-x-1/2 rounded-[15px] bg-app-primary px-3 py-3 shadow-[0_-6px_20px_rgba(0,0,0,0.25)] md:hidden">
         <div className="flex items-center justify-between gap-1">
           <Link
             to="/"

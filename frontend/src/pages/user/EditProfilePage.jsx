@@ -219,7 +219,7 @@ function EditProfilePage() {
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
                 Perfil de{" "}
-                <span className="text-vecilend-dark-primary">Usuario</span>
+                <span className="text-app-primary">Usuario</span>
               </h1>
               <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
                 Gestiona tu identidad y preferencias en Vecilend.
@@ -235,7 +235,7 @@ function EditProfilePage() {
                   <div className="relative w-32 h-32 mb-2">
                     <img
                       alt="Avatar"
-                      className="w-full h-full object-cover rounded-full border-2 border-vecilend-dark-primary/30"
+                      className="w-full h-full object-cover rounded-full border-2 border-app-primary/30"
                       src={
                         previewImage ||
                         profile.avatar_url ||
@@ -247,7 +247,7 @@ function EditProfilePage() {
                       onClick={() => fileInputRef.current.click()}
                       aria-label="Cambiar foto de perfil"
                       title="Cambiar foto de perfil"
-                      className="absolute bottom-1 right-1 flex h-9 w-9 items-center justify-center rounded-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] shadow-lg border-2 border-app-bg hover:bg-vecilend-dark-primary-hover transition-colors"
+                      className="absolute bottom-1 right-1 flex h-9 w-9 items-center justify-center rounded-full bg-app-primary text-[var(--color-app-success-on)] shadow-lg border-2 border-app-bg hover:bg-app-primary-hover transition-colors"
                     >
                       <span className="material-symbols-outlined text-[18px]">
                         edit
@@ -291,7 +291,7 @@ function EditProfilePage() {
                         name="nom"
                         value={formData.nom}
                         onChange={handleChange}
-                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
+                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-app-primary outline-none transition-all"
                         type="text"
                       />
                     </div>
@@ -303,7 +303,7 @@ function EditProfilePage() {
                         name="cognoms"
                         value={formData.cognoms}
                         onChange={handleChange}
-                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
+                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-app-primary outline-none transition-all"
                         type="text"
                       />
                     </div>
@@ -315,7 +315,7 @@ function EditProfilePage() {
                         name="telefon"
                         value={formData.telefon}
                         onChange={handleChange}
-                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
+                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-app-primary outline-none transition-all"
                         type="text"
                         placeholder="612 345 678"
                       />
@@ -334,7 +334,7 @@ function EditProfilePage() {
                         onBlur={() =>
                           setTimeout(() => setShowSuggestions(false), 200)
                         }
-                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none transition-all"
+                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-app-primary outline-none transition-all"
                         type="text"
                         autoComplete="off"
                       />
@@ -344,7 +344,7 @@ function EditProfilePage() {
                             <li
                               key={suggestion.id}
                               onClick={() => handleSelectSuggestion(suggestion)}
-                              className="px-4 py-2.5 text-sm text-app-text hover:bg-app-bg-card-secondary hover:text-vecilend-dark-primary cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
+                              className="px-4 py-2.5 text-sm text-app-text hover:bg-app-bg-card-secondary hover:text-app-primary cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
                             >
                               <span className="font-medium">
                                 {suggestion.name}
@@ -367,7 +367,7 @@ function EditProfilePage() {
                         onChange={handleChange}
                         maxLength={255}
                         rows={4}
-                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-vecilend-dark-primary outline-none resize-none transition-all flex-1 min-h-[120px]"
+                        className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:border-app-primary outline-none resize-none transition-all flex-1 min-h-[120px]"
                       ></textarea>
                       <p className="text-[10px] text-app-text-secondary mt-1 text-right">
                         {(formData.biography || "").length} / 255
@@ -389,7 +389,7 @@ function EditProfilePage() {
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="px-8 md:px-10 py-3 bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold rounded-lg shadow-lg disabled:opacity-50 transition-all hover:bg-vecilend-dark-primary-hover"
+                    className="px-8 md:px-10 py-3 bg-app-primary text-[var(--color-app-success-on)] font-bold rounded-lg shadow-lg disabled:opacity-50 transition-all hover:bg-app-primary-hover"
                   >
                     {isSaving ? "Guardando..." : "Guardar cambios"}
                   </button>
@@ -397,7 +397,7 @@ function EditProfilePage() {
 
                 <div className="flex items-center">
                   {successMessage && (
-                    <div className="bg-vecilend-dark-primary/10 border border-vecilend-dark-primary/50 text-vecilend-dark-primary px-4 py-2 rounded-lg flex items-center gap-2 animate-pulse w-fit">
+                    <div className="bg-app-primary/10 border border-app-primary/50 text-app-primary px-4 py-2 rounded-lg flex items-center gap-2 animate-pulse w-fit">
                       <span className="material-symbols-outlined text-sm">
                         check_circle
                       </span>

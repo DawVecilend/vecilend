@@ -37,7 +37,7 @@ function BenefitsSection() {
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-20">
           <h2 className="font-inter text-3xl md:text-4xl font-extrabold tracking-tight mb-4 text-app-text">
             Alquilar nunca fue{" "}
-            <span className="text-vecilend-dark-primary">tan fácil.</span>
+            <span className="text-app-primary">tan fácil.</span>
           </h2>
           <p className="text-app-text-secondary text-base md:text-lg">
             Cuatro pasos simples para obtener lo que necesitas o comenzar a

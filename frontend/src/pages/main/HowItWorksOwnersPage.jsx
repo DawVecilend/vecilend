@@ -47,13 +47,13 @@ function HowItWorksOwnersPage() {
       <section className="relative w-full overflow-hidden py-12 md:py-20 px-4 md:px-10">
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
           <div className="relative z-10">
-            <span className="mb-6 inline-block rounded-full border border-vecilend-dark-primary/20 bg-vecilend-dark-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-vecilend-dark-primary">
+            <span className="mb-6 inline-block rounded-full border border-app-primary/20 bg-app-primary/10 px-4 py-1.5 font-body text-caption font-bold uppercase tracking-[0.18em] text-app-primary">
               Comparte con confianza
             </span>
 
             <h1 className="max-w-[680px] font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
               Convierte objetos en{" "}
-              <span className="italic text-vecilend-dark-primary">
+              <span className="italic text-app-primary">
                 ingresos.
               </span>
             </h1>
@@ -67,7 +67,7 @@ function HowItWorksOwnersPage() {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 to="/objects/create"
-                className="inline-flex items-center justify-center rounded-[16px] bg-vecilend-dark-primary px-8 py-4 font-body text-body-base font-bold text-app-bg shadow-xl shadow-vecilend-dark-primary/20 transition-all hover:scale-[1.02] hover:bg-vecilend-dark-primary-hover active:scale-95"
+                className="inline-flex items-center justify-center rounded-[16px] bg-app-primary px-8 py-4 font-body text-body-base font-bold text-app-bg shadow-xl shadow-app-primary/20 transition-all hover:scale-[1.02] hover:bg-app-primary-hover active:scale-95"
               >
                 Subir objeto
               </Link>
@@ -114,7 +114,7 @@ function HowItWorksOwnersPage() {
           <div className="grid md:grid-cols-3 gap-8 relative">
             {/* Step 1 */}
             <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
+              <div className="w-16 h-16 rounded-2xl bg-app-primary/20 flex items-center justify-center text-app-primary mb-8 group-hover:bg-app-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined">add_a_photo</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
@@ -128,7 +128,7 @@ function HowItWorksOwnersPage() {
             </div>
             {/* Step 2 */}
             <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
+              <div className="w-16 h-16 rounded-2xl bg-app-primary/20 flex items-center justify-center text-app-primary mb-8 group-hover:bg-app-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined">fact_check</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
@@ -141,7 +141,7 @@ function HowItWorksOwnersPage() {
             </div>
             {/* Step 3 */}
             <div className="group bg-app-bg p-6 md:p-10 rounded-lg transition-all duration-300 border border-app-border text-center md:text-left">
-              <div className="w-16 h-16 rounded-2xl bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-8 group-hover:bg-vecilend-dark-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
+              <div className="w-16 h-16 rounded-2xl bg-app-primary/20 flex items-center justify-center text-app-primary mb-8 group-hover:bg-app-primary group-hover:text-app-bg transition-colors mx-auto md:mx-0">
                 <span className="material-symbols-outlined">payments</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 text-app-text">
@@ -160,7 +160,7 @@ function HowItWorksOwnersPage() {
       <section className="py-16 md:py-24 px-4 md:px-10 lg:px-24 overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8 md:gap-16 items-center">
           <div className="w-full md:w-1/2">
-            <span className="text-vecilend-dark-primary font-bold font-inter mb-4 block uppercase tracking-widest text-sm">
+            <span className="text-app-primary font-bold font-inter mb-4 block uppercase tracking-widest text-sm">
               La seguridad es lo primero
             </span>
             <h2 className="font-inter text-4xl md:text-5xl font-bold mb-8 leading-tight text-app-text">
@@ -209,10 +209,10 @@ function HowItWorksOwnersPage() {
             </div>
           </div>
           <div className="w-full md:w-1/2 relative">
-            <div className="bg-vecilend-dark-primary/5 rounded-full absolute -top-12 -right-12 w-96 h-96 blur-3xl"></div>
+            <div className="bg-app-primary/5 rounded-full absolute -top-12 -right-12 w-96 h-96 blur-3xl"></div>
             <div className="relative bg-app-bg-card p-8 rounded-xl shadow-2xl border border-app-border/10">
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-full bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary">
+                <div className="w-12 h-12 rounded-full bg-app-primary/20 flex items-center justify-center text-app-primary">
                   <span className="material-symbols-outlined">security</span>
                 </div>
                 <div>
@@ -324,7 +324,7 @@ function HowItWorksOwnersPage() {
 
       {/* CTA Section */}
       <section className="py-16 md:py-24 px-4 md:px-10 lg:px-24">
-        <div className="max-w-7xl mx-auto bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary rounded-xl p-8 md:p-16 lg:p-24 text-center text-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto bg-gradient-to-br from-app-primary to-app-primary rounded-xl p-8 md:p-16 lg:p-24 text-center text-white relative overflow-hidden">
           {/* Elementos Decorativos */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10">
             <svg className="w-full h-full preserve-3d" viewBox="0 0 100 100">
@@ -342,7 +342,7 @@ function HowItWorksOwnersPage() {
           <div className="relative z-10">
             <Link
               to="/objects/create"
-              className="bg-white text-vecilend-dark-primary px-8 md:px-12 py-4 md:py-5 rounded-full font-bold text-lg md:text-xl shadow-2xl hover:scale-105 transition-transform active:scale-95"
+              className="bg-white text-app-primary px-8 md:px-12 py-4 md:py-5 rounded-full font-bold text-lg md:text-xl shadow-2xl hover:scale-105 transition-transform active:scale-95"
             >
               Publicar objeto
             </Link>

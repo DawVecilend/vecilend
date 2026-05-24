@@ -27,7 +27,7 @@ function PriceFilter({ value = {}, onChange }) {
         <span className="text-label text-app-text-secondary font-body">
           Rango de precio (€/día)
         </span>
-        <span className="text-label text-vecilend-dark-primary font-bold font-body">
+        <span className="text-label text-app-primary font-bold font-body">
           {priceRange[0]}€ –{" "}
           {priceRange[1] >= 100 ? "100€+" : priceRange[1] + "€"}
         </span>

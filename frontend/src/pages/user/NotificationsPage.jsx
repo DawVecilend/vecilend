@@ -72,7 +72,7 @@ function buildNotificationContent(notif) {
     case "transaccio_pagament_pendent":
       return {
         icon: "payments",
-        color: "text-vecilend-dark-primary",
+        color: "text-app-primary",
         title: "Pago pendiente",
         message: d.objecte_nom
           ? `Tu reserva de «${d.objecte_nom}» requiere pago para confirmarse.`

@@ -533,7 +533,7 @@ function EditObjectPage() {
 
                       {/* Indicador "Principal" */}
                       {image.ordre === 0 && (
-                        <span className="absolute top-2 left-2 z-10 bg-vecilend-dark-primary text-app-text text-[9px] font-bold px-2 py-0.5 rounded-full shadow pointer-events-none">
+                        <span className="absolute top-2 left-2 z-10 bg-app-primary text-app-text text-[9px] font-bold px-2 py-0.5 rounded-full shadow pointer-events-none">
                           Principal
                         </span>
                       )}
@@ -553,7 +553,7 @@ function EditObjectPage() {
                           <button
                             type="button"
                             onClick={() => handleSetMainImage(image.id)}
-                            className="text-[10px] font-bold rounded-full bg-vecilend-dark-primary text-app-text px-3 py-1 hover:bg-vecilend-dark-primary-hover active:scale-95 transition shadow"
+                            className="text-[10px] font-bold rounded-full bg-app-primary text-app-text px-3 py-1 hover:bg-app-primary-hover active:scale-95 transition shadow"
                           >
                             Hacer principal
                           </button>
@@ -599,7 +599,7 @@ function EditObjectPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-vecilend-dark-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-vecilend-dark-primary-hover"
+                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-app-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-app-primary-hover"
                 >
                   <img
                     src="/assets/icons/add-photo-icon.svg"
@@ -648,7 +648,7 @@ function EditObjectPage() {
                   }
                   className={`flex h-[56px] px-3 items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "lloguer"
-                      ? "bg-vecilend-dark-primary text-app-text"
+                      ? "bg-app-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
@@ -667,7 +667,7 @@ function EditObjectPage() {
                   }
                   className={`flex h-[56px] px-3 items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "prestec"
-                      ? "bg-vecilend-dark-primary text-app-text"
+                      ? "bg-app-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
@@ -864,7 +864,7 @@ function EditObjectPage() {
                             onClick={() => handleSelectCategory(category.id)}
                             className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                               isActive
-                                ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                ? "bg-app-primary-hover/20 text-app-primary"
                                 : "text-app-text hover:bg-app-neutral"
                             }`}
                           >
@@ -956,7 +956,7 @@ function EditObjectPage() {
                               }
                               className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                                 isActive
-                                  ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                  ? "bg-app-primary-hover/20 text-app-primary"
                                   : "text-app-text hover:bg-app-neutral"
                               }`}
                             >
@@ -1036,7 +1036,7 @@ function EditObjectPage() {
                 <button
                   type="submit"
                   disabled={loadingSubmit}
-                  className="rounded-[14px] bg-vecilend-dark-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-vecilend-dark-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
+                  className="rounded-[14px] bg-app-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-app-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {loadingSubmit ? "Guardando..." : "Guardar cambios"}
                 </button>
@@ -1044,7 +1044,7 @@ function EditObjectPage() {
 
               <div className="flex items-center">
                 {successMessage && (
-                  <div className="flex w-fit items-center gap-2 rounded-lg border border-vecilend-dark-primary/50 bg-vecilend-dark-primary/10 px-4 py-2 text-vecilend-dark-primary animate-pulse">
+                  <div className="flex w-fit items-center gap-2 rounded-lg border border-app-primary/50 bg-app-primary/10 px-4 py-2 text-app-primary animate-pulse">
                     <span className="material-symbols-outlined text-sm">
                       check_circle
                     </span>

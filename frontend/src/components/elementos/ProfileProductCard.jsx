@@ -17,8 +17,8 @@ function getAvailabilityClasses(status) {
   }
 
   return {
-    container: "bg-app-bg/60 text-vecilend-dark-primary",
-    dot: "bg-vecilend-dark-primary",
+    container: "bg-app-bg/60 text-app-primary",
+    dot: "bg-app-primary",
   };
 }
 
@@ -113,7 +113,7 @@ function ProfileProductCard({
   return (
     <div className="relative w-full">
       <Link to={slug ? `/objects/${id}/${slug}` : `/objects/${id}`} className="block w-full">
-        <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
+        <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-app-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
           <div className="relative aspect-4/3 overflow-hidden">
             <img
               alt={title}
@@ -126,7 +126,7 @@ function ProfileProductCard({
                 ref={buttonRef}
                 type="button"
                 onClick={handleOpenMenu}
-                className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-app-bg/40 text-white backdrop-blur-md transition-colors hover:text-vecilend-dark-primary"
+                className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-app-bg/40 text-white backdrop-blur-md transition-colors hover:text-app-primary"
               >
                 <span className="material-symbols-outlined">more_horiz</span>
               </button>
@@ -154,7 +154,7 @@ function ProfileProductCard({
           </div>
 
           <div className="flex flex-1 flex-col p-6">
-            <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-vecilend-dark-primary">
+            <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-app-primary">
               {title}
             </h3>
 

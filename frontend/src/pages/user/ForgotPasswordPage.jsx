@@ -49,7 +49,7 @@ function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
                   placeholder="tu@email.com"
                 />
               </div>
@@ -63,7 +63,7 @@ function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed hover:bg-vecilend-dark-primary active:scale-[0.97]"
+                className="w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-app-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed hover:bg-app-primary active:scale-[0.97]"
               >
                 {submitting ? "Enviando…" : "Enviar enlace de restablecimiento"}
               </button>
@@ -72,7 +72,7 @@ function ForgotPasswordPage() {
         ) : (
           <div className="bg-app-bg-card border border-app-border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-vecilend-dark-primary text-3xl">
+              <span className="material-symbols-outlined text-app-primary text-3xl">
                 mark_email_read
               </span>
               <h2 className="text-xl font-bold">Email enviado</h2>
@@ -87,7 +87,7 @@ function ForgotPasswordPage() {
             </p>
             <Link
               to="/login"
-              className="inline-block mt-4 text-vecilend-dark-primary font-bold hover:underline"
+              className="inline-block mt-4 text-app-primary font-bold hover:underline"
             >
               ← Volver al inicio de sesión
             </Link>

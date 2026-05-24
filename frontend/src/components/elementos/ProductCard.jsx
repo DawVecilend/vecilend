@@ -41,7 +41,7 @@ function ProductCard({
 
   return (
     <div onClick={handleCardClick} className="block w-full cursor-pointer">
-      <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-vecilend-dark-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
+      <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-app-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
         <div className="relative aspect-4/3 overflow-hidden">
           <Link to={detailLink} aria-label={title} className="block h-full w-full">
             <img
@@ -73,13 +73,13 @@ function ProductCard({
               className="h-8 w-8 rounded-full border-2 border-app-border object-cover"
             />
 
-            <span className="text-sm text-app-text-secondary transition-colors hover:text-vecilend-dark-primary">
+            <span className="text-sm text-app-text-secondary transition-colors hover:text-app-primary">
               {userName}
             </span>
           </button>
 
-          <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-vecilend-dark-primary">
-            <Link to={detailLink} className="hover:underline">
+          <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-app-primary">
+            <Link to={detailLink}>
               {title}
             </Link>
           </h3>

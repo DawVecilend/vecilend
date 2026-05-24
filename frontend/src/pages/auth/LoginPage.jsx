@@ -105,7 +105,7 @@ function LoginPage() {
           </div>
           <div className="relative z-10 max-w-lg px-8">
             <div className="bg-app-bg-card-secondary/60 backdrop-blur-xl border border-app-border p-8 rounded-xl shadow-2xl">
-              <div className="flex gap-1 mb-4 text-vecilend-dark-primary">
+              <div className="flex gap-1 mb-4 text-app-primary">
                 {[...Array(5)].map((_, i) => (
                   <span
                     key={i}
@@ -122,7 +122,7 @@ function LoginPage() {
                 de mi zona.”
               </p>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-vecilend-dark-primary">
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-app-primary">
                   <OptimizedImage
                     alt="User Avatar"
                     src="/assets/auth-user-avatar.jpg"
@@ -200,7 +200,7 @@ function LoginPage() {
                     inputMode="text"
                     autoComplete="one-time-code"
                     placeholder="123456 o XXXXX-XXXXX"
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider text-center focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider text-center focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
                     required
                     autoFocus
                   />
@@ -217,7 +217,7 @@ function LoginPage() {
                 )}
 
                 <button
-                  className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary active:scale-[0.97]"}`}
+                  className={`w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-app-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-app-primary active:scale-[0.97]"}`}
                   type="submit"
                   disabled={submitting || !twoFactorCode.trim()}
                 >
@@ -243,7 +243,7 @@ function LoginPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, login: e.target.value })
                   }
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
                   placeholder="Nombre de usuario o email"
                   type="text"
                   required
@@ -257,7 +257,7 @@ function LoginPage() {
                   </label>
                   <Link
                     to="/forgot-password"
-                    className="text-xs font-bold text-vecilend-dark-primary hover:underline"
+                    className="text-xs font-bold text-app-primary hover:underline"
                   >
                     ¿Olvidaste tu contraseña?
                   </Link>
@@ -267,7 +267,7 @@ function LoginPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
                   placeholder="••••••••"
                   required
                 />
@@ -280,7 +280,7 @@ function LoginPage() {
               )}
 
               <button
-                className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary active:scale-[0.97]"}`}
+                className={`w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-app-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-app-primary active:scale-[0.97]"}`}
                 type="submit"
                 disabled={submitting}
               >
@@ -301,7 +301,7 @@ function LoginPage() {
                 ¿No tienes cuenta?{" "}
                 <Link
                   to="/register"
-                  className="text-vecilend-dark-primary font-bold hover:underline"
+                  className="text-app-primary font-bold hover:underline"
                 >
                   Crea una aquí
                 </Link>

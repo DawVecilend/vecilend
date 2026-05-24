@@ -15,7 +15,7 @@ function RadiusSlider({ value, onChange, disabled = false }) {
         <span className="text-label text-app-text-secondary font-body">
           Radio de búsqueda
         </span>
-        <span className="text-label text-vecilend-dark-primary font-bold font-body">
+        <span className="text-label text-app-primary font-bold font-body">
           {value} km
         </span>
       </div>

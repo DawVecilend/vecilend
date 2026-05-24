@@ -204,7 +204,7 @@ function ProfilePage() {
                   </p>
 
                   <div className="space-y-2">
-                    <h2 className="text-xl font-bold text-vecilend-dark-primary">
+                    <h2 className="text-xl font-bold text-app-primary">
                       Acerca de {profile?.nom}
                     </h2>
                     <p className="text-app-text-secondary leading-relaxed line-clamp-4 whitespace-pre-line">
@@ -252,7 +252,7 @@ function ProfilePage() {
                 {isOwnProfile ? (
                   <Link
                     to={`/settings/profile/${username}/editing`}
-                    className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-vecilend-dark-primary/25 active:scale-95 transition-all flex items-center gap-2"
+                    className="bg-gradient-to-br from-app-primary to-app-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-app-primary/25 active:scale-95 transition-all flex items-center gap-2"
                   >
                     <span className="material-symbols-outlined !text-xl">
                       edit
@@ -265,7 +265,7 @@ function ProfilePage() {
                       type="button"
                       onClick={handleContact}
                       disabled={contacting}
-                      className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-vecilend-dark-primary/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="bg-gradient-to-br from-app-primary to-app-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-app-primary/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       <span className="material-symbols-outlined !text-xl">mail</span>
                       {contacting ? "Abriendo…" : `Contacta a ${profile?.nom}`}
@@ -317,7 +317,7 @@ function ProfilePage() {
             {latestObjects.length > 0 && (
               <Link
                 to={`/profile/${username}/objects`}
-                className="text-vecilend-dark-primary font-bold hover:underline flex items-center gap-1"
+                className="text-app-primary font-bold hover:underline flex items-center gap-1"
               >
                 Ver todos
               </Link>
@@ -339,7 +339,7 @@ function ProfilePage() {
               {isOwnProfile && (
                 <Link
                   to="/objects/create"
-                  className="inline-block mt-4 bg-vecilend-dark-primary text-[var(--color-app-success-on)] px-6 py-2.5 rounded-full font-bold hover:bg-vecilend-dark-primary"
+                  className="inline-block mt-4 bg-app-primary text-[var(--color-app-success-on)] px-6 py-2.5 rounded-full font-bold hover:bg-app-primary"
                 >
                   Publicar mi primer objeto
                 </Link>

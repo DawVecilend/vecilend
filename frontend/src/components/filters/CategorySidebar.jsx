@@ -86,8 +86,8 @@ function SidebarFilterButton({ icon, label, active, onClick }) {
       onClick={onClick}
       className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors text-left ${
         active
-          ? "border-vecilend-dark-primary bg-vecilend-dark-primary/10 text-vecilend-dark-primary"
-          : "border-app-border bg-app-bg-card text-app-text hover:border-vecilend-dark-primary/50"
+          ? "border-app-primary bg-app-primary/10 text-app-primary"
+          : "border-app-border bg-app-bg-card text-app-text hover:border-app-primary/50"
       }`}
     >
       <span className="material-symbols-outlined text-base">{icon}</span>

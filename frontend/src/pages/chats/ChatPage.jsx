@@ -61,11 +61,11 @@ function ObjectContextCard({ objecte }) {
           </p>
 
           {objecte.preu_diari ? (
-            <p className="text-caption text-vecilend-dark-primary font-bold">
+            <p className="text-caption text-app-primary font-bold">
               {Number(objecte.preu_diari).toFixed(2)}€ / día
             </p>
           ) : (
-            <p className="text-caption text-vecilend-dark-secondary font-bold">
+            <p className="text-caption text-app-secondary font-bold">
               Préstamo gratuito
             </p>
           )}
@@ -154,15 +154,15 @@ function SolicitudContextCard({
             </p>
 
             {total != null ? (
-              <p className="text-caption text-vecilend-dark-primary font-bold">
+              <p className="text-caption text-app-primary font-bold">
                 {total.toFixed(2)}€ total · {dies} día{dies === 1 ? "" : "s"}
               </p>
             ) : dies > 0 ? (
-              <p className="text-caption text-vecilend-dark-secondary font-bold">
+              <p className="text-caption text-app-secondary font-bold">
                 Préstamo gratuito · {dies} día{dies === 1 ? "" : "s"}
               </p>
             ) : (
-              <p className="text-caption text-vecilend-dark-secondary font-bold">
+              <p className="text-caption text-app-secondary font-bold">
                 Préstamo gratuito
               </p>
             )}
@@ -224,7 +224,7 @@ function MessageBubble({ msg, onReply }) {
               className={
                 "mb-2 border-l-2 pl-2 text-caption " +
                 (mine
-                  ? "border-vecilend-dark-primary text-[var(--color-app-success-on)]/80"
+                  ? "border-app-primary text-[var(--color-app-success-on)]/80"
                   : "border-app-primary text-app-text-secondary")
               }
             >

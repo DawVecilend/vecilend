@@ -78,7 +78,7 @@ function GoogleCallbackPage() {
           </>
         ) : (
           <>
-            <div className="mb-4 inline-block animate-spin rounded-full h-12 w-12 border-4 border-app-border border-t-vecilend-dark-primary" />
+            <div className="mb-4 inline-block animate-spin rounded-full h-12 w-12 border-4 border-app-border border-t-app-primary" />
             <h1 className="text-2xl font-bold text-app-text mb-2">
               Iniciando sesión con Google
             </h1>

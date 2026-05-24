@@ -75,28 +75,28 @@ function CookieBanner() {
     >
       <div className="mx-auto w-full max-w-3xl rounded-2xl border border-app-border bg-app-bg-card shadow-2xl">
         <div className="p-5 md:p-6">
-          <div className="flex items-start gap-3 mb-3">
-            <span className="material-symbols-outlined text-vecilend-dark-primary text-3xl shrink-0">
-              cookie
-            </span>
-            <div className="min-w-0">
-              <h2 className="text-h3-desktop font-heading text-app-text mb-1">
+          <div className="mb-3">
+            <div className="flex items-center gap-3 mb-1">
+              <span className="material-symbols-outlined text-app-primary text-3xl shrink-0 leading-none">
+                cookie
+              </span>
+              <h2 className="text-h3-desktop font-heading text-app-text">
                 Tu privacidad es importante
               </h2>
-              <p className="text-label font-body text-app-text-secondary leading-relaxed">
-                Usamos cookies y tecnologías similares para que el sitio
-                funcione, recordar tus preferencias y, opcionalmente, medir el
-                uso para mejorar el servicio. Puedes aceptar todas, rechazar
-                las opcionales o personalizar tu elección. Consulta nuestra{" "}
-                <Link
-                  to="/privacy-policy"
-                  className="text-vecilend-dark-primary hover:underline font-bold"
-                >
-                  política de privacidad
-                </Link>
-                .
-              </p>
             </div>
+            <p className="text-label font-body text-app-text-secondary leading-relaxed">
+              Usamos cookies y tecnologías similares para que el sitio
+              funcione, recordar tus preferencias y, opcionalmente, medir el
+              uso para mejorar el servicio. Puedes aceptar todas, rechazar
+              las opcionales o personalizar tu elección. Consulta nuestra{" "}
+              <Link
+                to="/privacy-policy"
+                className="text-app-primary hover:underline font-bold"
+              >
+                política de privacidad
+              </Link>
+              .
+            </p>
           </div>
 
           {showDetails && (
@@ -106,7 +106,7 @@ function CookieBanner() {
                   type="checkbox"
                   checked
                   disabled
-                  className="mt-1 h-4 w-4 accent-vecilend-dark-primary"
+                  className="mt-1 h-4 w-4 accent-app-primary"
                 />
                 <div className="min-w-0">
                   <p className="text-label font-bold text-app-text">
@@ -132,7 +132,7 @@ function CookieBanner() {
                       personalization: e.target.checked,
                     }))
                   }
-                  className="mt-1 h-4 w-4 accent-vecilend-dark-primary"
+                  className="mt-1 h-4 w-4 accent-app-primary"
                 />
                 <div className="min-w-0">
                   <p className="text-label font-bold text-app-text">
@@ -152,7 +152,7 @@ function CookieBanner() {
                   onChange={(e) =>
                     setPrefs((p) => ({ ...p, analytics: e.target.checked }))
                   }
-                  className="mt-1 h-4 w-4 accent-vecilend-dark-primary"
+                  className="mt-1 h-4 w-4 accent-app-primary"
                 />
                 <div className="min-w-0">
                   <p className="text-label font-bold text-app-text">
@@ -194,7 +194,7 @@ function CookieBanner() {
             <button
               type="button"
               onClick={acceptAll}
-              className="px-5 py-2.5 text-label font-bold rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] hover:from-vecilend-dark-primary-hover hover:to-vecilend-dark-primary-hover"
+              className="px-5 py-2.5 text-label font-bold rounded-full bg-gradient-to-br from-app-primary to-app-primary text-[var(--color-app-success-on)] hover:from-app-primary-hover hover:to-app-primary-hover"
             >
               Aceptar todas
             </button>

@@ -356,7 +356,7 @@ function CreateObjectPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-vecilend-dark-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-vecilend-dark-primary-hover"
+                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-app-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-app-primary-hover"
                 >
                   <img
                     src="/assets/icons/add-photo-icon.svg"
@@ -402,7 +402,7 @@ function CreateObjectPage() {
                   onClick={() => setForm((p) => ({ ...p, tipus: "lloguer" }))}
                   className={`flex items-center justify-center gap-2 h-[56px] px-3 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "lloguer"
-                      ? "bg-vecilend-dark-primary text-app-text"
+                      ? "bg-app-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
@@ -420,7 +420,7 @@ function CreateObjectPage() {
                   }
                   className={`flex items-center justify-center gap-2 h-[56px] px-3 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "prestec"
-                      ? "bg-vecilend-dark-primary text-app-text"
+                      ? "bg-app-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
@@ -608,7 +608,7 @@ function CreateObjectPage() {
                             onClick={() => handleSelectCategory(category.id)}
                             className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                               isActive
-                                ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                ? "bg-app-primary-hover/20 text-app-primary"
                                 : "text-app-text hover:bg-app-neutral"
                             }`}
                           >
@@ -695,7 +695,7 @@ function CreateObjectPage() {
                               }
                               className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                                 isActive
-                                  ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                  ? "bg-app-primary-hover/20 text-app-primary"
                                   : "text-app-text hover:bg-app-neutral"
                               }`}
                             >
@@ -740,14 +740,14 @@ function CreateObjectPage() {
               <button
                 type="submit"
                 disabled={loadingSubmit}
-                className="rounded-[14px] bg-vecilend-dark-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-vecilend-dark-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
+                className="rounded-[14px] bg-app-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-app-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {loadingSubmit ? "Publicando..." : "Publicar objeto"}
               </button>
 
               <div className="flex items-center">
                 {successMessage && (
-                  <div className="flex w-fit items-center gap-2 rounded-lg border border-vecilend-dark-primary/50 bg-vecilend-dark-primary/10 px-4 py-2 text-vecilend-dark-primary animate-pulse">
+                  <div className="flex w-fit items-center gap-2 rounded-lg border border-app-primary/50 bg-app-primary/10 px-4 py-2 text-app-primary animate-pulse">
                     <span className="material-symbols-outlined text-sm">
                       check_circle
                     </span>

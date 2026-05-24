@@ -183,7 +183,7 @@ function SecuritySettingsPage() {
           <section className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
-                Seguridad de la <span className="text-vecilend-dark-primary">Cuenta</span>
+                Seguridad de la <span className="text-app-primary">Cuenta</span>
               </h1>
 
               <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
@@ -195,14 +195,14 @@ function SecuritySettingsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             <section className="lg:col-span-7 bg-app-bg-card-secondary/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="material-symbols-outlined text-vecilend-dark-primary">
+                <span className="material-symbols-outlined text-app-primary">
                   lock
                 </span>
                 <h2 className="text-xl font-bold">Cambiar contraseña</h2>
               </div>
 
               {successMessage && (
-                <div className="mb-6 bg-vecilend-dark-primary/10 border border-vecilend-dark-primary/50 text-vecilend-dark-primary px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
+                <div className="mb-6 bg-app-primary/10 border border-app-primary/50 text-app-primary px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
                   <span className="material-symbols-outlined text-base">
                     check_circle
                   </span>
@@ -233,7 +233,7 @@ function SecuritySettingsPage() {
                     name="current_password"
                     value={passwords.current_password}
                     onChange={handlePasswordChange}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-app-primary focus:border-transparent transition-all outline-none text-app-text"
                     placeholder="••••••••••••"
                   />
                 </div>
@@ -248,7 +248,7 @@ function SecuritySettingsPage() {
                       name="password"
                       value={passwords.password}
                       onChange={handlePasswordChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-app-primary focus:border-transparent transition-all outline-none text-app-text"
                       placeholder="••••••••"
                     />
 
@@ -264,7 +264,7 @@ function SecuritySettingsPage() {
                       name="password_confirmation"
                       value={passwords.password_confirmation}
                       onChange={handlePasswordChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-app-primary focus:border-transparent transition-all outline-none text-app-text"
                       placeholder="••••••••"
                     />
                   </div>
@@ -273,10 +273,10 @@ function SecuritySettingsPage() {
                 <div className="pt-2 flex justify-end">
                   <button
                     disabled={isLoading}
-                    className={`bg-vecilend-dark-primary text-[var(--color-app-success-on)] px-10 py-3 rounded-lg font-bold shadow-lg transition-all ${
+                    className={`bg-app-primary text-[var(--color-app-success-on)] px-10 py-3 rounded-lg font-bold shadow-lg transition-all ${
                       isLoading
                         ? "opacity-70 cursor-not-allowed"
-                        : "hover:bg-vecilend-dark-primary active:scale-95"
+                        : "hover:bg-app-primary active:scale-95"
                     }`}
                     type="submit"
                   >
@@ -290,7 +290,7 @@ function SecuritySettingsPage() {
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <span className={`material-symbols-outlined ${twoFactorEnabled ? "text-vecilend-dark-primary" : "text-[var(--color-app-warning)]"}`}>
+                    <span className={`material-symbols-outlined ${twoFactorEnabled ? "text-app-primary" : "text-[var(--color-app-warning)]"}`}>
                       verified_user
                     </span>
                     <h2 className="text-xl font-bold">Autenticación 2FA</h2>
@@ -303,7 +303,7 @@ function SecuritySettingsPage() {
                       className="sr-only peer"
                       type="checkbox"
                     />
-                    <span className="inline-block w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:bg-vecilend-dark-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-white"></span>
+                    <span className="inline-block w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:bg-app-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-white"></span>
                   </label>
                 </div>
 
@@ -317,7 +317,7 @@ function SecuritySettingsPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20">
                   <div className="flex items-center gap-3">
-                    <span className={`material-symbols-outlined ${twoFactorEnabled ? "text-vecilend-dark-primary" : "text-app-text-secondary"}`}>
+                    <span className={`material-symbols-outlined ${twoFactorEnabled ? "text-app-primary" : "text-app-text-secondary"}`}>
                       smartphone
                     </span>
                     <span className="text-sm font-bold text-app-text">
@@ -328,7 +328,7 @@ function SecuritySettingsPage() {
                   <span
                     className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded ${
                       twoFactorEnabled
-                        ? "bg-vecilend-dark-primary/20 text-vecilend-dark-primary"
+                        ? "bg-app-primary/20 text-app-primary"
                         : "bg-app-bg/40 text-app-text-secondary"
                     }`}
                   >
@@ -340,7 +340,7 @@ function SecuritySettingsPage() {
                   <button
                     type="button"
                     onClick={() => setTwoFactorRecoveryOpen(true)}
-                    className="w-full py-3 border border-vecilend-dark-primary/30 text-vecilend-dark-primary rounded-lg text-sm font-bold mt-2 hover:bg-vecilend-dark-primary/10 transition-colors active:scale-95"
+                    className="w-full py-3 border border-app-primary/30 text-app-primary rounded-lg text-sm font-bold mt-2 hover:bg-app-primary/10 transition-colors active:scale-95"
                   >
                     Ver códigos de recuperación
                   </button>

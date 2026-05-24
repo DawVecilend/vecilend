@@ -75,7 +75,7 @@ function ChatRow({ chat, draft }) {
             }`}
           >
             {hasDraft && (
-              <span className="not-italic font-semibold text-vecilend-dark-primary mr-1">
+              <span className="not-italic font-semibold text-app-primary mr-1">
                 Borrador:
               </span>
             )}

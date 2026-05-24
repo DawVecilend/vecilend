@@ -18,7 +18,7 @@ function CTASection() {
         <div className="relative z-10 max-w-xl md:max-w-1/2 text-center md:text-left">
           <h2 className="font-inter text-3xl md:text-6xl font-extrabold leading-tight mb-6 md:mb-8" style={{ color: "var(--color-app-cta-text)" }}>
             ¿Listo para convertir tu objeto en{" "}
-            <span className="text-vecilend-dark-primary">ingresos?</span>
+            <span className="text-app-primary">ingresos?</span>
           </h2>
           <p className="text-base md:text-lg mb-8 md:mb-10 leading-relaxed" style={{ color: "var(--color-app-cta-muted)" }}>
             Únete a la comunidad de Vecilend y comienza a generar ingresos con tu objeto.
@@ -26,7 +26,7 @@ function CTASection() {
           <div className="flex flex-wrap gap-4 md:gap-6 justify-center md:justify-start">
             <Link
               to="/objects/create"
-              className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary-hover text-white px-8 md:px-10 py-4 md:py-5 rounded-2xl font-black text-base md:text-lg shadow-2xl shadow-vecilend-dark-primary/30 hover:scale-105 active:scale-95 transition-all"
+              className="bg-gradient-to-br from-app-primary to-app-primary-hover text-white px-8 md:px-10 py-4 md:py-5 rounded-2xl font-black text-base md:text-lg shadow-2xl shadow-app-primary/30 hover:scale-105 active:scale-95 transition-all"
             >
               Comienza a alquilar
             </Link>

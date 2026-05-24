@@ -145,7 +145,7 @@ function ObjectLocationPicker({ value, onChange }) {
           type="button"
           onClick={handleUseMyLocation}
           disabled={status === "requesting"}
-          className="inline-flex items-center gap-2 rounded-[14px] bg-app-bg-card border border-app-border px-4 py-2 font-body text-[14px] text-app-text hover:border-vecilend-dark-primary disabled:opacity-50 transition"
+          className="inline-flex items-center gap-2 rounded-[14px] bg-app-bg-card border border-app-border px-4 py-2 font-body text-[14px] text-app-text hover:border-app-primary disabled:opacity-50 transition"
         >
           <span className="material-symbols-outlined text-base">
             my_location
@@ -154,7 +154,7 @@ function ObjectLocationPicker({ value, onChange }) {
         </button>
 
         {value ? (
-          <span className="text-xs text-vecilend-dark-primary font-body">
+          <span className="text-xs text-app-primary font-body">
             ✓ Ubicación seleccionada
           </span>
         ) : (
