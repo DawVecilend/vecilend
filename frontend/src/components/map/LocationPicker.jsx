@@ -10,6 +10,7 @@ import {
 import L from "leaflet";
 import RadiusSlider from "./RadiusSlider";
 import { useGeolocation } from "../../hooks/useGeolocation";
+import { SPAIN_MAX_BOUNDS } from "../../utils/spainBounds";
 import "../../utils/leafletIconFix";
 
 const pickerIcon = L.divIcon({
@@ -100,6 +101,8 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
           center={[center.lat, center.lng]}
           zoom={13}
           scrollWheelZoom
+          maxBounds={SPAIN_MAX_BOUNDS}
+          maxBoundsViscosity={0.6}
           style={{ height: "100%", width: "100%" }}
         >
           <TileLayer

@@ -2,15 +2,29 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Http\Requests\Api\V1\Concerns\ValidatesSpainLocation;
 use App\Models\Subcategoria;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreObjecteRequest extends FormRequest
 {
+    use ValidatesSpainLocation;
+
     public function authorize(): bool
     {
         // Qualsevol usuari autenticat pot publicar
         return true;
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($v) {
+            $lat = $this->input('lat');
+            $lng = $this->input('lng');
+            if (is_numeric($lat) && is_numeric($lng) && !self::isInSpain((float)$lat, (float)$lng)) {
+                $v->errors()->add('lat', 'La ubicación debe estar dentro o cerca del territorio español.');
+            }
+        });
     }
 
     /**

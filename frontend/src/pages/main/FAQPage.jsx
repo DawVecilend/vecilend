@@ -11,61 +11,61 @@ function FAQPage() {
       {
         question: "¿Qué pasa si accidentalmente daño el objeto?",
         answer:
-          "Si ocurre un daño accidental, revisa los términos del seguro incluido y ponte en contacto con el propietario. Nuestro equipo coordina la gestión para que el proceso sea claro y sin sorpresas.",
+          "El acuerdo de préstamo o alquiler es directo entre tú y el propietario, por lo que cualquier daño debe resolverse entre ambos. Te recomendamos comunicarlo cuanto antes a través del chat interno. Si no llegáis a un acuerdo, puedes abrir un reporte desde el perfil del usuario o desde la página del objeto y nuestro equipo lo revisará.",
       },
       {
         question: "¿Cómo funcionan las recogidas y devoluciones?",
         answer:
-          "La recogida y devolución se acuerdan directamente con el propietario. Puedes usar la plataforma para enviar mensajes, fijar horarios y confirmar el punto de encuentro antes de tu reserva.",
+          "La recogida y devolución se acuerdan directamente con el propietario. Puedes usar el chat interno para enviar mensajes, fijar horarios y confirmar el punto de encuentro antes de tu reserva.",
       },
       {
         question: "¿Se requiere un depósito de seguridad?",
         answer:
-          "Algunos objetos pueden requerir un depósito según el acuerdo del propietario. Si aplica, lo verás al reservar y se mantiene bloqueado hasta la devolución en buen estado.",
+          "No. Vecilend no retiene depósitos ni fianzas. Al confirmar una reserva pagarás el subtotal del alquiler, una comisión de plataforma del 5% y una garantía de servicio del 5%, ambas no reembolsables y mostradas claramente en el desglose del precio antes de pagar.",
       },
       {
         question: "¿Puedo alquilar artículos para llevarlos de viaje?",
         answer:
-          "Sí, puedes alquilar para viajar siempre que lo acuerdes con el dueño y respetes las reglas de transporte y seguro. Asegúrate de notificar cualquier destino especial antes de reservar.",
+          "Sí, siempre que lo acuerdes con el propietario. Comunícale el uso previsto y el lugar al que lo llevarás antes de reservar para evitar malentendidos.",
       },
     ],
     propietarios: [
       {
         question: "¿Cómo gestiono el mantenimiento?",
         answer:
-          "Los prestamistas son responsables de asegurar que el objeto esté en buenas condiciones de funcionamiento. Recomendamos hacer una revisión rápida entre alquileres. Si se necesita mantenimiento por desgaste normal, es responsabilidad del propietario, mientras que los daños causados por el arrendatario están cubiertos por la Protección Fluid.",
+          "El mantenimiento y el estado de conservación del objeto son responsabilidad del propietario. Recomendamos revisar el objeto antes de cada alquiler y dejar constancia por chat de su estado en el momento de la entrega y de la devolución.",
       },
       {
-        question: "¿Qué pasa con las fianzas?",
+        question: "¿Qué cobra Vecilend en cada operación?",
         answer:
-          "Retenemos automáticamente una fianza del arrendatario durante la duración del alquiler. Puedes elegir el importe de la fianza al publicar tu artículo, o usar nuestra recomendación por defecto basada en el valor del mismo.",
+          "En cada alquiler el solicitante paga el subtotal + 5% de comisión de plataforma + 5% de garantía de servicio. Estos dos cargos no son reembolsables y cubren el coste del servicio (moderación, soporte por reportes, infraestructura). No retenemos fianzas ni cobramos comisión al propietario.",
       },
       {
-        question: "¿Cuándo recibiré mi pago?",
+        question: "¿Qué hago si el solicitante devuelve el objeto en mal estado?",
         answer:
-          "Los pagos se inician automáticamente 24 horas después de que el período de alquiler concluya con éxito. Dependiendo de tu banco, los fondos suelen llegar a tu cuenta en 1-3 días laborables.",
+          "Comunícalo primero con el solicitante a través del chat interno e intentad llegar a un acuerdo. Si no es posible, puedes abrir un reporte indicando el motivo (fraude, comportamiento inapropiado, etc.) y nuestro equipo revisará el caso. Las valoraciones públicas que dejes también ayudan al resto de la comunidad.",
       },
     ],
     general: [
       {
-        question: "¿Es seguro usar Vecilend?",
+        question: "¿Cómo se garantiza la confianza entre usuarios?",
         answer:
-          "Sí, Vecilend cuenta con un sistema de verificación de identidad, valoraciones de usuarios, seguros incluidos y soporte 24/7 para garantizar la seguridad en cada transacción.",
+          "A través de tres mecanismos: valoraciones públicas bidireccionales (propietario y solicitante se valoran tras cada operación), un sistema de reportes revisado por nuestro equipo, y un chat interno que deja constancia de los acuerdos. Vecilend no actúa como intermediario en los acuerdos: la responsabilidad sobre el objeto y su uso recae directamente en los usuarios.",
       },
       {
         question: "¿Cuál es la comisión de Vecilend?",
         answer:
-          "Tomamos una comisión pequeña en cada alquiler que se completa exitosamente. Esta comisión es transparente y se muestra en detalle antes de confirmar cualquier alquiler.",
+          "Un 5% de comisión de plataforma más un 5% de garantía de servicio, ambos calculados sobre el subtotal del alquiler. Se muestran detalladamente en el desglose del precio antes de confirmar la reserva. En los préstamos gratuitos no se aplica ningún cargo.",
       },
       {
         question: "¿Cómo contacto con soporte?",
         answer:
-          "Puedes contactar con nuestro equipo de soporte a través del email support@vecilend.com. Disponemos de soporte 24/7 para resolver cualquier duda o problema.",
+          "Puedes escribirnos a support@vecilend.com. Para incidencias con otros usuarios u objetos, lo más rápido es abrir un reporte desde el perfil correspondiente.",
       },
       {
         question: "¿Qué sucede si necesito cancelar una reserva?",
         answer:
-          "Las políticas de cancelación dependen del propietario del objeto. Pueden consultar los detalles de cancelación específicos antes de confirmar su reserva.",
+          "Las solicitudes pueden cancelarse mientras estén pendientes. Una vez confirmadas, te recomendamos coordinarte con la otra parte por chat para acordar la cancelación.",
       },
     ],
   };

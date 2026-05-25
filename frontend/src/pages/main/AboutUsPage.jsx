@@ -6,8 +6,8 @@ function AboutUsPage() {
   const stats = [
     { number: "5K+", label: "Usuarios activos" },
     { number: "12K+", label: "Objetos en circulación" },
-    { number: "€250K", label: "Ahorros generados" },
-    { number: "98%", label: "Confianza de la comunidad" },
+    { number: "€250K+", label: "Ingresos generados" },
+    { number: "70K+", label: "Transacciones finalizadas" },
   ];
 
   const values = [
@@ -33,7 +33,7 @@ function AboutUsPage() {
       icon: "lock",
       title: "Seguridad",
       description:
-        "Un sistema de valoraciones, seguros y políticas claras para proteger a todos.",
+        "Un sistema de valoraciones, reportes y términos claros para proteger a todos.",
     },
   ];
 
@@ -48,13 +48,13 @@ function AboutUsPage() {
       date: "2025",
       title: "Primera comunidad",
       description:
-        "Alcanzamos 1,000 usuarios y publicamos nuestros primeros 5,000 objetos.",
+        "Alcanzamos 1.000 usuarios y se publicarion los primeros 5.000 objetos.",
     },
     {
       date: "2026",
       title: "Expansión",
       description:
-        "Llegamos a 5,000 usuarios activos y expandimos nuestro sistema de pagos.",
+        "Llegamos a 5.000 usuarios activos y expandimos nuestro sistema de pagos.",
     },
     {
       date: "Ahora",
@@ -86,9 +86,7 @@ function AboutUsPage() {
 
             <h1 className="max-w-[800px] mx-auto font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
               Compartir es el futuro del{" "}
-              <span className="italic text-app-primary">
-                consumo.
-              </span>
+              <span className="italic text-app-primary">consumo.</span>
             </h1>
 
             <p className="mt-6 max-w-[600px] mx-auto font-body text-body-base leading-body text-app-text-secondary md:text-[18px]">
@@ -268,8 +266,8 @@ function AboutUsPage() {
                     desc: "Alquila lo que necesitas por menos del 50% del precio de compra.",
                   },
                   {
-                    title: "Gana ingresos",
-                    desc: "Monetiza tus objetos ociosos alquilándolos a tus vecinos.",
+                    title: "Genera ingresos",
+                    desc: "Convierte en dinero tus objetos alquilándolos a tus vecinos.",
                   },
                   {
                     title: "Cuida el planeta",

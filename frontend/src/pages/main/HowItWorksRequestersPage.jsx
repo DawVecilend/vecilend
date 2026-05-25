@@ -106,8 +106,7 @@ function HowItWorksRequestersPage() {
               </h3>
               <p className="text-app-text-secondary leading-relaxed">
                 Selecciona tus fechas, envía un mensaje al dueño con tus dudas y
-                asegura tu reserva con nuestro sistema de pago y seguro
-                integrado.
+                confirma la reserva mediante el sistema de pago integrado.
               </p>
             </div>
             {/* Step 3 */}
@@ -139,28 +138,29 @@ function HowItWorksRequestersPage() {
           <div className="md:col-span-8 bg-app-bg-card rounded-lg p-10 flex flex-col md:flex-row gap-8 items-center overflow-hidden border border-app-border">
             <div className="flex-1">
               <span className="text-app-primary font-bold tracking-widest text-xs uppercase mb-2 block">
-                Tranquilidad total
+                Reglas claras
               </span>
               <h3 className="text-3xl font-bold mb-4 text-app-text">
-                Seguro todo riesgo
+                Sabes qué pagas antes de reservar
               </h3>
               <p className="text-app-text-secondary mb-6">
-                Nuestro seguro 'Fluid Care' está incluido en cada alquiler. Ya
-                sea un pequeño golpe o una falla técnica, te protegemos para que
-                uses el objeto sin miedo.
+                El acuerdo es directo entre tú y el propietario. Vecilend te
+                ofrece el chat interno para coordinar, el desglose claro del
+                precio antes de pagar y el sistema de reportes si surge un
+                problema.
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-app-text font-medium">
                   <span className="material-symbols-outlined text-app-primary">
                     check_circle
                   </span>{" "}
-                  Protección contra daños instantánea
+                  Desglose detallado del precio antes de confirmar
                 </li>
                 <li className="flex items-center gap-3 text-app-text font-medium">
                   <span className="material-symbols-outlined text-app-primary">
                     check_circle
                   </span>{" "}
-                  Deducibles bajos
+                  Reportes revisados por nuestro equipo
                 </li>
               </ul>
             </div>
@@ -168,7 +168,7 @@ function HowItWorksRequestersPage() {
               <OptimizedImage
                 className="w-full h-full object-cover"
                 src="/assets/requesters-car-protection.jpg"
-                alt="Vehículo todoterreno con seguro incluido"
+                alt="Vehículo todoterreno disponible en alquiler"
               />
             </div>
           </div>
@@ -197,8 +197,8 @@ function HowItWorksRequestersPage() {
             </span>
             <h3 className="text-2xl font-bold mb-4">Confianza vecinal</h3>
             <p className="text-app-primary/80 font-medium">
-              Sistema de verificación de identidad y valoraciones reales para
-              una experiencia 100% segura.
+              Valoraciones públicas bidireccionales y sistema de reportes para
+              que la comunidad se autogestione con transparencia.
             </p>
           </div>
 
@@ -213,12 +213,12 @@ function HowItWorksRequestersPage() {
             </div>
             <div>
               <h3 className="text-2xl font-bold mb-2 text-app-text">
-                Soporte 24/7
+                Soporte cercano
               </h3>
               <p className="text-app-text-secondary">
-                ¿No sabes cómo usar una herramienta o tienes problemas con la
-                entrega? Nuestro equipo humano está listo para ayudarte en
-                cualquier momento del día.
+                Escríbenos a support@vecilend.com si necesitas ayuda con la
+                plataforma. Para incidencias con otros usuarios u objetos, lo
+                más rápido es abrir un reporte desde el perfil correspondiente.
               </p>
             </div>
           </div>
@@ -240,10 +240,10 @@ function HowItWorksRequestersPage() {
                 </span>
               </summary>
               <div className="px-6 pb-6 text-app-text-secondary leading-relaxed">
-                Si ocurre un daño accidental, revisa los términos del seguro
-                incluido y ponte en contacto con el propietario. Nuestro equipo
-                coordina la gestión para que el proceso sea claro y sin
-                sorpresas.
+                El acuerdo es directo entre tú y el propietario, por lo que
+                cualquier daño debe resolverse entre ambos. Comunícalo cuanto
+                antes por el chat interno. Si no llegáis a un acuerdo, puedes
+                abrir un reporte y nuestro equipo lo revisará.
               </div>
             </details>
             <details className="group bg-app-bg-card rounded-xl">
@@ -268,9 +268,10 @@ function HowItWorksRequestersPage() {
                 </span>
               </summary>
               <div className="px-6 pb-6 text-app-text-secondary leading-relaxed">
-                Algunos objetos pueden requerir un depósito según el acuerdo del
-                propietario. Si aplica, lo verás al reservar y se mantiene
-                bloqueado hasta la devolución en buen estado.
+                No. Vecilend no retiene depósitos ni fianzas. Al confirmar
+                pagas el subtotal del alquiler + 5% de comisión + 5% de
+                garantía de servicio, ambos cargos no reembolsables y mostrados
+                claramente antes de pagar.
               </div>
             </details>
             <details className="group bg-app-bg-card rounded-xl">
@@ -281,9 +282,9 @@ function HowItWorksRequestersPage() {
                 </span>
               </summary>
               <div className="px-6 pb-6 text-app-text-secondary leading-relaxed">
-                Sí, puedes alquilar para viajar siempre que lo acuerdes con el
-                dueño y respetes las reglas de transporte y seguro. Asegúrate de
-                notificar cualquier destino especial antes de reservar.
+                Sí, siempre que lo acuerdes con el propietario. Comunícale el
+                uso previsto y el destino antes de reservar para evitar
+                malentendidos.
               </div>
             </details>
           </div>

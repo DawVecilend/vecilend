@@ -152,14 +152,6 @@ function App() {
                       path="/how-it-works/owners"
                       element={<HowItWorksOwnersPage />}
                     />
-                    <Route
-                      path="/how-it-works/renters"
-                      element={<Navigate to="/how-it-works/requesters" replace />}
-                    />
-                    <Route
-                      path="/how-it-works/lenders"
-                      element={<Navigate to="/how-it-works/owners" replace />}
-                    />
 
                     <Route path="/status" element={<StatusPage />} />
                     <Route

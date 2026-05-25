@@ -15,13 +15,20 @@ function CTASection() {
             alt="Co-working space"
           />
         </div>
-        <div className="relative z-10 max-w-xl md:max-w-1/2 text-center md:text-left">
-          <h2 className="font-inter text-3xl md:text-6xl font-extrabold leading-tight mb-6 md:mb-8" style={{ color: "var(--color-app-cta-text)" }}>
-            ¿Listo para convertir tu objeto en{" "}
+        <div className="relative z-10 w-full lg:w-1/2 lg:pr-8 text-center md:text-left">
+          <h2
+            className="font-inter text-3xl md:text-5xl font-extrabold leading-tight mb-6 md:mb-8"
+            style={{ color: "var(--color-app-cta-text)" }}
+          >
+            ¿Listo para convertir tus objetos en{" "}
             <span className="text-app-primary">ingresos?</span>
           </h2>
-          <p className="text-base md:text-lg mb-8 md:mb-10 leading-relaxed" style={{ color: "var(--color-app-cta-muted)" }}>
-            Únete a la comunidad de Vecilend y comienza a generar ingresos con tu objeto.
+          <p
+            className="text-base md:text-lg mb-8 md:mb-10 leading-relaxed"
+            style={{ color: "var(--color-app-cta-muted)" }}
+          >
+            Únete a la comunidad de Vecilend y comienza a generar ingresos con
+            tus objetos.
           </p>
           <div className="flex flex-wrap gap-4 md:gap-6 justify-center md:justify-start">
             <Link

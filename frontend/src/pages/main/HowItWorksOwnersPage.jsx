@@ -5,24 +5,24 @@ import OptimizedImage from "../../components/elementos/OptimizedImage";
 
 const faqItems = [
   {
-    question: "¿Qué pasa si accidentalmente daño el objeto?",
+    question: "¿Qué pasa si el objeto vuelve dañado?",
     answer:
-      "Si ocurre un daño accidental, revisa los términos del seguro incluido y ponte en contacto con el propietario. Nuestro equipo coordina la gestión para que el proceso sea claro y sin sorpresas.",
+      "El acuerdo es directo entre propietario y solicitante: comunícalo primero a la otra parte por el chat interno. Si no llegáis a un acuerdo, puedes abrir un reporte y nuestro equipo revisará el caso. Las valoraciones públicas también ayudan al resto de la comunidad.",
   },
   {
     question: "¿Cómo funcionan las recogidas y devoluciones?",
     answer:
-      "La recogida y devolución se acuerdan directamente con el propietario. Puedes usar la plataforma para enviar mensajes, fijar horarios y confirmar el punto de encuentro antes de tu reserva.",
+      "La recogida y devolución se acuerdan directamente entre las dos partes a través del chat interno: horario, punto de encuentro y estado del objeto en la entrega.",
   },
   {
-    question: "¿Se requiere un depósito de seguridad?",
+    question: "¿Vecilend retiene una fianza?",
     answer:
-      "Algunos objetos pueden requerir un depósito según el acuerdo del propietario. Si aplica, lo verás al reservar y se mantiene bloqueado hasta la devolución en buen estado.",
+      "No. Al confirmar la reserva, el solicitante paga el subtotal + 5% de comisión de plataforma + 5% de garantía de servicio. Ambos cargos no son reembolsables y se muestran claramente antes de pagar.",
   },
   {
-    question: "¿Puedo alquilar artículos para llevarlos de viaje?",
+    question: "¿Puedo limitar quién alquila mi objeto?",
     answer:
-      "Sí, puedes alquilar para viajar siempre que lo acuerdes con el dueño y respetes las reglas de transporte y seguro. Asegúrate de notificar cualquier destino especial antes de reservar.",
+      "Sí. Tienes control sobre cada solicitud entrante: puedes revisar el perfil del solicitante, sus valoraciones previas, y aceptar o rechazar la solicitud antes de que se convierta en reserva.",
   },
 ];
 
@@ -53,9 +53,7 @@ function HowItWorksOwnersPage() {
 
             <h1 className="max-w-[680px] font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
               Convierte objetos en{" "}
-              <span className="italic text-app-primary">
-                ingresos.
-              </span>
+              <span className="italic text-app-primary">ingresos.</span>
             </h1>
 
             <p className="mt-6 max-w-[600px] font-body text-body-base leading-body text-app-text-secondary md:text-[18px]">
@@ -156,7 +154,7 @@ function HowItWorksOwnersPage() {
         </div>
       </section>
 
-      {/* Lender Protection */}
+      {/* Protection Section */}
       <section className="py-16 md:py-24 px-4 md:px-10 lg:px-24 overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8 md:gap-16 items-center">
           <div className="w-full md:w-1/2">
@@ -178,11 +176,13 @@ function HowItWorksOwnersPage() {
                 </div>
                 <div>
                   <h4 className="font-bold text-xl mb-2 text-app-text">
-                    Protección Fluid
+                    Sistema de reportes
                   </h4>
                   <p className="text-app-text-secondary">
-                    Cobertura de seguro líder en la industria de hasta 10.000€
-                    por artículo. Protegemos tu objeto contra daños o pérdidas.
+                    Si surge un problema con un solicitante, puedes abrir un
+                    reporte desde su perfil. Nuestro equipo revisa cada caso y
+                    puede bloquear cuentas o eliminar objetos que incumplan los
+                    términos.
                   </p>
                 </div>
               </div>
@@ -197,12 +197,12 @@ function HowItWorksOwnersPage() {
                 </div>
                 <div>
                   <h4 className="font-bold text-xl mb-2 text-app-text">
-                    Arrendatarios verificados
+                    Valoraciones públicas
                   </h4>
                   <p className="text-app-text-secondary">
-                    Cada arrendatario pasa por un riguroso proceso de
-                    verificación de identidad y antecedentes antes de poder
-                    reservar.
+                    Tras cada operación, propietario y solicitante se valoran
+                    mutuamente. La reputación pública de cada usuario es visible
+                    antes de aceptar una solicitud.
                   </p>
                 </div>
               </div>
@@ -229,25 +229,25 @@ function HowItWorksOwnersPage() {
                   <span className="material-symbols-outlined text-[var(--color-app-warning)] text-lg">
                     check_circle
                   </span>
-                  0€ de franquicia para prestamistas
+                  Sin comisión para el propietario
                 </li>
                 <li className="flex items-center gap-3 text-sm font-medium text-app-text">
                   <span className="material-symbols-outlined text-[var(--color-app-warning)] text-lg">
                     check_circle
                   </span>
-                  Equipo de soporte dedicado 24/7
+                  Soporte por reportes revisado por nuestro equipo
                 </li>
                 <li className="flex items-center gap-3 text-sm font-medium text-app-text">
                   <span className="material-symbols-outlined text-[var(--color-app-warning)] text-lg">
                     check_circle
                   </span>
-                  Pagos seguros en depósito
+                  Pago integrado al confirmar la reserva
                 </li>
                 <li className="flex items-center gap-3 text-sm font-medium text-app-text">
                   <span className="material-symbols-outlined text-[var(--color-app-warning)] text-lg">
                     check_circle
                   </span>
-                  Reseñas y valoraciones de arrendatarios
+                  Valoraciones públicas bidireccionales
                 </li>
               </ul>
             </div>
@@ -270,26 +270,26 @@ function HowItWorksOwnersPage() {
                 </span>
               </summary>
               <div className="px-6 pb-6 text-app-text-secondary leading-relaxed">
-                Los prestamistas son responsables de asegurar que el objeto esté
-                en buenas condiciones de funcionamiento. Recomendamos hacer una
-                revisión rápida entre alquileres. Si se necesita mantenimiento
-                por desgaste normal, es responsabilidad del propietario,
-                mientras que los daños causados por el arrendatario están
-                cubiertos por la Protección Fluid.
+                El mantenimiento y el estado del objeto son responsabilidad del
+                propietario. Recomendamos revisar el objeto entre alquileres y
+                dejar constancia por chat de su estado en la entrega y en la
+                devolución. Si hay un desacuerdo sobre daños, comunícalo primero
+                al solicitante; si no llegáis a un acuerdo, abre un reporte y
+                nuestro equipo revisará el caso.
               </div>
             </details>
             <details className="group bg-app-bg-card rounded-xl">
               <summary className="flex justify-between items-center p-6 cursor-pointer list-none font-bold text-lg text-app-text">
-                ¿Qué pasa con las fianzas?
+                ¿Vecilend retiene una fianza?
                 <span className="material-symbols-outlined transition-transform group-open:rotate-180">
                   expand_more
                 </span>
               </summary>
               <div className="px-6 pb-6 text-app-text-secondary leading-relaxed">
-                Retenemos automáticamente una fianza del arrendatario durante la
-                duración del alquiler. Puedes elegir el importe de la fianza al
-                publicar tu artículo, o usar nuestra recomendación por defecto
-                basada en el valor del mismo.
+                No. Al confirmar la reserva, el solicitante paga el subtotal +
+                5% de comisión de plataforma + 5% de garantía de servicio. Ambos
+                cargos no son reembolsables y cubren el coste del servicio.
+                Vecilend no retiene depósitos ni fianzas adicionales.
               </div>
             </details>
             <details className="group bg-app-bg-card rounded-xl">
@@ -300,9 +300,10 @@ function HowItWorksOwnersPage() {
                 </span>
               </summary>
               <div className="px-6 pb-6 text-app-text-secondary leading-relaxed">
-                Los pagos se inician automáticamente 24 horas después de que el
-                período de alquiler concluya con éxito. Dependiendo de tu banco,
-                los fondos suelen llegar a tu cuenta en 1-3 días laborables.
+                El sistema gestiona el cobro al solicitante en el momento de
+                confirmar la reserva. La liquidación al propietario depende de
+                los métodos de pago integrados; consulta los términos y
+                condiciones para los detalles concretos del flujo de fondos.
               </div>
             </details>
             <details className="group bg-app-bg-card rounded-xl">
