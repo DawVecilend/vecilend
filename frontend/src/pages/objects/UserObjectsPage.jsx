@@ -49,7 +49,7 @@ function UserObjectsPage() {
       </div>
 
       {loadingProducts ? (
-        <ProductsGridSkeleton count={6} />
+        <ProductsGridSkeleton count={5} />
       ) : (
         <ProductsSection
           title={
