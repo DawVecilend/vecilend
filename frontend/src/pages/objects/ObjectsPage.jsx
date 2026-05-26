@@ -366,7 +366,7 @@ function ObjectsPage() {
 
           <div className="mt-6">
             {loading ? (
-              <ProductsGridSkeleton count={6} />
+              <ProductsGridSkeleton count={8} maxCols={4} />
             ) : products.length > 0 ? (
               <>
                 <ProductsSection

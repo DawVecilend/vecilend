@@ -66,7 +66,7 @@ function FavoritesPage() {
 
         {loading ? (
           <div className="mt-8">
-            <ProductsGridSkeleton count={6} />
+            <ProductsGridSkeleton count={10} />
           </div>
         ) : favorites.length > 0 ? (
           <div className="mt-6">

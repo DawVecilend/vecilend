@@ -48,9 +48,6 @@ import CreateObjectPage from "./pages/objects/CreateObjectPage";
 import UserObjectsPage from "./pages/objects/UserObjectsPage";
 import EditObjectPage from "./pages/objects/EditObjectPage";
 
-// CATEGORIES PAGES
-import CategoryPage from "./pages/categories/CategoryPage";
-
 // CHATS PAGES
 import ChatsLayout from "./components/chats/ChatsLayout";
 import ChatPage from "./pages/chats/ChatPage";
@@ -172,10 +169,6 @@ function App() {
                     <Route
                       path="/objects/:id/:slug?"
                       element={<ObjectPage />}
-                    />
-                    <Route
-                      path="/categories/:slug"
-                      element={<CategoryPage />}
                     />
 
                     <Route
