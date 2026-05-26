@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\V1\Admin\AdminSubcategoriaController;
 use App\Http\Controllers\Api\V1\Admin\AdminUserController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\TransactionController;
-use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\Api\V1\FavoriteController;
 use App\Http\Controllers\Api\V1\ValoracioController;
 use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\NotificacioController;
@@ -196,6 +196,7 @@ Route::prefix('backoffice')->middleware(['auth:sanctum', 'empleat'])->group(func
         Route::delete('/subcategories/{id}',[AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
 
         Route::get('/logs',         [AdminLogController::class, 'index']);
+        Route::get('/logs/filters', [AdminLogController::class, 'filters']);
         Route::get('/logs/export',  [AdminLogController::class, 'export']);
         Route::delete('/logs',      [AdminLogController::class, 'clean']);
     });

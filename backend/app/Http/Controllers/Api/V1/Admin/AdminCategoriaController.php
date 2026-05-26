@@ -14,11 +14,18 @@ use Illuminate\Support\Facades\DB;
 class AdminCategoriaController extends Controller {
 
     public function index(Request $request) {
-        $categories = Categoria::with(['subcategories' => function ($query) {
-            $query->orderBy('nom');
-        }])->withCount(['objectes', 'subcategories'])->orderBy('nom')->get();
+        $request->validate([
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'page'     => 'nullable|integer|min:1',
+        ]);
 
-        return CategoriaResource::collection($categories);
+        $perPage = (int) $request->input('per_page', 20);
+
+        $query = Categoria::with(['subcategories' => function ($query) {
+            $query->orderBy('nom');
+        }])->withCount(['objectes', 'subcategories'])->orderBy('nom');
+
+        return CategoriaResource::collection($query->paginate($perPage));
     }
 
     public function show(Request $request, $id) {

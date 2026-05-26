@@ -150,8 +150,6 @@ class User extends Authenticatable
 
         $result = [];
         foreach ($userIds as $id) {
-            $stats = \App\Models\Valoracio::query()->getModel(); // qualsevol per accedir al mètode
-            // utilitzem reflection del helper privat via wrapper públic
             $rowsUser = $grouped->get($id) ?? collect();
             $result[$id] = self::computeStatsFromRows($rowsUser);
         }

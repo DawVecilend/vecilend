@@ -1,9 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import backofficeApi from "../../services/backofficeApi";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
+import Pagination from "../../components/admin/Pagination";
 import { useToast } from "../../contexts/ToastContext";
 import { useBackofficeAuth } from "../../contexts/BackofficeAuthContext";
+import { useDebounce } from "../../hooks/useDebounce";
+
+const PER_PAGE = 20;
 
 function AdminEmpleatsPage() {
   const { showToast } = useToast();
@@ -14,21 +18,33 @@ function AdminEmpleatsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterRol, setFilterRol] = useState("all");
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState({ current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
   const [confirm, setConfirm] = useState({ open: false, action: null, empleat: null });
   const [confirmBusy, setConfirmBusy] = useState(false);
 
-  useEffect(() => {
-    backofficeApi.get("/backoffice/empleats")
-      .then((res) => setEmpleats(Array.isArray(res.data) ? res.data : res.data.data ?? []))
-      .finally(() => setLoading(false));
-  }, []);
+  const debouncedSearch = useDebounce(search, 300);
 
-  const filtered = empleats.filter((e) => {
-    const q = search.toLowerCase();
-    const matchSearch = !q || e.nom?.toLowerCase().includes(q) || e.email?.toLowerCase().includes(q) || e.username?.toLowerCase().includes(q);
-    const matchRol = filterRol === "all" || e.rol === filterRol;
-    return matchSearch && matchRol;
-  });
+  const fetchEmpleats = useCallback(() => {
+    setLoading(true);
+    backofficeApi.get("/backoffice/empleats", {
+      params: {
+        page,
+        per_page: PER_PAGE,
+        search: debouncedSearch || undefined,
+        rol: filterRol,
+      },
+    })
+      .then((res) => {
+        setEmpleats(res.data.data ?? []);
+        setMeta(res.data.meta ?? { current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
+      })
+      .finally(() => setLoading(false));
+  }, [page, debouncedSearch, filterRol]);
+
+  useEffect(() => { fetchEmpleats(); }, [fetchEmpleats]);
+
+  useEffect(() => { setPage(1); }, [debouncedSearch, filterRol]);
 
   const handleConfirm = async () => {
     setConfirmBusy(true);
@@ -44,8 +60,8 @@ function AdminEmpleatsPage() {
         showToast(`${empleat.nom} reactivado.`);
       } else if (action === "delete") {
         await backofficeApi.delete(`/backoffice/empleats/${empleat.id}`);
-        setEmpleats((p) => p.filter((e) => e.id !== empleat.id));
         showToast("Empleado eliminado.");
+        fetchEmpleats();
       }
       setConfirm({ open: false, action: null, empleat: null });
     } catch (err) {
@@ -88,7 +104,7 @@ function AdminEmpleatsPage() {
           <option value="admin">Administradores</option>
           <option value="suport">Soporte técnico</option>
         </select>
-        <span className="self-center text-sm text-app-text-secondary">{filtered.length} resultados</span>
+        <span className="self-center text-sm text-app-text-secondary">{meta.total} resultados</span>
       </div>
 
       {loading ? (
@@ -96,58 +112,68 @@ function AdminEmpleatsPage() {
           <div className="h-8 w-8 rounded-full border-4 border-app-border border-t-app-primary animate-spin" />
         </div>
       ) : (
-        <div className="rounded-xl border border-app-border overflow-x-auto">
-          <table className="w-full min-w-[700px] text-sm">
-            <thead>
-              <tr className="bg-app-neutral border-b border-app-border">
-                {["Empleado", "Email", "Rol", "Estado", "Acciones"].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-app-text-secondary">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((e, i) => {
-                const isSelf = current && current.id === e.id;
-                return (
-                  <tr key={e.id} className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}>
-                    <td className="px-4 py-3">
-                      <p className="font-medium text-app-text">
-                        {e.nom} {e.cognoms}
-                        {isSelf && <span className="ml-2 text-xs text-app-text-secondary font-normal">(tú)</span>}
-                      </p>
-                      <p className="text-xs text-app-text-secondary">@{e.username}</p>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-app-text-secondary">{e.email}</td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded ${e.rol === "admin" ? "bg-app-primary/10 text-app-primary" : "bg-app-secondary/10 text-app-secondary"}`}>
-                        {e.rol === "admin" ? "Administrador" : "Soporte"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${e.actiu ? "bg-app-secondary/10 text-app-secondary" : "bg-red-500/10 text-red-400"}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${e.actiu ? "bg-app-secondary" : "bg-red-400"}`} />
-                        {e.actiu ? "Activo" : "Desactivado"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      {!isSelf ? (
-                        <div className="flex gap-2">
-                          {e.actiu
-                            ? <button onClick={() => setConfirm({ open: true, action: "block", empleat: e })} className="text-xs px-3 py-1 rounded-lg bg-orange-500/10 text-orange-400 hover:bg-orange-500/20">Desactivar</button>
-                            : <button onClick={() => setConfirm({ open: true, action: "unblock", empleat: e })} className="text-xs px-3 py-1 rounded-lg bg-app-primary/10 text-app-primary hover:bg-app-primary/20">Activar</button>
-                          }
-                          <button onClick={() => setConfirm({ open: true, action: "delete", empleat: e })} className="text-xs px-3 py-1 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20">Eliminar</button>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-app-text-secondary">—</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <div className="rounded-xl border border-app-border overflow-x-auto">
+            <table className="w-full min-w-[700px] text-sm">
+              <thead>
+                <tr className="bg-app-neutral border-b border-app-border">
+                  {["Empleado", "Email", "Rol", "Estado", "Acciones"].map((h) => (
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-app-text-secondary">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {empleats.map((e, i) => {
+                  const isSelf = current && current.id === e.id;
+                  return (
+                    <tr key={e.id} className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}>
+                      <td className="px-4 py-3">
+                        <p className="font-medium text-app-text">
+                          {e.nom} {e.cognoms}
+                          {isSelf && <span className="ml-2 text-xs text-app-text-secondary font-normal">(tú)</span>}
+                        </p>
+                        <p className="text-xs text-app-text-secondary">@{e.username}</p>
+                      </td>
+                      <td className="px-4 py-3 text-xs text-app-text-secondary">{e.email}</td>
+                      <td className="px-4 py-3">
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded ${e.rol === "admin" ? "bg-app-primary/10 text-app-primary" : "bg-app-secondary/10 text-app-secondary"}`}>
+                          {e.rol === "admin" ? "Administrador" : "Soporte"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${e.actiu ? "bg-app-secondary/10 text-app-secondary" : "bg-red-500/10 text-red-400"}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${e.actiu ? "bg-app-secondary" : "bg-red-400"}`} />
+                          {e.actiu ? "Activo" : "Desactivado"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        {!isSelf ? (
+                          <div className="flex gap-2">
+                            {e.actiu
+                              ? <button onClick={() => setConfirm({ open: true, action: "block", empleat: e })} className="text-xs px-3 py-1 rounded-lg bg-orange-500/10 text-orange-400 hover:bg-orange-500/20">Desactivar</button>
+                              : <button onClick={() => setConfirm({ open: true, action: "unblock", empleat: e })} className="text-xs px-3 py-1 rounded-lg bg-app-primary/10 text-app-primary hover:bg-app-primary/20">Activar</button>
+                            }
+                            <button onClick={() => setConfirm({ open: true, action: "delete", empleat: e })} className="text-xs px-3 py-1 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20">Eliminar</button>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-app-text-secondary">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <Pagination
+            currentPage={meta.current_page}
+            lastPage={meta.last_page}
+            perPage={meta.per_page}
+            total={meta.total}
+            onPageChange={setPage}
+          />
+        </>
       )}
     </div>
   );

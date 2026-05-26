@@ -1,7 +1,9 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+
 return new class extends Migration {
     public function up(): void {
         Schema::create('notificacions', function (Blueprint $table) {
@@ -12,6 +14,7 @@ return new class extends Migration {
             $table->text('missatge');
             $table->string('entitat_referenciada', 50)->nullable();
             $table->unsignedBigInteger('id_entitat_referenciada')->nullable();
+            $table->json('dades_extra')->nullable();
             $table->boolean('llegida')->default(false);
             $table->timestamp('created_at')->useCurrent();
             $table->index(['user_id', 'llegida']);

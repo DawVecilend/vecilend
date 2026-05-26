@@ -1,6 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import backofficeApi from "../../services/backofficeApi";
+import Pagination from "../../components/admin/Pagination";
 import { useToast } from "../../contexts/ToastContext";
+import { useDebounce } from "../../hooks/useDebounce";
+
+const PER_PAGE = 20;
 
 function ActionBadge({ accio, tipus }) {
   let bg = "rgba(107,114,128,0.12)";
@@ -43,61 +47,52 @@ function AdminLogsPage() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [meta, setMeta] = useState({ current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
+  const [page, setPage] = useState(1);
 
+  const [filterOptions, setFilterOptions] = useState({ tipus: [], accions: [], entitats: [] });
   const [filterTipus, setFilterTipus] = useState("all");
   const [filterAction, setFilterAction] = useState("all");
   const [filterActor, setFilterActor] = useState("");
   const [filterEntity, setFilterEntity] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 25;
 
   const [exporting, setExporting] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const [cleanDays, setCleanDays] = useState(90);
   const [cleanConfirmOpen, setCleanConfirmOpen] = useState(false);
 
-  const loadLogs = () => {
+  const debouncedActor = useDebounce(filterActor, 300);
+
+  const loadFilterOptions = useCallback(() => {
+    backofficeApi.get("/backoffice/logs/filters")
+      .then((res) => setFilterOptions(res.data.data ?? { tipus: [], accions: [], entitats: [] }))
+      .catch(() => {});
+  }, []);
+
+  const loadLogs = useCallback(() => {
     setLoading(true);
-    backofficeApi.get("/backoffice/logs")
+    backofficeApi.get("/backoffice/logs", {
+      params: {
+        page,
+        per_page: PER_PAGE,
+        tipus: filterTipus,
+        accio: filterAction,
+        entitat: filterEntity,
+        actor: debouncedActor || undefined,
+      },
+    })
       .then((res) => {
-        const data = Array.isArray(res.data) ? res.data : res.data.data ?? [];
-        setLogs(data);
+        setLogs(res.data.data ?? []);
+        setMeta(res.data.meta ?? { current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
+        setError(null);
       })
       .catch(() => setError("No se han podido cargar los logs."))
       .finally(() => setLoading(false));
-  };
+  }, [page, filterTipus, filterAction, filterEntity, debouncedActor]);
 
-  useEffect(() => {
-    loadLogs();
-  }, []);
-
-  const uniqueActions = useMemo(() => {
-    const s = new Set(logs.map((l) => l.accio).filter(Boolean));
-    return [...s].sort();
-  }, [logs]);
-
-  const uniqueEntities = useMemo(() => {
-    const s = new Set(logs.map((l) => l.entitat_afectada).filter(Boolean));
-    return [...s].sort();
-  }, [logs]);
-
-  const filtered = useMemo(() => {
-    const q = filterActor.toLowerCase().trim();
-    return logs.filter((l) => {
-      const matchTipus  = filterTipus === "all" || l.tipus === filterTipus;
-      const matchAction = filterAction === "all" || l.accio === filterAction;
-      const matchEntity = filterEntity === "all" || l.entitat_afectada === filterEntity;
-      const matchActor  = !q
-        || l.actor?.username?.toLowerCase().includes(q)
-        || l.actor?.email?.toLowerCase().includes(q);
-      return matchTipus && matchAction && matchEntity && matchActor;
-    });
-  }, [logs, filterTipus, filterAction, filterEntity, filterActor]);
-
-  useEffect(() => setCurrentPage(1), [filterTipus, filterAction, filterEntity, filterActor]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  useEffect(() => { loadFilterOptions(); }, [loadFilterOptions]);
+  useEffect(() => { loadLogs(); }, [loadLogs]);
+  useEffect(() => { setPage(1); }, [filterTipus, filterAction, filterEntity, debouncedActor]);
 
   const formatDate = (iso) => {
     if (!iso) return "—";
@@ -113,6 +108,12 @@ function AdminLogsPage() {
     try {
       const res = await backofficeApi.get("/backoffice/logs/export", {
         responseType: "blob",
+        params: {
+          tipus: filterTipus,
+          accio: filterAction,
+          entitat: filterEntity,
+          actor: debouncedActor || undefined,
+        },
       });
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
@@ -145,6 +146,7 @@ function AdminLogsPage() {
       showToast(res.data?.message || "Logs limpiados.");
       setCleanConfirmOpen(false);
       loadLogs();
+      loadFilterOptions();
     } catch (err) {
       showToast(
         err.response?.data?.message || "No se han podido limpiar los logs.",
@@ -163,7 +165,7 @@ function AdminLogsPage() {
         <div>
           <h1 className="text-2xl font-bold font-heading text-app-text">Log de acciones</h1>
           <p className="text-sm mt-1 text-app-text-secondary">
-            Historial de acciones · {logs.length} registros totales
+            Historial de acciones · {meta.total} registros
           </p>
         </div>
 
@@ -202,19 +204,17 @@ function AdminLogsPage() {
 
         <select aria-label="Filtrar por tipo" value={filterTipus} onChange={(e) => setFilterTipus(e.target.value)} className={selectClass}>
           <option value="all">Todos los tipos</option>
-          <option value="admin">Admin</option>
-          <option value="auth">Auth (login/logout)</option>
-          <option value="usuari">Usuario</option>
+          {filterOptions.tipus.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
 
         <select aria-label="Filtrar por acción" value={filterAction} onChange={(e) => setFilterAction(e.target.value)} className={selectClass}>
           <option value="all">Todas las acciones</option>
-          {uniqueActions.map((a) => <option key={a} value={a}>{a}</option>)}
+          {filterOptions.accions.map((a) => <option key={a} value={a}>{a}</option>)}
         </select>
 
         <select aria-label="Filtrar por entidad" value={filterEntity} onChange={(e) => setFilterEntity(e.target.value)} className={selectClass}>
           <option value="all">Todas las entidades</option>
-          {uniqueEntities.map((e) => <option key={e} value={e}>{e}</option>)}
+          {filterOptions.entitats.map((e) => <option key={e} value={e}>{e}</option>)}
         </select>
 
         {(filterTipus !== "all" || filterAction !== "all" || filterEntity !== "all" || filterActor) && (
@@ -226,7 +226,7 @@ function AdminLogsPage() {
           </button>
         )}
 
-        <span className="text-sm ml-auto text-app-text-secondary">{filtered.length} resultados</span>
+        <span className="text-sm ml-auto text-app-text-secondary">{meta.total} resultados</span>
       </div>
 
       {error && (
@@ -240,7 +240,7 @@ function AdminLogsPage() {
           <div className="flex items-center justify-center h-48">
             <div className="h-8 w-8 rounded-full border-4 border-app-border border-t-app-primary animate-spin" />
           </div>
-        ) : paginated.length === 0 ? (
+        ) : logs.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-48 text-sm gap-2 text-app-text-secondary">
             No hay registros con estos filtros
           </div>
@@ -257,7 +257,7 @@ function AdminLogsPage() {
                 </tr>
               </thead>
               <tbody>
-                {paginated.map((log, i) => (
+                {logs.map((log, i) => (
                   <tr key={log.id} className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}>
                     <td className="px-4 py-3 text-xs font-mono text-app-text-secondary">{log.id}</td>
                     <td className="px-4 py-3"><TipusBadge tipus={log.tipus} /></td>
@@ -301,40 +301,13 @@ function AdminLogsPage() {
         )}
       </div>
 
-      {!loading && totalPages > 1 && (
-        <div className="flex items-center justify-between mt-4">
-          <span className="text-xs text-app-text-secondary">
-            Página {currentPage} de {totalPages} · {PAGE_SIZE} por página
-          </span>
-          <div className="flex gap-1">
-            <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1}
-              className="px-2 py-1.5 rounded-lg text-xs font-medium border border-app-border bg-app-neutral text-app-text disabled:opacity-40">«</button>
-            <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium border border-app-border bg-app-neutral text-app-text disabled:opacity-40">← Anterior</button>
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              const start = Math.max(1, currentPage - 2);
-              const page = start + i;
-              if (page > totalPages) return null;
-              const isActive = currentPage === page;
-              return (
-                <button key={page} onClick={() => setCurrentPage(page)}
-                  className="w-8 py-1.5 rounded-lg text-xs font-medium border"
-                  style={{
-                    backgroundColor: isActive ? "rgba(20,184,166,0.15)" : "var(--color-app-neutral)",
-                    borderColor: isActive ? "#14B8A6" : "var(--color-app-border)",
-                    color: isActive ? "#14B8A6" : "var(--color-app-text)",
-                  }}>
-                  {page}
-                </button>
-              );
-            })}
-            <button onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium border border-app-border bg-app-neutral text-app-text disabled:opacity-40">Siguiente →</button>
-            <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}
-              className="px-2 py-1.5 rounded-lg text-xs font-medium border border-app-border bg-app-neutral text-app-text disabled:opacity-40">»</button>
-          </div>
-        </div>
-      )}
+      <Pagination
+        currentPage={meta.current_page}
+        lastPage={meta.last_page}
+        perPage={meta.per_page}
+        total={meta.total}
+        onPageChange={setPage}
+      />
 
       {cleanConfirmOpen && (
         <div
@@ -360,7 +333,6 @@ function AdminLogsPage() {
                 value={cleanDays}
                 onChange={(e) => setCleanDays(e.target.value)}
                 className="w-24 rounded-md px-3 py-2 text-sm bg-app-neutral border border-app-border text-app-text"
-                aria-label="Días de antigüedad para limpiar"
               />
               <span className="text-sm text-app-text-secondary">días de antigüedad</span>
             </div>

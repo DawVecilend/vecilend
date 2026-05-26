@@ -76,8 +76,7 @@ function LoginPage() {
         );
       else if (err.response?.status === 401)
         setError(
-          err.response.data.message ||
-            "La sesión de verificación ha expirado.",
+          err.response.data.message || "La sesión de verificación ha expirado.",
         );
       else setError("Error de conexión");
     } finally {
@@ -118,8 +117,8 @@ function LoginPage() {
               <p className="text-xl font-medium leading-relaxed italic text-app-text mb-6">
                 “Vecilend me ha ayudado a encontrar justo lo que necesitaba sin
                 tener que comprarlo. Es fácil de usar, cercano y da mucha
-                confianza saber que los objetos están compartidos por vecinos
-                de mi zona.”
+                confianza saber que los objetos están compartidos por vecinos de
+                mi zona.”
               </p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-app-primary">
@@ -194,7 +193,8 @@ function LoginPage() {
                   <label className="block text-sm font-semibold text-app-text-secondary">
                     Código de verificación
                   </label>
-                  <input aria-label="Código de verificación"
+                  <input
+                    aria-label="Código de verificación"
                     value={twoFactorCode}
                     onChange={(e) => setTwoFactorCode(e.target.value)}
                     inputMode="text"
@@ -205,8 +205,8 @@ function LoginPage() {
                     autoFocus
                   />
                   <p className="text-xs text-app-text-secondary mt-2">
-                    Introduce el código de 6 dígitos de tu app de
-                    autenticación o uno de tus códigos de recuperación.
+                    Introduce el código de 6 dígitos de tu app de autenticación
+                    o uno de tus códigos de recuperación.
                   </p>
                 </div>
 
@@ -221,7 +221,11 @@ function LoginPage() {
                   type="submit"
                   disabled={submitting || !twoFactorCode.trim()}
                 >
-                  <span>{submitting ? "Verificando..." : "Verificar e iniciar sesión"}</span>
+                  <span>
+                    {submitting
+                      ? "Verificando..."
+                      : "Verificar e iniciar sesión"}
+                  </span>
                 </button>
 
                 <button
@@ -233,67 +237,68 @@ function LoginPage() {
                 </button>
               </form>
             ) : (
-            <form className="space-y-5" onSubmit={handleSubmit}>
-              <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-app-text-secondary">
-                  Usuario / Email
-                </label>
-                <input aria-label="Usuario / Email"
-                  value={formData.login}
-                  onChange={(e) =>
-                    setFormData({ ...formData, login: e.target.value })
-                  }
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
-                  placeholder="Nombre de usuario o email"
-                  type="text"
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center">
+              <form className="space-y-5" onSubmit={handleSubmit}>
+                <div className="space-y-1.5">
                   <label className="block text-sm font-semibold text-app-text-secondary">
-                    Contraseña
+                    Usuario o email
                   </label>
-                  <Link
-                    to="/forgot-password"
-                    className="text-xs font-bold text-app-primary hover:underline"
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </Link>
+                  <input
+                    aria-label="Usuario o email"
+                    value={formData.login}
+                    onChange={(e) =>
+                      setFormData({ ...formData, login: e.target.value })
+                    }
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
+                    placeholder="Introduce tu usuario o email"
+                    type="text"
+                    required
+                  />
                 </div>
-                <PasswordInput
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                  className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
 
-              {error && (
-                <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-2 rounded-lg text-sm font-medium text-center">
-                  {error}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="block text-sm font-semibold text-app-text-secondary">
+                      Contraseña
+                    </label>
+                    <Link
+                      to="/forgot-password"
+                      className="text-xs font-bold text-app-primary hover:underline"
+                    >
+                      ¿Olvidaste tu contraseña?
+                    </Link>
+                  </div>
+                  <PasswordInput
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
+                    placeholder="••••••••"
+                    required
+                  />
                 </div>
-              )}
 
-              <button
-                className={`w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-app-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-app-primary active:scale-[0.97]"}`}
-                type="submit"
-                disabled={submitting}
-              >
-                <span>
-                  {submitting ? "Iniciando sesión..." : "Iniciar sesión"}
-                </span>
-                {!submitting && (
-                  <span className="material-symbols-outlined text-xl">
-                    login
-                  </span>
+                {error && (
+                  <div className="bg-[var(--color-app-danger)]/20 border border-[var(--color-app-danger)] text-[var(--color-app-danger)] px-4 py-2 rounded-lg text-sm font-medium text-center">
+                    {error}
+                  </div>
                 )}
-              </button>
-            </form>
+
+                <button
+                  className={`w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-app-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${submitting ? "opacity-70 cursor-not-allowed" : "hover:bg-app-primary active:scale-[0.97]"}`}
+                  type="submit"
+                  disabled={submitting}
+                >
+                  <span>
+                    {submitting ? "Iniciando sesión..." : "Iniciar sesión"}
+                  </span>
+                  {!submitting && (
+                    <span className="material-symbols-outlined text-xl">
+                      login
+                    </span>
+                  )}
+                </button>
+              </form>
             )}
 
             <div className="mt-8 text-center">

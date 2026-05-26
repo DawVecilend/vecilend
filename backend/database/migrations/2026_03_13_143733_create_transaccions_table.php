@@ -9,7 +9,7 @@ return new class extends Migration {
         Schema::create('transaccions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('solicitud_id')->unique()->constrained('solicituds')->cascadeOnDelete();
-            $table->timestamp('data_inici_real');
+            $table->timestamp('data_inici_real')->nullable();
             $table->timestamp('data_fi_real')->nullable();
             $table->string('estat', 20)->default('en_curs');
             $table->timestamps();

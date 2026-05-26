@@ -18,18 +18,28 @@ class AdminReportController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Report::with(['reportador', 'usuariReportat', 'objecte', 'revisor']);
+        $request->validate([
+            'estat'    => 'nullable|string|in:all,pendent,resolt,descartat',
+            'motiu'    => 'nullable|string|max:50',
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'page'     => 'nullable|integer|min:1',
+        ]);
 
-        if ($request->filled('estat')) {
-            $query->where('estat', $request->input('estat'));
+        $query = Report::with(['reportador', 'usuariReportat', 'objecte', 'revisor'])
+            ->orderByDesc('created_at');
+
+        $estat = $request->input('estat', 'all');
+        if ($estat !== 'all' && $estat) {
+            $query->where('estat', $estat);
         }
 
-        if ($request->filled('motiu')) {
-            $query->where('motiu', $request->input('motiu'));
+        $motiu = $request->input('motiu');
+        if ($motiu && $motiu !== 'all') {
+            $query->where('motiu', $motiu);
         }
 
-        $reports = $query->orderByDesc('created_at')->get();
-        return ReportResource::collection($reports);
+        $perPage = (int) $request->input('per_page', 20);
+        return ReportResource::collection($query->paginate($perPage));
     }
 
     public function show(Request $request, $id)
@@ -71,8 +81,6 @@ class AdminReportController extends Controller
         $empleat = $request->user();
         $esAdmin = $empleat && $empleat->rol === 'admin';
 
-        // Soporte puede eliminar objetos solo si el reporte es por
-        // "objecte_inapropiat". Para cualquier otro motivo se requiere admin.
         if (!empty($validated['eliminar_objecte']) && !$esAdmin
             && $report->motiu !== Report::MOTIU_OBJECTE_INAPROPIAT) {
             return response()->json([
@@ -108,10 +116,8 @@ class AdminReportController extends Controller
             }
         });
 
-        // Notificar al reportador sobre el resultado de su reporte
         $this->notifyReportador($report, $validated['estat'], $usuariBloquejat);
 
-        // Si se ha bloqueado al usuario, enviarle un email con el motivo
         if ($usuariBloquejat && $report->usuariReportat) {
             try {
                 Mail::to($report->usuariReportat->email)

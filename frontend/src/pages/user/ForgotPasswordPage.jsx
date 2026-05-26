@@ -44,13 +44,14 @@ function ForgotPasswordPage() {
                 <label className="block text-sm font-semibold text-app-text-secondary">
                   Email
                 </label>
-                <input aria-label="Email"
+                <input
+                  aria-label="Email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
-                  placeholder="tu@email.com"
+                  placeholder="ejemplo@email.com"
                 />
               </div>
 

@@ -13,37 +13,56 @@ class AdminLogController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'tipus'    => 'nullable|string|max:30',
+            'accio'    => 'nullable|string|max:100',
+            'entitat'  => 'nullable|string|max:50',
+            'actor'    => 'nullable|string|max:100',
+            'per_page' => 'nullable|integer|min:1|max:200',
+            'page'     => 'nullable|integer|min:1',
+        ]);
+
         $query = $this->baseQuery();
+        $this->applyFilters($query, $request);
 
-        if ($request->filled('tipus')) {
-            $query->where('logs.tipus', $request->input('tipus'));
-        }
+        $perPage = (int) $request->input('per_page', 20);
+        $paginator = $query->paginate($perPage);
 
-        $logs = $query->get();
-
-        return AdminLogResource::collection($logs);
+        return AdminLogResource::collection($paginator);
     }
 
     /**
-     * GET /api/v1/backoffice/logs/export
-     * Devuelve un CSV con todos los logs (o filtrados por tipus).
+     * GET /api/v1/backoffice/logs/filters
+     *
+     * Devuelve los valores distintos de tipus, accio y entitat afectada
+     * para alimentar los selectores del frontend sin tener que cargar
+     * todos los logs.
      */
+    public function filters()
+    {
+        $tipus    = DB::table('logs')->select('tipus')->whereNotNull('tipus')->distinct()->orderBy('tipus')->pluck('tipus');
+        $accions  = DB::table('logs')->select('accio')->whereNotNull('accio')->distinct()->orderBy('accio')->pluck('accio');
+        $entitats = DB::table('logs')->select('entitat_afectada')->whereNotNull('entitat_afectada')->distinct()->orderBy('entitat_afectada')->pluck('entitat_afectada');
+
+        return response()->json([
+            'data' => [
+                'tipus'    => $tipus->values(),
+                'accions'  => $accions->values(),
+                'entitats' => $entitats->values(),
+            ],
+        ]);
+    }
+
     public function export(Request $request): StreamedResponse
     {
         $query = $this->baseQuery();
-
-        if ($request->filled('tipus')) {
-            $query->where('logs.tipus', $request->input('tipus'));
-        }
+        $this->applyFilters($query, $request);
 
         $filename = 'vecilend_logs_' . Carbon::now()->format('Y-m-d_His') . '.csv';
 
         return new StreamedResponse(function () use ($query) {
             $out = fopen('php://output', 'w');
-
-            // BOM para que Excel detecte UTF-8
             fwrite($out, "\xEF\xBB\xBF");
-
             fputcsv($out, [
                 'id', 'created_at', 'tipus', 'accio',
                 'user_id', 'user_username', 'user_email',
@@ -89,10 +108,6 @@ class AdminLogController extends Controller
         return $str;
     }
 
-    /**
-     * DELETE /api/v1/backoffice/logs
-     * Elimina logs antiguos. Por defecto > 90 días.
-     */
     public function clean(Request $request)
     {
         $validated = $request->validate([
@@ -125,6 +140,28 @@ class AdminLogController extends Controller
             'deleted' => $deleted,
             'cutoff'  => $cutoff->toDateTimeString(),
         ]);
+    }
+
+    protected function applyFilters($query, Request $request): void
+    {
+        if ($request->filled('tipus') && $request->input('tipus') !== 'all') {
+            $query->where('logs.tipus', $request->input('tipus'));
+        }
+        if ($request->filled('accio') && $request->input('accio') !== 'all') {
+            $query->where('logs.accio', $request->input('accio'));
+        }
+        if ($request->filled('entitat') && $request->input('entitat') !== 'all') {
+            $query->where('logs.entitat_afectada', $request->input('entitat'));
+        }
+        if ($request->filled('actor')) {
+            $q = '%' . strtolower($request->input('actor')) . '%';
+            $query->where(function ($w) use ($q) {
+                $w->whereRaw('LOWER(users.username) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(users.email) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(empleats.username) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(empleats.email) LIKE ?', [$q]);
+            });
+        }
     }
 
     protected function baseQuery()
