@@ -169,7 +169,7 @@ function ProductsSection({
                   image={getMainImage(product)}
                   category={product.categoria?.nom || "Sin categoría"}
                   description={product.descripcio || "Sin descripción"}
-                  title={product.nom || "Producto"}
+                  title={product.nom || "Objeto"}
                   userName={getUserName(product)}
                   userAvatar={getUserAvatar(product)}
                   ownerId={product.user?.id || product.propietari?.id}
@@ -192,7 +192,7 @@ function ProductsSection({
                   image={getMainImage(product)}
                   category={product.categoria?.nom || "Sin categoría"}
                   description={product.descripcio || "Sin descripción"}
-                  title={product.nom || "Producto"}
+                  title={product.nom || "Objeto"}
                   userName={getUserName(product)}
                   userAvatar={getUserAvatar(product)}
                   ownerId={product.user?.id || product.propietari?.id}

@@ -13,16 +13,14 @@ return new class extends Migration {
             $table->foreignId('usuari_1_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('usuari_2_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('objecte_id')->nullable()->constrained('objectes')->nullOnDelete();
+            $table->timestamp('usuari_1_hidden_at')->nullable();
+            $table->timestamp('usuari_2_hidden_at')->nullable();
             $table->timestamps();
 
-            // Una sola conversa per parell d'usuaris (independentment de l'objecte de context)
             $table->unique(['usuari_1_id', 'usuari_2_id']);
-
-            // Per ordenar el llistat per últim missatge fem servir updated_at com a fallback
             $table->index('updated_at');
         });
 
-        // Garanteix que sempre usuari_1_id < usuari_2_id (evita duplicats reverse)
         DB::statement('ALTER TABLE converses ADD CONSTRAINT chk_conversa_ordre CHECK (usuari_1_id < usuari_2_id)');
     }
 

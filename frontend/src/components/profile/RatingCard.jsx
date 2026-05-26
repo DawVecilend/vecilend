@@ -1,4 +1,3 @@
-import React from "react";
 
 /**
  * Targeta compacta del perfil amb un valor + label.
@@ -11,7 +10,7 @@ function RatingCard({ value, label, starred = false }) {
   return (
     <div className="bg-app-bg-card px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[110px]">
       <div className="flex items-center gap-1">
-        <span className="text-vecilend-dark-primary font-bold text-xl">{value ?? "-"}</span>
+        <span className="text-app-primary font-bold text-xl">{value ?? "-"}</span>
         {starred && value != null && (
           <span className="material-symbols-outlined icon-filled text-orange-500 text-sm">
             star

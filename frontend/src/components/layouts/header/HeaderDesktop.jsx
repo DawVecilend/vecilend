@@ -37,11 +37,11 @@ function HeaderDesktop() {
   const getNavClass = (path) => {
     const isActive =
       location.pathname === path ||
-      (path === "/how-it-works/renters" &&
+      (path === "/how-it-works/requesters" &&
         location.pathname.startsWith("/how-it-works"));
     return isActive
-      ? "text-vecilend-dark-primary border-b-2 border-vecilend-dark-primary font-bold p-1 text-sm tracking-tight"
-      : "text-app-text-secondary font-medium hover:text-vecilend-dark-primary transition-colors p-1 text-sm tracking-tight";
+      ? "text-app-primary border-b-2 border-app-primary font-bold p-1 text-sm tracking-tight"
+      : "text-app-text-secondary font-medium hover:text-app-primary transition-colors p-1 text-sm tracking-tight";
   };
 
   return (
@@ -52,8 +52,8 @@ function HeaderDesktop() {
         borderColor: "var(--color-app-header-border)",
       }}
     >
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-8">
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-6 py-4">
+        <div className="flex items-center gap-8 shrink-0">
           <Link to="/" className="flex items-center">
             <Logo className="h-[45px] w-[136px]" />
           </Link>
@@ -63,8 +63,8 @@ function HeaderDesktop() {
               Objetos
             </Link>
             <Link
-              to="/how-it-works/renters"
-              className={getNavClass("/how-it-works/renters")}
+              to="/how-it-works/requesters"
+              className={getNavClass("/how-it-works/requesters")}
             >
               ¿Cómo funciona?
             </Link>
@@ -74,15 +74,17 @@ function HeaderDesktop() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="hidden lg:flex flex-1 min-w-0 justify-center">
           <SearchBar />
+        </div>
 
+        <div className="flex items-center gap-4 shrink-0 ml-auto lg:ml-0">
           {user && (
             <Link
               to="/objects/create"
               aria-label="Publicar objeto"
               title="Publicar objeto"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] shadow-md transition-all hover:bg-vecilend-dark-primary-hover hover:text-white active:scale-95"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-app-primary text-[var(--color-app-success-on)] shadow-md transition-all hover:bg-app-primary-hover hover:text-white active:scale-95"
             >
               <span className="material-symbols-outlined text-[22px] font-bold">
                 add
@@ -142,7 +144,7 @@ function HeaderDesktop() {
                       <div className="flex flex-col divide-y divide-app-border">
                         <Link
                           to={`/profile/${user?.username}`}
-                          className="px-4 py-3 text-sm text-vecilend-dark-primary transition-colors hover:bg-app-bg-card-secondary"
+                          className="px-4 py-3 text-sm text-app-primary transition-colors hover:bg-app-bg-card-secondary"
                         >
                           <p className="py-2 text-base text-app-text">
                             <span>
@@ -153,25 +155,25 @@ function HeaderDesktop() {
                         </Link>
                         <Link
                           to="/orders"
-                          className="px-4 py-3 text-sm text-vecilend-dark-primary transition-colors hover:bg-app-bg-card-secondary"
+                          className="px-4 py-3 text-sm text-app-primary transition-colors hover:bg-app-bg-card-secondary"
                         >
                           Mis pedidos
                         </Link>
                         <Link
                           to="/favorites"
-                          className="px-4 py-3 text-sm text-vecilend-dark-primary transition-colors hover:bg-app-bg-card-secondary"
+                          className="px-4 py-3 text-sm text-app-primary transition-colors hover:bg-app-bg-card-secondary"
                         >
                           Mis favoritos
                         </Link>
                         <Link
                           to={`/settings/profile/${user?.username}`}
-                          className="flex gap-2 px-4 py-3 text-sm text-vecilend-dark-primary transition-colors hover:bg-app-bg-card-secondary"
+                          className="flex gap-2 px-4 py-3 text-sm text-app-primary transition-colors hover:bg-app-bg-card-secondary"
                         >
                           Ajustes
                         </Link>
                         <button
                           onClick={logout}
-                          className="w-full cursor-pointer px-4 py-3 text-left text-sm text-vecilend-dark-primary transition-colors hover:bg-[var(--color-app-danger)]/10 hover:text-[var(--color-app-danger)]"
+                          className="w-full cursor-pointer px-4 py-3 text-left text-sm text-app-primary transition-colors hover:bg-[var(--color-app-danger)]/10 hover:text-[var(--color-app-danger)]"
                         >
                           Cerrar sesión
                         </button>
@@ -185,14 +187,14 @@ function HeaderDesktop() {
             <>
               <Link
                 to="/login"
-                className="hidden px-4 py-2.5 text-sm font-bold text-app-text-secondary transition-colors hover:text-vecilend-dark-primary md:block"
+                className="hidden px-4 py-2.5 text-sm font-bold text-app-text-secondary transition-colors hover:text-app-primary md:block"
               >
                 Iniciar sesión
               </Link>
 
               <Link
                 to="/register"
-                className="hidden rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary-hover px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-vecilend-dark-primary/20 transition-transform active:scale-95 md:block"
+                className="hidden rounded-full bg-gradient-to-br from-app-primary to-app-primary-hover px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-app-primary/20 transition-transform active:scale-95 md:block"
               >
                 Registrarse
               </Link>

@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProfile, getUserObjects } from "../../services/profile";
@@ -13,6 +12,7 @@ import UserReviewsList from "../../components/profile/UserReviewsList";
 import { getReviewsEvolution } from "../../services/reviews";
 import { createChat } from "../../services/chats";
 import ReportModal from "../../components/elementos/ReportModal";
+import BtnBack from "../../components/elementos/BtnBack";
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -81,7 +81,7 @@ function ProfilePage() {
     );
 
     if (!productToUpdate) {
-      alert("No se ha encontrado el producto");
+      alert("No se ha encontrado el objeto");
       return;
     }
 
@@ -104,7 +104,7 @@ function ProfilePage() {
 
       alert(
         error.response?.data?.message ||
-          "No se ha podido cambiar la visibilidad del producto",
+          "No se ha podido cambiar la visibilidad del objeto",
       );
     }
   }
@@ -131,11 +131,11 @@ function ProfilePage() {
       setConfirmDeleteOpen(false);
       setProductToDelete(null);
     } catch (error) {
-      console.error("Error eliminando producto:", error);
+      console.error("Error eliminando objeto:", error);
 
       const message =
         error.response?.data?.message ||
-        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+        "No se ha podido eliminar el objeto. Inténtalo de nuevo.";
 
       setDeleteError(message);
     } finally {
@@ -176,7 +176,8 @@ function ProfilePage() {
 
   return (
     <div className="bg-app-bg text-app-text antialiased min-h-screen dark">
-      <main className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
+      <section className="pt-28 pb-12 px-4 max-w-7xl mx-auto space-y-24">
+        <div className="-mt-20 md:hidden"><BtnBack /></div>
         <section className="relative bg-app-bg-secondary rounded-xl p-8 md:p-12 overflow-hidden">
           <div className="relative flex flex-col md:flex-row gap-8 items-start">
             {/* ── Avatar ── */}
@@ -203,7 +204,7 @@ function ProfilePage() {
                   </p>
 
                   <div className="space-y-2">
-                    <h2 className="text-xl font-bold text-vecilend-dark-primary">
+                    <h2 className="text-xl font-bold text-app-primary">
                       Acerca de {profile?.nom}
                     </h2>
                     <p className="text-app-text-secondary leading-relaxed line-clamp-4 whitespace-pre-line">
@@ -251,7 +252,7 @@ function ProfilePage() {
                 {isOwnProfile ? (
                   <Link
                     to={`/settings/profile/${username}/editing`}
-                    className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-vecilend-dark-primary/25 active:scale-95 transition-all flex items-center gap-2"
+                    className="bg-gradient-to-br from-app-primary to-app-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-app-primary/25 active:scale-95 transition-all flex items-center gap-2"
                   >
                     <span className="material-symbols-outlined !text-xl">
                       edit
@@ -264,7 +265,7 @@ function ProfilePage() {
                       type="button"
                       onClick={handleContact}
                       disabled={contacting}
-                      className="bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-vecilend-dark-primary/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="bg-gradient-to-br from-app-primary to-app-primary text-[var(--color-app-success-on)] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-app-primary/25 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       <span className="material-symbols-outlined !text-xl">mail</span>
                       {contacting ? "Abriendo…" : `Contacta a ${profile?.nom}`}
@@ -316,7 +317,7 @@ function ProfilePage() {
             {latestObjects.length > 0 && (
               <Link
                 to={`/profile/${username}/objects`}
-                className="text-vecilend-dark-primary font-bold hover:underline flex items-center gap-1"
+                className="text-app-primary font-bold hover:underline flex items-center gap-1"
               >
                 Ver todos
               </Link>
@@ -325,7 +326,7 @@ function ProfilePage() {
 
           {loading ? (
             <div className="rounded-lg border border-app-border bg-app-bg-secondary p-10 text-center">
-              <p className="text-app-text-secondary">Cargando productos...</p>
+              <p className="text-app-text-secondary">Cargando objetos...</p>
             </div>
           ) : latestObjects.length === 0 ? (
             <div className="rounded-lg border border-app-border bg-app-bg-secondary p-10 text-center">
@@ -338,7 +339,7 @@ function ProfilePage() {
               {isOwnProfile && (
                 <Link
                   to="/objects/create"
-                  className="inline-block mt-4 bg-vecilend-dark-primary text-[var(--color-app-success-on)] px-6 py-2.5 rounded-full font-bold hover:bg-vecilend-dark-primary"
+                  className="inline-block mt-4 bg-app-primary text-[var(--color-app-success-on)] px-6 py-2.5 rounded-full font-bold hover:bg-app-primary"
                 >
                   Publicar mi primer objeto
                 </Link>
@@ -360,7 +361,7 @@ function ProfilePage() {
         </section>
 
         <UserReviewsList username={username} />
-      </main>
+      </section>
 
       <ConfirmDeleteModal
         open={confirmDeleteOpen}
@@ -372,8 +373,8 @@ function ProfilePage() {
           }
         }}
         onConfirm={handleConfirmDelete}
-        title="¿Eliminar producto?"
-        message={`Vas a eliminar "${productToDelete?.title || "este producto"}".`}
+        title="¿Eliminar objeto?"
+        message={`Vas a eliminar "${productToDelete?.title || "este objeto"}".`}
         description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
         confirmLabel="Sí, eliminar"
         busy={deleting}

@@ -41,7 +41,7 @@ export function ToastProvider({ children }) {
             className={
               "pointer-events-auto cursor-pointer flex items-center gap-3 px-4 py-3 rounded-xl border shadow-2xl backdrop-blur-md text-label font-bold animate-in fade-in slide-in-from-top-2 duration-300 " +
               (t.type === "success"
-                ? "bg-vecilend-dark-primary/20 border-vecilend-dark-primary/40 text-vecilend-dark-primary"
+                ? "bg-app-primary/20 border-app-primary/40 text-app-primary"
                 : t.type === "error"
                   ? "bg-red-500/20 border-red-500/40 text-red-300"
                   : "bg-app-bg-card border-app-border text-app-text")

@@ -14,7 +14,7 @@ function ReviewCard({ rev }) {
     : null;
 
   return (
-    <article className="bg-app-bg-card border-l-4 border-vecilend-dark-primary p-5 rounded-lg space-y-2">
+    <article className="bg-app-bg-card border-l-4 border-app-primary p-5 rounded-lg space-y-2">
       <div className="flex items-center gap-3">
         {rev.autor?.avatar_url ? (
           <img
@@ -26,18 +26,18 @@ function ReviewCard({ rev }) {
           <div className="w-10 h-10 rounded-full bg-app-neutral" />
         )}
         <div className="flex-1 min-w-0">
-          <h4 className="font-bold text-app-text truncate">
+          <h3 className="font-bold text-app-text truncate">
             {rev.autor?.username ? (
               <Link
                 to={`/profile/${rev.autor.username}`}
-                className="hover:text-vecilend-dark-primary transition-colors"
+                className="hover:text-app-primary transition-colors"
               >
                 {rev.autor.nom}
               </Link>
             ) : (
               rev.autor?.nom
             )}
-          </h4>
+          </h3>
           <Rating
             value={rev.puntuacio}
             readOnly
@@ -113,7 +113,7 @@ function ObjectReviewsSection({ valoracions = [] }) {
           <button
             type="button"
             onClick={() => setShown((s) => s + PER_PAGE)}
-            className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text transition-colors"
+            className="rounded-full bg-app-bg-card border border-app-border hover:border-app-primary px-8 py-3 text-body-base font-bold text-app-text transition-colors"
           >
             Ver más reseñas ({valoracions.length - shown} restantes)
           </button>

@@ -55,7 +55,7 @@ function UserObjectsPage() {
           title={
             isOwnProfile
               ? "Mis objetos publicados"
-              : `Todos los productos de ${userNom || username}`
+              : `Todos los objetos de ${userNom || username}`
           }
           products={objects}
           profile={true}

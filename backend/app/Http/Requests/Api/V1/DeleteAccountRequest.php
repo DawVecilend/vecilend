@@ -15,6 +15,12 @@ class DeleteAccountRequest extends FormRequest
 
     public function rules(): array
     {
+        $hasPassword = ! is_null($this->user()?->password);
+
+        if (! $hasPassword) {
+            return [];
+        }
+
         return [
             'password' => [
                 'required',

@@ -1,11 +1,13 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import backofficeApi from "../../services/backofficeApi";
+import Pagination from "../../components/admin/Pagination";
 import { useToast } from "../../contexts/ToastContext";
 import { useBackofficeAuth } from "../../contexts/BackofficeAuthContext";
 import { REPORT_MOTIUS } from "../../services/reports";
 
 const MOTIU_LABEL = Object.fromEntries(REPORT_MOTIUS.map((m) => [m.value, m.label]));
+const PER_PAGE = 20;
 
 function ResolveModal({ open, report, onClose, onResolved }) {
   const { showToast } = useToast();
@@ -98,13 +100,13 @@ function ResolveModal({ open, report, onClose, onResolved }) {
               <p className="text-xs text-app-text-secondary mb-1">Acciones a aplicar:</p>
               {report.usuari_reportat?.actiu !== false && (
                 <label className="flex items-center gap-2 text-sm text-app-text cursor-pointer">
-                  <input type="checkbox" checked={bloquearUsuari} onChange={(e) => setBloquearUsuari(e.target.checked)} className="cursor-pointer" />
+                  <input aria-label="Bloquear al usuario" type="checkbox" checked={bloquearUsuari} onChange={(e) => setBloquearUsuari(e.target.checked)} className="cursor-pointer" />
                   Bloquear al usuario reportado
                 </label>
               )}
               {report.objecte && (isAdmin || report.motiu === "objecte_inapropiat") && (
                 <label className="flex items-center gap-2 text-sm text-app-text cursor-pointer">
-                  <input type="checkbox" checked={eliminarObjecte} onChange={(e) => setEliminarObjecte(e.target.checked)} className="cursor-pointer" />
+                  <input aria-label="Eliminar el objeto reportado" type="checkbox" checked={eliminarObjecte} onChange={(e) => setEliminarObjecte(e.target.checked)} className="cursor-pointer" />
                   Eliminar el objeto referenciado
                 </label>
               )}
@@ -121,7 +123,7 @@ function ResolveModal({ open, report, onClose, onResolved }) {
             <label className="block text-sm font-medium text-app-text mb-1.5">
               Nota interna <span className="text-app-text-secondary font-normal">(opcional)</span>
             </label>
-            <textarea
+            <textarea aria-label="Nota interna (opcional)"
               value={nota}
               onChange={(e) => setNota(e.target.value)}
               rows={3}
@@ -167,22 +169,32 @@ function AdminReportsPage() {
   const [error, setError] = useState(null);
   const [filterEstat, setFilterEstat] = useState("pendent");
   const [filterMotiu, setFilterMotiu] = useState("all");
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState({ current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
   const [resolveTarget, setResolveTarget] = useState(null);
 
-  useEffect(() => {
-    backofficeApi.get("/backoffice/reports")
-      .then((res) => setReports(Array.isArray(res.data) ? res.data : res.data.data ?? []))
+  const fetchReports = useCallback(() => {
+    setLoading(true);
+    backofficeApi.get("/backoffice/reports", {
+      params: {
+        page,
+        per_page: PER_PAGE,
+        estat: filterEstat,
+        motiu: filterMotiu,
+      },
+    })
+      .then((res) => {
+        setReports(res.data.data ?? []);
+        setMeta(res.data.meta ?? { current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
+        setError(null);
+      })
       .catch(() => setError("No se han podido cargar los reportes."))
       .finally(() => setLoading(false));
-  }, []);
+  }, [page, filterEstat, filterMotiu]);
 
-  const filtered = useMemo(() => {
-    return reports.filter((r) => {
-      const matchEstat = filterEstat === "all" || r.estat === filterEstat;
-      const matchMotiu = filterMotiu === "all" || r.motiu === filterMotiu;
-      return matchEstat && matchMotiu;
-    });
-  }, [reports, filterEstat, filterMotiu]);
+  useEffect(() => { fetchReports(); }, [fetchReports]);
+
+  useEffect(() => { setPage(1); }, [filterEstat, filterMotiu]);
 
   const handleResolved = (updated) => {
     setReports((p) => p.map((r) => r.id === updated.id ? updated : r));
@@ -200,7 +212,7 @@ function AdminReportsPage() {
   const selectClass = "rounded-lg px-3 py-2 text-sm outline-none bg-app-neutral border border-app-border text-app-text cursor-pointer";
 
   return (
-    <div className="p-8 flex flex-col gap-6">
+    <div className="p-4 lg:p-8 flex flex-col gap-6">
       <ResolveModal
         open={!!resolveTarget}
         report={resolveTarget}
@@ -214,17 +226,17 @@ function AdminReportsPage() {
       </div>
 
       <div className="flex flex-wrap gap-3 items-center">
-        <select value={filterEstat} onChange={(e) => setFilterEstat(e.target.value)} className={selectClass}>
+        <select aria-label="Filtrar por estado" value={filterEstat} onChange={(e) => setFilterEstat(e.target.value)} className={selectClass}>
           <option value="all">Todos los estados</option>
           <option value="pendent">Pendientes</option>
           <option value="resolt">Resueltos</option>
           <option value="descartat">Descartados</option>
         </select>
-        <select value={filterMotiu} onChange={(e) => setFilterMotiu(e.target.value)} className={selectClass}>
+        <select aria-label="Filtrar por motivo" value={filterMotiu} onChange={(e) => setFilterMotiu(e.target.value)} className={selectClass}>
           <option value="all">Todos los motivos</option>
           {REPORT_MOTIUS.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
         </select>
-        <span className="self-center text-sm text-app-text-secondary ml-auto">{filtered.length} resultados</span>
+        <span className="self-center text-sm text-app-text-secondary ml-auto">{meta.total} resultados</span>
       </div>
 
       {error && (
@@ -237,66 +249,76 @@ function AdminReportsPage() {
         <div className="flex items-center justify-center h-48">
           <div className="h-8 w-8 rounded-full border-4 border-app-border border-t-app-primary animate-spin" />
         </div>
-      ) : filtered.length === 0 ? (
+      ) : reports.length === 0 ? (
         <div className="rounded-xl border border-app-border bg-app-bg-card p-10 text-center text-app-text-secondary text-sm">
           No hay reportes con estos filtros.
         </div>
       ) : (
-        <div className="rounded-xl border border-app-border overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-app-neutral border-b border-app-border">
-                {["#", "Motivo", "Reportador", "Reportado", "Objeto", "Estado", "Fecha", "Acciones"].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-app-text-secondary">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((r, i) => (
-                <tr key={r.id} className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}>
-                  <td className="px-4 py-3 text-xs font-mono text-app-text-secondary">{r.id}</td>
-                  <td className="px-4 py-3 text-xs text-app-text">{MOTIU_LABEL[r.motiu] ?? r.motiu}</td>
-                  <td className="px-4 py-3 text-xs">
-                    {r.reportador ? (
-                      <Link to={`/profile/${r.reportador.username}`} className="text-app-primary hover:underline">
-                        @{r.reportador.username}
-                      </Link>
-                    ) : "—"}
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    {r.usuari_reportat ? (
-                      <Link to={`/profile/${r.usuari_reportat.username}`} className="text-app-primary hover:underline">
-                        @{r.usuari_reportat.username}
-                      </Link>
-                    ) : "—"}
-                  </td>
-                  <td className="px-4 py-3 text-xs">
-                    {r.objecte ? (
-                      <Link to={r.objecte.slug ? `/objects/${r.objecte.id}/${r.objecte.slug}` : `/objects/${r.objecte.id}`} className="text-app-primary hover:underline">
-                        {r.objecte.nom}
-                      </Link>
-                    ) : "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <EstatBadge estat={r.estat} />
-                  </td>
-                  <td className="px-4 py-3 text-xs text-app-text-secondary">{formatDate(r.created_at)}</td>
-                  <td className="px-4 py-3">
-                    {r.estat === "pendent" ? (
-                      <button onClick={() => setResolveTarget(r)} className="text-xs px-3 py-1 rounded-lg bg-app-primary/10 text-app-primary hover:bg-app-primary/20">
-                        Gestionar
-                      </button>
-                    ) : (
-                      <span className="text-xs text-app-text-secondary">
-                        {r.revisor ? `por @${r.revisor.username}` : "—"}
-                      </span>
-                    )}
-                  </td>
+        <>
+          <div className="rounded-xl border border-app-border overflow-x-auto">
+            <table className="w-full min-w-[700px] text-sm">
+              <thead>
+                <tr className="bg-app-neutral border-b border-app-border">
+                  {["#", "Motivo", "Reportador", "Reportado", "Objeto", "Estado", "Fecha", "Acciones"].map((h) => (
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-app-text-secondary">{h}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {reports.map((r, i) => (
+                  <tr key={r.id} className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}>
+                    <td className="px-4 py-3 text-xs font-mono text-app-text-secondary">{r.id}</td>
+                    <td className="px-4 py-3 text-xs text-app-text">{MOTIU_LABEL[r.motiu] ?? r.motiu}</td>
+                    <td className="px-4 py-3 text-xs">
+                      {r.reportador ? (
+                        <Link to={`/profile/${r.reportador.username}`} className="text-app-primary hover:underline">
+                          @{r.reportador.username}
+                        </Link>
+                      ) : "—"}
+                    </td>
+                    <td className="px-4 py-3 text-xs">
+                      {r.usuari_reportat ? (
+                        <Link to={`/profile/${r.usuari_reportat.username}`} className="text-app-primary hover:underline">
+                          @{r.usuari_reportat.username}
+                        </Link>
+                      ) : "—"}
+                    </td>
+                    <td className="px-4 py-3 text-xs">
+                      {r.objecte ? (
+                        <Link to={r.objecte.slug ? `/objects/${r.objecte.id}/${r.objecte.slug}` : `/objects/${r.objecte.id}`} className="text-app-primary hover:underline">
+                          {r.objecte.nom}
+                        </Link>
+                      ) : "—"}
+                    </td>
+                    <td className="px-4 py-3">
+                      <EstatBadge estat={r.estat} />
+                    </td>
+                    <td className="px-4 py-3 text-xs text-app-text-secondary">{formatDate(r.created_at)}</td>
+                    <td className="px-4 py-3">
+                      {r.estat === "pendent" ? (
+                        <button onClick={() => setResolveTarget(r)} className="text-xs px-3 py-1 rounded-lg bg-app-primary/10 text-app-primary hover:bg-app-primary/20">
+                          Gestionar
+                        </button>
+                      ) : (
+                        <span className="text-xs text-app-text-secondary">
+                          {r.revisor ? `por @${r.revisor.username}` : "—"}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <Pagination
+            currentPage={meta.current_page}
+            lastPage={meta.last_page}
+            perPage={meta.per_page}
+            total={meta.total}
+            onPageChange={setPage}
+          />
+        </>
       )}
     </div>
   );

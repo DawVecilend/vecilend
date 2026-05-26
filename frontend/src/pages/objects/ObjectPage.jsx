@@ -8,7 +8,10 @@ import {
 } from "react-router-dom";
 
 import { getProduct, deleteObject } from "../../services/objects";
-import { createTransaction, getTransactions } from "../../services/transactions";
+import {
+  createTransaction,
+  getTransactions,
+} from "../../services/transactions";
 import { createChat } from "../../services/chats";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -23,6 +26,7 @@ import NavCategori from "../../components/elementos/NavCategori";
 import DetailsPriceCardProduct from "../../components/elementos/DetailsPriceCard";
 import ObjectReviewsSection from "../../components/elementos/ObjectReviewsSection";
 import ReportModal from "../../components/elementos/ReportModal";
+import FavoriteButton from "../../components/elementos/FavoriteButton";
 
 import { cldTransform } from "../../utils/cloudinary";
 import NotFoundPage from "../main/NotFoundPage";
@@ -114,7 +118,7 @@ function ObjectPage() {
         setMainImage(data?.imatges?.[0]?.url || null);
       })
       .catch((err) => {
-        console.error("Error cargando producto:", err);
+        console.error("Error cargando objeto:", err);
 
         if (!cancelled) {
           setProduct(null);
@@ -315,7 +319,7 @@ function ObjectPage() {
     return (
       <div className="pt-24 flex justify-center">
         <div
-          className="h-10 w-10 rounded-full border-4 border-app-border border-t-vecilend-dark-primary animate-spin"
+          className="h-10 w-10 rounded-full border-4 border-app-border border-t-app-primary animate-spin"
           role="status"
           aria-label="Cargando"
         />
@@ -345,7 +349,7 @@ function ObjectPage() {
     } catch (err) {
       const msg =
         err.response?.data?.message ||
-        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+        "No se ha podido eliminar el objeto. Inténtalo de nuevo.";
 
       setDeleteError(msg);
     } finally {
@@ -358,7 +362,7 @@ function ObjectPage() {
   if (isOwnObject) {
     actionBox = (
       <div className="rounded-2xl bg-app-card border border-app-border p-6 text-center">
-        <span className="material-symbols-outlined text-vecilend-dark-primary text-4xl mb-2 inline-block">
+        <span className="material-symbols-outlined text-app-primary text-4xl mb-2 inline-block">
           inventory_2
         </span>
 
@@ -373,7 +377,7 @@ function ObjectPage() {
         <div className="flex items-center justify-center gap-3 flex-wrap">
           <Link
             to={`/objects/${product.id}/edit`}
-            className="inline-flex items-center gap-2 rounded-full bg-vecilend-dark-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 hover:opacity-90 transition cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-full bg-app-primary px-5 py-2 text-label font-bold text-[var(--color-app-success-on)] active:scale-95 hover:opacity-90 transition cursor-pointer"
           >
             <span className="material-symbols-outlined text-base">edit</span>
             Editar
@@ -411,9 +415,9 @@ function ObjectPage() {
     );
   } else if (hasPendingRequest) {
     actionBox = (
-      <div className="rounded-2xl bg-app-card border border-vecilend-dark-primary/40 p-6">
+      <div className="rounded-2xl bg-app-card border border-app-primary/40 p-6">
         <div className="flex items-start gap-3 mb-4">
-          <span className="material-symbols-outlined text-vecilend-dark-primary text-2xl shrink-0">
+          <span className="material-symbols-outlined text-app-primary text-2xl shrink-0">
             schedule
           </span>
 
@@ -432,7 +436,7 @@ function ObjectPage() {
           <button
             type="button"
             onClick={() => openChatWith(product.propietari?.id)}
-            className="block w-full text-center rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] transition-transform active:scale-95 flex items-center justify-center gap-2"
+            className="block w-full text-center rounded-full bg-gradient-to-br from-app-primary to-app-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] transition-transform active:scale-95 flex items-center justify-center gap-2"
           >
             <span className="material-symbols-outlined !text-xl">
               chat_bubble
@@ -474,7 +478,7 @@ function ObjectPage() {
               Total ({dies} día{dies === 1 ? "" : "s"})
             </span>
 
-            <span className="text-h3-desktop font-bold text-vecilend-dark-primary font-body">
+            <span className="text-h3-desktop font-bold text-app-primary font-body">
               {preuTotal.toFixed(2)}€
             </span>
           </div>
@@ -486,20 +490,20 @@ function ObjectPage() {
               Duración: {dies} día{dies === 1 ? "" : "s"}
             </span>
 
-            <span className="text-label font-bold text-vecilend-dark-secondary font-body">
+            <span className="text-label font-bold text-app-secondary font-body">
               Sin coste
             </span>
           </div>
         )}
 
         {!needsDates && (
-          <textarea
+          <textarea aria-label="Mensaje al propietario"
             value={missatge}
             onChange={(e) => setMissatge(e.target.value)}
             placeholder="Mensaje acerca de la solicitud (opcional)"
             rows={4}
             maxLength={1000}
-            className="w-full rounded-xl bg-app-neutral border border-app-border p-3 text-body-base text-app-text font-body focus:outline-none focus:ring-2 focus:ring-vecilend-dark-primary"
+            className="w-full rounded-xl bg-app-neutral border border-app-border p-3 text-body-base text-app-text font-body focus:outline-none focus:ring-2 focus:ring-app-primary"
           />
         )}
 
@@ -525,7 +529,7 @@ function ObjectPage() {
             "w-full rounded-full px-6 py-3 text-body-base font-bold transition-transform active:scale-95 disabled:cursor-not-allowed cursor-pointer " +
             (needsDates
               ? "bg-app-card border border-app-border text-app-text-secondary disabled:opacity-100"
-              : "bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary text-[var(--color-app-success-on)] disabled:opacity-50")
+              : "bg-gradient-to-br from-app-primary to-app-primary text-[var(--color-app-success-on)] disabled:opacity-50")
           }
         >
           {submitting
@@ -542,20 +546,31 @@ function ObjectPage() {
     <section className="mx-auto w-full max-w-[1380px] px-4 md:px-10 pt-6 pb-32">
       <BtnBack />
 
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="flex flex-col gap-6">
-          <div>
-            <img
-              src={
-                cldTransform(mainImage, "detail") ||
-                "/assets/product1-image.jpg"
-              }
-              alt={product.nom}
-              className="w-full h-[280px] md:h-[428px] object-cover rounded-2xl"
-            />
+      <div className="mt-6 flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-8">
+        <div className="contents lg:flex lg:flex-col lg:gap-6">
+          <div className="order-2 lg:order-none">
+            <div className="relative">
+              <img
+                src={
+                  cldTransform(mainImage, "detail") ||
+                  "/assets/product1-image.jpg"
+                }
+                alt={product.nom}
+                className="w-full h-[280px] md:h-[428px] object-cover rounded-2xl"
+              />
+
+              {!isOwnObject && (
+                <FavoriteButton
+                  objectId={product.id}
+                  ownerId={product.propietari?.id}
+                  initialIsFavorite={!!product.favorit}
+                  className="absolute top-3 right-3"
+                />
+              )}
+            </div>
 
             {images.length > 1 && (
-              <div className="flex justify-center gap-2 mt-2 overflow-x-auto pb-1">
+              <div className="flex justify-center gap-2 mt-2 overflow-x-auto py-1.5 px-1">
                 {images.map((img, idx) => (
                   <button
                     key={idx}
@@ -563,7 +578,7 @@ function ObjectPage() {
                     onClick={() => setMainImage(img)}
                     className={`shrink-0 rounded-lg transition ${
                       mainImage === img
-                        ? "ring-2 ring-vecilend-dark-primary"
+                        ? "ring-2 ring-offset-2 ring-offset-app-bg ring-app-primary"
                         : "opacity-60 hover:opacity-100"
                     }`}
                     aria-label={`Imagen ${idx + 1}`}
@@ -580,40 +595,46 @@ function ObjectPage() {
           </div>
 
           {propietari && (
-            <UserCard
-              user={propietari}
-              profileHref={`/profile/${propietari.username}`}
-              action={
-                !isOwnObject && (
-                  <button
-                    type="button"
-                    onClick={openChatAboutObject}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-vecilend-dark-primary/15 hover:bg-vecilend-dark-primary/25 border border-vecilend-dark-primary/40 px-3 py-2 text-label font-bold text-vecilend-dark-primary active:scale-95 transition"
-                    title="Consultar al propietario sobre este objeto"
-                  >
-                    <span className="material-symbols-outlined text-base leading-none">
-                      chat_bubble
-                    </span>
-                    <span>Consultar sobre el objeto</span>
-                  </button>
-                )
-              }
-            />
+            <div className="order-6 lg:order-none">
+              <UserCard
+                user={propietari}
+                profileHref={`/profile/${propietari.username}`}
+                action={
+                  !isOwnObject && (
+                    <button
+                      type="button"
+                      onClick={openChatAboutObject}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-app-primary/15 hover:bg-app-primary/25 border border-app-primary/40 px-3 py-2 text-label font-bold text-app-primary active:scale-95 transition w-full md:w-auto justify-center md:justify-start"
+                      title="Consultar al propietario sobre este objeto"
+                    >
+                      <span className="material-symbols-outlined text-base leading-none">
+                        chat_bubble
+                      </span>
+                      <span>Consultar sobre el objeto</span>
+                    </button>
+                  )
+                }
+              />
+            </div>
           )}
 
           {!isOwnObject && isAuthenticated && product?.propietari && (
-            <button
-              type="button"
-              onClick={() => setReportOpen(true)}
-              className="self-start inline-flex items-center gap-1.5 text-xs text-app-text-secondary hover:text-red-400 transition-colors"
-            >
-              <span className="material-symbols-outlined text-base">flag</span>
-              Reportar objeto o usuario
-            </button>
+            <div className="order-7 lg:order-none -mt-4 lg:mt-0 flex justify-center lg:block">
+              <button
+                type="button"
+                onClick={() => setReportOpen(true)}
+                className="inline-flex items-center gap-1.5 text-xs text-app-text-secondary hover:text-red-400 transition-colors"
+              >
+                <span className="material-symbols-outlined text-base">
+                  flag
+                </span>
+                Reportar objeto o usuario
+              </button>
+            </div>
           )}
 
           {product.ubicacio && (
-            <div>
+            <div className="order-8 lg:order-none">
               <h2 className="text-app-text text-h3-desktop font-heading mb-3">
                 {searchCenter
                   ? "Ubicación y tu zona de búsqueda"
@@ -630,16 +651,18 @@ function ObjectPage() {
           )}
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="contents lg:flex lg:flex-col lg:gap-6">
           {(product.categoria || product.subcategoria) && (
-            <NavCategori
-              mainCategory={product.categoria}
-              subCategory={product.subcategoria}
-            />
+            <div className="order-1 lg:order-none">
+              <NavCategori
+                mainCategory={product.categoria}
+                subCategory={product.subcategoria}
+              />
+            </div>
           )}
 
-          <div className="space-y-2">
-            <h1 className="text-app-text text-h1-mobile lg:text-h1-desktop font-heading">
+          <div className="order-3 lg:order-none space-y-2">
+            <h1 className="text-app-text text-[20px] sm:text-[24px] lg:text-h1-desktop font-heading break-words leading-tight">
               {product.nom}
             </h1>
 
@@ -674,14 +697,14 @@ function ObjectPage() {
             )}
           </div>
 
-          <div>
+          <div className="order-4 lg:order-none">
             <p className="text-app-text-secondary text-body-base font-body whitespace-pre-line">
               {product.descripcio}
             </p>
 
             {product.tipus === "lloguer" && product.preu_diari ? (
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-h2-desktop font-bold text-vecilend-dark-primary font-heading">
+                <span className="text-h2-desktop font-bold text-app-primary font-heading">
                   {Number(product.preu_diari).toFixed(2)}€
                 </span>
 
@@ -691,18 +714,18 @@ function ObjectPage() {
               </div>
             ) : (
               <div className="mt-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-vecilend-dark-secondary">
+                <span className="material-symbols-outlined text-app-secondary shrink-0">
                   volunteer_activism
                 </span>
 
-                <span className="text-h2-desktop font-bold text-vecilend-dark-secondary font-heading">
+                <span className="text-h3-desktop md:text-h2-desktop font-bold text-app-secondary font-heading whitespace-nowrap">
                   Préstamo gratuito
                 </span>
               </div>
             )}
           </div>
 
-          {actionBox}
+          <div className="order-5 lg:order-none">{actionBox}</div>
         </div>
       </div>
 
@@ -716,7 +739,7 @@ function ObjectPage() {
           }
         }}
         onConfirm={handleConfirmDelete}
-        title="¿Eliminar producto?"
+        title="¿Eliminar objeto?"
         message={`Vas a eliminar "${product.nom}".`}
         description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
         confirmLabel="Sí, eliminar"

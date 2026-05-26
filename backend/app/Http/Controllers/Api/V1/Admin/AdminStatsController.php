@@ -41,7 +41,7 @@ class AdminStatsController extends Controller
                 ->where('last_seen_at', '>=', now()->subMinutes(5))
                 ->count(),
             'total_objects'      => Objecte::count(),
-            'total_transactions' => Transaccio::where('estat', '!=', 'cancelada')->count(),
+            'total_transactions' => Transaccio::where('estat', '!=', 'cancellat')->count(),
             'pending_reports'    => \App\Models\Report::where('estat', 'pendent')->count(),
         ];
     }
@@ -59,7 +59,7 @@ class AdminStatsController extends Controller
             ->join('solicituds', 'transaccions.solicitud_id', '=', 'solicituds.id')
             ->join('objectes', 'solicituds.objecte_id', '=', 'objectes.id')
             ->join('categories', 'objectes.categoria_id', '=', 'categories.id')
-            ->where('transaccions.estat', '!=', 'cancelada')
+            ->where('transaccions.estat', '!=', 'cancellat')
             ->groupBy('categories.id', 'categories.nom')
             ->orderBy('count', 'desc')
             ->limit(5)
@@ -76,7 +76,7 @@ class AdminStatsController extends Controller
     private function popularObjetsInCategory($categoryId) {
         return Objecte::where('categoria_id', $categoryId)
             ->withCount(['transaccions' => function ($query) {
-                $query->where('transaccions.estat', '!=', 'cancelada');
+                $query->where('transaccions.estat', '!=', 'cancellat');
             }])
             ->orderBy('transaccions_count', 'desc')
             ->limit(5)
@@ -91,13 +91,13 @@ class AdminStatsController extends Controller
     private function buildTrends(string $dateFormat, string $periodKey, string $subtractMethod, int $subtractValue)
     {
         return Transaccio::selectRaw("TO_CHAR(created_at, '{$dateFormat}') as period, COUNT(*) as count")
-            ->where('estat', '!=', 'cancelada')
+            ->where('estat', '!=', 'cancellat')
             ->where('created_at', '>=', now()->{$subtractMethod}($subtractValue))
             ->groupBy('period')
             ->orderBy('period')
             ->get()
             ->map(function ($item) use ($dateFormat, $periodKey) {
-                $transactions = Transaccio::where('estat', '!=', 'cancelada')
+                $transactions = Transaccio::where('estat', '!=', 'cancellat')
                     ->whereRaw("TO_CHAR(created_at, '{$dateFormat}') = ?", [$item->period])
                     ->with(['solicitud' => function ($query) {
                         $query->with('objecte:id,nom,preu_diari', 'solicitant:id,nom,username', 'objecte.user:id,nom,username');

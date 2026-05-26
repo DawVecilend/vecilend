@@ -25,13 +25,13 @@ function PasswordRequirements({ password = "" }) {
             key={req.id}
             className={
               "flex items-center gap-2 text-xs font-body transition-colors " +
-              (ok ? "text-vecilend-dark-primary" : "text-app-text-secondary")
+              (ok ? "text-app-primary" : "text-app-text-secondary")
             }
           >
             <span
               className={
                 "material-symbols-outlined text-base " +
-                (ok ? "text-vecilend-dark-primary" : "text-app-text-secondary opacity-60")
+                (ok ? "text-app-primary" : "text-app-text-secondary opacity-60")
               }
               style={{ fontVariationSettings: ok ? "'FILL' 1" : undefined }}
             >

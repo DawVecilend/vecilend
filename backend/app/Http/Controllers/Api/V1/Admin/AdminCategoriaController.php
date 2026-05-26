@@ -14,11 +14,18 @@ use Illuminate\Support\Facades\DB;
 class AdminCategoriaController extends Controller {
 
     public function index(Request $request) {
-        $categories = Categoria::with(['subcategories' => function ($query) {
-            $query->orderBy('nom');
-        }])->withCount(['objectes', 'subcategories'])->orderBy('nom')->get();
+        $request->validate([
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'page'     => 'nullable|integer|min:1',
+        ]);
 
-        return CategoriaResource::collection($categories);
+        $perPage = (int) $request->input('per_page', 20);
+
+        $query = Categoria::with(['subcategories' => function ($query) {
+            $query->orderBy('nom');
+        }])->withCount(['objectes', 'subcategories'])->orderBy('nom');
+
+        return CategoriaResource::collection($query->paginate($perPage));
     }
 
     public function show(Request $request, $id) {
@@ -83,13 +90,15 @@ class AdminCategoriaController extends Controller {
 
     protected function logAdminAction(Request $request, string $action, Categoria $category, array $details = []): void {
         DB::table('logs')->insert([
-            'user_id' => $request->user()->id,
+            'user_id'    => null,
+            'empleat_id' => $request->user()->id,
             'tipus' => 'admin',
             'accio' => "categoria_{$action}",
             'detall' => json_encode($details),
             'entitat_afectada' => 'categoria',
             'id_entitat_afectada' => $category->id,
             'ip' => $request->ip(),
+            'created_at' => now(),
         ]);
     }
 }

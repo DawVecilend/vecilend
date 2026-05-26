@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BtnBack from "../../components/elementos/BtnBack";
 import { getCategories } from "../../services/categories";
-import { getProduct, updateObject, deleteObject, setMainImage as setMainImageApi, } from "../../services/objects";
+import {
+  getProduct,
+  updateObject,
+  deleteObject,
+  setMainImage as setMainImageApi,
+} from "../../services/objects";
 import { mapCategories } from "../../mappers/categoryMapper";
 import { cldTransform } from "../../utils/cloudinary";
 import ObjectLocationPicker from "../../components/map/ObjectLocationPicker";
 import ConfirmDeleteModal from "../../components/elementos/ConfirmDeleteModal";
-
 
 function EditObjectPage() {
   const { id } = useParams();
@@ -96,8 +100,8 @@ function EditObjectPage() {
 
         setExistingImages(product.imatges || []);
       } catch (error) {
-        console.error("Error cargando producto:", error);
-        setErrorMessage("No se ha podido cargar el producto");
+        console.error("Error cargando objeto:", error);
+        setErrorMessage("No se ha podido cargar el objeto");
       } finally {
         setLoadingPage(false);
         setLoadingCategories(false);
@@ -187,7 +191,7 @@ function EditObjectPage() {
 
       case "images":
         if (currentTotalImages <= 0) {
-          return "El producto debe tener al menos una imagen";
+          return "El objeto debe tener al menos una imagen";
         }
         return "";
 
@@ -395,7 +399,7 @@ function EditObjectPage() {
     } catch (error) {
       const message =
         error.response?.data?.message ||
-        "No se ha podido eliminar el producto. Inténtalo de nuevo.";
+        "No se ha podido eliminar el objeto. Inténtalo de nuevo.";
 
       setDeleteError(message);
     } finally {
@@ -447,14 +451,14 @@ function EditObjectPage() {
 
       await updateObject(id, formData);
 
-      setSuccessMessage("Producto actualizado correctamente");
+      setSuccessMessage("Objeto actualizado correctamente");
       setErrorMessage("");
 
       setTimeout(() => {
         navigate(`/objects/${id}`);
       }, 1000);
     } catch (error) {
-      console.error("Error actualizando producto:", error);
+      console.error("Error actualizando objeto:", error);
 
       if (error.response?.status === 422 && error.response.data?.errors) {
         const validationErrors = error.response.data.errors;
@@ -463,7 +467,7 @@ function EditObjectPage() {
       } else {
         setErrorMessage(
           error.response?.data?.message ||
-            "No se ha podido actualizar el producto",
+            "No se ha podido actualizar el objeto",
         );
       }
     } finally {
@@ -474,19 +478,21 @@ function EditObjectPage() {
   if (loadingPage) {
     return (
       <>
-        <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
-          <BtnBack />
+        <div className="mx-auto flex w-full max-w-[1380px] items-center gap-4 px-10 pt-6">
+          <div className="flex-1 flex justify-start">
+            <BtnBack />
+          </div>
 
-          <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px]">
-            Editar producto
+          <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px] text-center">
+            Editar objeto
           </h1>
 
-          <div className="w-[90px]" />
+          <div className="flex-1" />
         </div>
 
         <section className="min-h-screen bg-app-bg px-4 pb-16 pt-6 text-app-text md:px-6">
           <div className="mx-auto w-full max-w-4xl rounded-[24px] border border-app-border bg-app-bg-card p-8">
-            <p className="text-app-text-secondary">Cargando producto...</p>
+            <p className="text-app-text-secondary">Cargando objeto...</p>
           </div>
         </section>
       </>
@@ -495,14 +501,16 @@ function EditObjectPage() {
 
   return (
     <>
-      <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
-        <BtnBack />
+      <div className="mx-auto flex w-full max-w-[1380px] items-center gap-4 px-10 pt-6">
+        <div className="flex-1 flex justify-start">
+          <BtnBack />
+        </div>
 
-        <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px]">
-          Editar producto
+        <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px] text-center">
+          Editar objeto
         </h1>
 
-        <div className="w-[90px]" />
+        <div className="flex-1" />
       </div>
 
       <section className="min-h-screen bg-app-bg px-4 pb-16 pt-6 text-app-text md:px-6">
@@ -511,7 +519,7 @@ function EditObjectPage() {
             <div className="rounded-[24px] border border-dashed border-app-border bg-app-bg px-6 py-10 md:px-10 md:py-12">
               <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-6 font-body text-[16px] text-app-text">
-                  Imágenes del producto
+                  Imágenes del objeto
                 </p>
 
                 <div className="flex w-full flex-wrap items-center justify-center gap-4">
@@ -525,7 +533,7 @@ function EditObjectPage() {
 
                       {/* Indicador "Principal" */}
                       {image.ordre === 0 && (
-                        <span className="absolute top-2 left-2 z-10 bg-vecilend-dark-primary text-app-text text-[9px] font-bold px-2 py-0.5 rounded-full shadow pointer-events-none">
+                        <span className="absolute top-2 left-2 z-10 bg-app-primary text-app-text text-[9px] font-bold px-2 py-0.5 rounded-full shadow pointer-events-none">
                           Principal
                         </span>
                       )}
@@ -545,7 +553,7 @@ function EditObjectPage() {
                           <button
                             type="button"
                             onClick={() => handleSetMainImage(image.id)}
-                            className="text-[10px] font-bold rounded-full bg-vecilend-dark-primary text-app-text px-3 py-1 hover:bg-vecilend-dark-primary-hover active:scale-95 transition shadow"
+                            className="text-[10px] font-bold rounded-full bg-app-primary text-app-text px-3 py-1 hover:bg-app-primary-hover active:scale-95 transition shadow"
                           >
                             Hacer principal
                           </button>
@@ -591,7 +599,7 @@ function EditObjectPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-vecilend-dark-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-vecilend-dark-primary-hover"
+                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-app-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-app-primary-hover"
                 >
                   <img
                     src="/assets/icons/add-photo-icon.svg"
@@ -638,9 +646,9 @@ function EditObjectPage() {
                       tipus: "lloguer",
                     }))
                   }
-                  className={`flex h-[56px] items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  className={`flex h-[56px] px-3 items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "lloguer"
-                      ? "bg-vecilend-dark-primary text-app-text"
+                      ? "bg-app-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
@@ -657,9 +665,9 @@ function EditObjectPage() {
                       pricePerDay: "",
                     }))
                   }
-                  className={`flex h-[56px] items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  className={`flex h-[56px] px-3 items-center justify-center gap-2 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "prestec"
-                      ? "bg-vecilend-dark-primary text-app-text"
+                      ? "bg-app-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
@@ -682,12 +690,14 @@ function EditObjectPage() {
                 htmlFor="name"
                 className="mb-3 block font-heading text-[20px] font-semibold text-app-text"
               >
-                Nombre del producto
+                Nombre del objeto
               </label>
 
               <div
                 className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
-                  fieldErrors.name ? "border border-[var(--color-app-danger)]" : ""
+                  fieldErrors.name
+                    ? "border border-[var(--color-app-danger)]"
+                    : ""
                 }`}
               >
                 <img
@@ -703,7 +713,7 @@ function EditObjectPage() {
                   autoComplete="off"
                   value={form.name}
                   onChange={handleChange}
-                  placeholder="Introducir el nombre del producto"
+                  placeholder="Nombre del objeto"
                   className="h-full w-full bg-transparent font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--color-app-text)] [&:-webkit-autofill]:[caret-color:var(--color-app-text)] [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:focus]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:hover]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset]"
                 />
               </div>
@@ -726,7 +736,9 @@ function EditObjectPage() {
 
                 <div
                   className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
-                    fieldErrors.pricePerDay ? "border border-[var(--color-app-danger)]" : ""
+                    fieldErrors.pricePerDay
+                      ? "border border-[var(--color-app-danger)]"
+                      : ""
                   }`}
                 >
                   <span className="text-[28px] leading-none text-app-text-secondary">
@@ -768,9 +780,11 @@ function EditObjectPage() {
                 rows="5"
                 value={form.description}
                 onChange={handleChange}
-                placeholder="Describe los detalles y características del producto"
+                placeholder="Describe los detalles y características del objeto"
                 className={`w-full rounded-[16px] bg-app-bg-card px-4 py-4 font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none ${
-                  fieldErrors.description ? "border border-[var(--color-app-danger)]" : ""
+                  fieldErrors.description
+                    ? "border border-[var(--color-app-danger)]"
+                    : ""
                 }`}
               />
 
@@ -793,7 +807,9 @@ function EditObjectPage() {
                     onClick={() => setOpenCategories(!openCategories)}
                     disabled={loadingCategories}
                     className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-app-bg-card px-4 font-body text-[16px] text-app-text transition hover:bg-app-bg-card disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.category ? "border border-[var(--color-app-danger)]" : ""
+                      fieldErrors.category
+                        ? "border border-[var(--color-app-danger)]"
+                        : ""
                     }`}
                   >
                     {loadingCategories ? (
@@ -804,7 +820,9 @@ function EditObjectPage() {
                     ) : (
                       <span
                         className={
-                          selectedCategory ? "text-app-text" : "text-app-text-secondary"
+                          selectedCategory
+                            ? "text-app-text"
+                            : "text-app-text-secondary"
                         }
                       >
                         {selectedCategory
@@ -846,7 +864,7 @@ function EditObjectPage() {
                             onClick={() => handleSelectCategory(category.id)}
                             className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                               isActive
-                                ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                ? "bg-app-primary-hover/20 text-app-primary"
                                 : "text-app-text hover:bg-app-neutral"
                             }`}
                           >
@@ -876,7 +894,9 @@ function EditObjectPage() {
                     onClick={() => setOpenSubcategories(!openSubcategories)}
                     disabled={loadingCategories || !selectedCategory}
                     className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-app-bg-card px-4 font-body text-[16px] text-app-text transition hover:bg-app-bg-card disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.subcategory ? "border border-[var(--color-app-danger)]" : ""
+                      fieldErrors.subcategory
+                        ? "border border-[var(--color-app-danger)]"
+                        : ""
                     }`}
                   >
                     {loadingCategories ? (
@@ -887,7 +907,9 @@ function EditObjectPage() {
                     ) : (
                       <span
                         className={
-                          selectedSubcategory ? "text-app-text" : "text-app-text-secondary"
+                          selectedSubcategory
+                            ? "text-app-text"
+                            : "text-app-text-secondary"
                         }
                       >
                         {selectedSubcategory
@@ -934,7 +956,7 @@ function EditObjectPage() {
                               }
                               className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                                 isActive
-                                  ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                  ? "bg-app-primary-hover/20 text-app-primary"
                                   : "text-app-text hover:bg-app-neutral"
                               }`}
                             >
@@ -1014,7 +1036,7 @@ function EditObjectPage() {
                 <button
                   type="submit"
                   disabled={loadingSubmit}
-                  className="rounded-[14px] bg-vecilend-dark-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-vecilend-dark-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
+                  className="rounded-[14px] bg-app-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-app-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {loadingSubmit ? "Guardando..." : "Guardar cambios"}
                 </button>
@@ -1022,7 +1044,7 @@ function EditObjectPage() {
 
               <div className="flex items-center">
                 {successMessage && (
-                  <div className="flex w-fit items-center gap-2 rounded-lg border border-vecilend-dark-primary/50 bg-vecilend-dark-primary/10 px-4 py-2 text-vecilend-dark-primary animate-pulse">
+                  <div className="flex w-fit items-center gap-2 rounded-lg border border-app-primary/50 bg-app-primary/10 px-4 py-2 text-app-primary animate-pulse">
                     <span className="material-symbols-outlined text-sm">
                       check_circle
                     </span>
@@ -1054,7 +1076,7 @@ function EditObjectPage() {
             </h2>
 
             <p className="mb-4 font-body text-sm text-app-text-secondary">
-              Una vez eliminado, no podrás recuperar este producto ni sus
+              Una vez eliminado, no podrás recuperar este objeto ni sus
               imágenes.
             </p>
 
@@ -1069,7 +1091,7 @@ function EditObjectPage() {
               <span className="material-symbols-outlined text-base">
                 delete
               </span>
-              Eliminar producto
+              Eliminar objeto
             </button>
           </div>
         </div>
@@ -1081,7 +1103,7 @@ function EditObjectPage() {
           if (!deleting) setConfirmDeleteOpen(false);
         }}
         onConfirm={handleConfirmDelete}
-        title="¿Eliminar producto?"
+        title="¿Eliminar objeto?"
         message={`Vas a eliminar "${form.name}".`}
         description="Esta acción es permanente y borrará también todas las imágenes. Si tiene solicitudes pendientes o aceptadas, deberás resolverlas antes."
         confirmLabel="Sí, eliminar"

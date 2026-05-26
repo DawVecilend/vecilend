@@ -8,7 +8,7 @@ function ProtectedRoute({ children }) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-app-bg">
         <div
-          className="h-10 w-10 rounded-full border-4 border-app-border border-t-vecilend-dark-primary animate-spin"
+          className="h-10 w-10 rounded-full border-4 border-app-border border-t-app-primary animate-spin"
           role="status"
           aria-label="Cargando"
         />

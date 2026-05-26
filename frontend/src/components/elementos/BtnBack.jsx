@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function BtnBack() {
@@ -18,7 +17,7 @@ function BtnBack() {
       onClick={handleBack}
       aria-label="Volver"
       title="Volver"
-      className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-app-bg-card transition-colors cursor-pointer"
+      className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-app-bg-card transition-colors cursor-pointer"
     >
       <img
         src="/assets/icons/arrow-back-white-icon.svg"

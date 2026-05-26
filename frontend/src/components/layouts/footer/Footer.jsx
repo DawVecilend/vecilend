@@ -6,23 +6,23 @@ function Footer() {
     <footer className="bg-app-bg-secondary px-6 py-10 md:h-[226px] md:px-10 md:py-0">
       <div className="mx-auto flex max-w-[1380px] flex-col items-center text-center md:h-full md:flex-row md:items-center md:justify-around md:gap-20 md:text-left xl:gap-75">
         <div className="order-1 flex flex-col items-center md:items-start">
-          <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">
+          <h2 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">
             Empresa
-          </h3>
+          </h2>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 md:flex-col md:items-start md:justify-start md:gap-x-0 md:gap-y-0">
             <Link
               to="/about-us"
-              className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary md:mb-[9px]"
+              className="font-body text-body-base text-app-text-secondary hover:text-app-primary md:mb-[9px]"
             >
               Sobre nosotros
             </Link>
 
             <Link
               to="/faq"
-              className="font-body text-body-base text-app-text-secondary hover:text-vecilend-dark-primary"
+              className="font-body text-body-base text-app-text-secondary hover:text-app-primary"
             >
-              FAQ
+              Preguntas frecuentes
             </Link>
           </div>
         </div>
@@ -30,9 +30,9 @@ function Footer() {
         <div className="order-2 my-8 h-px w-full bg-app-border md:hidden" />
 
         <div className="order-3 flex flex-col items-center md:items-start">
-          <h3 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">
+          <h2 className="mb-4 font-heading text-h2-mobile font-semibold text-app-text md:text-h3-desktop">
             Síguenos
-          </h3>
+          </h2>
 
           <div className="flex flex-row items-center justify-center gap-4 md:justify-start">
             <a
@@ -40,7 +40,7 @@ function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="text-app-text-secondary hover:text-vecilend-dark-primary transition-colors"
+              className="text-app-text-secondary hover:text-app-primary transition-colors"
             >
               <svg
                 className="h-6 w-6"
@@ -57,7 +57,7 @@ function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="X (antes Twitter)"
-              className="text-app-text-secondary hover:text-vecilend-dark-primary transition-colors"
+              className="text-app-text-secondary hover:text-app-primary transition-colors"
             >
               <svg
                 className="h-6 w-6"
@@ -74,7 +74,7 @@ function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="TikTok"
-              className="text-app-text-secondary hover:text-vecilend-dark-primary transition-colors"
+              className="text-app-text-secondary hover:text-app-primary transition-colors"
             >
               <svg
                 className="h-6 w-6"
@@ -96,17 +96,17 @@ function Footer() {
           <div className="mt-8 flex flex-col items-center gap-4 md:mt-[20px] md:gap-[32px]">
             <div className="flex flex-col items-center gap-4 md:flex-row md:flex-wrap md:justify-center md:gap-6">
               <Link
-                to="/terminos-y-condiciones"
-                className="font-body text-body-base text-app-text underline underline-offset-4 transition-colors duration-200 hover:text-vecilend-dark-primary"
+                to="/terms-and-conditions"
+                className="font-body text-body-base text-app-text underline underline-offset-4 transition-colors duration-200 hover:text-app-primary"
               >
                 Términos y condiciones
               </Link>
 
               <Link
-                to="/politica-de-privacidad"
-                className="font-body text-body-base text-app-text underline underline-offset-4 transition-colors duration-200 hover:text-vecilend-dark-primary"
+                to="/privacy-policy"
+                className="font-body text-body-base text-app-text underline underline-offset-4 transition-colors duration-200 hover:text-app-primary"
               >
-                Políticas de privacidad
+                Política de privacidad
               </Link>
             </div>
 

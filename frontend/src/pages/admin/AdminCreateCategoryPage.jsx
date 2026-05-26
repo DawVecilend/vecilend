@@ -68,7 +68,7 @@ function AdminCreateCategoryPage() {
   const inputClass = "w-full rounded-lg px-4 py-3 text-sm outline-none bg-app-neutral border border-app-border text-app-text";
 
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-4 lg:p-8 max-w-2xl">
       <button
         onClick={() => navigate("/backoffice/categories")}
         className="text-sm text-app-text-secondary hover:text-app-text mb-6 flex items-center gap-1"
@@ -95,7 +95,7 @@ function AdminCreateCategoryPage() {
               Nombre *
             </label>
 
-            <input
+            <input aria-label="Nombre"
               type="text"
               value={nom}
               onChange={(e) => setNom(e.target.value)}
@@ -110,7 +110,7 @@ function AdminCreateCategoryPage() {
               Descripción
             </label>
 
-            <textarea
+            <textarea aria-label="Descripción"
               value={descripcio}
               onChange={(e) => setDescripcio(e.target.value)}
               rows={3}
@@ -138,7 +138,7 @@ function AdminCreateCategoryPage() {
                   Subcategoría {i + 1}
                 </label>
 
-                <input
+                <input aria-label="Subcategoría"
                   type="text"
                   value={sub}
                   onChange={(e) => updateSub(i, e.target.value)}
@@ -152,7 +152,7 @@ function AdminCreateCategoryPage() {
                   Descripción
                 </label>
 
-                <textarea
+                <textarea aria-label="Descripción"
                   value={subDescriptions[i]}
                   onChange={(e) => updateSubDescription(i, e.target.value)}
                   rows={2}

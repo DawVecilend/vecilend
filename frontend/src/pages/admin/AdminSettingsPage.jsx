@@ -64,7 +64,7 @@ function AdminSettingsPage() {
   };
 
   return (
-    <div className="p-8 flex flex-col gap-8 max-w-3xl">
+    <div className="p-4 lg:p-8 flex flex-col gap-8 max-w-3xl">
       <div>
         <h1 className="text-2xl font-bold font-heading text-app-text">Ajustes</h1>
         <p className="text-sm text-app-text-secondary mt-1">
@@ -183,7 +183,7 @@ function AdminSettingsPage() {
                   No modifica la tarea programada nocturna.
                 </p>
                 <div className="mt-2 flex items-center gap-2">
-                  <input
+                  <input aria-label="Días a conservar"
                     type="number"
                     min={1}
                     max={3650}

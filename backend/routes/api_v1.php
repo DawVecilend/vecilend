@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\TwoFactorController;
+use App\Http\Controllers\Api\V1\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\BackofficeAuthController;
@@ -20,7 +22,7 @@ use App\Http\Controllers\Api\V1\Admin\AdminSubcategoriaController;
 use App\Http\Controllers\Api\V1\Admin\AdminUserController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\V1\TransactionController;
-use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\Api\V1\FavoriteController;
 use App\Http\Controllers\Api\V1\ValoracioController;
 use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\NotificacioController;
@@ -28,15 +30,19 @@ use App\Models\Conversa;
 use App\Models\Notificacio;
 
 // ── Públiques (usuari) ──
-Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:register');
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
-Route::post('/check-user', [RegisterController::class, 'checkUser']);
-Route::post('/email/send-code',   [EmailVerificationController::class, 'sendCode']);
-Route::post('/email/verify-code', [EmailVerificationController::class, 'verifyCode']);
+Route::post('/login/2fa', [LoginController::class, 'verify2fa'])->middleware('throttle:login');
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->middleware('throttle:30,1');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->middleware('throttle:30,1');
+Route::post('/auth/google/exchange', [GoogleAuthController::class, 'exchange'])->middleware('throttle:30,1');
+Route::post('/check-user', [RegisterController::class, 'checkUser'])->middleware('throttle:30,1');
+Route::post('/email/send-code',   [EmailVerificationController::class, 'sendCode'])->middleware('throttle:email-verify');
+Route::post('/email/verify-code', [EmailVerificationController::class, 'verifyCode'])->middleware('throttle:email-verify');
 Route::get('/profile/{username}', [UserController::class, 'getByUsername']);
 Route::get('/profile/{username}/objects', [ObjecteController::class, 'getUserObjects']);
-Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword']);
-Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
+Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])->middleware('throttle:password-forgot');
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->middleware('throttle:password-reset');
 Route::get('/categories', [CategoriaController::class, 'index']);
 Route::get('/objects', [ObjecteController::class, 'index']);
 Route::get('/objects/nearby', [ObjecteController::class, 'nearby']);
@@ -52,6 +58,12 @@ Route::middleware(['auth:sanctum', 'last_seen', 'log_user_action'])->group(funct
     Route::get('/me', function (Request $request) {
         return new UserResource($request->user());
     });
+
+    Route::post('/2fa/setup',                [TwoFactorController::class, 'setup'])->middleware('throttle:10,1');
+    Route::post('/2fa/confirm',              [TwoFactorController::class, 'confirm'])->middleware('throttle:10,1');
+    Route::post('/2fa/disable',              [TwoFactorController::class, 'disable'])->middleware('throttle:10,1');
+    Route::post('/2fa/recovery-codes',       [TwoFactorController::class, 'showRecoveryCodes'])->middleware('throttle:10,1');
+    Route::post('/2fa/recovery-codes/regenerate', [TwoFactorController::class, 'regenerateRecoveryCodes'])->middleware('throttle:10,1');
 
     Route::put('/profile/{username}/editing', [UserController::class, 'update']);
     Route::put('/profile/{username}/password', [UserController::class, 'updatePassword']);
@@ -184,6 +196,7 @@ Route::prefix('backoffice')->middleware(['auth:sanctum', 'empleat'])->group(func
         Route::delete('/subcategories/{id}',[AdminSubcategoriaController::class, 'destroy'])->where('id', '[0-9]+');
 
         Route::get('/logs',         [AdminLogController::class, 'index']);
+        Route::get('/logs/filters', [AdminLogController::class, 'filters']);
         Route::get('/logs/export',  [AdminLogController::class, 'export']);
         Route::delete('/logs',      [AdminLogController::class, 'clean']);
     });

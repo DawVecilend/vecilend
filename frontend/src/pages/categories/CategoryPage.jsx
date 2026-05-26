@@ -62,7 +62,7 @@ function CategoryPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-app-bg px-6 py-10 text-app-text">
+      <section className="min-h-screen bg-app-bg px-6 py-10 text-app-text">
         <div className="mx-auto max-w-[1380px]">
           <div className="flex items-center justify-between gap-4">
             <BtnBack />
@@ -89,12 +89,12 @@ function CategoryPage() {
                   {currentCategory.name}
                 </h1>
                 <p className="mt-2 font-body text-body-base text-app-text-secondary">
-                  Se han encontrado {products.length} productos en esta
+                  Se han encontrado {products.length} objetos en esta
                   categoría.
                 </p>
               </section>
               <ProductsSection
-                title={`Productos de ${currentCategory.name}`}
+                title={`Objetos de ${currentCategory.name}`}
                 products={products}
               />
             </>
@@ -105,22 +105,22 @@ function CategoryPage() {
                   {currentCategory.name}
                 </h1>
                 <p className="mt-2 font-body text-body-base text-app-text-secondary">
-                  Se han encontrado 0 productos en esta categoría.
+                  Se han encontrado 0 objetos en esta categoría.
                 </p>
               </section>
               <section className="rounded-[20px] border border-app-border bg-app-bg-card p-10 text-center">
                 <h2 className="font-heading text-h3-desktop text-app-text">
-                  No hay productos en esta categoría
+                  No hay objetos en esta categoría
                 </h2>
                 <p className="mt-3 font-body text-body text-app-text-secondary">
-                  Todavía no hay productos publicados en "{currentCategory.name}
+                  Todavía no hay objetos publicados en "{currentCategory.name}
                   ".
                 </p>
               </section>
             </>
           )}
         </div>
-      </main>
+      </section>
     </>
   );
 }

@@ -37,7 +37,7 @@ function HomePage() {
           setRecentProducts(recentResult.value || []);
         } else {
           console.error(
-            "Error cargando productos recientes:",
+            "Error cargando objetos recientes:",
             recentResult.reason,
           );
           setRecentProducts([]);
@@ -85,9 +85,9 @@ function HomePage() {
       ) : (
         <>
           <CategoriesSection categories={categories} />
-          <ProductsSection title="Más Populares" products={topProducts} />
+          <ProductsSection title="Más populares" products={topProducts} />
           <ProductsSection
-            title="Publicaciones Recientes"
+            title="Publicaciones recientes"
             products={recentProducts}
           />
         </>

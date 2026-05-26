@@ -128,13 +128,22 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
+    public function updatePassword(UpdatePasswordRequest $request, $username): JsonResponse
     {
         $user = $request->user();
+
+        if ($user->username !== $username) {
+            return response()->json(['message' => 'No tienes permiso para cambiar esta contraseña.'], 403);
+        }
 
         $user->update([
             'password' => Hash::make($request->validated('password')),
         ]);
+
+        $currentTokenId = $request->user()->currentAccessToken()?->id;
+        $user->tokens()
+            ->when($currentTokenId, fn($q) => $q->where('id', '!=', $currentTokenId))
+            ->delete();
 
         return response()->json([
             'success' => true,

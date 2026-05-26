@@ -356,7 +356,7 @@ class ObjecteController extends Controller
             ->where('solicituds.estat', 'acceptat')
             ->where(function ($q) {
                 $q->whereNull('transaccions.id')
-                  ->orWhereIn('transaccions.estat', ['en_curs']);
+                    ->orWhereIn('transaccions.estat', ['en_curs']);
             })
             ->select('solicituds.data_inici', 'solicituds.data_fi')
             ->orderBy('solicituds.data_inici')
@@ -428,6 +428,12 @@ class ObjecteController extends Controller
         $authUser = $request->user();
         $isOwn = $authUser && $authUser->id === $user->id;
 
+        if (!$user->actiu && !$isOwn) {
+            return response()->json([
+                'message' => 'Usuario no encontrado.',
+            ], 404);
+        }
+
         $query = Objecte::query()
             ->ambCoordenades()
             ->with([
@@ -439,7 +445,6 @@ class ObjecteController extends Controller
             ->where('user_id', $user->id)
             ->orderByDesc('created_at');
 
-        // Visitants i altres usuaris només veuen els disponibles
         if (!$isOwn) {
             $query->where('estat', 'disponible');
         }
@@ -513,7 +518,7 @@ class ObjecteController extends Controller
                 ]);
 
                 return response()->json([
-                    'message' => 'Error al subir las imágenes. Inténtalo de nuevo.',
+                    'message' => 'Error al añadir las imágenes. Inténtalo de nuevo.',
                 ], 500);
             }
         }

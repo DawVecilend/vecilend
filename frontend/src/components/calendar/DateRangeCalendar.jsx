@@ -181,7 +181,7 @@ function DateRangeCalendar({
             <button
               type="button"
               onClick={handleClear}
-              className="text-caption text-vecilend-dark-primary font-body underline cursor-pointer"
+              className="text-caption text-app-primary font-body underline cursor-pointer"
             >
               Limpiar
             </button>

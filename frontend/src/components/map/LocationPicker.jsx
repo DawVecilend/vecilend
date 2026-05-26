@@ -10,6 +10,7 @@ import {
 import L from "leaflet";
 import RadiusSlider from "./RadiusSlider";
 import { useGeolocation } from "../../hooks/useGeolocation";
+import { SPAIN_MAX_BOUNDS } from "../../utils/spainBounds";
 import "../../utils/leafletIconFix";
 
 const pickerIcon = L.divIcon({
@@ -50,7 +51,7 @@ function FlyTo({ position }) {
  *
  * Distinció important:
  *   - 'value' (prop controlada): el lloc seleccionat explícitament per l'usuari
- *     (click, drag, o "Usar mi ubicación"). Pot ser null si l'usuari no ha
+ *     (click, drag, o "Usar mi ubicación actual"). Pot ser null si l'usuari no ha
  *     interactuat — en aquest cas, el component consumidor pot decidir no
  *     aplicar cap filtre d'ubicació.
  *   - 'mapCenter' (state intern): on es centra visualment el mapa per defecte
@@ -100,6 +101,8 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
           center={[center.lat, center.lng]}
           zoom={13}
           scrollWheelZoom
+          maxBounds={SPAIN_MAX_BOUNDS}
+          maxBoundsViscosity={0.6}
           style={{ height: "100%", width: "100%" }}
         >
           <TileLayer
@@ -144,12 +147,12 @@ function LocationPicker({ value, onChange, radiusKm, onRadiusChange }) {
           type="button"
           onClick={handleUseMyLocation}
           disabled={status === "requesting"}
-          className="self-start inline-flex items-center gap-2 rounded-full bg-app-neutral border border-app-border px-4 py-2 text-label text-app-text font-body hover:border-vecilend-dark-primary disabled:opacity-50"
+          className="self-start inline-flex items-center gap-2 rounded-full bg-app-neutral border border-app-border px-4 py-2 text-label text-app-text font-body hover:border-app-primary disabled:opacity-50"
         >
           <span className="material-symbols-outlined text-base">
             my_location
           </span>
-          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación"}
+          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación actual"}
         </button>
         {geoFailed && (
           <p className="text-caption text-amber-400 font-body ml-1">

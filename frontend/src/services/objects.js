@@ -73,7 +73,7 @@ export async function deleteObject(id) {
 /**
  * PUT /api/v1/objects/{id}/main-image/{imageId}
  *
- * Marca la imagen dada como principal del producto.
+ * Marca la imagen dada como principal del objeto.
  */
 export async function setMainImage(productId, imageId) {
   const response = await api.put(`/objects/${productId}/main-image/${imageId}`);

@@ -2,15 +2,29 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Http\Requests\Api\V1\Concerns\ValidatesSpainLocation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
 class UpdateProfileRequest extends FormRequest
 {
+    use ValidatesSpainLocation;
+
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($v) {
+            $lat = data_get($this->input('ubicacio'), 'lat');
+            $lng = data_get($this->input('ubicacio'), 'lng');
+            if (is_numeric($lat) && is_numeric($lng) && !self::isInSpain((float)$lat, (float)$lng)) {
+                $v->errors()->add('ubicacio.lat', 'La ubicación debe estar dentro o cerca del territorio español.');
+            }
+        });
     }
 
     public function rules(): array

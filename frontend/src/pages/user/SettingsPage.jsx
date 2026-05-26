@@ -1,8 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import SettingsNav from "../../components/layouts/SettingsNav";
+import BtnBack from "../../components/elementos/BtnBack";
 
 function SettingsPage() {
   const { user } = useAuth();
@@ -12,14 +12,15 @@ function SettingsPage() {
   return (
     <div className="bg-app-bg text-app-text antialiased font-inter min-h-[calc(100vh-80px)]">
       <div className="mx-auto w-full max-w-[1380px] px-4 md:px-8 py-3 md:py-6">
-        <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
+        <BtnBack />
+        <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)] mt-4 md:mt-0">
           <SettingsNav username={user?.username} current="home" />
 
-          <main className="flex-1 min-w-0 p-0 md:p-6">
+          <section className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
                 Hola,{" "}
-                <span className="text-vecilend-dark-primary">{user?.nom || "Usuario"}</span>
+                <span className="text-app-primary">{user?.nom || "Usuario"}</span>
               </h1>
               <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
                 Gestiona tu experiencia en Vecilend. Aquí puedes controlar tu
@@ -31,10 +32,10 @@ function SettingsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Link
                 to={`/settings/profile/${user?.username}/editing`}
-                className="bg-app-bg-card-secondary/40 backdrop-blur-md border border-app-border group p-8 rounded-xl flex flex-col justify-between hover:border-vecilend-dark-primary/40 transition-all duration-300 cursor-pointer active:scale-[0.98]"
+                className="bg-app-bg-card-secondary/40 backdrop-blur-md border border-app-border group p-8 rounded-xl flex flex-col justify-between hover:border-app-primary/40 transition-all duration-300 cursor-pointer active:scale-[0.98]"
               >
                 <div>
-                  <div className="w-14 h-14 bg-vecilend-dark-primary/10 text-vecilend-dark-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 bg-app-primary/10 text-app-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <span
                       className="material-symbols-outlined text-3xl"
                       style={{ fontVariationSettings: "'FILL' 1" }}
@@ -50,7 +51,7 @@ function SettingsPage() {
                     público en la comunidad de Vecilend.
                   </p>
                 </div>
-                <div className="flex items-center text-vecilend-dark-primary font-semibold text-sm group-hover:gap-2 transition-all">
+                <div className="flex items-center text-app-primary font-semibold text-sm group-hover:gap-2 transition-all">
                   <span>Gestionar información</span>
                   <span className="material-symbols-outlined text-sm ml-1">
                     arrow_forward
@@ -60,7 +61,7 @@ function SettingsPage() {
 
               <Link
                 to={`/settings/profile/${user?.username}/security`}
-                className="bg-app-bg-card-secondary/40 backdrop-blur-md border border-app-border group p-8 rounded-xl flex flex-col justify-between hover:border-vecilend-dark-primary/40 transition-all duration-300 cursor-pointer active:scale-[0.98]"
+                className="bg-app-bg-card-secondary/40 backdrop-blur-md border border-app-border group p-8 rounded-xl flex flex-col justify-between hover:border-app-primary/40 transition-all duration-300 cursor-pointer active:scale-[0.98]"
               >
                 <div>
                   <div className="w-14 h-14 bg-[var(--color-app-warning)]/20 text-[var(--color-app-warning)] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -80,7 +81,7 @@ function SettingsPage() {
                     acceso.
                   </p>
                 </div>
-                <div className="flex items-center text-vecilend-dark-primary font-semibold text-sm group-hover:gap-2 transition-all">
+                <div className="flex items-center text-app-primary font-semibold text-sm group-hover:gap-2 transition-all">
                   <span>Reforzar seguridad</span>
                   <span className="material-symbols-outlined text-sm ml-1">
                     arrow_forward
@@ -90,7 +91,7 @@ function SettingsPage() {
 
               <div className="bg-app-bg-card-secondary/40 backdrop-blur-md border border-app-border p-8 rounded-xl flex flex-col justify-between md:col-span-2 lg:col-span-1">
                 <div>
-                  <div className="w-14 h-14 bg-vecilend-dark-primary/10 text-vecilend-dark-primary rounded-xl flex items-center justify-center mb-6">
+                  <div className="w-14 h-14 bg-app-primary/10 text-app-primary rounded-xl flex items-center justify-center mb-6">
                     <span
                       className="material-symbols-outlined text-3xl"
                       style={{ fontVariationSettings: "'FILL' 1" }}
@@ -102,8 +103,8 @@ function SettingsPage() {
                     Preferencias
                   </h3>
                   <p className="text-app-text-secondary text-sm leading-relaxed mb-6">
-                    Personaliza la apariencia de la aplicación y revisa nuestras
-                    políticas de tratamiento de datos.
+                    Personaliza la apariencia de la aplicación y revisa nuestra
+                    política de tratamiento de datos.
                   </p>
                 </div>
 
@@ -134,7 +135,7 @@ function SettingsPage() {
                       <span
                         className={`absolute inset-0 w-11 h-6 rounded-full transition-colors ${
                           isDark
-                            ? "bg-vecilend-dark-primary"
+                            ? "bg-app-primary"
                             : "bg-app-bg border border-app-border"
                         }`}
                       />
@@ -147,25 +148,25 @@ function SettingsPage() {
                   </div>
 
                   <Link
-                    to="/politica-de-privacidad"
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-4 bg-app-bg-card rounded-lg border border-app-border hover:border-vecilend-dark-primary/40 transition-colors group"
+                    to="/privacy-policy"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-4 bg-app-bg-card rounded-lg border border-app-border hover:border-app-primary/40 transition-colors group"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <span className="material-symbols-outlined text-app-text-secondary shrink-0">
                         privacy_tip
                       </span>
                       <span className="text-sm font-bold text-app-text">
-                        Políticas de privacidad
+                        Política de privacidad
                       </span>
                     </div>
-                    <span className="material-symbols-outlined text-app-text-secondary text-base group-hover:text-vecilend-dark-primary transition-colors self-end sm:self-auto">
+                    <span className="material-symbols-outlined text-app-text-secondary text-base group-hover:text-app-primary transition-colors self-end sm:self-auto">
                       arrow_forward
                     </span>
                   </Link>
                 </div>
               </div>
             </div>
-          </main>
+          </section>
         </div>
       </div>
     </div>

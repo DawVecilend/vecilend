@@ -56,11 +56,31 @@ export function AuthProvider({ children }) {
   // ── Login ──
   const login = async (credentials) => {
     const res = await api.post("/login", credentials);
+    const data = res.data.data || {};
+    if (data.requires_2fa) {
+      return {
+        requires2fa: true,
+        twoFactorToken: data.two_factor_token,
+      };
+    }
+    const { user: userData, token } = data;
+    localStorage.setItem("auth_token", token);
+    setUser(userData);
+    setDraftsUser(userData?.id ?? null);
+    return { requires2fa: false, user: userData };
+  };
+
+  // ── Verify 2FA login challenge ──
+  const verifyLogin2fa = async ({ twoFactorToken, code }) => {
+    const res = await api.post("/login/2fa", {
+      two_factor_token: twoFactorToken,
+      code,
+    });
     const { user: userData, token } = res.data.data;
     localStorage.setItem("auth_token", token);
     setUser(userData);
     setDraftsUser(userData?.id ?? null);
-    return userData;
+    return { user: userData, recoveryCodesUsed: res.data.data.recovery_codes_used, recoveryCodesLeft: res.data.data.recovery_codes_left };
   };
 
   // ── Register ──
@@ -90,6 +110,7 @@ export function AuthProvider({ children }) {
         user,
         loading,
         login,
+        verifyLogin2fa,
         register,
         logout,
         getUser,

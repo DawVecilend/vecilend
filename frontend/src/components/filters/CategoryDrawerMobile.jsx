@@ -52,7 +52,7 @@ function CategoryDrawerMobile({
             }}
             className={`w-full text-left px-2 py-2 rounded-lg transition-colors mb-1 ${
               !filters?.category
-                ? "bg-vecilend-dark-primary/10 text-vecilend-dark-primary font-bold"
+                ? "bg-app-primary/10 text-app-primary font-bold"
                 : "text-app-text hover:bg-app-bg-card"
             }`}
           >

@@ -20,6 +20,12 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
+import {
+  TwoFactorSetupModal,
+  TwoFactorDisableModal,
+  TwoFactorRecoveryModal,
+} from "../../components/elementos/TwoFactorModals";
+
 function SecuritySettingsPage() {
   const { user } = useContext(AuthContext);
   const auth = useContext(AuthContext);
@@ -45,6 +51,33 @@ function SecuritySettingsPage() {
   const [deactivateOpen, setDeactivateOpen] = useState(false);
   const [deactivateBusy, setDeactivateBusy] = useState(false);
   const [deactivateError, setDeactivateError] = useState(null);
+
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
+    Boolean(user?.two_factor_enabled),
+  );
+  const [twoFactorSetupOpen, setTwoFactorSetupOpen] = useState(false);
+  const [twoFactorDisableOpen, setTwoFactorDisableOpen] = useState(false);
+  const [twoFactorRecoveryOpen, setTwoFactorRecoveryOpen] = useState(false);
+  const userHasPassword = user ? Boolean(user.has_password) : true;
+
+  React.useEffect(() => {
+    setTwoFactorEnabled(Boolean(user?.two_factor_enabled));
+  }, [user?.two_factor_enabled]);
+
+  const handleToggle2fa = () => {
+    if (twoFactorEnabled) setTwoFactorDisableOpen(true);
+    else setTwoFactorSetupOpen(true);
+  };
+
+  const handle2faActivated = () => {
+    setTwoFactorEnabled(true);
+    auth.getUser?.();
+  };
+
+  const handle2faDisabled = () => {
+    setTwoFactorEnabled(false);
+    auth.getUser?.();
+  };
 
   const handlePasswordChange = (e) => {
     setPasswords((prev) => ({
@@ -147,10 +180,10 @@ function SecuritySettingsPage() {
         <div className="flex flex-col md:flex-row md:items-stretch gap-0 md:gap-6 md:min-h-[calc(100vh-80px-48px)]">
           <SettingsNav username={user?.username} current="security" />
 
-          <main className="flex-1 min-w-0 p-0 md:p-6">
+          <section className="flex-1 min-w-0 p-0 md:p-6">
             <header className="mb-8">
               <h1 className="text-3xl md:text-5xl font-extrabold text-app-text mb-2 tracking-tight">
-                Seguridad de la <span className="text-vecilend-dark-primary">Cuenta</span>
+                Seguridad de la <span className="text-app-primary">Cuenta</span>
               </h1>
 
               <p className="text-app-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
@@ -162,14 +195,14 @@ function SecuritySettingsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             <section className="lg:col-span-7 bg-app-bg-card-secondary/40 backdrop-blur-md rounded-xl p-8 border border-app-border/20 shadow-xl">
               <div className="flex items-center gap-3 mb-6">
-                <span className="material-symbols-outlined text-vecilend-dark-primary">
+                <span className="material-symbols-outlined text-app-primary">
                   lock
                 </span>
-                <h2 className="text-xl font-bold">Cambiar Contraseña</h2>
+                <h2 className="text-xl font-bold">Cambiar contraseña</h2>
               </div>
 
               {successMessage && (
-                <div className="mb-6 bg-vecilend-dark-primary/10 border border-vecilend-dark-primary/50 text-vecilend-dark-primary px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
+                <div className="mb-6 bg-app-primary/10 border border-app-primary/50 text-app-primary px-4 py-3 rounded-lg flex items-center gap-2 animate-pulse">
                   <span className="material-symbols-outlined text-base">
                     check_circle
                   </span>
@@ -200,7 +233,7 @@ function SecuritySettingsPage() {
                     name="current_password"
                     value={passwords.current_password}
                     onChange={handlePasswordChange}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-app-primary focus:border-transparent transition-all outline-none text-app-text"
                     placeholder="••••••••••••"
                   />
                 </div>
@@ -215,7 +248,7 @@ function SecuritySettingsPage() {
                       name="password"
                       value={passwords.password}
                       onChange={handlePasswordChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-app-primary focus:border-transparent transition-all outline-none text-app-text"
                       placeholder="••••••••"
                     />
 
@@ -231,7 +264,7 @@ function SecuritySettingsPage() {
                       name="password_confirmation"
                       value={passwords.password_confirmation}
                       onChange={handlePasswordChange}
-                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent transition-all outline-none text-app-text"
+                      className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 focus:ring-2 focus:ring-app-primary focus:border-transparent transition-all outline-none text-app-text"
                       placeholder="••••••••"
                     />
                   </div>
@@ -240,14 +273,14 @@ function SecuritySettingsPage() {
                 <div className="pt-2 flex justify-end">
                   <button
                     disabled={isLoading}
-                    className={`bg-vecilend-dark-primary text-[var(--color-app-success-on)] px-10 py-3 rounded-lg font-bold shadow-lg transition-all ${
+                    className={`bg-app-primary text-[var(--color-app-success-on)] px-10 py-3 rounded-lg font-bold shadow-lg transition-all ${
                       isLoading
                         ? "opacity-70 cursor-not-allowed"
-                        : "hover:bg-vecilend-dark-primary active:scale-95"
+                        : "hover:bg-app-primary active:scale-95"
                     }`}
                     type="submit"
                   >
-                    {isLoading ? "Actualizando..." : "Actualizar Contraseña"}
+                    {isLoading ? "Actualizando..." : "Actualizar contraseña"}
                   </button>
                 </div>
               </form>
@@ -257,41 +290,34 @@ function SecuritySettingsPage() {
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-[var(--color-app-warning)]">
+                    <span className={`material-symbols-outlined ${twoFactorEnabled ? "text-app-primary" : "text-[var(--color-app-warning)]"}`}>
                       verified_user
                     </span>
                     <h2 className="text-xl font-bold">Autenticación 2FA</h2>
                   </div>
 
-                  <label className="relative inline-flex items-center cursor-not-allowed opacity-60">
-                    <input
-                      checked={false}
-                      readOnly
-                      disabled
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input aria-label="Activar verificación en dos pasos"
+                      checked={twoFactorEnabled}
+                      onChange={handleToggle2fa}
                       className="sr-only peer"
                       type="checkbox"
-                      onClick={(e) => e.preventDefault()}
-                      onChange={() => {}}
                     />
-                    <div className="w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5"></div>
+                    <span className="inline-block w-11 h-6 bg-app-bg-card peer-focus:outline-none rounded-full peer peer-checked:bg-app-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-app-bg-card-secondary after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-white"></span>
                   </label>
                 </div>
 
-                <p className="text-sm text-app-text-secondary mb-3 leading-relaxed">
+                <p className="text-sm text-app-text-secondary mb-6 leading-relaxed">
                   Añade una capa extra de seguridad a tu cuenta usando una
-                  aplicación de autenticación.
-                </p>
-
-                <p className="text-xs text-[var(--color-app-warning)] mb-6 leading-relaxed italic">
-                  Esta funcionalidad se encuentra en fase de desarrollo y
-                  todavía no ha sido implementada.
+                  aplicación de autenticación como Google Authenticator, Authy o
+                  1Password.
                 </p>
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20 opacity-60">
+                <div className="flex items-center justify-between p-4 bg-app-bg-card rounded-lg border border-app-border/20">
                   <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-app-text-secondary">
+                    <span className={`material-symbols-outlined ${twoFactorEnabled ? "text-app-primary" : "text-app-text-secondary"}`}>
                       smartphone
                     </span>
                     <span className="text-sm font-bold text-app-text">
@@ -299,20 +325,26 @@ function SecuritySettingsPage() {
                     </span>
                   </div>
 
-                  <span className="text-[10px] uppercase tracking-wider font-bold bg-app-bg/40 text-app-text-secondary px-2 py-0.5 rounded">
-                    Inactivo
+                  <span
+                    className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded ${
+                      twoFactorEnabled
+                        ? "bg-app-primary/20 text-app-primary"
+                        : "bg-app-bg/40 text-app-text-secondary"
+                    }`}
+                  >
+                    {twoFactorEnabled ? "Activo" : "Inactivo"}
                   </span>
                 </div>
 
-                <button
-                  type="button"
-                  disabled
-                  aria-disabled="true"
-                  onClick={(e) => e.preventDefault()}
-                  className="w-full py-3 border border-vecilend-dark-primary/30 text-vecilend-dark-primary/60 rounded-lg text-sm font-bold cursor-not-allowed mt-2"
-                >
-                  Configurar métodos alternativos
-                </button>
+                {twoFactorEnabled && (
+                  <button
+                    type="button"
+                    onClick={() => setTwoFactorRecoveryOpen(true)}
+                    className="w-full py-3 border border-app-primary/30 text-app-primary rounded-lg text-sm font-bold mt-2 hover:bg-app-primary/10 transition-colors active:scale-95"
+                  >
+                    Ver códigos de recuperación
+                  </button>
+                )}
               </div>
             </section>
 
@@ -383,7 +415,7 @@ function SecuritySettingsPage() {
               </div>
             </section>
             </div>
-          </main>
+          </section>
         </div>
       </div>
 
@@ -393,6 +425,7 @@ function SecuritySettingsPage() {
         fullScreen={isMobile}
         fullWidth
         maxWidth="xs"
+        disableScrollLock
         PaperProps={{
           sx: {
             backgroundColor: "#0A0A0B",
@@ -446,7 +479,7 @@ function SecuritySettingsPage() {
             </span>
 
             <div className="mt-2 relative">
-              <input
+              <input aria-label="Contraseña actual para eliminar la cuenta"
                 type={deleteShowPassword ? "text" : "password"}
                 value={deletePassword}
                 onChange={(e) => setDeletePassword(e.target.value)}
@@ -520,6 +553,7 @@ function SecuritySettingsPage() {
         fullScreen={isMobile}
         fullWidth
         maxWidth="xs"
+        disableScrollLock
         PaperProps={{
           sx: {
             backgroundColor: "#0A0A0B",
@@ -611,6 +645,25 @@ function SecuritySettingsPage() {
           </button>
         </DialogActions>
       </Dialog>
+      <TwoFactorSetupModal
+        open={twoFactorSetupOpen}
+        onClose={() => setTwoFactorSetupOpen(false)}
+        onActivated={handle2faActivated}
+        userHasPassword={userHasPassword}
+      />
+
+      <TwoFactorDisableModal
+        open={twoFactorDisableOpen}
+        onClose={() => setTwoFactorDisableOpen(false)}
+        onDisabled={handle2faDisabled}
+        userHasPassword={userHasPassword}
+      />
+
+      <TwoFactorRecoveryModal
+        open={twoFactorRecoveryOpen}
+        onClose={() => setTwoFactorRecoveryOpen(false)}
+        userHasPassword={userHasPassword}
+      />
     </div>
   );
 }

@@ -11,15 +11,17 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('conversa_id')->constrained('converses')->cascadeOnDelete();
             $table->foreignId('emissor_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('objecte_id')->nullable()->constrained('objectes')->nullOnDelete();
+            $table->foreignId('respon_a_id')->nullable()->constrained('missatges')->nullOnDelete();
+            $table->foreignId('solicitud_id')->nullable()->constrained('solicituds')->nullOnDelete();
             $table->text('contingut');
             $table->timestamp('llegit_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
 
-            // Llistar missatges per conversa ordenats per data
             $table->index(['conversa_id', 'created_at']);
-
-            // Comptar no llegits per receptor (per a la bombolla i el llistat)
             $table->index(['conversa_id', 'emissor_id', 'llegit_at']);
+            $table->index('objecte_id');
+            $table->index('respon_a_id');
         });
     }
 
