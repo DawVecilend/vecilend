@@ -17,13 +17,11 @@ function getMainImage(product) {
 }
 
 function getUserName(product) {
-  return (
-    product.user?.username ||
-    product.propietari?.username ||
-    product.user?.nom ||
-    product.propietari?.nom ||
-    "usuario"
-  );
+  return product.user?.nom || product.propietari?.nom || "usuario";
+}
+
+function getUserSlug(product) {
+  return product.user?.username || product.propietari?.username || null;
 }
 
 function getUserAvatar(product) {
@@ -171,6 +169,7 @@ function ProductsSection({
                   description={product.descripcio || "Sin descripción"}
                   title={product.nom || "Objeto"}
                   userName={getUserName(product)}
+                  userSlug={getUserSlug(product)}
                   userAvatar={getUserAvatar(product)}
                   ownerId={product.user?.id || product.propietari?.id}
                   rating={getRating(product)}
@@ -194,6 +193,7 @@ function ProductsSection({
                   description={product.descripcio || "Sin descripción"}
                   title={product.nom || "Objeto"}
                   userName={getUserName(product)}
+                  userSlug={getUserSlug(product)}
                   userAvatar={getUserAvatar(product)}
                   ownerId={product.user?.id || product.propietari?.id}
                   rating={getRating(product)}

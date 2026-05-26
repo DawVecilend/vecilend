@@ -57,7 +57,7 @@ class ObjecteController extends Controller
             ->ambCoordenades()
             ->disponible()
             ->with([
-                'user:id,nom,avatar_url',
+                'user:id,username,nom,avatar_url',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',
@@ -277,7 +277,7 @@ class ObjecteController extends Controller
         $query = Objecte::query()
             ->disponible()
             ->with([
-                'user:id,nom,avatar_url',
+                'user:id,username,nom,avatar_url',
                 'categoria:id,nom,icona,slug',
                 'subcategoria:id,nom,slug',
                 'imatges',
@@ -437,7 +437,7 @@ class ObjecteController extends Controller
         $query = Objecte::query()
             ->ambCoordenades()
             ->with([
-                'user:id,nom,avatar_url',
+                'user:id,username,nom,avatar_url',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',
@@ -528,7 +528,7 @@ class ObjecteController extends Controller
 
         // ── 3. Recarregar amb relacions i retornar ──
         $objecte->load([
-            'user:id,nom,avatar_url',
+            'user:id,username,nom,avatar_url',
             'categoria:id,nom,icona',
             'subcategoria:id,nom',
             'imatges',
@@ -649,7 +649,7 @@ class ObjecteController extends Controller
         // ── 6. Recarregar i retornar ──
         if (isset($validated['lat']) && isset($validated['lng'])) {
             $objecte->load([
-                'user:id,nom,avatar_url',
+                'user:id,username,nom,avatar_url',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom',
                 'imatges',
@@ -661,7 +661,7 @@ class ObjecteController extends Controller
             $objecte = Objecte::ambCoordenades()
                 ->findOrFail($objecte->id)
                 ->load([
-                    'user:id,nom,avatar_url',
+                    'user:id,username,nom,avatar_url',
                     'categoria:id,nom,icona',
                     'subcategoria:id,nom',
                     'imatges',
