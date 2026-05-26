@@ -9,6 +9,7 @@ function ProductCard({
   description,
   title,
   userName,
+  userSlug,
   userAvatar,
   ownerId,
   rating,
@@ -22,14 +23,16 @@ function ProductCard({
   const navigate = useNavigate();
 
   const basePath = slug ? `/objects/${id}/${slug}` : `/objects/${id}`;
-  const detailLink = searchParamsString ? `${basePath}?${searchParamsString}` : basePath;
+  const detailLink = searchParamsString
+    ? `${basePath}?${searchParamsString}`
+    : basePath;
 
   function handleProfileClick(e) {
     e.preventDefault();
     e.stopPropagation();
-
-    if (userName) {
-      navigate(`/profile/${userName.toLowerCase()}`);
+    const target = userSlug || userName;
+    if (target) {
+      navigate(`/profile/${target.toLowerCase()}`);
     }
   }
 
@@ -43,7 +46,11 @@ function ProductCard({
     <div onClick={handleCardClick} className="block w-full cursor-pointer">
       <div className="group flex h-full w-full flex-col overflow-hidden rounded-[12px] border border-app-border bg-app-bg-card transition-all duration-300 hover:border-app-primary hover:shadow-[0_20px_50px_rgba(20,184,166,0.15)]">
         <div className="relative aspect-4/3 overflow-hidden">
-          <Link to={detailLink} aria-label={title} className="block h-full w-full">
+          <Link
+            to={detailLink}
+            aria-label={title}
+            className="block h-full w-full"
+          >
             <img
               alt={title}
               src={image}
@@ -79,9 +86,7 @@ function ProductCard({
           </button>
 
           <h3 className="min-h-[56px] mb-2 text-lg font-bold text-app-text line-clamp-2 transition-colors group-hover:text-app-primary">
-            <Link to={detailLink}>
-              {title}
-            </Link>
+            <Link to={detailLink}>{title}</Link>
           </h3>
 
           <p className="mb-4 min-h-[42px] text-sm text-app-text-secondary line-clamp-2">
