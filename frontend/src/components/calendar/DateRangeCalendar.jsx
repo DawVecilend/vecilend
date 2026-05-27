@@ -138,7 +138,7 @@ function DateRangeCalendar({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
-      <div className="rounded-2xl bg-app-bg-card border border-app-border p-2 w-full max-w-[340px] mx-auto overflow-hidden">
+      <div className="rounded-2xl bg-app-bg-card border border-app-border px-2 pt-4 pb-2 w-full max-w-[340px] mx-auto overflow-hidden">
         <DateCalendar
           value={rangeStart}
           onChange={handleDateClick}

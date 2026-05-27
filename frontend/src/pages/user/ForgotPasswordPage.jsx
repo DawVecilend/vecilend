@@ -51,7 +51,7 @@ function ForgotPasswordPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
-                  placeholder="ejemplo@email.com"
+                  placeholder="correo@ejemplo.com"
                 />
               </div>
 
