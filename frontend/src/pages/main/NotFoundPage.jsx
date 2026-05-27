@@ -35,7 +35,7 @@ function NotFoundPage({
   return (
     <section className="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center">
       <div className="mx-auto max-w-md">
-        <p className="font-heading text-[120px] leading-none font-extrabold bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary bg-clip-text text-transparent">
+        <p className="font-heading text-[120px] leading-none font-extrabold bg-gradient-to-br from-app-primary to-app-primary bg-clip-text text-transparent">
           404
         </p>
         <h1 className="mt-2 font-heading text-h2-desktop text-app-text">
@@ -45,13 +45,13 @@ function NotFoundPage({
         <div className="mt-6 flex justify-center gap-3 flex-wrap">
           <Link
             to="/"
-            className="rounded-full bg-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] active:scale-95"
+            className="rounded-full bg-app-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] active:scale-95"
           >
             Volver al inicio
           </Link>
           <Link
             to="/objects"
-            className="rounded-full border border-app-border px-6 py-3 text-body-base text-app-text hover:border-vecilend-dark-primary"
+            className="rounded-full border border-app-border px-6 py-3 text-body-base text-app-text hover:border-app-primary"
           >
             Explorar objetos
           </Link>

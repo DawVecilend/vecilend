@@ -15,8 +15,32 @@ class AdminEmpleatController extends Controller
 {
     public function index(Request $request)
     {
-        $empleats = Empleat::orderByDesc('created_at')->get();
-        return EmpleatResource::collection($empleats);
+        $request->validate([
+            'search'   => 'nullable|string|max:100',
+            'rol'      => 'nullable|string|in:all,admin,suport',
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'page'     => 'nullable|integer|min:1',
+        ]);
+
+        $query = Empleat::query()->orderByDesc('created_at');
+
+        if ($request->filled('search')) {
+            $q = '%' . strtolower($request->input('search')) . '%';
+            $query->where(function ($w) use ($q) {
+                $w->whereRaw('LOWER(nom) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(cognoms) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(username) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(email) LIKE ?', [$q]);
+            });
+        }
+
+        $rol = $request->input('rol', 'all');
+        if (in_array($rol, ['admin', 'suport'], true)) {
+            $query->where('rol', $rol);
+        }
+
+        $perPage = (int) $request->input('per_page', 20);
+        return EmpleatResource::collection($query->paginate($perPage));
     }
 
     public function store(StoreEmpleatRequest $request)

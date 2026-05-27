@@ -49,7 +49,7 @@ function DetailsPriceCardProduct({ product, diasSelected, onTotalChange }) {
 
         <div className="flex justify-between py-3">
           <p className="text-app-text font-bold">Precio total</p>
-          <p className="text-vecilend-dark-primary font-bold text-h3-mobile">
+          <p className="text-app-primary font-bold text-h3-mobile">
             {total.toFixed(2)} €
           </p>
         </div>

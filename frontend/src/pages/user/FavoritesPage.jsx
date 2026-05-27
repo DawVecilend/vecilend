@@ -43,7 +43,7 @@ function FavoritesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-app-bg px-4 py-8 text-app-text md:px-10">
+    <section className="min-h-screen bg-app-bg px-4 py-8 text-app-text md:px-10">
       <section className="mx-auto w-full max-w-[1380px]">
         <BtnBack />
 
@@ -66,7 +66,7 @@ function FavoritesPage() {
 
         {loading ? (
           <div className="mt-8">
-            <ProductsGridSkeleton count={6} />
+            <ProductsGridSkeleton count={10} />
           </div>
         ) : favorites.length > 0 ? (
           <div className="mt-6">
@@ -81,7 +81,7 @@ function FavoritesPage() {
           <section className="mt-8 rounded-[24px] border border-app-border bg-app-bg-card px-6 py-14 text-center md:px-10">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-app-bg">
               <span
-                className="material-symbols-outlined text-[34px] text-vecilend-dark-primary"
+                className="material-symbols-outlined text-[34px] text-app-primary"
                 style={{ fontVariationSettings: "'FILL' 1" }}
               >
                 favorite
@@ -99,14 +99,14 @@ function FavoritesPage() {
 
             <Link
               to="/objects"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-vecilend-dark-primary px-6 py-3 font-body text-sm font-bold text-white transition-colors hover:bg-vecilend-dark-primary-hover"
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-app-primary px-6 py-3 font-body text-sm font-bold text-white transition-colors hover:bg-app-primary-hover"
             >
               Explorar objetos
             </Link>
           </section>
         )}
       </section>
-    </main>
+    </section>
   );
 }
 

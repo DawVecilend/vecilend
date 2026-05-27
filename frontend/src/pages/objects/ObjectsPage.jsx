@@ -366,7 +366,7 @@ function ObjectsPage() {
 
           <div className="mt-6">
             {loading ? (
-              <ProductsGridSkeleton count={6} />
+              <ProductsGridSkeleton count={8} maxCols={4} />
             ) : products.length > 0 ? (
               <>
                 <ProductsSection
@@ -383,7 +383,7 @@ function ObjectsPage() {
                       type="button"
                       onClick={handleLoadMore}
                       disabled={loadingMore}
-                      className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50"
+                      className="rounded-full bg-app-bg-card border border-app-border hover:border-app-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50"
                     >
                       {loadingMore
                         ? "Cargando…"

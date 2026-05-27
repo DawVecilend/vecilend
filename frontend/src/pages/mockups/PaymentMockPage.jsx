@@ -105,7 +105,7 @@ function RedirectCountdown({ onCancel }) {
     <div className="mt-4 text-center">
       <p className="text-app-text-secondary text-label">
         Te redirigimos a tus pedidos en{" "}
-        <span className="font-bold text-vecilend-dark-primary">
+        <span className="font-bold text-app-primary">
           {remaining}
         </span>{" "}
         segundo{remaining === 1 ? "" : "s"}…
@@ -272,7 +272,7 @@ function PaymentMockPage() {
 
       <div className="mt-6 rounded-2xl bg-app-card border border-app-border p-6 md:p-8">
         <div className="flex items-center gap-3 mb-6">
-          <span className="material-symbols-outlined text-vecilend-dark-primary text-3xl">
+          <span className="material-symbols-outlined text-app-primary text-3xl">
             verified_user
           </span>
 
@@ -292,7 +292,7 @@ function PaymentMockPage() {
             Vas a pagar
           </p>
 
-          <p className="font-heading text-h2-desktop text-vecilend-dark-primary font-bold">
+          <p className="font-heading text-h2-desktop text-app-primary font-bold">
             {Number(tx.preu_total || 0).toFixed(2)}€
           </p>
 
@@ -331,7 +331,7 @@ function PaymentMockPage() {
                   Número de tarjeta
                 </span>
 
-                <input
+                <input aria-label="Número de tarjeta"
                   inputMode="numeric"
                   autoComplete="cc-number"
                   placeholder="0000 0000 0000 0000"
@@ -354,7 +354,7 @@ function PaymentMockPage() {
                       number: validateCardNumber(card.number),
                     }))
                   }
-                  className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
+                  className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-app-primary outline-none"
                 />
               </label>
 
@@ -367,7 +367,7 @@ function PaymentMockPage() {
                   Titular
                 </span>
 
-                <input
+                <input aria-label="Nombre del titular"
                   autoComplete="cc-name"
                   placeholder="NOMBRE APELLIDOS"
                   value={card.name}
@@ -391,7 +391,7 @@ function PaymentMockPage() {
                       name: validateName(card.name),
                     }))
                   }
-                  className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
+                  className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary outline-none"
                 />
               </label>
 
@@ -405,7 +405,7 @@ function PaymentMockPage() {
                     Caducidad
                   </span>
 
-                  <input
+                  <input aria-label="Fecha de caducidad"
                     inputMode="numeric"
                     autoComplete="cc-exp"
                     placeholder="MM/AA"
@@ -428,7 +428,7 @@ function PaymentMockPage() {
                         exp: validateExp(card.exp),
                       }))
                     }
-                    className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
+                    className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-app-primary outline-none"
                   />
                 </label>
 
@@ -441,7 +441,7 @@ function PaymentMockPage() {
                     CVV
                   </span>
 
-                  <input
+                  <input aria-label="Código de seguridad CVC"
                     inputMode="numeric"
                     autoComplete="cc-csc"
                     placeholder="123"
@@ -464,7 +464,7 @@ function PaymentMockPage() {
                         cvv: validateCvv(card.cvv),
                       }))
                     }
-                    className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-vecilend-dark-primary outline-none"
+                    className="mt-1 w-full bg-app-neutral border border-app-border rounded-lg px-4 py-3 text-app-text font-mono tracking-wider focus:ring-2 focus:ring-app-primary outline-none"
                   />
                 </label>
 
@@ -480,7 +480,7 @@ function PaymentMockPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full mt-2 rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+              className="w-full mt-2 rounded-full bg-gradient-to-br from-app-primary to-app-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
             >
               {submitting
                 ? "Procesando…"

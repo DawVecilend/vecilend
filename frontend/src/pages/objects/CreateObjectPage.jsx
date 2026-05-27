@@ -124,7 +124,7 @@ function CreateObjectPage() {
         return "";
 
       case "images":
-        if (!currentImages.length) return "Debes subir al menos una imagen";
+        if (!currentImages.length) return "Debes añadir al menos una imagen";
         return "";
 
       case "location":
@@ -278,18 +278,18 @@ function CreateObjectPage() {
 
       await createObject(formData);
 
-      setSuccessMessage("¡Producto publicado correctamente!");
+      setSuccessMessage("¡Objeto publicado correctamente!");
       setErrorMessage("");
       setTimeout(() => navigate("/objects"), 1200);
     } catch (error) {
-      console.error("Error creando producto:", error);
+      console.error("Error creando objeto:", error);
       if (error.response?.status === 422 && error.response.data?.errors) {
         const validationErrors = error.response.data.errors;
         const firstErrorKey = Object.keys(validationErrors)[0];
         setErrorMessage(validationErrors[firstErrorKey][0]);
       } else {
         setErrorMessage(
-          error.response?.data?.message || "No se ha podido crear el producto",
+          error.response?.data?.message || "No se ha podido crear el objeto",
         );
       }
     } finally {
@@ -299,12 +299,14 @@ function CreateObjectPage() {
 
   return (
     <>
-      <div className="mx-auto flex w-full max-w-[1380px] items-center justify-between gap-4 px-10 pt-6">
-        <BtnBack />
-        <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px]">
-          Subir producto
+      <div className="mx-auto flex w-full max-w-[1380px] items-center gap-4 px-10 pt-6">
+        <div className="flex-1 flex justify-start">
+          <BtnBack />
+        </div>
+        <h1 className="font-heading text-[28px] font-semibold text-app-text md:text-[32px] text-center">
+          Subir objeto
         </h1>
-        <div className="w-[90px]" />
+        <div className="flex-1" />
       </div>
 
       <section className="min-h-screen bg-app-bg px-4 pb-16 pt-6 text-app-text md:px-6">
@@ -314,7 +316,7 @@ function CreateObjectPage() {
             <div className="rounded-[24px] border border-dashed border-app-border bg-app-bg px-6 py-10 md:px-10 md:py-12">
               <div className="flex flex-col items-center justify-center text-center">
                 <p className="mb-6 font-body text-[16px] text-app-text">
-                  Sube una o más imágenes
+                  Añade una o más imágenes
                 </p>
 
                 <div className="flex w-full flex-wrap items-center justify-center gap-4">
@@ -354,14 +356,14 @@ function CreateObjectPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-vecilend-dark-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-vecilend-dark-primary-hover"
+                  className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-app-primary px-6 py-3 font-body text-[15px] font-medium text-app-text transition-all hover:bg-app-primary-hover"
                 >
                   <img
                     src="/assets/icons/add-photo-icon.svg"
                     alt=""
                     className="h-5 w-5"
                   />
-                  Subir imagen
+                  Añadir imagen
                 </button>
 
                 <input
@@ -398,9 +400,9 @@ function CreateObjectPage() {
                 <button
                   type="button"
                   onClick={() => setForm((p) => ({ ...p, tipus: "lloguer" }))}
-                  className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  className={`flex items-center justify-center gap-2 h-[56px] px-3 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "lloguer"
-                      ? "bg-vecilend-dark-primary text-app-text"
+                      ? "bg-app-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
@@ -416,9 +418,9 @@ function CreateObjectPage() {
                       pricePerDay: "",
                     }))
                   }
-                  className={`flex items-center justify-center gap-2 h-[56px] rounded-[16px] font-body text-[15px] font-semibold transition ${
+                  className={`flex items-center justify-center gap-2 h-[56px] px-3 rounded-[16px] font-body text-[15px] font-semibold transition ${
                     form.tipus === "prestec"
-                      ? "bg-vecilend-dark-primary text-app-text"
+                      ? "bg-app-primary text-app-text"
                       : "bg-app-bg-card text-app-text hover:bg-app-bg-card"
                   }`}
                 >
@@ -441,11 +443,13 @@ function CreateObjectPage() {
                 htmlFor="name"
                 className="mb-3 block font-heading text-[20px] font-semibold text-app-text"
               >
-                Nombre del producto
+                Nombre del objeto
               </label>
               <div
                 className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
-                  fieldErrors.name ? "border border-[var(--color-app-danger)]" : ""
+                  fieldErrors.name
+                    ? "border border-[var(--color-app-danger)]"
+                    : ""
                 }`}
               >
                 <img
@@ -460,7 +464,7 @@ function CreateObjectPage() {
                   autoComplete="off"
                   value={form.name}
                   onChange={handleChange}
-                  placeholder="Introducir el nombre del producto"
+                  placeholder="Nombre del objeto"
                   className="h-full w-full bg-transparent font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--color-app-text)] [&:-webkit-autofill]:[caret-color:var(--color-app-text)] [&:-webkit-autofill]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:focus]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset] [&:-webkit-autofill:hover]:[box-shadow:0_0_0_1000px_var(--color-app-bg-card)_inset]"
                 />
               </div>
@@ -482,7 +486,9 @@ function CreateObjectPage() {
                 </label>
                 <div
                   className={`flex h-[56px] items-center gap-3 rounded-[16px] bg-app-bg-card px-4 ${
-                    fieldErrors.pricePerDay ? "border border-[var(--color-app-danger)]" : ""
+                    fieldErrors.pricePerDay
+                      ? "border border-[var(--color-app-danger)]"
+                      : ""
                   }`}
                 >
                   <span className="text-[28px] leading-none text-app-text-secondary">
@@ -522,9 +528,11 @@ function CreateObjectPage() {
                 rows="5"
                 value={form.description}
                 onChange={handleChange}
-                placeholder="Describe los detalles y características del producto"
+                placeholder="Describe los detalles y características del objeto"
                 className={`w-full rounded-[16px] bg-app-bg-card px-4 py-4 font-body text-[16px] text-app-text placeholder:text-app-text-secondary focus:outline-none ${
-                  fieldErrors.description ? "border border-[var(--color-app-danger)]" : ""
+                  fieldErrors.description
+                    ? "border border-[var(--color-app-danger)]"
+                    : ""
                 }`}
               />
               {fieldErrors.description && (
@@ -546,7 +554,9 @@ function CreateObjectPage() {
                     onClick={() => setOpenCategories(!openCategories)}
                     disabled={loadingCategories}
                     className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-app-bg-card px-4 font-body text-[16px] text-app-text transition hover:bg-app-bg-card disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.category ? "border border-[var(--color-app-danger)]" : ""
+                      fieldErrors.category
+                        ? "border border-[var(--color-app-danger)]"
+                        : ""
                     }`}
                   >
                     {loadingCategories ? (
@@ -557,7 +567,9 @@ function CreateObjectPage() {
                     ) : (
                       <span
                         className={
-                          selectedCategory ? "text-app-text" : "text-app-text-secondary"
+                          selectedCategory
+                            ? "text-app-text"
+                            : "text-app-text-secondary"
                         }
                       >
                         {selectedCategory
@@ -596,7 +608,7 @@ function CreateObjectPage() {
                             onClick={() => handleSelectCategory(category.id)}
                             className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                               isActive
-                                ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                ? "bg-app-primary-hover/20 text-app-primary"
                                 : "text-app-text hover:bg-app-neutral"
                             }`}
                           >
@@ -624,7 +636,9 @@ function CreateObjectPage() {
                     onClick={() => setOpenSubcategories(!openSubcategories)}
                     disabled={loadingCategories || !selectedCategory}
                     className={`inline-flex h-[56px] w-full items-center justify-between gap-3 rounded-[16px] bg-app-bg-card px-4 font-body text-[16px] text-app-text transition hover:bg-app-bg-card disabled:cursor-not-allowed disabled:opacity-70 ${
-                      fieldErrors.subcategory ? "border border-[var(--color-app-danger)]" : ""
+                      fieldErrors.subcategory
+                        ? "border border-[var(--color-app-danger)]"
+                        : ""
                     }`}
                   >
                     {loadingCategories ? (
@@ -635,7 +649,9 @@ function CreateObjectPage() {
                     ) : (
                       <span
                         className={
-                          selectedSubcategory ? "text-app-text" : "text-app-text-secondary"
+                          selectedSubcategory
+                            ? "text-app-text"
+                            : "text-app-text-secondary"
                         }
                       >
                         {selectedSubcategory
@@ -679,7 +695,7 @@ function CreateObjectPage() {
                               }
                               className={`flex w-full items-center px-4 py-3 text-left font-body text-[15px] transition ${
                                 isActive
-                                  ? "bg-vecilend-dark-primary-hover/20 text-vecilend-dark-primary"
+                                  ? "bg-app-primary-hover/20 text-app-primary"
                                   : "text-app-text hover:bg-app-neutral"
                               }`}
                             >
@@ -724,14 +740,14 @@ function CreateObjectPage() {
               <button
                 type="submit"
                 disabled={loadingSubmit}
-                className="rounded-[14px] bg-vecilend-dark-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-vecilend-dark-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
+                className="rounded-[14px] bg-app-primary px-8 py-3 font-body text-[15px] font-semibold text-app-text transition-all hover:bg-app-primary-hover disabled:cursor-not-allowed disabled:opacity-70"
               >
-                {loadingSubmit ? "Publicando..." : "Publicar producto"}
+                {loadingSubmit ? "Publicando..." : "Publicar objeto"}
               </button>
 
               <div className="flex items-center">
                 {successMessage && (
-                  <div className="flex w-fit items-center gap-2 rounded-lg border border-vecilend-dark-primary/50 bg-vecilend-dark-primary/10 px-4 py-2 text-vecilend-dark-primary animate-pulse">
+                  <div className="flex w-fit items-center gap-2 rounded-lg border border-app-primary/50 bg-app-primary/10 px-4 py-2 text-app-primary animate-pulse">
                     <span className="material-symbols-outlined text-sm">
                       check_circle
                     </span>

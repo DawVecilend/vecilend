@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->foreignId('objecte_id')->constrained('objectes')->cascadeOnDelete();
             $table->date('data_inici');
             $table->date('data_fi');
+            $table->string('tipus', 20);
             $table->text('missatge')->nullable();
             $table->string('estat', 20)->default('pendent');
             $table->timestamps();

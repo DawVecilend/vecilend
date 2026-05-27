@@ -16,8 +16,34 @@ class AdminUserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::orderByDesc('created_at')->get();
-        return UserResource::collection($users);
+        $request->validate([
+            'search'   => 'nullable|string|max:100',
+            'status'   => 'nullable|string|in:all,active,blocked',
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'page'     => 'nullable|integer|min:1',
+        ]);
+
+        $query = User::query()->orderByDesc('created_at');
+
+        if ($request->filled('search')) {
+            $q = '%' . strtolower($request->input('search')) . '%';
+            $query->where(function ($w) use ($q) {
+                $w->whereRaw('LOWER(nom) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(cognoms) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(username) LIKE ?', [$q])
+                    ->orWhereRaw('LOWER(email) LIKE ?', [$q]);
+            });
+        }
+
+        $status = $request->input('status', 'all');
+        if ($status === 'active') {
+            $query->where('actiu', true);
+        } elseif ($status === 'blocked') {
+            $query->where('actiu', false);
+        }
+
+        $perPage = (int) $request->input('per_page', 20);
+        return UserResource::collection($query->paginate($perPage));
     }
 
     public function block(Request $request, $id)
@@ -33,13 +59,14 @@ class AdminUserController extends Controller
         if (!$user->actiu) {
             return response()->json(['message' => 'El usuario ya está bloqueado.'], Response::HTTP_BAD_REQUEST);
         }
-        $user->update(['actiu' => false]);
+        $user->actiu = false;
+        $user->save();
+        $user->tokens()->delete();
         $this->logAdminAction($request, 'block', $user, [
             'payload' => ['actiu' => false],
             'motiu'   => $validated['motiu'] ?? null,
         ]);
 
-        // Enviar email de bloqueo
         try {
             Mail::to($user->email)->send(new AccountBlockedMail(
                 $user->nom,
@@ -65,7 +92,8 @@ class AdminUserController extends Controller
         if ($user->actiu) {
             return response()->json(['message' => 'El usuario ya está activo.'], Response::HTTP_BAD_REQUEST);
         }
-        $user->update(['actiu' => true]);
+        $user->actiu = true;
+        $user->save();
         $this->logAdminAction($request, 'unblock', $user, ['payload' => ['actiu' => true]]);
         return new UserResource($user->refresh());
     }

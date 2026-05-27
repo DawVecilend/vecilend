@@ -11,9 +11,9 @@ function TrendsChart({ trends }) {
 
   return (
     <div className="rounded-xl border border-app-border bg-app-bg-card p-6">
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
         <h2 className="text-base font-bold font-heading text-app-text">Tendencia de transacciones</h2>
-        <div className="flex rounded-lg overflow-hidden border border-app-border">
+        <div className="flex flex-col sm:flex-row rounded-lg overflow-hidden border border-app-border self-start">
           <button
             onClick={() => setView("monthly")}
             className={`px-3 py-1.5 text-xs font-medium transition-colors ${view === "monthly" ? "bg-app-primary/15 text-app-primary" : "text-app-text-secondary"}`}

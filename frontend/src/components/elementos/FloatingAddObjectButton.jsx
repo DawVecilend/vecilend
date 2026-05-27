@@ -13,7 +13,7 @@ function FloatingAddObjectButton() {
     >
       <img
         src="/assets/icons/add-object-icon.svg"
-        alt="Subir producto"
+        alt="Subir objeto"
         className="h-8 w-8"
       />
     </Link>

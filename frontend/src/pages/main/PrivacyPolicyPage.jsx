@@ -8,7 +8,7 @@ function PrivacyPolicyPage() {
 
       <header className="mt-6 mb-10">
         <h1 className="font-heading text-h1-mobile md:text-h1-desktop text-app-text mb-3">
-          Políticas de privacidad
+          Política de privacidad
         </h1>
         <p className="text-app-text-secondary text-body-base">
           Última actualización: 18 de mayo de 2026
@@ -21,7 +21,14 @@ function PrivacyPolicyPage() {
             El responsable del tratamiento de los datos personales en Vecilend
             es el equipo de la plataforma. Cualquier solicitud relacionada con
             tus datos personales puede dirigirse a través de los canales
-            internos de la aplicación.
+            internos de la aplicación o por correo electrónico a{" "}
+            <a
+              href="mailto:support@vecilend.com"
+              className="text-app-primary hover:underline"
+            >
+              support@vecilend.com
+            </a>
+            .
           </p>
         </Section>
 
@@ -73,7 +80,7 @@ function PrivacyPolicyPage() {
             Tratamos tus datos en base a la ejecución del contrato que aceptas
             al registrarte (los{" "}
             <Link
-              to="/terminos-y-condiciones"
+              to="/terms-and-conditions"
               className="text-app-primary hover:underline"
             >
               Términos y condiciones
@@ -102,8 +109,30 @@ function PrivacyPolicyPage() {
           <p>
             Utilizamos almacenamiento local del navegador para mantener tu
             sesión iniciada, recordar tus preferencias de visualización (como el
-            tema claro u oscuro) y mejorar la experiencia. No usamos cookies de
-            seguimiento publicitario.
+            tema claro u oscuro) y registrar tu consentimiento de cookies. No
+            usamos cookies de seguimiento publicitario.
+          </p>
+          <p className="mt-2">
+            Distinguimos tres categorías:
+          </p>
+          <ul className="list-disc pl-6 space-y-2 text-app-text-secondary mt-2">
+            <li>
+              <strong>Necesarias:</strong> sesión, autenticación y preferencias
+              básicas. Sin ellas la plataforma no funciona y no requieren
+              consentimiento.
+            </li>
+            <li>
+              <strong>Personalización:</strong> recordar el tema (claro u
+              oscuro), la ubicación reciente y los filtros aplicados.
+            </li>
+            <li>
+              <strong>Analíticas:</strong> estadísticas agregadas y anónimas
+              de uso para mejorar la plataforma.
+            </li>
+          </ul>
+          <p className="mt-2">
+            Puedes modificar tu consentimiento en cualquier momento desde el
+            banner de cookies o borrando los datos del navegador.
           </p>
         </Section>
 
@@ -122,8 +151,14 @@ function PrivacyPolicyPage() {
           <p>
             Puedes ejercer en cualquier momento los derechos de acceso,
             rectificación, supresión, oposición, limitación del tratamiento y
-            portabilidad de tus datos personales contactando con el equipo de
-            Vecilend. También tienes derecho a presentar una reclamación ante la
+            portabilidad de tus datos personales escribiendo a{" "}
+            <a
+              href="mailto:support@vecilend.com"
+              className="text-app-primary hover:underline"
+            >
+              support@vecilend.com
+            </a>
+            . También tienes derecho a presentar una reclamación ante la
             Agencia Española de Protección de Datos si consideras que el
             tratamiento no cumple la normativa.
           </p>
@@ -137,9 +172,9 @@ function PrivacyPolicyPage() {
           </p>
         </Section>
 
-        <Section title="10. Cambios en la políticas">
+        <Section title="10. Cambios en la política">
           <p>
-            Podemos actualizar estas políticas para reflejar cambios legales o
+            Podemos actualizar esta política para reflejar cambios legales o
             mejoras del servicio. Si los cambios son significativos los
             anunciaremos en la plataforma y, cuando proceda, por correo
             electrónico.

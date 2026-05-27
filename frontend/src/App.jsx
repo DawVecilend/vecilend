@@ -17,8 +17,8 @@ import HomePage from "./pages/main/HomePage";
 import StatusPage from "./pages/main/StatusPage";
 import NotFoundPage from "./pages/main/NotFoundPage";
 import ForbiddenPage from "./pages/main/ForbiddenPage";
-import HowItWorksRentersPage from "./pages/main/HowItWorksRentersPage";
-import HowItWorksLendersPage from "./pages/main/HowItWorksLendersPage";
+import HowItWorksRequestersPage from "./pages/main/HowItWorksRequestersPage";
+import HowItWorksOwnersPage from "./pages/main/HowItWorksOwnersPage";
 import TermsPage from "./pages/main/TermsPage";
 import PrivacyPolicyPage from "./pages/main/PrivacyPolicyPage";
 import FeatureComingSoonPage from "./pages/main/FeatureComingSoonPage";
@@ -28,6 +28,7 @@ import FAQPage from "./pages/main/FAQPage";
 // AUTH PAGES
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 
 // USER PAGES
 import ProfilePage from "./pages/user/ProfilePage";
@@ -46,9 +47,6 @@ import ObjectsPage from "./pages/objects/ObjectsPage";
 import CreateObjectPage from "./pages/objects/CreateObjectPage";
 import UserObjectsPage from "./pages/objects/UserObjectsPage";
 import EditObjectPage from "./pages/objects/EditObjectPage";
-
-// CATEGORIES PAGES
-import CategoryPage from "./pages/categories/CategoryPage";
 
 // CHATS PAGES
 import ChatsLayout from "./components/chats/ChatsLayout";
@@ -70,6 +68,7 @@ import AdminCreateCategoryPage from "./pages/admin/AdminCreateCategoryPage";
 
 // ADMIN COMPONENTS
 import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
+import CookieBanner from "./components/elementos/CookieBanner";
 import AdminLayout from "./components/admin/AdminLayout";
 
 function App() {
@@ -122,6 +121,7 @@ function App() {
             <AuthProvider>
               <UnreadCountsProvider>
                 <ScrollToTop />
+                <CookieBanner />
 
                 <div className="hidden md:block">
                   <HeaderDesktop />
@@ -136,23 +136,27 @@ function App() {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route
+                      path="/auth/google/callback"
+                      element={<GoogleCallbackPage />}
+                    />
 
                     <Route
-                      path="/how-it-works/renters"
-                      element={<HowItWorksRentersPage />}
+                      path="/how-it-works/requesters"
+                      element={<HowItWorksRequestersPage />}
                     />
                     <Route
-                      path="/how-it-works/lenders"
-                      element={<HowItWorksLendersPage />}
+                      path="/how-it-works/owners"
+                      element={<HowItWorksOwnersPage />}
                     />
 
                     <Route path="/status" element={<StatusPage />} />
                     <Route
-                      path="/terminos-y-condiciones"
+                      path="/terms-and-conditions"
                       element={<TermsPage />}
                     />
                     <Route
-                      path="/politica-de-privacidad"
+                      path="/privacy-policy"
                       element={<PrivacyPolicyPage />}
                     />
                     <Route
@@ -165,10 +169,6 @@ function App() {
                     <Route
                       path="/objects/:id/:slug?"
                       element={<ObjectPage />}
-                    />
-                    <Route
-                      path="/categories/:slug"
-                      element={<CategoryPage />}
                     />
 
                     <Route

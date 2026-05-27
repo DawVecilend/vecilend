@@ -46,6 +46,7 @@ function ConfirmDeleteModal({
       fullScreen={isMobile}
       fullWidth
       maxWidth="xs"
+      disableScrollLock
       PaperProps={{
         sx: {
           backgroundColor: "#0A0A0B",

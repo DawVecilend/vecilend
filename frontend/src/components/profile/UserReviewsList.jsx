@@ -93,8 +93,8 @@ function UserReviewsList({ username }) {
               onClick={() => handleRoleChange(r.id)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 role === r.id
-                  ? "bg-vecilend-dark-primary text-[var(--color-app-success-on)]"
-                  : "bg-app-bg-secondary border border-app-border text-app-text hover:border-vecilend-dark-primary"
+                  ? "bg-app-primary text-[var(--color-app-success-on)]"
+                  : "bg-app-bg-secondary border border-app-border text-app-text hover:border-app-primary"
               }`}
             >
               {r.label}
@@ -127,7 +127,7 @@ function UserReviewsList({ username }) {
           {reviews.map((rev) => (
             <article
               key={rev.id}
-              className="bg-app-bg-secondary p-6 rounded-lg space-y-3 border-l-4 border-vecilend-dark-primary"
+              className="bg-app-bg-secondary p-6 rounded-lg space-y-3 border-l-4 border-app-primary"
             >
               <div className="flex items-center gap-3">
                 {rev.autor?.avatar_url ? (
@@ -140,11 +140,11 @@ function UserReviewsList({ username }) {
                   <div className="w-12 h-12 rounded-full bg-app-bg-card-secondary" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-app-text truncate">
+                  <h3 className="font-bold text-app-text truncate">
                     {rev.autor?.username ? (
                       <Link
                         to={`/profile/${rev.autor.username}`}
-                        className="hover:text-vecilend-dark-primary"
+                        className="hover:text-app-primary"
                       >
                         {rev.autor.nom} {rev.autor.cognoms}
                       </Link>
@@ -153,7 +153,7 @@ function UserReviewsList({ username }) {
                         {rev.autor?.nom} {rev.autor?.cognoms}
                       </>
                     )}
-                  </h4>
+                  </h3>
                   <Rating
                     value={rev.puntuacio}
                     readOnly
@@ -187,7 +187,7 @@ function UserReviewsList({ username }) {
                   Sobre el objeto:{" "}
                   <Link
                     to={(rev.objecte.slug ? `/objects/${rev.objecte.id}/${rev.objecte.slug}` : `/objects/${rev.objecte.id}`)}
-                    className="text-vecilend-dark-primary hover:underline"
+                    className="text-app-primary hover:underline"
                   >
                     {rev.objecte.nom}
                   </Link>
@@ -196,7 +196,7 @@ function UserReviewsList({ username }) {
 
               {rev.rol && role === "qualsevol" && (
                 <div className="flex justify-end">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider bg-vecilend-dark-primary/20 text-vecilend-dark-primary border border-vecilend-dark-primary/30">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider bg-app-primary/20 text-app-primary border border-app-primary/30">
                     {rev.rol === "propietari"
                       ? "Como propietario"
                       : "Como solicitante"}
@@ -214,7 +214,7 @@ function UserReviewsList({ username }) {
             type="button"
             onClick={handleLoadMore}
             disabled={loadingMore}
-            className="rounded-full bg-app-bg-card border border-app-border hover:border-vecilend-dark-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
+            className="rounded-full bg-app-bg-card border border-app-border hover:border-app-primary px-8 py-3 text-body-base font-bold text-app-text disabled:opacity-50 transition-colors"
           >
             {loadingMore
               ? "Cargando…"

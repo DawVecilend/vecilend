@@ -138,6 +138,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
       fullScreen={isMobile}
       fullWidth
       maxWidth="md"
+      disableScrollLock
       PaperProps={{
         sx: {
           backgroundColor: "var(--color-app-bg-card)",
@@ -247,7 +248,7 @@ function SearchModal({ open, onClose, initialFilters = {} }) {
         <button
           type="button"
           onClick={handleApply}
-          className="rounded-full bg-gradient-to-br from-vecilend-dark-primary to-vecilend-dark-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)]"
+          className="rounded-full bg-gradient-to-br from-app-primary to-app-primary px-6 py-3 text-body-base font-bold text-[var(--color-app-success-on)]"
         >
           Guardar filtros
         </button>

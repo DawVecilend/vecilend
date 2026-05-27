@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Objecte;
-use App\Models\User;
 use App\Models\Categoria;
+use App\Models\Objecte;
 use App\Models\Subcategoria;
+use App\Models\User;
+use Database\Seeders\Support\Municipios;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +16,9 @@ class ObjecteFactory extends Factory
 
     public function definition(): array
     {
-        $lat = fake()->latitude(41.30, 41.50);
-        $lng = fake()->longitude(1.95, 2.25);
+        $muni = Municipios::random();
+        $lat  = $muni['lat'] + fake()->randomFloat(5, -0.006, 0.006);
+        $lng  = $muni['lng'] + fake()->randomFloat(5, -0.006, 0.006);
 
         $categoria = Categoria::has('subcategories')->inRandomOrder()->first()
             ?? Categoria::factory()->create();

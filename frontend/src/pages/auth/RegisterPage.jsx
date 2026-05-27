@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import api from "../../services/api";
+import OptimizedImage from "../../components/elementos/OptimizedImage";
 import municipalitiesData from "../../data/municipios.json";
 
 import { normalizeString } from "../../utils/string";
@@ -21,6 +22,11 @@ function FieldError({ messages }) {
 function RegisterPage() {
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleGoogleLogin = () => {
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    window.location.href = `${apiUrl}/api/v1/auth/google/redirect`;
+  };
 
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
@@ -302,13 +308,13 @@ function RegisterPage() {
   return (
     <div className="bg-app-bg text-app-text antialiased md:h-[calc(100vh-80px)] md:overflow-hidden flex flex-col dark">
       {step === 1 && (
-        <main className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
+        <section className="grow flex flex-col md:flex-row md:h-full overflow-hidden">
           <section className="hidden md:flex md:w-1/2 relative bg-app-bg-card items-center justify-center h-full overflow-hidden">
             <div className="absolute inset-0 z-0">
-              <img
-                alt="Producto compartido entre vecinos"
+              <OptimizedImage
+                alt="Objeto compartido entre vecinos"
                 className="w-full h-full object-cover opacity-40"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQW8YXGcPQGsj1Q0KeE6EM5PNeIb_2pLMJDvddODr88dUMeNgFpr5Qs5dEO2AB3ny82vvXhxKR1aN2E7BqjU2sV5FtcQZ-345ynN76RDdZv2smlnejUHG2dyJnTy2VyYGx6-IWF-CKxfbXp8pzNllfgIcWjEMqPvNwxWyDXubGsjAiiVqX-uFuvxCluOPaesKLrAtqv5nHmjRfKM-WAQLXtTiquVhbmhJZ62YM7sq7EbMBlR3I8WQF1s_63H87bU9H2tZ7BGot5ARl"
+                src="/assets/auth-shared-item.jpg"
               />
 
               <div className="absolute inset-0 bg-linear-to-tr from-app-bg via-transparent to-transparent"></div>
@@ -316,7 +322,7 @@ function RegisterPage() {
 
             <div className="relative z-10 max-w-lg px-8">
               <div className="bg-app-bg-card-secondary/60 backdrop-blur-xl border border-app-border p-8 rounded-xl shadow-2xl">
-                <div className="flex gap-1 mb-4 text-vecilend-dark-primary">
+                <div className="flex gap-1 mb-4 text-app-primary">
                   {[...Array(5)].map((_, i) => (
                     <span
                       key={i}
@@ -330,15 +336,15 @@ function RegisterPage() {
                 <p className="text-xl font-medium leading-relaxed italic text-app-text mb-6">
                   "Vecilend me ha ayudado a encontrar justo lo que necesitaba
                   sin tener que comprarlo. Es fácil de usar, cercano y da mucha
-                  confianza saber que los productos están compartidos por
+                  confianza saber que los objetos están compartidos por
                   vecinos de mi zona."
                 </p>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-vecilend-dark-primary">
-                    <img
+                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-app-primary">
+                    <OptimizedImage
                       alt="Avatar de usuario"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3lCex78R9gss1rSRXiBMONf6Kpo-aObjVvhOsdxYfDEV5VkAjs6H5udYWFVTbBQLLe-5OX-1Nfr__L2EXX8_85qkavwodEygWuVjZ6R_S-ujoopRTJ6XdUyiVw_F4VHAySzA5WVdjgh6exDBGT_RwCUnYkkCZZYY6CTNyMrYDouOrmBTLw1SX27Er49FLqX-_HboWJrblOlE2XV8QqCIM-hFlX3WtzUVzAQ7DIjz6roiYJcCohYGKap5Asn5a0VIiVco4tNU-khmT"
+                      src="/assets/auth-user-avatar.jpg"
                     />
                   </div>
 
@@ -366,7 +372,11 @@ function RegisterPage() {
               </div>
 
               <div className="flex flex-col gap-3 mb-6">
-                <button className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]">
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]"
+                >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -388,14 +398,6 @@ function RegisterPage() {
 
                   <span>Continuar con Google</span>
                 </button>
-
-                <button className="w-full flex items-center justify-center gap-3 bg-app-bg-card-secondary hover:bg-app-bg-card-secondary border border-app-border py-3 rounded-lg font-medium transition-all active:scale-[0.98]">
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                    <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2.002-.156-3.725 1.09-4.51 1.09zM15.53 4.854c.87-1.05 1.454-2.506 1.293-3.96-1.247.052-2.76.831-3.656 1.883-.792.935-1.48 2.442-1.293 3.869 1.39.104 2.786-.74 3.656-1.792z"></path>
-                  </svg>
-
-                  <span>Continuar con Apple</span>
-                </button>
               </div>
 
               <div className="relative flex items-center justify-center mb-8">
@@ -414,7 +416,7 @@ function RegisterPage() {
                     Usuario
                   </label>
 
-                  <input
+                  <input aria-label="Usuario"
                     name="username"
                     value={formData.username}
                     onChange={(e) => {
@@ -424,7 +426,7 @@ function RegisterPage() {
                         username: undefined,
                       }));
                     }}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
                     placeholder="Nombre de usuario"
                     type="text"
                     required
@@ -437,14 +439,14 @@ function RegisterPage() {
                     Email
                   </label>
 
-                  <input
+                  <input aria-label="Email"
                     name="email"
                     value={formData.email}
                     onChange={(e) => {
                       handleChange(e);
                       setFieldErrors((prev) => ({ ...prev, email: undefined }));
                     }}
-                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-vecilend-dark-primary focus:border-transparent outline-none transition-all"
+                    className="w-full bg-app-bg-card border border-app-border rounded-lg px-4 py-3 text-app-text focus:ring-2 focus:ring-app-primary focus:border-transparent outline-none transition-all"
                     placeholder="correo@ejemplo.com"
                     type="email"
                     required
@@ -459,7 +461,7 @@ function RegisterPage() {
                 )}
 
                 <button
-                  className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-vecilend-dark-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary active:scale-[0.97]"}`}
+                  className={`w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-4 rounded-lg shadow-lg shadow-app-primary/20 transition-all flex items-center justify-center gap-2 mt-4 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-app-primary active:scale-[0.97]"}`}
                   type="submit"
                   disabled={isLoading}
                 >
@@ -480,7 +482,7 @@ function RegisterPage() {
                   ¿Ya tienes cuenta?{" "}
                   <Link
                     to="/login"
-                    className="text-vecilend-dark-primary font-bold hover:underline"
+                    className="text-app-primary font-bold hover:underline"
                   >
                     Inicia sesión
                   </Link>
@@ -488,15 +490,15 @@ function RegisterPage() {
               </div>
             </div>
           </section>
-        </main>
+        </section>
       )}
 
       {step === 2 && (
-        <main className="flex-grow flex flex-col items-center justify-center px-4 h-full">
+        <section className="flex-grow flex flex-col items-center justify-center px-4 h-full">
           <div className="w-full max-w-md -mt-12 md:-mt-8">
             <div className="mb-10 md:mb-6">
               <div className="flex justify-between mb-3 px-1">
-                <span className="text-xs font-bold tracking-widest text-vecilend-dark-primary uppercase">
+                <span className="text-xs font-bold tracking-widest text-app-primary uppercase">
                   Paso 2 de 3
                 </span>
 
@@ -506,8 +508,8 @@ function RegisterPage() {
               </div>
 
               <div className="flex h-1.5 w-full bg-app-bg-card-secondary rounded-full overflow-hidden">
-                <div className="h-full w-1/3 bg-vecilend-dark-primary/30"></div>
-                <div className="h-full w-1/3 bg-vecilend-dark-primary"></div>
+                <div className="h-full w-1/3 bg-app-primary/30"></div>
+                <div className="h-full w-1/3 bg-app-primary"></div>
                 <div className="h-full w-1/3 bg-transparent"></div>
               </div>
             </div>
@@ -515,7 +517,7 @@ function RegisterPage() {
             <div className="bg-app-bg-card-secondary rounded-xl p-8 border border-app-border shadow-2xl relative">
               <button
                 onClick={() => setStep(1)}
-                className="absolute top-6 left-6 flex items-center gap-1 text-app-text-secondary hover:text-vecilend-dark-primary transition-colors font-medium text-sm"
+                className="absolute top-6 left-6 flex items-center gap-1 text-app-text-secondary hover:text-app-primary transition-colors font-medium text-sm"
               >
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_back
@@ -525,8 +527,8 @@ function RegisterPage() {
               </button>
 
               <div className="flex flex-col items-center mb-6 mt-2">
-                <div className="w-20 h-20 bg-vecilend-dark-primary/20 rounded-full flex items-center justify-center mb-4 ring-4 ring-vecilend-dark-primary/5">
-                  <span className="material-symbols-outlined icon-filled text-vecilend-dark-primary text-4xl">
+                <div className="w-20 h-20 bg-app-primary/20 rounded-full flex items-center justify-center mb-4 ring-4 ring-app-primary/5">
+                  <span className="material-symbols-outlined icon-filled text-app-primary text-4xl">
                     mail
                   </span>
                 </div>
@@ -537,7 +539,7 @@ function RegisterPage() {
 
                 <p className="text-app-text-secondary text-center text-sm leading-relaxed">
                   Hemos enviado un código de verificación a{" "}
-                  <span className="font-bold text-vecilend-dark-primary">
+                  <span className="font-bold text-app-primary">
                     {formData.email}
                   </span>
                   . Introduce el código para confirmar tu cuenta.
@@ -581,7 +583,7 @@ function RegisterPage() {
                             onPaste={handleOtpPaste}
                             inputMode="numeric"
                             autoComplete="one-time-code"
-                            className="w-12 h-14 bg-app-bg-card-secondary border-2 border-app-border rounded-lg text-center text-xl font-bold text-vecilend-dark-primary focus:border-vecilend-dark-primary focus:ring-0 outline-none transition-colors"
+                            className="w-12 h-14 bg-app-bg-card-secondary border-2 border-app-border rounded-lg text-center text-xl font-bold text-app-primary focus:border-app-primary focus:ring-0 outline-none transition-colors"
                             maxLength="1"
                             type="text"
                           />
@@ -591,7 +593,7 @@ function RegisterPage() {
                       <button
                         type="submit"
                         disabled={isLoading}
-                        className={`w-full bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-vecilend-dark-primary/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-vecilend-dark-primary"}`}
+                        className={`w-full bg-app-primary text-[var(--color-app-success-on)] font-bold py-3.5 rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-app-primary/10 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-app-primary"}`}
                       >
                         {isLoading ? "Verificando..." : "Verificar código"}
                       </button>
@@ -610,7 +612,7 @@ function RegisterPage() {
                     type="button"
                     onClick={handleResendCode}
                     disabled={resendCooldown > 0}
-                    className={`text-sm font-medium transition-colors ${resendCooldown > 0 ? "text-app-text-secondary cursor-not-allowed" : "text-vecilend-dark-primary hover:underline"}`}
+                    className={`text-sm font-medium transition-colors ${resendCooldown > 0 ? "text-app-text-secondary cursor-not-allowed" : "text-app-primary hover:underline"}`}
                   >
                     {resendCooldown > 0
                       ? `Reenviar en ${resendCooldown}s`
@@ -620,11 +622,11 @@ function RegisterPage() {
               </div>
             </div>
           </div>
-        </main>
+        </section>
       )}
 
       {step === 3 && (
-        <main className="flex-grow flex flex-col items-center justify-center pt-8 pb-12 px-4 md:pt-10 md:pb-8 h-full overflow-hidden">
+        <section className="flex-grow flex flex-col items-center justify-center pt-8 pb-12 px-4 md:pt-10 md:pb-8 h-full overflow-hidden">
           <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row gap-6 lg:gap-8 items-stretch justify-center h-[90%]">
             <div className="w-full md:w-2/3 flex flex-col justify-center h-full relative">
               <div
@@ -632,7 +634,7 @@ function RegisterPage() {
                 className="w-full max-h-[85vh] bg-app-bg-card-secondary border border-app-border/30 rounded-xl p-6 lg:px-10 lg:py-7 shadow-2xl relative flex flex-col overflow-y-auto custom-scrollbar"
               >
                 <div className="absolute top-0 left-0 w-full h-1 bg-app-bg-card-secondary">
-                  <div className="h-full bg-vecilend-dark-primary w-full shadow-[0_0_10px_rgba(79,219,200,0.5)] transition-all duration-500"></div>
+                  <div className="h-full bg-app-primary w-full shadow-[0_0_10px_rgba(79,219,200,0.5)] transition-all duration-500"></div>
                 </div>
 
                 <div className="mb-4 mt-2">
@@ -641,7 +643,7 @@ function RegisterPage() {
                       Últimos datos personales
                     </h1>
 
-                    <span className="text-sm text-vecilend-dark-primary font-semibold px-3 py-1 bg-vecilend-dark-primary/20 rounded-full border border-vecilend-dark-primary/20">
+                    <span className="text-sm text-app-primary font-semibold px-3 py-1 bg-app-primary/20 rounded-full border border-app-primary/20">
                       Paso 3 de 3
                     </span>
                   </div>
@@ -672,11 +674,11 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors">
                             person
                           </span>
 
-                          <input
+                          <input aria-label="Nombre"
                             name="nom"
                             value={formData.nom}
                             onChange={(e) => {
@@ -687,7 +689,7 @@ function RegisterPage() {
                               }));
                             }}
                             required
-                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Nombre"
                             type="text"
                           />
@@ -701,11 +703,11 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors">
                             badge
                           </span>
 
-                          <input
+                          <input aria-label="Apellidos"
                             name="cognoms"
                             value={formData.cognoms}
                             onChange={(e) => {
@@ -716,7 +718,7 @@ function RegisterPage() {
                               }));
                             }}
                             required
-                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Apellidos"
                             type="text"
                           />
@@ -741,7 +743,7 @@ function RegisterPage() {
                             }));
                           }}
                           required
-                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                           placeholder="••••••••"
                         />
                         <FieldError messages={fieldErrors.password} />
@@ -766,7 +768,7 @@ function RegisterPage() {
                             }));
                           }}
                           required
-                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                          className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                           placeholder="••••••••"
                         />
                         <FieldError
@@ -788,11 +790,11 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors">
                             location_on
                           </span>
 
-                          <input
+                          <input aria-label="Población"
                             name="direccio"
                             value={formData.direccio}
                             onChange={(e) => {
@@ -809,7 +811,7 @@ function RegisterPage() {
                             onBlur={() =>
                               setTimeout(() => setShowSuggestions(false), 200)
                             }
-                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
                             placeholder="Ej. Castelldefels"
                             type="text"
                             autoComplete="off"
@@ -824,7 +826,7 @@ function RegisterPage() {
                                   onClick={() =>
                                     handleSelectSuggestion(suggestion)
                                   }
-                                  className="px-4 py-2 text-xs text-app-text hover:bg-app-bg-card-secondary hover:text-vecilend-dark-primary cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
+                                  className="px-4 py-2 text-xs text-app-text hover:bg-app-bg-card-secondary hover:text-app-primary cursor-pointer transition-colors border-b border-app-border/50 last:border-none"
                                 >
                                   <span className="font-medium">
                                     {suggestion.name}
@@ -846,11 +848,11 @@ function RegisterPage() {
                         </label>
 
                         <div className="relative group">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-vecilend-dark-primary text-lg transition-colors">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-app-text-secondary group-focus-within:text-app-primary text-lg transition-colors">
                             call
                           </span>
 
-                          <input
+                          <input aria-label="Teléfono"
                             name="telefon"
                             value={formData.telefon}
                             onChange={(e) => {
@@ -860,8 +862,8 @@ function RegisterPage() {
                                 telefon: undefined,
                               }));
                             }}
-                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
-                            placeholder="+34 600 000 000"
+                            className="w-full bg-app-bg-card-secondary border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all text-sm"
+                            placeholder="+34 612 345 678"
                             type="tel"
                           />
                         </div>
@@ -894,7 +896,7 @@ function RegisterPage() {
                                 upload
                               </span>
                               Elegir archivo
-                              <input
+                              <input aria-label="Subir avatar"
                                 type="file"
                                 className="hidden"
                                 accept="image/jpeg,image/png,image/webp"
@@ -911,11 +913,11 @@ function RegisterPage() {
                         Biografía
                       </label>
 
-                      <textarea
+                      <textarea aria-label="Biografía"
                         name="biography"
                         value={formData.biography}
                         onChange={handleChange}
-                        className="w-full bg-app-bg-card-secondary border-none rounded-lg px-4 py-2 focus:ring-2 focus:ring-inset focus:ring-vecilend-dark-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all resize-none text-sm"
+                        className="w-full bg-app-bg-card-secondary border-none rounded-lg px-4 py-2 focus:ring-2 focus:ring-inset focus:ring-app-primary text-app-text placeholder:text-app-text-secondary/50 outline-none transition-all resize-none text-sm"
                         placeholder="Cuéntanos algo sobre ti, qué sueles compartir o qué tipo de objetos te interesan..."
                         rows="2"
                       ></textarea>
@@ -933,7 +935,7 @@ function RegisterPage() {
 
                     <button
                       disabled={isLoading}
-                      className={`flex-1 px-6 py-3 rounded-xl bg-vecilend-dark-primary text-[var(--color-app-success-on)] font-bold shadow-lg shadow-vecilend-dark-primary/20 transition-all text-sm ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110 active:scale-[0.98]"}`}
+                      className={`flex-1 px-6 py-3 rounded-xl bg-app-primary text-[var(--color-app-success-on)] font-bold shadow-lg shadow-app-primary/20 transition-all text-sm ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110 active:scale-[0.98]"}`}
                       type="submit"
                     >
                       {isLoading ? "Creando cuenta..." : "Completar registro"}
@@ -945,7 +947,7 @@ function RegisterPage() {
 
             <div className="w-full md:w-1/3 flex flex-col gap-6 lg:gap-8 justify-center h-full">
               <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
-                <div className="w-10 h-10 rounded-lg bg-vecilend-dark-primary/20 flex items-center justify-center text-vecilend-dark-primary mb-4">
+                <div className="w-10 h-10 rounded-lg bg-app-primary/20 flex items-center justify-center text-app-primary mb-4">
                   <span className="material-symbols-outlined">
                     verified_user
                   </span>
@@ -981,7 +983,7 @@ function RegisterPage() {
               </div>
 
               <div className="p-6 bg-app-bg-card rounded-xl border border-app-border/20 flex flex-col items-center text-center w-full">
-                <div className="w-10 h-10 rounded-lg bg-vecilend-dark-primary/20/20 flex items-center justify-center text-vecilend-dark-primary mb-4">
+                <div className="w-10 h-10 rounded-lg bg-app-primary/20/20 flex items-center justify-center text-app-primary mb-4">
                   <span className="material-symbols-outlined">speed</span>
                 </div>
 
@@ -998,7 +1000,7 @@ function RegisterPage() {
               </div>
             </div>
           </div>
-        </main>
+        </section>
       )}
     </div>
   );

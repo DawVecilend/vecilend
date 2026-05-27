@@ -1,16 +1,22 @@
+networks:
+  internal:
+    driver: bridge
+  proxy:
+    external: true
+
 services:
   db:
     build: ./db
     container_name: vecilend_db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: vecilend_db
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-    ports:
-      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d vecilend_db"]
       interval: 5s
@@ -20,21 +26,20 @@ services:
   backend:
     build: ./backend
     container_name: vecilend_backend
-    restart: always
-    ports:
-      - "8000:8000"
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
     volumes:
-      - ./backend:/var/www/html
-      - backend_vendor:/var/www/html/vendor
-    environment: &backend_env
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: vecilend_db
-      DB_USERNAME: admin
-      DB_PASSWORD: admin
-      APP_URL: http://localhost:8000
-      FRONTEND_URL: http://localhost:5173
+      - backend_storage:/var/www/html/storage
+    networks:
+      - internal
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.vecilend-api.rule=Host(`vecilend-api.es`)"
+      - "traefik.http.routers.vecilend-api.entrypoints=web"
+      - "traefik.http.services.vecilend-api.loadbalancer.server.port=8000"
     depends_on:
       db:
         condition: service_healthy
@@ -42,32 +47,37 @@ services:
   scheduler:
     build: ./backend
     container_name: vecilend_scheduler
-    restart: always
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
     volumes:
-      - ./backend:/var/www/html
-      - backend_vendor:/var/www/html/vendor
-    environment:
-      <<: *backend_env
+      - backend_storage:/var/www/html/storage
     command: php artisan schedule:work
+    networks:
+      - internal
     depends_on:
       backend:
         condition: service_started
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://vecilend-api.es
     container_name: vecilend_frontend
-    restart: always
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - frontend_node_modules:/app/node_modules
-    environment:
-      VITE_API_URL: http://localhost:8000
+    restart: unless-stopped
+    networks:
+      - internal
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.vecilend.rule=Host(`vecilend.es`)"
+      - "traefik.http.routers.vecilend.entrypoints=web"
+      - "traefik.http.services.vecilend.loadbalancer.server.port=3000"
     depends_on:
       - backend
 
 volumes:
   pgdata:
-  backend_vendor:
-  frontend_node_modules:
+  backend_storage:

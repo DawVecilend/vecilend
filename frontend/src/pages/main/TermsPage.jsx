@@ -21,10 +21,10 @@ function TermsPage() {
             Al registrarte y utilizar Vecilend aceptas estos términos y
             condiciones, así como nuestras{" "}
             <Link
-              to="/politica-de-privacidad"
+              to="/privacy-policy"
               className="text-app-primary hover:underline"
             >
-              políticas de privacidad
+              política de privacidad
             </Link>
             . Si no estás de acuerdo con alguna parte, por favor no uses la
             plataforma.
@@ -121,7 +121,14 @@ function TermsPage() {
         <Section title="9. Contacto">
           <p>
             Para cualquier consulta sobre estos términos puedes contactar con
-            nosotros respondiendo a las notificaciones del equipo de Vecilend.
+            nuestro equipo de soporte escribiendo a{" "}
+            <a
+              href="mailto:support@vecilend.com"
+              className="text-app-primary hover:underline"
+            >
+              support@vecilend.com
+            </a>
+            .
           </p>
         </Section>
       </div>

@@ -71,6 +71,8 @@ class ObjecteDetailResource extends JsonResource
             // ── Dates ocupades (transaccions actives) ──
             'dates_ocupades' => $this->dates_ocupades ?? [],
 
+            'favorit'        => (bool) ($this->favorit ?? false),
+
             'created_at'     => $this->created_at?->toIso8601String(),
             'updated_at'     => $this->updated_at?->toIso8601String(),
         ];

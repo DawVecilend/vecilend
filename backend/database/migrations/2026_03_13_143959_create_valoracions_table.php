@@ -10,11 +10,15 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('transaccio_id')->constrained('transaccions')->cascadeOnDelete();
             $table->foreignId('autor_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('valorat_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('objecte_id')->constrained('objectes')->cascadeOnDelete();
             $table->unsignedTinyInteger('puntuacio');
             $table->text('comentari')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->unique(['transaccio_id', 'autor_id']);
             $table->index('transaccio_id');
+            $table->index(['valorat_id', 'created_at']);
+            $table->index(['objecte_id', 'created_at']);
         });
     }
 

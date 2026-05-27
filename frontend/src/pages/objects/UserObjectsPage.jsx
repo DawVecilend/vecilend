@@ -49,13 +49,13 @@ function UserObjectsPage() {
       </div>
 
       {loadingProducts ? (
-        <ProductsGridSkeleton count={6} />
+        <ProductsGridSkeleton count={5} />
       ) : (
         <ProductsSection
           title={
             isOwnProfile
               ? "Mis objetos publicados"
-              : `Todos los productos de ${userNom || username}`
+              : `Todos los objetos de ${userNom || username}`
           }
           products={objects}
           profile={true}

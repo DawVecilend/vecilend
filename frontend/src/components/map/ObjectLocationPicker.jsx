@@ -8,7 +8,11 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import { useAuth } from "../../contexts/AuthContext";
-import { useGeolocation, DEFAULT_FALLBACK_LOCATION } from "../../hooks/useGeolocation";
+import {
+  useGeolocation,
+  DEFAULT_FALLBACK_LOCATION,
+} from "../../hooks/useGeolocation";
+import { isInSpain, SPAIN_MAX_BOUNDS } from "../../utils/spainBounds";
 import "../../utils/leafletIconFix";
 
 const pickerIcon = L.divIcon({
@@ -25,50 +29,29 @@ const pickerIcon = L.divIcon({
   iconAnchor: [16, 32],
 });
 
-function ClickHandler({ onChange }) {
+function ClickHandler({ onPick, onOutOfBounds }) {
+  const map = useMap();
   useMapEvents({
     click(e) {
-      onChange({ lat: e.latlng.lat, lng: e.latlng.lng });
+      const { lat, lng } = e.latlng;
+      if (!isInSpain(lat, lng)) {
+        onOutOfBounds();
+        return;
+      }
+      onPick({ lat, lng });
+      map.setView([lat, lng], map.getZoom(), { animate: true });
     },
   });
   return null;
 }
 
-function FlyTo({ position }) {
-  const map = useMap();
-  useEffect(() => {
-    if (position) {
-      map.flyTo([position.lat, position.lng], map.getZoom(), { duration: 0.6 });
-    }
-  }, [position, map]);
-  return null;
-}
-
-/**
- * Selector d'ubicació SENSE radi — pensat per pujar/editar objectes.
- *
- * Comportament:
- *   - Si `value` ja porta coordenades (cas d'edició d'un objecte
- *     existent), centrem el mapa i marquem el pin allà.
- *   - Si `value` és null (cas de creació), el mapa es centra a
- *     la ubicació de l'usuari (de useGeolocation: navigator → user.ubicacio
- *     → DEFAULT_FALLBACK_LOCATION) i NO posa pin fins que l'usuari toca.
- *   - "Usar mi ubicación" demana al navegador i si funciona, selecciona
- *     aquesta ubicació com a valor. Si l'usuari denega, no fa res.
- */
 function ObjectLocationPicker({ value, onChange }) {
   const { user } = useAuth();
   const { status, requestLocation } = useGeolocation({ autoRequest: false });
   const [mapCenter, setMapCenter] = useState(null);
   const [geoFailed, setGeoFailed] = useState(false);
+  const [outOfBounds, setOutOfBounds] = useState(false);
 
-  // Centrem el mapa amb la prioritat correcta per a creació d'objectes:
-  //   1. value (si venim d'edició o l'usuari ja ha triat)
-  //   2. user.ubicacio (ubicació guardada al perfil — el cas habitual a creació)
-  //   3. DEFAULT_FALLBACK_LOCATION
-  // NO demanem geolocalització automàticament: això sobreescrivia la ubicació
-  // del perfil amb la geolocalització del navegador/IP, que sovint no és on
-  // viu realment l'usuari.
   useEffect(() => {
     if (mapCenter) return;
     if (value) {
@@ -82,9 +65,9 @@ function ObjectLocationPicker({ value, onChange }) {
 
   if (!mapCenter) {
     return (
-      <div className="h-[260px] md:h-[320px] w-full rounded-[16px] bg-app-bg-card border border-app-border flex items-center justify-center">
-        <span className="text-sm text-app-text-secondary font-body">
-          Obteniendo ubicación…
+      <div className="h-[260px] md:h-[320px] w-full rounded-2xl bg-app-bg-card border border-app-border flex items-center justify-center">
+        <span className="text-label text-app-text-secondary font-body">
+          Cargando mapa…
         </span>
       </div>
     );
@@ -92,12 +75,21 @@ function ObjectLocationPicker({ value, onChange }) {
 
   const center = value || mapCenter;
 
+  const handleValidPick = (coords) => {
+    setOutOfBounds(false);
+    onChange(coords);
+  };
+
   const handleUseMyLocation = async () => {
     setGeoFailed(false);
     try {
       const result = await requestLocation();
       if (result && result.lat != null) {
-        onChange(result);
+        if (!isInSpain(result.lat, result.lng)) {
+          setOutOfBounds(true);
+          return;
+        }
+        handleValidPick(result);
       }
     } catch {
       setGeoFailed(true);
@@ -111,6 +103,8 @@ function ObjectLocationPicker({ value, onChange }) {
           center={[center.lat, center.lng]}
           zoom={14}
           scrollWheelZoom
+          maxBounds={SPAIN_MAX_BOUNDS}
+          maxBoundsViscosity={0.8}
           style={{ height: "100%", width: "100%" }}
         >
           <TileLayer
@@ -126,14 +120,21 @@ function ObjectLocationPicker({ value, onChange }) {
               eventHandlers={{
                 dragend(e) {
                   const ll = e.target.getLatLng();
-                  onChange({ lat: ll.lat, lng: ll.lng });
+                  if (!isInSpain(ll.lat, ll.lng)) {
+                    setOutOfBounds(true);
+                    e.target.setLatLng([value.lat, value.lng]);
+                    return;
+                  }
+                  handleValidPick({ lat: ll.lat, lng: ll.lng });
                 },
               }}
             />
           )}
 
-          <ClickHandler onChange={onChange} />
-          <FlyTo position={value} />
+          <ClickHandler
+            onPick={handleValidPick}
+            onOutOfBounds={() => setOutOfBounds(true)}
+          />
         </MapContainer>
       </div>
 
@@ -142,16 +143,16 @@ function ObjectLocationPicker({ value, onChange }) {
           type="button"
           onClick={handleUseMyLocation}
           disabled={status === "requesting"}
-          className="inline-flex items-center gap-2 rounded-[14px] bg-app-bg-card border border-app-border px-4 py-2 font-body text-[14px] text-app-text hover:border-vecilend-dark-primary disabled:opacity-50 transition"
+          className="inline-flex items-center gap-2 rounded-[14px] bg-app-bg-card border border-app-border px-4 py-2 font-body text-[14px] text-app-text hover:border-app-primary disabled:opacity-50 transition"
         >
           <span className="material-symbols-outlined text-base">
             my_location
           </span>
-          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación"}
+          {status === "requesting" ? "Obteniendo…" : "Usar mi ubicación actual"}
         </button>
 
         {value ? (
-          <span className="text-xs text-vecilend-dark-primary font-body">
+          <span className="text-xs text-app-primary font-body">
             ✓ Ubicación seleccionada
           </span>
         ) : (
@@ -160,6 +161,14 @@ function ObjectLocationPicker({ value, onChange }) {
           </span>
         )}
       </div>
+
+      {outOfBounds && (
+        <p className="text-xs text-amber-400 font-body">
+          {value
+            ? "Ese punto no es válido porque no está lo suficientemente cerca de España. Tu ubicación actual sigue seleccionada."
+            : "La ubicación debe estar en España o zonas cercanas. Selecciona un punto próximo al territorio español."}
+        </p>
+      )}
 
       {geoFailed && (
         <p className="text-xs text-amber-400 font-body">

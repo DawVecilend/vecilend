@@ -57,7 +57,7 @@ class ObjecteController extends Controller
             ->ambCoordenades()
             ->disponible()
             ->with([
-                'user:id,nom,avatar_url',
+                'user:id,username,nom,avatar_url',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',
@@ -277,7 +277,7 @@ class ObjecteController extends Controller
         $query = Objecte::query()
             ->disponible()
             ->with([
-                'user:id,nom,avatar_url',
+                'user:id,username,nom,avatar_url',
                 'categoria:id,nom,icona,slug',
                 'subcategoria:id,nom,slug',
                 'imatges',
@@ -356,7 +356,7 @@ class ObjecteController extends Controller
             ->where('solicituds.estat', 'acceptat')
             ->where(function ($q) {
                 $q->whereNull('transaccions.id')
-                  ->orWhereIn('transaccions.estat', ['en_curs']);
+                    ->orWhereIn('transaccions.estat', ['en_curs']);
             })
             ->select('solicituds.data_inici', 'solicituds.data_fi')
             ->orderBy('solicituds.data_inici')
@@ -428,10 +428,16 @@ class ObjecteController extends Controller
         $authUser = $request->user();
         $isOwn = $authUser && $authUser->id === $user->id;
 
+        if (!$user->actiu && !$isOwn) {
+            return response()->json([
+                'message' => 'Usuario no encontrado.',
+            ], 404);
+        }
+
         $query = Objecte::query()
             ->ambCoordenades()
             ->with([
-                'user:id,nom,avatar_url',
+                'user:id,username,nom,avatar_url',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom,slug',
                 'imatges',
@@ -439,7 +445,6 @@ class ObjecteController extends Controller
             ->where('user_id', $user->id)
             ->orderByDesc('created_at');
 
-        // Visitants i altres usuaris només veuen els disponibles
         if (!$isOwn) {
             $query->where('estat', 'disponible');
         }
@@ -513,7 +518,7 @@ class ObjecteController extends Controller
                 ]);
 
                 return response()->json([
-                    'message' => 'Error al subir las imágenes. Inténtalo de nuevo.',
+                    'message' => 'Error al añadir las imágenes. Inténtalo de nuevo.',
                 ], 500);
             }
         }
@@ -523,7 +528,7 @@ class ObjecteController extends Controller
 
         // ── 3. Recarregar amb relacions i retornar ──
         $objecte->load([
-            'user:id,nom,avatar_url',
+            'user:id,username,nom,avatar_url',
             'categoria:id,nom,icona',
             'subcategoria:id,nom',
             'imatges',
@@ -644,7 +649,7 @@ class ObjecteController extends Controller
         // ── 6. Recarregar i retornar ──
         if (isset($validated['lat']) && isset($validated['lng'])) {
             $objecte->load([
-                'user:id,nom,avatar_url',
+                'user:id,username,nom,avatar_url',
                 'categoria:id,nom,icona',
                 'subcategoria:id,nom',
                 'imatges',
@@ -656,7 +661,7 @@ class ObjecteController extends Controller
             $objecte = Objecte::ambCoordenades()
                 ->findOrFail($objecte->id)
                 ->load([
-                    'user:id,nom,avatar_url',
+                    'user:id,username,nom,avatar_url',
                     'categoria:id,nom,icona',
                     'subcategoria:id,nom',
                     'imatges',

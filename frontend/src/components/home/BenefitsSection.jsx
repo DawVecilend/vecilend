@@ -8,25 +8,25 @@ function BenefitsSection() {
     {
       id: 1,
       icon: "search_check",
-      title: "Buscar y Reservar",
+      title: "Buscar y reservar",
       text: "Busca el artículo que necesitas y selecciona tus fechas de alquiler con facilidad.",
     },
     {
       id: 2,
       icon: "handshake",
-      title: "Conocer al Propietario",
+      title: "Conocer al propietario",
       text: "Coordina una ubicación de entrega segura o elige la entrega a domicilio.",
     },
     {
       id: 3,
       icon: "local_activity",
-      title: "Disfrutar del Artículo",
-      text: "Usa el objeto para tu proyecto, viaje o evento. ¡Es tuyo por la reserva!",
+      title: "Disfrutar del artículo",
+      text: "Usa el objeto para tu proyecto, viaje o evento. ¡Es tuyo durante la reserva!",
     },
     {
       id: 4,
       icon: "replay",
-      title: "Devolver y Calificar",
+      title: "Devolver y valorar",
       text: "Devuelve el artículo y deja una reseña para mantener nuestra comunidad confiable.",
     },
   ];
@@ -37,7 +37,7 @@ function BenefitsSection() {
         <div className="text-center max-w-2xl mx-auto mb-12 md:mb-20">
           <h2 className="font-inter text-3xl md:text-4xl font-extrabold tracking-tight mb-4 text-app-text">
             Alquilar nunca fue{" "}
-            <span className="text-vecilend-dark-primary">tan fácil.</span>
+            <span className="text-app-primary">tan fácil.</span>
           </h2>
           <p className="text-app-text-secondary text-base md:text-lg">
             Cuatro pasos simples para obtener lo que necesitas o comenzar a

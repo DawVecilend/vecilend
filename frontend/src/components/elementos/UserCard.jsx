@@ -18,74 +18,78 @@ function UserCard({ user, action = null, profileHref = null }) {
     <img
       src={user.avatar_url}
       alt="Avatar usuario"
-      className="h-[80px] w-[80px] rounded-full object-cover shrink-0"
+      className="h-[56px] w-[56px] md:h-[80px] md:w-[80px] rounded-full object-cover shrink-0"
     />
   ) : (
     <img
       src="/assets/icons/empty-user-icon.svg"
       alt=""
-      className="h-[80px] w-[80px] shrink-0"
+      className="h-[56px] w-[56px] md:h-[80px] md:w-[80px] shrink-0"
     />
   );
 
   const nameEl = (
-    <p className="text-app-text text-h3-desktop font-heading truncate">
+    <p className="text-app-text text-[16px] lg:text-h3-desktop font-heading truncate">
       {user?.nom} {user?.cognoms}
     </p>
   );
 
   return (
-    <div className="flex bg-app-card w-full rounded-2xl p-4 gap-3 items-center">
-      {profileHref ? (
-        <Link
-          to={profileHref}
-          className="shrink-0 hover:opacity-90 transition-opacity"
-          aria-label={`Ver perfil de ${user?.nom ?? "usuario"}`}
-        >
-          {avatarEl}
-        </Link>
-      ) : (
-        avatarEl
-      )}
-
-      <div className="flex flex-col gap-1 flex-1 min-w-0">
+    <div className="bg-app-card w-full rounded-2xl p-4">
+      <div className="flex gap-3 items-center">
         {profileHref ? (
           <Link
             to={profileHref}
-            className="self-start hover:opacity-90 transition-opacity max-w-full"
+            className="shrink-0 hover:opacity-90 transition-opacity"
             aria-label={`Ver perfil de ${user?.nom ?? "usuario"}`}
           >
-            {nameEl}
+            {avatarEl}
           </Link>
         ) : (
-          nameEl
+          avatarEl
         )}
 
-        {hasRating ? (
-          <div className="flex items-center gap-2 flex-wrap">
-            <Rating
-              value={Number(avg)}
-              precision={0.5}
-              readOnly
-              size="small"
-              sx={{
-                "& .MuiRating-iconFilled": { color: "#14B8A6" },
-                "& .MuiRating-iconEmpty": { color: "#14B8A6", opacity: 0.3 },
-              }}
-            />
-            <span className="text-app-text-secondary text-label">
-              {Number(avg).toFixed(1)} ({total}{" "}
-              {total === 1 ? "valoración" : "valoraciones"})
-            </span>
-          </div>
-        ) : (
-          <p className="text-app-text-secondary text-label italic">
-            Sin valoraciones
-          </p>
-        )}
+        <div className="flex flex-col gap-1 flex-1 min-w-0">
+          {profileHref ? (
+            <Link
+              to={profileHref}
+              className="self-start hover:opacity-90 transition-opacity max-w-full"
+              aria-label={`Ver perfil de ${user?.nom ?? "usuario"}`}
+            >
+              {nameEl}
+            </Link>
+          ) : (
+            nameEl
+          )}
+
+          {hasRating ? (
+            <div className="flex items-center gap-2 flex-wrap">
+              <Rating
+                value={Number(avg)}
+                precision={0.5}
+                readOnly
+                size="small"
+                sx={{
+                  "& .MuiRating-iconFilled": { color: "#14B8A6" },
+                  "& .MuiRating-iconEmpty": { color: "#14B8A6", opacity: 0.3 },
+                }}
+              />
+              <span className="text-app-text-secondary text-label">
+                {Number(avg).toFixed(1)} ({total}{" "}
+                {total === 1 ? "valoración" : "valoraciones"})
+              </span>
+            </div>
+          ) : (
+            <p className="text-app-text-secondary text-label italic">
+              Sin valoraciones
+            </p>
+          )}
+        </div>
+
+        {action && <div className="shrink-0 hidden md:block">{action}</div>}
       </div>
 
-      {action && <div className="shrink-0">{action}</div>}
+      {action && <div className="md:hidden mt-3">{action}</div>}
     </div>
   );
 }
