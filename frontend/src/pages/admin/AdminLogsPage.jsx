@@ -11,17 +11,33 @@ function ActionBadge({ accio, tipus }) {
   let color = "#9ca3af";
 
   if (tipus === "admin") {
-    if (accio?.endsWith("_block") || accio?.endsWith("_delete")) { bg = "rgba(239,68,68,0.12)"; color = "#f87171"; }
-    else if (accio?.endsWith("_create")) { bg = "rgba(34,197,94,0.12)"; color = "#22C55E"; }
-    else if (accio?.endsWith("_update") || accio?.endsWith("_unblock") || accio?.endsWith("_resolve")) { bg = "rgba(20,184,166,0.12)"; color = "#14B8A6"; }
+    if (accio?.endsWith("_block") || accio?.endsWith("_delete")) {
+      bg = "rgba(239,68,68,0.12)";
+      color = "#f87171";
+    } else if (accio?.endsWith("_create")) {
+      bg = "rgba(34,197,94,0.12)";
+      color = "#22C55E";
+    } else if (
+      accio?.endsWith("_update") ||
+      accio?.endsWith("_unblock") ||
+      accio?.endsWith("_resolve")
+    ) {
+      bg = "rgba(20,184,166,0.12)";
+      color = "#14B8A6";
+    }
   } else if (tipus === "auth") {
-    bg = "rgba(168,85,247,0.12)"; color = "#a855f7";
+    bg = "rgba(168,85,247,0.12)";
+    color = "#a855f7";
   } else if (tipus === "usuari") {
-    bg = "rgba(59,130,246,0.12)"; color = "#60a5fa";
+    bg = "rgba(59,130,246,0.12)";
+    color = "#60a5fa";
   }
 
   return (
-    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono font-semibold" style={{ backgroundColor: bg, color }}>
+    <span
+      className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono font-semibold"
+      style={{ backgroundColor: bg, color }}
+    >
       {accio}
     </span>
   );
@@ -29,13 +45,20 @@ function ActionBadge({ accio, tipus }) {
 
 function TipusBadge({ tipus }) {
   const map = {
-    admin:  { label: "Admin",  color: "#14B8A6", bg: "rgba(20,184,166,0.12)" },
-    auth:   { label: "Auth",   color: "#a855f7", bg: "rgba(168,85,247,0.12)" },
+    admin: { label: "Admin", color: "#14B8A6", bg: "rgba(20,184,166,0.12)" },
+    auth: { label: "Auth", color: "#a855f7", bg: "rgba(168,85,247,0.12)" },
     usuari: { label: "Usuario", color: "#60a5fa", bg: "rgba(59,130,246,0.12)" },
   };
-  const s = map[tipus] ?? { label: tipus, color: "#9ca3af", bg: "rgba(107,114,128,0.12)" };
+  const s = map[tipus] ?? {
+    label: tipus,
+    color: "#9ca3af",
+    bg: "rgba(107,114,128,0.12)",
+  };
   return (
-    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider" style={{ backgroundColor: s.bg, color: s.color }}>
+    <span
+      className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
+      style={{ backgroundColor: s.bg, color: s.color }}
+    >
       {s.label}
     </span>
   );
@@ -47,10 +70,19 @@ function AdminLogsPage() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [meta, setMeta] = useState({ current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
+  const [meta, setMeta] = useState({
+    current_page: 1,
+    last_page: 1,
+    per_page: PER_PAGE,
+    total: 0,
+  });
   const [page, setPage] = useState(1);
 
-  const [filterOptions, setFilterOptions] = useState({ tipus: [], accions: [], entitats: [] });
+  const [filterOptions, setFilterOptions] = useState({
+    tipus: [],
+    accions: [],
+    entitats: [],
+  });
   const [filterTipus, setFilterTipus] = useState("all");
   const [filterAction, setFilterAction] = useState("all");
   const [filterActor, setFilterActor] = useState("");
@@ -64,41 +96,63 @@ function AdminLogsPage() {
   const debouncedActor = useDebounce(filterActor, 300);
 
   const loadFilterOptions = useCallback(() => {
-    backofficeApi.get("/backoffice/logs/filters")
-      .then((res) => setFilterOptions(res.data.data ?? { tipus: [], accions: [], entitats: [] }))
+    backofficeApi
+      .get("/backoffice/logs/filters")
+      .then((res) =>
+        setFilterOptions(
+          res.data.data ?? { tipus: [], accions: [], entitats: [] },
+        ),
+      )
       .catch(() => {});
   }, []);
 
   const loadLogs = useCallback(() => {
     setLoading(true);
-    backofficeApi.get("/backoffice/logs", {
-      params: {
-        page,
-        per_page: PER_PAGE,
-        tipus: filterTipus,
-        accio: filterAction,
-        entitat: filterEntity,
-        actor: debouncedActor || undefined,
-      },
-    })
+    backofficeApi
+      .get("/backoffice/logs", {
+        params: {
+          page,
+          per_page: PER_PAGE,
+          tipus: filterTipus,
+          accio: filterAction,
+          entitat: filterEntity,
+          actor: debouncedActor || undefined,
+        },
+      })
       .then((res) => {
         setLogs(res.data.data ?? []);
-        setMeta(res.data.meta ?? { current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
+        setMeta(
+          res.data.meta ?? {
+            current_page: 1,
+            last_page: 1,
+            per_page: PER_PAGE,
+            total: 0,
+          },
+        );
         setError(null);
       })
       .catch(() => setError("No se han podido cargar los logs."))
       .finally(() => setLoading(false));
   }, [page, filterTipus, filterAction, filterEntity, debouncedActor]);
 
-  useEffect(() => { loadFilterOptions(); }, [loadFilterOptions]);
-  useEffect(() => { loadLogs(); }, [loadLogs]);
-  useEffect(() => { setPage(1); }, [filterTipus, filterAction, filterEntity, debouncedActor]);
+  useEffect(() => {
+    loadFilterOptions();
+  }, [loadFilterOptions]);
+  useEffect(() => {
+    loadLogs();
+  }, [loadLogs]);
+  useEffect(() => {
+    setPage(1);
+  }, [filterTipus, filterAction, filterEntity, debouncedActor]);
 
   const formatDate = (iso) => {
     if (!iso) return "—";
     return new Date(iso).toLocaleString("es-ES", {
-      day: "2-digit", month: "2-digit", year: "numeric",
-      hour: "2-digit", minute: "2-digit",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -157,13 +211,16 @@ function AdminLogsPage() {
     }
   };
 
-  const selectClass = "px-3 py-2 rounded-lg text-sm outline-none cursor-pointer bg-app-neutral border border-app-border text-app-text";
+  const selectClass =
+    "px-3 py-2 rounded-lg text-sm outline-none cursor-pointer bg-app-neutral border border-app-border text-app-text";
 
   return (
     <div className="p-6 lg:p-8">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold font-heading text-app-text">Log de acciones</h1>
+          <h1 className="text-2xl font-bold font-heading text-app-text">
+            Log de acciones
+          </h1>
           <p className="text-sm mt-1 text-app-text-secondary">
             Historial de acciones · {meta.total} registros
           </p>
@@ -176,16 +233,20 @@ function AdminLogsPage() {
             disabled={exporting || loading}
             className="inline-flex items-center justify-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-app-primary/15 text-app-primary hover:bg-app-primary/25 disabled:opacity-60 whitespace-nowrap w-full sm:w-auto"
           >
-            <span className="material-symbols-outlined text-base">download</span>
+            <span className="material-symbols-outlined text-base">
+              download
+            </span>
             {exporting ? "Exportando…" : "Exportar CSV"}
           </button>
           <button
             type="button"
             onClick={() => setCleanConfirmOpen(true)}
             disabled={cleaning || loading}
-            className="inline-flex items-center justify-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 disabled:opacity-60 whitespace-nowrap w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-1.5 text-sm px-4 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 disabled:opacity-60 whitespace-nowrap w-full sm:w-auto"
           >
-            <span className="material-symbols-outlined text-base">delete_sweep</span>
+            <span className="material-symbols-outlined text-base">
+              delete_sweep
+            </span>
             Limpiar historial
           </button>
         </div>
@@ -193,7 +254,8 @@ function AdminLogsPage() {
 
       <div className="rounded-xl border border-app-border bg-app-bg-card p-4 mb-5 flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-[180px]">
-          <input aria-label="Filtrar por usuario"
+          <input
+            aria-label="Filtrar por usuario"
             type="text"
             placeholder="Filtrar por usuario..."
             value={filterActor}
@@ -202,31 +264,68 @@ function AdminLogsPage() {
           />
         </div>
 
-        <select aria-label="Filtrar por tipo" value={filterTipus} onChange={(e) => setFilterTipus(e.target.value)} className={selectClass}>
+        <select
+          aria-label="Filtrar por tipo"
+          value={filterTipus}
+          onChange={(e) => setFilterTipus(e.target.value)}
+          className={selectClass}
+        >
           <option value="all">Todos los tipos</option>
-          {filterOptions.tipus.map((t) => <option key={t} value={t}>{t}</option>)}
+          {filterOptions.tipus.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
         </select>
 
-        <select aria-label="Filtrar por acción" value={filterAction} onChange={(e) => setFilterAction(e.target.value)} className={selectClass}>
+        <select
+          aria-label="Filtrar por acción"
+          value={filterAction}
+          onChange={(e) => setFilterAction(e.target.value)}
+          className={selectClass}
+        >
           <option value="all">Todas las acciones</option>
-          {filterOptions.accions.map((a) => <option key={a} value={a}>{a}</option>)}
+          {filterOptions.accions.map((a) => (
+            <option key={a} value={a}>
+              {a}
+            </option>
+          ))}
         </select>
 
-        <select aria-label="Filtrar por entidad" value={filterEntity} onChange={(e) => setFilterEntity(e.target.value)} className={selectClass}>
+        <select
+          aria-label="Filtrar por entidad"
+          value={filterEntity}
+          onChange={(e) => setFilterEntity(e.target.value)}
+          className={selectClass}
+        >
           <option value="all">Todas las entidades</option>
-          {filterOptions.entitats.map((e) => <option key={e} value={e}>{e}</option>)}
+          {filterOptions.entitats.map((e) => (
+            <option key={e} value={e}>
+              {e}
+            </option>
+          ))}
         </select>
 
-        {(filterTipus !== "all" || filterAction !== "all" || filterEntity !== "all" || filterActor) && (
+        {(filterTipus !== "all" ||
+          filterAction !== "all" ||
+          filterEntity !== "all" ||
+          filterActor) && (
           <button
-            onClick={() => { setFilterTipus("all"); setFilterAction("all"); setFilterEntity("all"); setFilterActor(""); }}
+            onClick={() => {
+              setFilterTipus("all");
+              setFilterAction("all");
+              setFilterEntity("all");
+              setFilterActor("");
+            }}
             className="px-3 py-2 rounded-lg text-xs font-medium bg-red-500/10 text-red-400"
           >
             Limpiar filtros
           </button>
         )}
 
-        <span className="text-sm ml-auto text-app-text-secondary">{meta.total} resultados</span>
+        <span className="text-sm ml-auto text-app-text-secondary">
+          {meta.total} resultados
+        </span>
       </div>
 
       {error && (
@@ -249,8 +348,19 @@ function AdminLogsPage() {
             <table className="w-full min-w-[700px] text-sm">
               <thead>
                 <tr className="bg-app-neutral border-b border-app-border">
-                  {["#", "Tipo", "Actor", "Acción", "Entidad afectada", "IP", "Fecha"].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left font-semibold text-xs uppercase tracking-wider text-app-text-secondary">
+                  {[
+                    "#",
+                    "Tipo",
+                    "Actor",
+                    "Acción",
+                    "Entidad afectada",
+                    "IP",
+                    "Fecha",
+                  ].map((h) => (
+                    <th
+                      key={h}
+                      className="px-4 py-3 text-left font-semibold text-xs uppercase tracking-wider text-app-text-secondary"
+                    >
                       {h}
                     </th>
                   ))}
@@ -258,24 +368,37 @@ function AdminLogsPage() {
               </thead>
               <tbody>
                 {logs.map((log, i) => (
-                  <tr key={log.id} className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}>
-                    <td className="px-4 py-3 text-xs font-mono text-app-text-secondary">{log.id}</td>
-                    <td className="px-4 py-3"><TipusBadge tipus={log.tipus} /></td>
+                  <tr
+                    key={log.id}
+                    className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}
+                  >
+                    <td className="px-4 py-3 text-xs font-mono text-app-text-secondary">
+                      {log.id}
+                    </td>
+                    <td className="px-4 py-3">
+                      <TipusBadge tipus={log.tipus} />
+                    </td>
                     <td className="px-4 py-3">
                       {log.actor ? (
                         <>
                           <p className="text-sm font-medium text-app-text">
                             @{log.actor.username ?? "—"}
                             {log.actor.rol && (
-                              <span className="ml-1.5 text-[10px] text-app-text-secondary uppercase">({log.actor.rol})</span>
+                              <span className="ml-1.5 text-[10px] text-app-text-secondary uppercase">
+                                ({log.actor.rol})
+                              </span>
                             )}
                           </p>
                           {log.actor.email && (
-                            <p className="text-xs text-app-text-secondary">{log.actor.email}</p>
+                            <p className="text-xs text-app-text-secondary">
+                              {log.actor.email}
+                            </p>
                           )}
                         </>
                       ) : (
-                        <span className="text-xs text-app-text-secondary">—</span>
+                        <span className="text-xs text-app-text-secondary">
+                          —
+                        </span>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -284,15 +407,26 @@ function AdminLogsPage() {
                     <td className="px-4 py-3 text-xs text-app-text">
                       {log.entitat_afectada ? (
                         <>
-                          <span className="capitalize">{log.entitat_afectada}</span>
+                          <span className="capitalize">
+                            {log.entitat_afectada}
+                          </span>
                           {log.id_entitat_afectada && (
-                            <span className="text-app-text-secondary"> #{log.id_entitat_afectada}</span>
+                            <span className="text-app-text-secondary">
+                              {" "}
+                              #{log.id_entitat_afectada}
+                            </span>
                           )}
                         </>
-                      ) : "—"}
+                      ) : (
+                        "—"
+                      )}
                     </td>
-                    <td className="px-4 py-3 text-xs font-mono text-app-text-secondary">{log.ip ?? "—"}</td>
-                    <td className="px-4 py-3 text-xs text-app-text-secondary">{formatDate(log.created_at)}</td>
+                    <td className="px-4 py-3 text-xs font-mono text-app-text-secondary">
+                      {log.ip ?? "—"}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-app-text-secondary">
+                      {formatDate(log.created_at)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -323,10 +457,12 @@ function AdminLogsPage() {
               ¿Eliminar logs antiguos?
             </h3>
             <p className="text-sm text-app-text-secondary mb-3">
-              Se eliminarán permanentemente los registros anteriores al número de días indicado. Esta acción no se puede deshacer.
+              Se eliminarán permanentemente los registros anteriores al número
+              de días indicado. Esta acción no se puede deshacer.
             </p>
             <div className="flex items-center gap-2 mb-4">
-              <input aria-label="Días a conservar"
+              <input
+                aria-label="Días a conservar"
                 type="number"
                 min={1}
                 max={3650}
@@ -334,7 +470,9 @@ function AdminLogsPage() {
                 onChange={(e) => setCleanDays(e.target.value)}
                 className="w-24 rounded-md px-3 py-2 text-sm bg-app-neutral border border-app-border text-app-text"
               />
-              <span className="text-sm text-app-text-secondary">días de antigüedad</span>
+              <span className="text-sm text-app-text-secondary">
+                días de antigüedad
+              </span>
             </div>
             <div className="flex gap-2">
               <button

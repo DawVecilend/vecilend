@@ -16,10 +16,13 @@ function AdminLayout() {
 
   const linkClass = ({ isActive }) =>
     `block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-      isActive ? "bg-app-primary/15 text-app-primary" : "text-app-text-secondary hover:bg-app-neutral hover:text-app-text"
+      isActive
+        ? "bg-app-primary/15 text-app-primary"
+        : "text-app-text-secondary hover:bg-app-neutral hover:text-app-text"
     }`;
 
-  const rolLabel = empleat?.rol === "admin" ? "Administrador" : "Soporte técnico";
+  const rolLabel =
+    empleat?.rol === "admin" ? "Administrador" : "Soporte técnico";
 
   return (
     <div className="flex min-h-screen bg-app-bg">
@@ -70,14 +73,26 @@ function AdminLayout() {
         </div>
 
         <nav className="flex-1 py-4 px-3 flex flex-col gap-1 overflow-y-auto">
-          <NavLink to="/backoffice/dashboard" className={linkClass}>Dashboard</NavLink>
-          <NavLink to="/backoffice/users" className={linkClass}>Usuarios</NavLink>
-          <NavLink to="/backoffice/reports" className={linkClass}>Reportes</NavLink>
+          <NavLink to="/backoffice/dashboard" className={linkClass}>
+            Dashboard
+          </NavLink>
+          <NavLink to="/backoffice/users" className={linkClass}>
+            Usuarios
+          </NavLink>
+          <NavLink to="/backoffice/reports" className={linkClass}>
+            Reportes
+          </NavLink>
           {isAdmin && (
             <>
-              <NavLink to="/backoffice/empleats" className={linkClass}>Empleados</NavLink>
-              <NavLink to="/backoffice/categories" className={linkClass}>Categorías</NavLink>
-              <NavLink to="/backoffice/logs" className={linkClass}>Log de acciones</NavLink>
+              <NavLink to="/backoffice/empleats" className={linkClass}>
+                Empleados
+              </NavLink>
+              <NavLink to="/backoffice/categories" className={linkClass}>
+                Categorías
+              </NavLink>
+              <NavLink to="/backoffice/logs" className={linkClass}>
+                Log de acciones
+              </NavLink>
             </>
           )}
         </nav>
@@ -86,7 +101,9 @@ function AdminLayout() {
           <button
             type="button"
             onClick={toggleTheme}
-            aria-label={theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"}
+            aria-label={
+              theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
+            }
             className="w-full mb-3 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm text-app-text-secondary hover:bg-app-neutral hover:text-app-text transition-colors"
           >
             <span className="material-symbols-outlined text-base">
@@ -95,10 +112,19 @@ function AdminLayout() {
             <span>{theme === "dark" ? "Modo claro" : "Modo oscuro"}</span>
           </button>
 
-          <p className="w-full text-sm font-medium text-app-text truncate">{empleat?.nom} {empleat?.cognoms}</p>
-          <p className="w-full text-xs text-app-text-secondary truncate">{rolLabel}</p>
-          <p className="w-full text-xs text-app-text-secondary truncate mb-3">{empleat?.email}</p>
-          <button onClick={logout} className="w-full px-3 py-2 rounded-lg text-sm text-app-text-secondary hover:bg-red-500/10 hover:text-red-400 transition-colors text-center">
+          <p className="w-full text-sm font-medium text-app-text truncate">
+            {empleat?.nom} {empleat?.cognoms}
+          </p>
+          <p className="w-full text-xs text-app-text-secondary truncate">
+            {rolLabel}
+          </p>
+          <p className="w-full text-xs text-app-text-secondary truncate mb-3">
+            {empleat?.email}
+          </p>
+          <button
+            onClick={logout}
+            className="w-full px-3 py-2 rounded-lg text-sm text-app-text-secondary hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-500/10 dark:hover:text-red-400 transition-colors text-center"
+          >
             Cerrar sesión
           </button>
         </div>

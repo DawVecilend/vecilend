@@ -41,7 +41,8 @@ function FAQPage() {
           "En cada alquiler el solicitante paga el subtotal + 5% de comisión de plataforma + 5% de garantía de servicio. Estos dos cargos no son reembolsables y cubren el coste del servicio (moderación, soporte por reportes, infraestructura). No retenemos fianzas ni cobramos comisión al propietario.",
       },
       {
-        question: "¿Qué hago si el solicitante devuelve el objeto en mal estado?",
+        question:
+          "¿Qué hago si el solicitante devuelve el objeto en mal estado?",
         answer:
           "Comunícalo primero con el solicitante a través del chat interno e intentad llegar a un acuerdo. Si no es posible, puedes abrir un reporte indicando el motivo (fraude, comportamiento inapropiado, etc.) y nuestro equipo revisará el caso. Las valoraciones públicas que dejes también ayudan al resto de la comunidad.",
       },
@@ -80,8 +81,14 @@ function FAQPage() {
   const getDisplayQuestions = () => {
     if (activeCategory === "all") {
       return [
-        ...faqData.solicitantes.map((q) => ({ ...q, category: "Solicitantes" })),
-        ...faqData.propietarios.map((q) => ({ ...q, category: "Propietarios" })),
+        ...faqData.solicitantes.map((q) => ({
+          ...q,
+          category: "Solicitantes",
+        })),
+        ...faqData.propietarios.map((q) => ({
+          ...q,
+          category: "Propietarios",
+        })),
         ...faqData.general.map((q) => ({ ...q, category: "General" })),
       ];
     }
@@ -113,9 +120,7 @@ function FAQPage() {
 
             <h1 className="max-w-[800px] mx-auto font-heading text-[44px] font-extrabold leading-[1.08] tracking-[-0.04em] text-app-text md:text-[64px]">
               Encontramos las respuestas a tus{" "}
-              <span className="italic text-app-primary">
-                preguntas.
-              </span>
+              <span className="italic text-app-primary">preguntas.</span>
             </h1>
 
             <p className="mt-6 max-w-[600px] mx-auto font-body text-body-base leading-body text-app-text-secondary md:text-[18px]">
@@ -154,8 +159,10 @@ function FAQPage() {
           {activeCategory !== "all" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-center mb-8 text-app-text">
-                {activeCategory === "solicitantes" && "Preguntas para solicitantes"}
-                {activeCategory === "propietarios" && "Preguntas para propietarios"}
+                {activeCategory === "solicitantes" &&
+                  "Preguntas para solicitantes"}
+                {activeCategory === "propietarios" &&
+                  "Preguntas para propietarios"}
                 {activeCategory === "general" && "Preguntas generales"}
               </h2>
             </div>
@@ -206,8 +213,8 @@ function FAQPage() {
                 Cómo alquilar
               </h3>
               <p className="text-app-text-secondary">
-                Aprende paso a paso cómo alquilar objetos en Vecilend y
-                disfruta de todas las ventajas.
+                Aprende paso a paso cómo alquilar objetos en Vecilend y disfruta
+                de todas las ventajas.
               </p>
             </Link>
 
@@ -238,7 +245,8 @@ function FAQPage() {
                 Sobre Vecilend
               </h3>
               <p className="text-app-text-secondary">
-                Conoce nuestra misión, valores y todo lo que nos hace especiales.
+                Conoce nuestra misión, valores y todo lo que nos hace
+                especiales.
               </p>
             </Link>
           </div>
@@ -273,7 +281,7 @@ function FAQPage() {
                 </Link>
                 <Link
                   to="/objects/create"
-                  className="bg-white/10 backdrop-blur-md text-app-text border border-white/20 px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/20 transition-all"
+                  className="bg-black/5 backdrop-blur-md text-app-text border border-black/10 hover:bg-black/10 dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/20 px-10 py-5 rounded-2xl font-black text-lg transition-all"
                 >
                   Publicar objeto
                 </Link>

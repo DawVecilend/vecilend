@@ -352,7 +352,7 @@ function AboutUsPage() {
                 </Link>
                 <Link
                   to="/objects/create"
-                  className="bg-white/10 backdrop-blur-md text-app-text border border-white/20 px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/20 transition-all"
+                  className="bg-black/5 backdrop-blur-md text-app-text border border-black/10 hover:bg-black/10 dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/20 px-10 py-5 rounded-2xl font-black text-lg transition-all"
                 >
                   Publicar objeto
                 </Link>

@@ -14,7 +14,8 @@ function AdminSettingsPage() {
   const [cleanDays, setCleanDays] = useState(90);
   const [cleanConfirmOpen, setCleanConfirmOpen] = useState(false);
 
-  const rolLabel = empleat?.rol === "admin" ? "Administrador" : "Soporte técnico";
+  const rolLabel =
+    empleat?.rol === "admin" ? "Administrador" : "Soporte técnico";
 
   const handleExportLogs = async () => {
     if (exporting) return;
@@ -66,7 +67,9 @@ function AdminSettingsPage() {
   return (
     <div className="p-4 lg:p-8 flex flex-col gap-8 max-w-3xl">
       <div>
-        <h1 className="text-2xl font-bold font-heading text-app-text">Ajustes</h1>
+        <h1 className="text-2xl font-bold font-heading text-app-text">
+          Ajustes
+        </h1>
         <p className="text-sm text-app-text-secondary mt-1">
           Configura tu experiencia en el panel de administración.
         </p>
@@ -87,7 +90,9 @@ function AdminSettingsPage() {
           </div>
           <div className="bg-app-neutral rounded-lg p-3 border border-app-border">
             <p className="text-xs text-app-text-secondary mb-0.5">Email</p>
-            <p className="font-medium text-app-text break-all">{empleat?.email}</p>
+            <p className="font-medium text-app-text break-all">
+              {empleat?.email}
+            </p>
           </div>
           <div className="bg-app-neutral rounded-lg p-3 border border-app-border">
             <p className="text-xs text-app-text-secondary mb-0.5">Usuario</p>
@@ -145,11 +150,13 @@ function AdminSettingsPage() {
           </p>
 
           <div className="rounded-lg border border-app-border bg-app-neutral/50 p-3 mb-4 flex items-start gap-2">
-            <span className="material-symbols-outlined text-app-text-secondary text-base mt-0.5">info</span>
+            <span className="material-symbols-outlined text-app-text-secondary text-base mt-0.5">
+              info
+            </span>
             <p className="text-xs text-app-text-secondary leading-relaxed">
               Una tarea programada elimina automáticamente los logs de más de{" "}
-              <strong className="text-app-text">90 días</strong> cada noche a las
-              04:00. Este valor es fijo y se gestiona desde el servidor.
+              <strong className="text-app-text">90 días</strong> cada noche a
+              las 04:00. Este valor es fijo y se gestiona desde el servidor.
             </p>
           </div>
 
@@ -179,11 +186,12 @@ function AdminSettingsPage() {
                   Limpiar logs antiguos manualmente
                 </p>
                 <p className="text-xs text-app-text-secondary">
-                  Elimina ahora todos los registros anteriores al número de días que indiques.
-                  No modifica la tarea programada nocturna.
+                  Elimina ahora todos los registros anteriores al número de días
+                  que indiques. No modifica la tarea programada nocturna.
                 </p>
                 <div className="mt-2 flex items-center gap-2">
-                  <input aria-label="Días a conservar"
+                  <input
+                    aria-label="Días a conservar"
                     type="number"
                     min={1}
                     max={3650}
@@ -192,14 +200,16 @@ function AdminSettingsPage() {
                     className="w-20 rounded-md px-2 py-1 text-sm bg-app-bg-card border border-app-border text-app-text"
                     aria-label="Días de antigüedad para limpiar"
                   />
-                  <span className="text-xs text-app-text-secondary">días de antigüedad</span>
+                  <span className="text-xs text-app-text-secondary">
+                    días de antigüedad
+                  </span>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setCleanConfirmOpen(true)}
                 disabled={cleaning}
-                className="text-sm px-4 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 disabled:opacity-60 whitespace-nowrap"
+                className="text-sm px-4 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 disabled:opacity-60 whitespace-nowrap"
               >
                 Limpiar ahora
               </button>

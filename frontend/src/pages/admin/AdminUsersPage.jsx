@@ -17,32 +17,53 @@ function AdminUsersPage() {
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [page, setPage] = useState(1);
-  const [meta, setMeta] = useState({ current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
-  const [confirm, setConfirm] = useState({ open: false, action: null, user: null });
+  const [meta, setMeta] = useState({
+    current_page: 1,
+    last_page: 1,
+    per_page: PER_PAGE,
+    total: 0,
+  });
+  const [confirm, setConfirm] = useState({
+    open: false,
+    action: null,
+    user: null,
+  });
   const [confirmBusy, setConfirmBusy] = useState(false);
 
   const debouncedSearch = useDebounce(search, 300);
 
   const fetchUsers = useCallback(() => {
     setLoading(true);
-    backofficeApi.get("/backoffice/users", {
-      params: {
-        page,
-        per_page: PER_PAGE,
-        search: debouncedSearch || undefined,
-        status: filterStatus,
-      },
-    })
+    backofficeApi
+      .get("/backoffice/users", {
+        params: {
+          page,
+          per_page: PER_PAGE,
+          search: debouncedSearch || undefined,
+          status: filterStatus,
+        },
+      })
       .then((res) => {
         setUsers(res.data.data ?? []);
-        setMeta(res.data.meta ?? { current_page: 1, last_page: 1, per_page: PER_PAGE, total: 0 });
+        setMeta(
+          res.data.meta ?? {
+            current_page: 1,
+            last_page: 1,
+            per_page: PER_PAGE,
+            total: 0,
+          },
+        );
       })
       .finally(() => setLoading(false));
   }, [page, debouncedSearch, filterStatus]);
 
-  useEffect(() => { fetchUsers(); }, [fetchUsers]);
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
-  useEffect(() => { setPage(1); }, [debouncedSearch, filterStatus]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, filterStatus]);
 
   const handleConfirm = async () => {
     setConfirmBusy(true);
@@ -50,11 +71,15 @@ function AdminUsersPage() {
       const { action, user } = confirm;
       if (action === "block") {
         await backofficeApi.put(`/backoffice/users/${user.id}/block`);
-        setUsers((p) => p.map((u) => u.id === user.id ? { ...u, actiu: false } : u));
+        setUsers((p) =>
+          p.map((u) => (u.id === user.id ? { ...u, actiu: false } : u)),
+        );
         showToast(`${user.nom} bloqueado.`);
       } else if (action === "unblock") {
         await backofficeApi.put(`/backoffice/users/${user.id}/unblock`);
-        setUsers((p) => p.map((u) => u.id === user.id ? { ...u, actiu: true } : u));
+        setUsers((p) =>
+          p.map((u) => (u.id === user.id ? { ...u, actiu: true } : u)),
+        );
         showToast(`${user.nom} desbloqueado.`);
       } else if (action === "delete") {
         await backofficeApi.delete(`/backoffice/users/${user.id}`);
@@ -69,7 +94,8 @@ function AdminUsersPage() {
     }
   };
 
-  const selectClass = "rounded-lg px-3 py-2.5 text-sm outline-none bg-app-bg-card border border-app-border text-app-text cursor-pointer";
+  const selectClass =
+    "rounded-lg px-3 py-2.5 text-sm outline-none bg-app-bg-card border border-app-border text-app-text cursor-pointer";
 
   return (
     <div className="p-4 lg:p-8 flex flex-col gap-6">
@@ -77,29 +103,56 @@ function AdminUsersPage() {
         open={confirm.open}
         onClose={() => setConfirm({ open: false, action: null, user: null })}
         onConfirm={handleConfirm}
-        title={{ block: "Bloquear usuario", unblock: "Desbloquear usuario", delete: "Eliminar usuario" }[confirm.action] ?? ""}
-        message={{
-          block: `¿Bloquear a ${confirm.user?.nom}? No podrá acceder a la plataforma.`,
-          unblock: `¿Restaurar el acceso de ${confirm.user?.nom}?`,
-          delete: `¿Eliminar permanentemente a ${confirm.user?.nom}?`,
-        }[confirm.action] ?? ""}
-        confirmLabel={{ block: "Bloquear", unblock: "Desbloquear", delete: "Eliminar" }[confirm.action] ?? ""}
+        title={
+          {
+            block: "Bloquear usuario",
+            unblock: "Desbloquear usuario",
+            delete: "Eliminar usuario",
+          }[confirm.action] ?? ""
+        }
+        message={
+          {
+            block: `¿Bloquear a ${confirm.user?.nom}? No podrá acceder a la plataforma.`,
+            unblock: `¿Restaurar el acceso de ${confirm.user?.nom}?`,
+            delete: `¿Eliminar permanentemente a ${confirm.user?.nom}?`,
+          }[confirm.action] ?? ""
+        }
+        confirmLabel={
+          { block: "Bloquear", unblock: "Desbloquear", delete: "Eliminar" }[
+            confirm.action
+          ] ?? ""
+        }
         busy={confirmBusy}
       />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold font-heading text-app-text">Usuarios</h1>
+        <h1 className="text-2xl font-bold font-heading text-app-text">
+          Usuarios
+        </h1>
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <input aria-label="Buscar" type="text" placeholder="Buscar..." value={search} onChange={(e) => setSearch(e.target.value)}
-          className="rounded-lg px-4 py-2.5 text-sm outline-none bg-app-bg-card border border-app-border text-app-text flex-1 min-w-[200px]" />
-        <select aria-label="Filtrar por estado" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className={selectClass}>
+        <input
+          aria-label="Buscar"
+          type="text"
+          placeholder="Buscar..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="rounded-lg px-4 py-2.5 text-sm outline-none bg-app-bg-card border border-app-border text-app-text flex-1 min-w-[200px]"
+        />
+        <select
+          aria-label="Filtrar por estado"
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className={selectClass}
+        >
           <option value="all">Todos los estados</option>
           <option value="active">Activos</option>
           <option value="blocked">Bloqueados</option>
         </select>
-        <span className="self-center text-sm text-app-text-secondary">{meta.total} resultados</span>
+        <span className="self-center text-sm text-app-text-secondary">
+          {meta.total} resultados
+        </span>
       </div>
 
       {loading ? (
@@ -113,32 +166,89 @@ function AdminUsersPage() {
               <thead>
                 <tr className="bg-app-neutral border-b border-app-border">
                   {["Usuario", "Email", "Estado", "Acciones"].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-app-text-secondary">{h}</th>
+                    <th
+                      key={h}
+                      className="px-4 py-3 text-left text-xs font-semibold text-app-text-secondary"
+                    >
+                      {h}
+                    </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {users.map((u, i) => (
-                  <tr key={u.id} className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}>
+                  <tr
+                    key={u.id}
+                    className={`border-b border-app-border ${i % 2 === 0 ? "bg-app-bg-card" : "bg-app-bg"}`}
+                  >
                     <td className="px-4 py-3">
-                      <p className="font-medium text-app-text">{u.nom} {u.cognoms}</p>
-                      <p className="text-xs text-app-text-secondary">@{u.username}</p>
+                      <p className="font-medium text-app-text">
+                        {u.nom} {u.cognoms}
+                      </p>
+                      <p className="text-xs text-app-text-secondary">
+                        @{u.username}
+                      </p>
                     </td>
-                    <td className="px-4 py-3 text-xs text-app-text-secondary">{u.email}</td>
+                    <td className="px-4 py-3 text-xs text-app-text-secondary">
+                      {u.email}
+                    </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${u.actiu ? "bg-app-secondary/10 text-app-secondary" : "bg-red-500/10 text-red-400"}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${u.actiu ? "bg-app-secondary" : "bg-red-400"}`} />
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold 
+                          ${
+                            u.actiu
+                              ? "bg-app-secondary/10 text-app-secondary"
+                              : "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
+                          }`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${u.actiu ? "bg-app-secondary" : "bg-red-400"}`}
+                        />
                         {u.actiu ? "Activo" : "Bloqueado"}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
-                        {u.actiu
-                          ? <button onClick={() => setConfirm({ open: true, action: "block", user: u })} className="text-xs px-3 py-1 rounded-lg bg-orange-500/10 text-orange-400 hover:bg-orange-500/20">Bloquear</button>
-                          : <button onClick={() => setConfirm({ open: true, action: "unblock", user: u })} className="text-xs px-3 py-1 rounded-lg bg-app-primary/10 text-app-primary hover:bg-app-primary/20">Activar</button>
-                        }
+                        {u.actiu ? (
+                          <button
+                            onClick={() =>
+                              setConfirm({
+                                open: true,
+                                action: "block",
+                                user: u,
+                              })
+                            }
+                            className="text-xs px-3 py-1 rounded-lg bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-500/10 dark:text-orange-400 dark:hover:bg-orange-500/20"
+                          >
+                            Bloquear
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              setConfirm({
+                                open: true,
+                                action: "unblock",
+                                user: u,
+                              })
+                            }
+                            className="text-xs px-3 py-1 rounded-lg bg-app-primary/10 text-app-primary hover:bg-app-primary/20"
+                          >
+                            Activar
+                          </button>
+                        )}
                         {isAdmin && (
-                          <button onClick={() => setConfirm({ open: true, action: "delete", user: u })} className="text-xs px-3 py-1 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20">Eliminar</button>
+                          <button
+                            onClick={() =>
+                              setConfirm({
+                                open: true,
+                                action: "delete",
+                                user: u,
+                              })
+                            }
+                            className="text-xs px-3 py-1 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20"
+                          >
+                            Eliminar
+                          </button>
                         )}
                       </div>
                     </td>
