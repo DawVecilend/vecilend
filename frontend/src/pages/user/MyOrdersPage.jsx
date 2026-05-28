@@ -688,9 +688,9 @@ function MyOrdersPage() {
         }}
         onConfirm={confirmCancel}
         title="¿Cancelar este pedido?"
-        message={`Vas a cancelar "${cancelTarget?.label ?? ""}".`}
         description="Esta acción no se puede deshacer. Si el otro vecino ya ha aceptado, ten en cuenta que perderás esta reserva."
         confirmLabel="Sí, cancelar"
+        cancelLabel="No"
         busy={cancelBusy}
         errorMessage={cancelError}
       />

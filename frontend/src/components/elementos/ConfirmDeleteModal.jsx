@@ -23,6 +23,7 @@ import {
  *   - message:     text principal de confirmació
  *   - description: text secundari opcional (subtítol gris)
  *   - confirmLabel: text del botó vermell (per defecte "Eliminar")
+ *   - cancelLabel:  text del botó secundari (per defecte "Cancelar")
  *   - busy:        bool, deshabilita els botons mentre es processa
  *   - errorMessage: text d'error opcional a mostrar dins del modal
  */
@@ -34,6 +35,7 @@ function ConfirmDeleteModal({
   message,
   description,
   confirmLabel = "Eliminar",
+  cancelLabel = "Cancelar",
   busy = false,
   errorMessage = null,
 }) {
@@ -49,10 +51,10 @@ function ConfirmDeleteModal({
       disableScrollLock
       PaperProps={{
         sx: {
-          backgroundColor: "#0A0A0B",
-          color: "#F2F4F8",
+          backgroundColor: "var(--color-app-bg-card)",
+          color: "var(--color-app-text)",
           borderRadius: isMobile ? 0 : 4,
-          border: "1px solid #2A2B31",
+          border: "1px solid var(--color-app-border)",
         },
       }}
     >
@@ -60,11 +62,11 @@ function ConfirmDeleteModal({
         sx={{
           fontFamily: "Montserrat",
           fontWeight: 700,
-          color: "#F2F4F8",
+          color: "var(--color-app-text)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          borderBottom: "1px solid #2A2B31",
+          borderBottom: "1px solid var(--color-app-border)",
         }}
       >
         <span className="flex items-center gap-2">
@@ -73,7 +75,11 @@ function ConfirmDeleteModal({
           </span>
           {title}
         </span>
-        <IconButton onClick={onClose} disabled={busy} sx={{ color: "#B6BCC8" }}>
+        <IconButton
+          onClick={onClose}
+          disabled={busy}
+          sx={{ color: "var(--color-app-text-secondary)" }}
+        >
           <span className="material-symbols-outlined">close</span>
         </IconButton>
       </DialogTitle>
@@ -98,7 +104,12 @@ function ConfirmDeleteModal({
       </DialogContent>
 
       <DialogActions
-        sx={{ borderTop: "1px solid #2A2B31", px: 3, py: 2, gap: 1 }}
+        sx={{
+          borderTop: "1px solid var(--color-app-border)",
+          px: 3,
+          py: 2,
+          gap: 1,
+        }}
       >
         <button
           type="button"
@@ -106,7 +117,7 @@ function ConfirmDeleteModal({
           disabled={busy}
           className="rounded-full border border-app-border px-5 py-2 text-label font-body text-app-text hover:bg-app-neutral disabled:opacity-50"
         >
-          Cancelar
+          {cancelLabel}
         </button>
         <button
           type="button"
