@@ -107,6 +107,11 @@ function OrderCard({ tx, tab, onAction, busyId }) {
 
   const busy = busyId === tx.id;
 
+  const canConfirmReception =
+    tx.am_owner &&
+    tx.transaccio?.estat === "en_curs" &&
+    (!isLloguer || tx.paid);
+
   // Etiqueta del "altre usuari" segons pestanya
   let otherLabel, otherUser;
   if (tab.role === "requester") {
@@ -263,7 +268,7 @@ function OrderCard({ tx, tab, onAction, busyId }) {
               )}
 
               {/* Confirmar recepción (només owner) */}
-              {tx.am_owner && (
+              {canConfirmReception && (
                 <button
                   type="button"
                   disabled={busy}
