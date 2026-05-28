@@ -16,8 +16,8 @@ class StoreEmpleatRequest extends FormRequest
     {
         return [
             'username' => ['required', 'string', 'max:100', 'unique:empleats,username'],
-            'nom'      => ['required', 'string', 'max:100'],
-            'cognoms'  => ['required', 'string', 'max:150'],
+            'nom'      => ['required', 'string', 'max:100', 'not_regex:/\p{N}/u'],
+            'cognoms'  => ['required', 'string', 'max:150', 'not_regex:/\p{N}/u'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:empleats,email'],
             'password' => [
                 'required',
@@ -37,6 +37,8 @@ class StoreEmpleatRequest extends FormRequest
             'email.unique'    => 'Este correo electrónico ya está registrado.',
             'password.confirmed' => 'La confirmación de contraseña no coincide.',
             'rol.in'          => 'El rol debe ser admin o suport.',
+            'nom.not_regex'     => 'El nombre no puede contener números.',
+            'cognoms.not_regex' => 'Los apellidos no pueden contener números.',
         ];
     }
 }

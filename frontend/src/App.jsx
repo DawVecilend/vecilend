@@ -123,6 +123,7 @@ function App() {
                 <ScrollToTop />
                 <CookieBanner />
 
+                <div className="flex min-h-screen flex-col">
                 <div className="hidden md:block">
                   <HeaderDesktop />
                 </div>
@@ -131,7 +132,7 @@ function App() {
                   <HeaderMobile />
                 </div>
 
-                <main className="md:pt-[80px]">
+                <main className="flex-1 md:pt-[80px]">
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
@@ -241,6 +242,7 @@ function App() {
                 </main>
 
                 <Footer />
+                </div>
               </UnreadCountsProvider>
             </AuthProvider>
           }

@@ -9,6 +9,7 @@ function AdminCreateCategoryPage() {
 
   const [nom, setNom] = useState("");
   const [descripcio, setDescripcio] = useState("");
+  const [icona, setIcona] = useState("");
   const [subcategories, setSubcategories] = useState(["", "", ""]);
   const [subDescriptions, setSubDescriptions] = useState(["", "", ""]);
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ function AdminCreateCategoryPage() {
       const catRes = await backofficeApi.post("/backoffice/categories", {
         nom,
         descripcio,
+        icona: icona.trim() || null,
       });
 
       const catId = catRes.data.data?.id ?? catRes.data.id;
@@ -117,6 +119,66 @@ function AdminCreateCategoryPage() {
               placeholder="Ej: Herramientas para reformas, bricolaje y mantenimiento."
               className={`${inputClass} resize-none`}
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-app-text mb-1.5">
+              Icono
+            </label>
+
+            <div className="flex items-center gap-3">
+              <input aria-label="Nombre del icono"
+                type="text"
+                value={icona}
+                onChange={(e) =>
+                  setIcona(e.target.value.trim().toLowerCase().replace(/\s+/g, "_"))
+                }
+                placeholder="Ej: handyman"
+                className={inputClass}
+              />
+
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-app-border bg-app-neutral text-app-primary">
+                <span className="material-symbols-outlined">
+                  {icona || "category"}
+                </span>
+              </span>
+            </div>
+
+            <div className="mt-2 flex flex-wrap gap-2">
+              {[
+                "handyman",
+                "construction",
+                "grass",
+                "pedal_bike",
+                "cardio_load",
+                "microwave_gen",
+                "child_friendly",
+                "strategy",
+                "trip",
+                "waves",
+              ].map((name) => (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => setIcona(name)}
+                  aria-label={`Usar icono ${name}`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${
+                    icona === name
+                      ? "border-app-primary text-app-primary bg-app-primary/10"
+                      : "border-app-border text-app-text-secondary hover:text-app-text"
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-xl">
+                    {name}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <p className="text-xs text-app-text-secondary mt-2">
+              Escribe el nombre de un icono de Material Symbols (p. ej.
+              «handyman»). Puedes consultarlos en fonts.google.com/icons.
+            </p>
           </div>
         </div>
 

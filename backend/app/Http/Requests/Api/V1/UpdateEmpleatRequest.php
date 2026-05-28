@@ -19,8 +19,8 @@ class UpdateEmpleatRequest extends FormRequest
 
         return [
             'username' => ['sometimes', 'string', 'max:100', Rule::unique('empleats', 'username')->ignore($id)],
-            'nom'      => ['sometimes', 'string', 'max:100'],
-            'cognoms'  => ['sometimes', 'string', 'max:150'],
+            'nom'      => ['sometimes', 'string', 'max:100', 'not_regex:/\p{N}/u'],
+            'cognoms'  => ['sometimes', 'string', 'max:150', 'not_regex:/\p{N}/u'],
             'email'    => ['sometimes', 'string', 'email', 'max:255', Rule::unique('empleats', 'email')->ignore($id)],
             'password' => [
                 'sometimes',
@@ -29,6 +29,14 @@ class UpdateEmpleatRequest extends FormRequest
             ],
             'rol'      => ['sometimes', 'string', 'in:admin,suport'],
             'actiu'    => ['sometimes', 'boolean'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nom.not_regex'     => 'El nombre no puede contener números.',
+            'cognoms.not_regex' => 'Los apellidos no pueden contener números.',
         ];
     }
 }

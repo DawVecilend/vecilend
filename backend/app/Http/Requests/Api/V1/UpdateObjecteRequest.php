@@ -62,8 +62,8 @@ class UpdateObjecteRequest extends FormRequest
             ?? optional(Objecte::find($this->route('id')))->tipus;
 
         return [
-            'nom'           => ['sometimes', 'string', 'max:200'],
-            'descripcio'    => ['sometimes', 'string', 'min:10', 'max:5000'],
+            'nom'           => ['sometimes', 'string', 'max:64'],
+            'descripcio'    => ['sometimes', 'string', 'min:10', 'max:256'],
             'categoria_id'  => ['sometimes', 'integer', 'exists:categories,id'],
             'subcategoria_id' => [
                 'sometimes',
@@ -112,7 +112,8 @@ class UpdateObjecteRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nom.max'                   => 'El nombre no puede superar los 200 caracteres.',
+            'nom.max'                   => 'El nombre no puede superar los 64 caracteres.',
+            'descripcio.max'            => 'La descripción no puede superar los 256 caracteres.',
             'descripcio.min'            => 'La descripción debe tener al menos 10 caracteres.',
             'categoria_id.exists'       => 'La categoría seleccionada no existe.',
             'subcategoria_id.exists'    => 'La subcategoría seleccionada no existe.',

@@ -113,7 +113,8 @@ class TransactionController extends Controller
             });
         }
 
-        $query->whereIn('estat', self::REQUEST_STATUSES);
+        $query->whereIn('estat', self::REQUEST_STATUSES)
+            ->whereDoesntHave('transaccio');
         return $query;
     }
 
@@ -447,6 +448,8 @@ class TransactionController extends Controller
         DB::transaction(function () use ($solicitud, $transaccio, $user) {
             $transaccio->update(['estat' => 'cancellat', 'data_fi_real' => now()]);
 
+            $solicitud->update(['estat' => 'cancellat']);
+
             // No tocamos l'estat de l'objecte. Si el propietari l'havia pausat
             // manualment, ha de quedar com estava.
 
@@ -513,6 +516,8 @@ class TransactionController extends Controller
                 'data_fi_real'    => now(),
                 'estat'           => 'finalitzat',
             ]);
+
+            $solicitud->update(['estat' => 'finalitzat']);
 
             // No forçem l'estat de l'objecte. Si el propietari l'havia pausat
             // manualment, ha de quedar com estava.

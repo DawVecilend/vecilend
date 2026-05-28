@@ -697,8 +697,8 @@ function ObjectPage() {
             )}
           </div>
 
-          <div className="order-4 lg:order-none">
-            <p className="text-app-text-secondary text-body-base font-body whitespace-pre-line">
+          <div className="order-4 lg:order-none min-w-0">
+            <p className="text-app-text-secondary text-body-base font-body whitespace-pre-line break-words">
               {product.descripcio}
             </p>
 

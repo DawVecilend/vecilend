@@ -24,8 +24,8 @@ class RegisterRequest extends FormRequest
                 'not_regex:/^(admin|vecilend)$/i',
                 'unique:users,username',
             ],
-            'nom' => ['required', 'string', 'max:100'],
-            'cognoms' => ['required', 'string', 'max:150'],
+            'nom' => ['required', 'string', 'max:100', 'not_regex:/\p{N}/u'],
+            'cognoms' => ['required', 'string', 'max:150', 'not_regex:/\p{N}/u'],
             'email' => [
                 'required',
                 'string',
@@ -40,7 +40,7 @@ class RegisterRequest extends FormRequest
             ],
             'password_confirmation' => ['required', 'string'],
             'biography' => ['nullable', 'string', 'max:1000'],
-            'telefon' => ['nullable', 'string', 'max:20'],
+            'telefon' => ['nullable', 'string', 'max:20', 'not_regex:/\p{L}/u'],
             'direccio' => ['nullable', 'string', 'max:500', Rule::in($this->getMunicipios())],
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:3072'],
             'ubicacio' => ['nullable', 'array'],
@@ -73,6 +73,9 @@ class RegisterRequest extends FormRequest
             'direccio.in' => 'El municipio no es válido.',
             'username.unique' => 'Este nombre de usuario ya está en uso.',
             'username.not_regex' => 'Este nombre de usuario está reservado.',
+            'nom.not_regex' => 'El nombre no puede contener números.',
+            'cognoms.not_regex' => 'Los apellidos no pueden contener números.',
+            'telefon.not_regex' => 'El teléfono solo puede contener números.',
         ];
     }
 

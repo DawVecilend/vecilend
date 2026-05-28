@@ -29,10 +29,9 @@ class ValoracioController extends Controller
     public function store(StoreValoracioRequest $request, int $transactionId): JsonResponse
     {
         $solicitud = Solicitud::with(['objecte:id,user_id', 'transaccio'])
-            ->whereHas('transaccio', fn($q) => $q->where('id', $transactionId))
-            ->first();
+            ->find($transactionId);
 
-        if (!$solicitud) {
+        if (!$solicitud || !$solicitud->transaccio) {
             return response()->json(['message' => 'Transacción no encontrada.'], 404);
         }
 

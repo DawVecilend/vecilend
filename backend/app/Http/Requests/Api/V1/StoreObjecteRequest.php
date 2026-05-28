@@ -41,8 +41,8 @@ class StoreObjecteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nom'           => ['required', 'string', 'max:200'],
-            'descripcio'    => ['required', 'string', 'min:10', 'max:5000'],
+            'nom'           => ['required', 'string', 'max:64'],
+            'descripcio'    => ['required', 'string', 'min:10', 'max:256'],
             'categoria_id'  => ['required', 'integer', 'exists:categories,id'],
             'subcategoria_id' => [
                 'required',
@@ -82,7 +82,8 @@ class StoreObjecteRequest extends FormRequest
     {
         return [
             'nom.required'             => 'El nombre del objeto es obligatorio.',
-            'nom.max'                  => 'El nombre no puede superar los 200 caracteres.',
+            'nom.max'                  => 'El nombre no puede superar los 64 caracteres.',
+            'descripcio.max'           => 'La descripción no puede superar los 256 caracteres.',
             'descripcio.required'      => 'La descripción es obligatoria.',
             'descripcio.min'           => 'La descripción debe tener al menos 10 caracteres.',
             'categoria_id.required'    => 'Debes seleccionar una categoría.',
