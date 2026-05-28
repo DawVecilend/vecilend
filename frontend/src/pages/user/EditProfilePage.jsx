@@ -69,7 +69,14 @@ function EditProfilePage() {
   }, [username]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name } = e.target;
+    let value = e.target.value;
+    if (name === "nom" || name === "cognoms") {
+      value = value.replace(/[0-9]/g, "");
+    } else if (name === "telefon") {
+      value = value.replace(/[^0-9+\s()-]/g, "");
+    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleFileChange = (e) => {

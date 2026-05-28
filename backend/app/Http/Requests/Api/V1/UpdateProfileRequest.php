@@ -30,9 +30,9 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nom'             => ['required', 'string', 'max:100'],
-            'cognoms'         => ['required', 'string', 'max:150'],
-            'telefon'         => ['nullable', 'string', 'max:20'],
+            'nom'             => ['required', 'string', 'max:100', 'not_regex:/\p{N}/u'],
+            'cognoms'         => ['required', 'string', 'max:150', 'not_regex:/\p{N}/u'],
+            'telefon'         => ['nullable', 'string', 'max:20', 'not_regex:/\p{L}/u'],
             'direccio'        => ['nullable', 'string', 'max:500', Rule::in($this->getMunicipios())],
             'biography'       => ['nullable', 'string', 'max:255'],
             'avatar'          => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
@@ -49,6 +49,9 @@ class UpdateProfileRequest extends FormRequest
             'avatar.image' => 'El avatar debe ser una imagen.',
             'avatar.mimes' => 'El avatar debe estar en formato: jpeg, png, jpg o webp.',
             'avatar.max'   => 'El avatar no puede superar los 3 MB.',
+            'nom.not_regex'     => 'El nombre no puede contener números.',
+            'cognoms.not_regex' => 'Los apellidos no pueden contener números.',
+            'telefon.not_regex' => 'El teléfono solo puede contener números.',
         ];
     }
 

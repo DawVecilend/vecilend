@@ -462,6 +462,7 @@ function CreateObjectPage() {
                   name="name"
                   type="text"
                   autoComplete="off"
+                  maxLength={64}
                   value={form.name}
                   onChange={handleChange}
                   placeholder="Nombre del objeto"
@@ -526,6 +527,7 @@ function CreateObjectPage() {
                 id="description"
                 name="description"
                 rows="5"
+                maxLength={256}
                 value={form.description}
                 onChange={handleChange}
                 placeholder="Describe los detalles y características del objeto"
