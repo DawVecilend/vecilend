@@ -104,9 +104,9 @@ function ConfirmDeleteModal({
           type="button"
           onClick={onClose}
           disabled={busy}
-          className="rounded-full border border-[#2A2B31] px-5 py-2 text-label font-body text-[#F2F4F8] hover:bg-white/10 disabled:opacity-50"
+          className="rounded-full border border-app-border px-5 py-2 text-label font-body text-app-text hover:bg-app-neutral disabled:opacity-50"
         >
-          No
+          Cancelar
         </button>
         <button
           type="button"
