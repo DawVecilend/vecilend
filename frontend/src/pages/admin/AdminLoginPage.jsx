@@ -44,7 +44,7 @@ function AdminLoginPage() {
             <Logo className="h-10 w-auto" />
           </Link>
           <h1 className="text-2xl font-bold font-heading text-app-text">
-            Panel de Control
+            Panel de control
           </h1>
           <p className="mt-1 text-sm text-app-text-secondary">
             Acceso restringido al personal autorizado
@@ -89,7 +89,7 @@ function AdminLoginPage() {
               disabled={submitting}
               className="w-full rounded-xl py-3 text-sm font-bold bg-app-primary hover:bg-app-primary-hover text-white disabled:opacity-60"
             >
-              {submitting ? "Verificando..." : "Entrar al Panel"}
+              {submitting ? "Verificando..." : "Entrar al panel"}
             </button>
           </form>
         </div>
