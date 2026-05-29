@@ -6,10 +6,12 @@ import api from "../../services/api";
 const ERROR_MESSAGES = {
   oauth_failed: "No se ha podido completar el inicio de sesión con Google.",
   no_email: "Google no ha devuelto un email asociado a tu cuenta.",
-  provisioning_failed: "Ha habido un problema al crear tu cuenta. Inténtalo de nuevo.",
+  provisioning_failed:
+    "Ha habido un problema al crear tu cuenta. Inténtalo de nuevo.",
   account_disabled: "Tu cuenta está desactivada. Contacta con soporte técnico.",
   access_denied: "Has cancelado el inicio de sesión con Google.",
-  invalid_code: "El enlace de inicio de sesión ha caducado. Inténtalo de nuevo.",
+  invalid_code:
+    "El enlace de inicio de sesión ha caducado. Inténtalo de nuevo.",
 };
 
 function GoogleCallbackPage() {
@@ -27,7 +29,9 @@ function GoogleCallbackPage() {
 
     if (errorCode) {
       handled.current = true;
-      setError(ERROR_MESSAGES[errorCode] || "Error al iniciar sesión con Google.");
+      setError(
+        ERROR_MESSAGES[errorCode] || "Error al iniciar sesión con Google.",
+      );
       window.setTimeout(() => navigate("/login", { replace: true }), 3500);
       return;
     }
@@ -41,16 +45,24 @@ function GoogleCallbackPage() {
 
     handled.current = true;
 
-    api.post("/auth/google/exchange", { code }, { skipAuthRedirect: true })
+    api
+      .post("/auth/google/exchange", { code }, { skipAuthRedirect: true })
       .then((response) => {
-        const token = response?.data?.data?.token;
+        const data = response?.data?.data || {};
+        if (data.requires_2fa) {
+          navigate("/login", {
+            replace: true,
+            state: { twoFactorToken: data.two_factor_token },
+          });
+          return;
+        }
+        const token = data.token;
         if (!token) {
           throw new Error("missing_token");
         }
         localStorage.setItem("auth_token", token);
-        return getUser();
+        return getUser().then(() => navigate("/", { replace: true }));
       })
-      .then(() => navigate("/", { replace: true }))
       .catch(() => {
         localStorage.removeItem("auth_token");
         setError(ERROR_MESSAGES.invalid_code);

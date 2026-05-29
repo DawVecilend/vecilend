@@ -141,6 +141,22 @@ class GoogleAuthController extends Controller
             return response()->json(['message' => 'Cuenta no disponible.'], 401);
         }
 
+        if ($user->two_factor_enabled) {
+            $challengeToken = Str::random(64);
+            Cache::put('2fa:challenge:' . hash('sha256', $challengeToken), [
+                'user_id'    => $user->id,
+                'created_at' => now()->toIso8601String(),
+            ], now()->addMinutes(5));
+
+            return response()->json([
+                'message' => 'Se requiere autenticación de dos factores.',
+                'data'    => [
+                    'requires_2fa'     => true,
+                    'two_factor_token' => $challengeToken,
+                ],
+            ]);
+        }
+
         $token = $user->createToken('google-oauth')->plainTextToken;
 
         return response()->json([

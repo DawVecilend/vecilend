@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import PasswordInput from "../../components/elementos/PasswordInput";
 import OptimizedImage from "../../components/elementos/OptimizedImage";
 import { useAuth } from "../../contexts/AuthContext";
@@ -9,7 +9,7 @@ function LoginPage() {
   const { login, verifyLogin2fa } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [formData, setFormData] = useState({
     login: "",
     password: "",
@@ -18,6 +18,15 @@ function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [twoFactorToken, setTwoFactorToken] = useState(null);
   const [twoFactorCode, setTwoFactorCode] = useState("");
+
+  useEffect(() => {
+    const incomingToken = location.state?.twoFactorToken;
+    if (incomingToken) {
+      setTwoFactorToken(incomingToken);
+      setTwoFactorCode("");
+      window.history.replaceState({}, "");
+    }
+  }, [location.state]);
 
   const handleGoogleLogin = () => {
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
